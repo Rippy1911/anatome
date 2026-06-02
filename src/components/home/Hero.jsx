@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Activity, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import Logo from "@/components/Logo";
 
 import { HERO_PERF_TAGLINE } from "@/lib/apiBenchmarks";
 
@@ -19,11 +20,8 @@ export default function Hero({ baseUrl }) {
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-4 py-20 sm:py-28 text-center">
-        <div className="inline-flex items-center gap-2 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-            <Activity className="w-5 h-5 text-primary-foreground" strokeWidth={2.5} />
-          </div>
-          <span className="font-display font-bold text-2xl tracking-tight">Anatome</span>
+        <div className="flex justify-center mb-6 mt-4">
+          <Logo className="h-[5.5rem] w-auto" alt="Anatome API" />
         </div>
 
         <h1 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-[1.1] max-w-3xl mx-auto">
