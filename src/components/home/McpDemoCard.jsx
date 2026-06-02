@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Plug, ArrowRight } from "lucide-react";
+import { PUBLIC_API } from "@/lib/apiBase";
 import CopyBlock from "./CopyBlock";
 
-const MCP_URL = "https://anatome-form-flow.base44.app/functions/mcp";
+const MCP_URL = `${PUBLIC_API}/mcp`;
 
 const CONFIG = `{
   "mcpServers": {

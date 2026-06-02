@@ -7,8 +7,8 @@ const QS = "?gender=male&view=front&layers=DC2626:chest|F59E0B:triceps|FCD34D:ab
 
 export default function ImageDemoCard({ baseUrl }) {
   const [loaded, setLoaded] = useState(false);
-  const src = `${baseUrl}/functions/generateImage${QS}`;
-  const displayUrl = `${baseUrl}/functions/generateImage${QS}`;
+  const src = `${baseUrl}/generateImage${QS}`;
+  const displayUrl = `${baseUrl}/generateImage${QS}`;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">

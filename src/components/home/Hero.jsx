@@ -9,7 +9,7 @@ const HERO_QS = "?gender=male&view=dual&layers=DC2626:chest,quadriceps,biceps|F5
 
 export default function Hero({ baseUrl }) {
   const [loaded, setLoaded] = useState(false);
-  const heroSrc = `${baseUrl}/functions/generateImage${HERO_QS}`;
+  const heroSrc = `${baseUrl}/generateImage${HERO_QS}`;
 
   return (
     <section className="relative overflow-hidden border-b border-border">

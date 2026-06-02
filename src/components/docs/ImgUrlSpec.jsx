@@ -1,6 +1,7 @@
 import React from "react";
+import { PUBLIC_API } from "@/lib/apiBase";
 
-const BASE = "https://anatome-form-flow.base44.app/functions/generateImage";
+const BASE = `${PUBLIC_API}/generateImage`;
 
 const PARAMS = [
   ["gender", "enum", "male", "male or female"],
@@ -26,7 +27,7 @@ const EXAMPLES = [
   ["Single-layer shortcut (muscles + color)", "?muscles=chest,triceps&color=%23FF0000&output=raw"],
 ];
 
-const POST_EXAMPLE = `const response = await fetch("https://anatome-form-flow.base44.app/functions/generateImage", {
+const POST_EXAMPLE = `const response = await fetch("${PUBLIC_API}/generateImage", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -77,7 +78,7 @@ export default function ImgUrlSpec() {
         {EXAMPLES.map(([label, qs], i) => (
           <div key={i}>
             <p className="text-sm font-medium text-foreground mb-1">{i + 1}. {label}</p>
-            <Code>{`GET /functions/generateImage${qs}`}</Code>
+            <Code>{`GET /generateImage${qs}`}</Code>
             <div className="rounded-lg border border-border bg-[#f1f5f9] dark:bg-[#0a0e17] p-3 flex justify-center">
               <img src={`${BASE}${qs}`} alt={label} loading="lazy" className="max-h-64 w-auto" />
             </div>

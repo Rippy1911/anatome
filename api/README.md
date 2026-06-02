@@ -1,49 +1,48 @@
 # Anatome API (Cloudflare Workers)
 
-The public Anatome API, served from Cloudflare Workers using [Hono](https://hono.dev).
+Public API at **https://api.anatome.dev** — Hono on Cloudflare Workers.
 
-> **Status:** scaffold in progress. The port from Base44 Deno functions
-> (`../base44/functions/`) lands in **Phase 3**. See [`../AGENTS.md`](../AGENTS.md).
+Marketing site (Base44): **https://anatome.dev**
 
-## Planned layout
+## Layout
 
 ```
 api/
-├── src/
-│   ├── index.ts          # Hono app + route registration
-│   ├── routes/           # one module per endpoint
-│   └── lib/              # shared: muscleEngine.ts, rateLimit.ts, attribution.ts
-├── data/                 # bundled static JSON (bodyPaths.json, exercises.json)
-├── test/                 # unit + worker tests (incl. selfTest parity)
-├── wrangler.toml         # Worker config, KV binding, routes (Phase 3)
-└── package.json
+├── src/           # Hono app, routes, shared lib
+├── data/          # bodyPaths.json, exercises.json (873 rows)
+├── public/gifs/   # 873 exercise demo GIFs (bundled, served at /exerciseGif)
+├── test/
+└── wrangler.toml
 ```
 
-## Endpoints (mirror the Base44 functions, minus aiDemo)
+## Endpoints
 
-`GET/POST /generateImage` · `GET /searchExercises` · `GET /getExercise` ·
-`GET/POST /resolveExercise` · `GET /listMuscles` · `POST /mcp` · `GET /openapi` ·
-`GET /selfTest`
+`generateImage` · `workoutImage` · `searchExercises` · `getExercise` · `resolveExercise` ·
+`exerciseGif` · `listMuscles` · `muscleInfo` · `listEquipment` · `mcp` · `openapi` · `selfTest`
 
-**Not ported:** `aiDemo` — AI is internal-only and stays on the Base44 frontend.
+**Not ported:** `aiDemo` — AI is internal-only on the Base44 frontend (`anatome.dev`).
 
 ## Local development
 
 ```bash
 pnpm install
-pnpm run worker:dev     # wrangler dev
-pnpm test               # unit tests
-pnpm run worker:test    # worker/integration tests (selfTest must be >= 39/39)
+pnpm run worker:dev
+pnpm test && pnpm run worker:test   # selfTest must stay >= 39/39
+```
+
+Regenerate GIFs (optional, already committed under `public/gifs/`):
+
+```bash
+python3 scripts/generate-exercise-gifs.py
 ```
 
 ## Configuration
 
-- **KV:** `RATE_LIMIT_KV` (keys `ip_day:<hash>:<date>` / `host_day:<hash>:<date>`, TTL ~36h)
-- **Secrets:** `wrangler secret put PROXY_SECRET` and `wrangler secret put MCP_TRUSTED_KEY`
-- **Routes:** `api.anatome.dev/*`
+- **KV:** `RATE_LIMIT_KV`
+- **Assets:** `public/` → `ASSETS` binding for `/exerciseGif`
+- **Secrets:** `wrangler secret put PROXY_SECRET` · `wrangler secret put MCP_TRUSTED_KEY`
+- **Vars:** `PUBLIC_BASE_URL=https://api.anatome.dev`
 
 ## Rules
 
-Read [`../AGENTS.md`](../AGENTS.md) before changing anything. In short: keep
-attribution fields, keep the rate-limit model, never add AI endpoints, never break
-backwards compatibility.
+See [`../CONTRIBUTING.md`](../CONTRIBUTING.md). Attribution fields and rate-limit model are intentional — do not remove or change without maintainer approval.

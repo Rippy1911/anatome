@@ -4,9 +4,7 @@ import FlowDiagram from "@/components/aiguide/FlowDiagram";
 import CodeBlock from "@/components/aiguide/CodeBlock";
 import LiveDemo from "@/components/aiguide/LiveDemo";
 import AironPromo from "@/components/AironPromo";
-import { API_BASE } from "@/lib/apiBase";
-
-const FN = `${API_BASE}/functions`;
+import { PUBLIC_API } from "@/lib/apiBase";
 
 const TOOL_DEF = `{
   "name": "generate_muscle_image",
@@ -21,7 +19,7 @@ const TOOL_DEF = `{
 }`;
 
 const RESOLVE_THEN_RENDER = `// 1. Resolve an exercise name to muscle layers
-const r = await fetch("${FN}/resolveExercise", {
+const r = await fetch("${PUBLIC_API}/resolveExercise", {
   method: "POST",
   body: JSON.stringify({ exercise: "bench press" })
 }).then((res) => res.json());
@@ -48,7 +46,7 @@ const tools = [{
 
 // When the model calls the tool, hit Anatome and return the image URL:
 async function generate_muscle_image({ exercise }) {
-  const r = await fetch("${FN}/resolveExercise", {
+  const r = await fetch("${PUBLIC_API}/resolveExercise", {
     method: "POST", body: JSON.stringify({ exercise })
   }).then((x) => x.json());
   return r.image_src; // drop this into your message as an image
@@ -102,7 +100,8 @@ export default function AiGuide() {
 
       <Heading icon={Code2}>MCP tool definition</Heading>
       <p className="text-sm text-muted-foreground mb-3">
-        Anatome ships a Model Context Protocol server at <span className="font-mono text-xs">/functions/mcp</span>.
+        Anatome ships a Model Context Protocol server at{" "}
+        <span className="font-mono text-xs">{PUBLIC_API}/mcp</span>.
         Here's the <span className="font-mono text-xs">generate_muscle_image</span> tool schema.
       </p>
       <CodeBlock label="json" code={TOOL_DEF} />

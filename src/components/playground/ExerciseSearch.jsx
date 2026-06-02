@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Loader2, X, Database } from "lucide-react";
 import { MUSCLES } from "@/data/muscleCatalog";
 import ExerciseResultRow from "./ExerciseResultRow";
+import { exerciseMediaUrl } from "@/lib/apiBase";
 
 const EQUIPMENT = ["any", "barbell", "dumbbell", "cable", "machine", "body only", "kettlebells", "bands", "medicine ball", "exercise ball", "e-z curl bar", "foam roll", "other"];
 const LEVELS = ["any", "beginner", "intermediate", "expert"];
@@ -60,18 +61,33 @@ export default function ExerciseSearch({ onSelect }) {
     const layers = payload.length
       ? payload.map((l) => ({ color: l.color, muscles: l.muscles || [], opacity: l.opacity != null ? l.opacity : 1 }))
       : [{ color: "#DC2626", muscles: ex.primaryMuscles || [], opacity: 1 }];
-    onSelect(layers);
+    onSelect(layers, ex);
     setLoaded(ex);
   };
 
   return (
     <div className="space-y-3">
       {loaded && (
-        <div className="flex items-center justify-between gap-2 rounded-lg bg-primary/10 border border-primary/20 px-3 py-2">
-          <span className="text-xs text-foreground truncate">
-            Loaded: <span className="font-semibold">{loaded.name}</span> · From ExerciseDB (CC0)
+        <div className="flex items-center gap-3 rounded-lg bg-primary/10 border border-primary/20 px-3 py-2">
+          {exerciseMediaUrl(loaded) && (
+            <img
+              src={exerciseMediaUrl(loaded)}
+              alt=""
+              className="w-14 h-14 rounded-md border border-border object-cover bg-background shrink-0"
+              loading="lazy"
+            />
+          )}
+          <span className="text-xs text-foreground truncate flex-1">
+            Loaded: <span className="font-semibold">{loaded.name}</span> · ExerciseDB (CC0)
           </span>
-          <button onClick={() => setLoaded(null)} className="text-muted-foreground hover:text-foreground shrink-0"><X className="w-4 h-4" /></button>
+          <button
+            type="button"
+            onClick={() => { setLoaded(null); onSelect(null, null); }}
+            className="text-muted-foreground hover:text-foreground shrink-0"
+            aria-label="Clear loaded exercise"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 

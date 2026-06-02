@@ -73,7 +73,7 @@ function Hint({ children }) {
 
 export default function RequestPanel({ settings, layers, baseUrl }) {
   const payload = useMemo(() => buildPayload(settings, layers), [settings, layers]);
-  const url = `${baseUrl}/functions/generateImage`;
+  const url = `${baseUrl}/generateImage`;
   const body = JSON.stringify(payload, null, 2);
 
   // GET URL (compact, raw SVG out) — the killer feature for <img> embedding.

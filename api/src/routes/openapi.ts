@@ -64,7 +64,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
     },
     servers: [
       { url: publicBaseUrl, description: "Cloudflare Workers (production)" },
-      { url: "https://anatome-form-flow.base44.app/functions", description: "Base44 hosted (legacy)" },
+      { url: "https://anatome.dev/functions", description: "Base44 marketing site (legacy /functions paths)" },
     ],
     tags: [
       { name: "Image Generation", description: "Render anatomical SVG diagrams" },

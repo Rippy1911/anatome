@@ -10,6 +10,7 @@ Usage:
   python3 scripts/generate-exercise-gifs.py              # all exercises
   python3 scripts/generate-exercise-gifs.py --id Air_Bike
   python3 scripts/generate-exercise-gifs.py --limit 10     # smoke test
+  python3 scripts/generate-exercise-gifs.py --retime     # fix speed on existing GIFs
 """
 
 from __future__ import annotations
@@ -32,7 +33,8 @@ DIST = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exe
 IMG_BASE = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/"
 OUT_DIR = ROOT / "api" / "public" / "gifs"
 DEFAULT_SIZE = 480
-DEFAULT_DELAY_MS = 600
+# Per-frame hold in ms (Pillow `duration` is milliseconds, not centiseconds).
+DEFAULT_DELAY_MS = 900
 
 
 def fetch_bytes(url: str) -> bytes | None:
@@ -41,6 +43,36 @@ def fetch_bytes(url: str) -> bytes | None:
             return resp.read()
     except Exception:
         return None
+
+
+def retime_gif(path: Path, delay_ms: int) -> bool:
+    """Re-save an existing GIF with a new per-frame duration (no re-download)."""
+    try:
+        im = Image.open(path)
+    except Exception:
+        return False
+    frames: list[Image.Image] = []
+    try:
+        while True:
+            frames.append(im.copy().convert("RGB"))
+            im.seek(im.tell() + 1)
+    except EOFError:
+        pass
+    if not frames:
+        return False
+    duration_ms = max(50, delay_ms)
+    if len(frames) == 1:
+        frames[0].save(path, save_all=False, optimize=True, loop=0)
+    else:
+        frames[0].save(
+            path,
+            save_all=True,
+            append_images=frames[1:],
+            duration=duration_ms,
+            loop=0,
+            optimize=True,
+        )
+    return True
 
 
 def make_gif(ex_id: str, images: list[str], size: int, delay_ms: int) -> bool:
@@ -60,7 +92,7 @@ def make_gif(ex_id: str, images: list[str], size: int, delay_ms: int) -> bool:
         return False
 
     out = OUT_DIR / f"{ex_id}.gif"
-    delay_cs = max(1, delay_ms // 10)
+    duration_ms = max(50, delay_ms)
     if len(frames) == 1:
         frames[0].save(out, save_all=False, optimize=True, loop=0)
     else:
@@ -68,7 +100,7 @@ def make_gif(ex_id: str, images: list[str], size: int, delay_ms: int) -> bool:
             out,
             save_all=True,
             append_images=frames[1:],
-            duration=delay_cs,
+            duration=duration_ms,
             loop=0,
             optimize=True,
         )
@@ -81,9 +113,30 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0, help="Max exercises (0 = all)")
     parser.add_argument("--size", type=int, default=DEFAULT_SIZE)
     parser.add_argument("--delay-ms", type=int, default=DEFAULT_DELAY_MS)
+    parser.add_argument("--force", action="store_true", help="Rebuild even if .gif already exists")
+    parser.add_argument(
+        "--retime",
+        action="store_true",
+        help="Only adjust playback speed on existing GIFs (no download)",
+    )
     args = parser.parse_args()
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    if args.retime:
+        paths = sorted(OUT_DIR.glob("*.gif"))
+        if args.id:
+            paths = [p for p in paths if p.stem == args.id]
+        if args.limit:
+            paths = paths[: args.limit]
+        ok = skip = 0
+        for path in paths:
+            if retime_gif(path, args.delay_ms):
+                ok += 1
+            else:
+                skip += 1
+        print(f"Retimed: {ok} gif(s), {skip} failed")
+        return 0 if ok else 1
 
     with urllib.request.urlopen(DIST, timeout=60) as resp:
         exercises = json.load(resp)
@@ -104,7 +157,7 @@ def main() -> int:
             skip += 1
             continue
         dest = OUT_DIR / f"{ex_id}.gif"
-        if dest.exists() and not args.id:
+        if dest.exists() and not args.id and not args.force:
             ok += 1
             continue
         if make_gif(ex_id, images, args.size, args.delay_ms):

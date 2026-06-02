@@ -5,7 +5,8 @@ deployed parts:
 
 - **Frontend (repo root)** — the React/Vite marketing + playground app
   (deploys through Base44; `base44/config.jsonc` must stay at the repo root).
-- **`api/`** — the Cloudflare Workers API (deploys via `wrangler`).
+- **`api/`** — the Cloudflare Workers API at **api.anatome.dev** (deploys via `wrangler`).
+- **Marketing site** — **anatome.dev** on Base44 (repo root frontend).
 
 ## Local setup
 
@@ -27,6 +28,9 @@ pnpm run worker:dev    # wrangler dev
 
 Secrets (`PROXY_SECRET`, `MCP_TRUSTED_KEY`) are set with `wrangler secret put` —
 never commit them.
+
+Exercise demo GIFs live in `api/public/gifs/` (git-tracked). To regenerate:
+`python3 scripts/generate-exercise-gifs.py`.
 
 ## Commit conventions
 

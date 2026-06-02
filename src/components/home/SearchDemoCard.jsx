@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { API_BASE } from "@/lib/apiBase";
+import { absApiUrl, exerciseMediaUrl } from "@/lib/apiBase";
 import { Search, Loader2, Dumbbell } from "lucide-react";
 
 function Chip({ children, tone = "primary" }) {
@@ -31,9 +31,8 @@ export default function SearchDemoCard({ baseUrl }) {
   }, [q]);
 
   const pick = (e) => { setSelected(e); setImgLoaded(false); };
-  const imgSrc = selected?.anatome_imageSrc
-    ? (selected.anatome_imageSrc.startsWith("http") ? selected.anatome_imageSrc : `${API_BASE}${selected.anatome_imageSrc}`)
-    : null;
+  const imgSrc = selected?.anatome_imageSrc ? absApiUrl(selected.anatome_imageSrc) : null;
+  const gifSrc = selected ? exerciseMediaUrl(selected) : null;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">
@@ -72,9 +71,14 @@ export default function SearchDemoCard({ baseUrl }) {
           {!selected && <p className="text-xs text-muted-foreground px-4">Click a result to render its muscle diagram.</p>}
           {selected && (
             <>
-              <div className="flex-1 flex items-center justify-center w-full">
-                {!imgLoaded && <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />}
-                {imgSrc && <img src={imgSrc} alt={selected.name} onLoad={() => setImgLoaded(true)} className={`max-h-40 w-auto ${imgLoaded ? "block" : "hidden"}`} />}
+              <div className="flex-1 flex items-center justify-center gap-3 w-full">
+                <div className="flex items-center justify-center">
+                  {!imgLoaded && <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />}
+                  {imgSrc && <img src={imgSrc} alt={selected.name} onLoad={() => setImgLoaded(true)} className={`max-h-40 w-auto ${imgLoaded ? "block" : "hidden"}`} />}
+                </div>
+                {gifSrc && (
+                  <img src={gifSrc} alt="" className="max-h-36 w-auto rounded-lg border border-border object-contain bg-background" loading="lazy" />
+                )}
               </div>
               <div className="mt-2 w-full">
                 <div className="text-sm font-semibold truncate">{selected.name}</div>

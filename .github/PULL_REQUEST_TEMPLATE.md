@@ -4,7 +4,7 @@
 
 ## Area
 - [ ] API (`api/` — Cloudflare Workers)
-- [ ] Frontend (`frontend/` — Base44)
+- [ ] Frontend (repo root — Base44 / anatome.dev)
 - [ ] Docs / tooling
 - [ ] Spans both frontend + api (requires maintainer review)
 

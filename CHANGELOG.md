@@ -7,14 +7,17 @@ adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
-- `api/` package reserved for the Cloudflare Workers port (Phase 3).
+- Cloudflare Workers API (`api/`) with bundled `bodyPaths.json`, `exercises.json`, and
+  873 exercise demo GIFs under `api/public/gifs/`.
+- P1 endpoints: `workoutImage`, `muscleInfo`, `listEquipment`, `exerciseGif`.
+- Playground exercise GIF preview when loading from ExerciseDB.
 - Project legal scaffolding: LICENSE (Apache-2.0), NOTICE, CONTRIBUTING,
   CODE_OF_CONDUCT, GitHub issue/PR templates, and CI workflow.
-- `AGENTS.md` + `.cursor/rules` with the port-out architecture and constraints.
 
 ### Changed
-- Frontend remains at the repository root (required by Base44's GitHub sync); the
-  Cloudflare API is an independent package under `api/`.
+- Production domains: marketing **anatome.dev** (Base44), API **api.anatome.dev** (Worker).
+- Frontend/API examples and docs use Worker paths (`/generateImage`, not `/functions/...`).
+- Frontend remains at the repository root (required by Base44's GitHub sync).
 
 ## [1.2.0] - 2026-06-02
 

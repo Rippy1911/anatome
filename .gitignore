@@ -28,8 +28,6 @@ pnpm-debug.log*
 
 test.txt
 
-# Generated exercise GIFs (run scripts/generate-exercise-gifs.py before deploy)
-api/public/gifs/*.gif
 .demo-venv/
 demo/
 

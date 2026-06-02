@@ -1,5 +1,5 @@
 import React from "react";
-import { API_BASE } from "@/lib/apiBase";
+import { PUBLIC_API } from "@/lib/apiBase";
 import Hero from "@/components/home/Hero";
 import ImageDemoCard from "@/components/home/ImageDemoCard";
 import SearchDemoCard from "@/components/home/SearchDemoCard";
@@ -20,7 +20,7 @@ function SectionHead({ eyebrow, title }) {
 }
 
 export default function Home() {
-  const baseUrl = API_BASE;
+  const baseUrl = PUBLIC_API;
 
   return (
     <div>

@@ -4,16 +4,16 @@ function Code({ children }) {
   return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
 }
 
-const PATTERN_A = `const { results } = await fetch("/functions/searchExercises?q=bench&limit=5").then(r => r.json());
+const PATTERN_A = `const { results } = await fetch("https://api.anatome.dev/searchExercises?q=bench&limit=5").then(r => r.json());
 const first = results[0];
 // drop into HTML:
 // <img src={first.anatome_imageSrc} alt={first.name} />`;
 
-const PATTERN_B = `const { exercise } = await fetch("/functions/getExercise?name=bench+press").then(r => r.json());
+const PATTERN_B = `const { exercise } = await fetch("https://api.anatome.dev/getExercise?name=bench+press").then(r => r.json());
 console.log(exercise.instructions);    // array of step-by-step strings
 console.log(exercise.anatome_imageSrc); // ready for <img src>`;
 
-const PATTERN_C = `const { exercise } = await fetch("/functions/getExercise?muscle=chest&limit=10").then(r => r.json());
+const PATTERN_C = `const { exercise } = await fetch("https://api.anatome.dev/getExercise?muscle=chest&limit=10").then(r => r.json());
 // exercise is an array of 10 chest exercises in this mode`;
 
 const SCHEMA = `{
@@ -45,7 +45,7 @@ const SCHEMA = `{
     { "color": "#DC2626", "muscles": ["chest"] },
     { "color": "#F59E0B", "muscles": ["deltoids", "triceps"] }
   ],
-  "anatome_imageSrc": "/functions/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:deltoids,triceps&output=raw"
+  "anatome_imageSrc": "https://api.anatome.dev/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:deltoids,triceps&output=raw"
 }`;
 
 export default function ExerciseDbSection() {
@@ -68,7 +68,7 @@ export default function ExerciseDbSection() {
       <Code>{PATTERN_C}</Code>
 
       <h3 className="font-display font-semibold mt-8 mb-1">Exercise schema</h3>
-      <p className="text-sm text-muted-foreground">Example: <span className="font-mono text-foreground">GET /functions/getExercise?name=bench+press</span></p>
+      <p className="text-sm text-muted-foreground">Example: <span className="font-mono text-foreground">GET https://api.anatome.dev/getExercise?name=bench+press</span></p>
       <Code>{SCHEMA}</Code>
 
       <p className="text-sm text-muted-foreground leading-relaxed mt-3">

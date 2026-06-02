@@ -9,14 +9,14 @@ here (they are intentionally git-tracked so the Worker build is reproducible):
 
 ## How to export (run against the live Base44 app)
 
-> Base URL today: `https://anatome-form-flow.base44.app`
+> Export source: `https://anatome.dev/functions/...` (Base44) or `https://api.anatome.dev/...` (Worker)
 
 ### 1. `bodyPaths.json`
 
 `getBodyData` already returns the exact nested shape the render engine expects:
 
 ```bash
-curl -s "https://anatome-form-flow.base44.app/functions/getBodyData" \
+curl -s "https://anatome.dev/functions/getBodyData" \
   | jq '.data' > api/data/bodyPaths.json
 ```
 
@@ -44,7 +44,7 @@ bundle we want the raw rows including the `anatome_*` mapping fields. Two option
 
 ```bash
 # Fallback (projected fields) — empty query returns all, paginated by limit
-curl -s "https://anatome-form-flow.base44.app/functions/searchExercises?q=&limit=1000" \
+curl -s "https://anatome.dev/functions/searchExercises?q=&limit=1000" \
   | jq '.results' > api/data/exercises.json
 ```
 

@@ -7,6 +7,8 @@ import BodyControls from "@/components/playground/BodyControls";
 import ExerciseSearch from "@/components/playground/ExerciseSearch";
 import RequestPanel from "@/components/playground/RequestPanel";
 import HealthBar from "@/components/playground/HealthBar";
+import ExerciseGifPreview from "@/components/playground/ExerciseGifPreview";
+import { PUBLIC_API } from "@/lib/apiBase";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Layers, SlidersHorizontal, Dumbbell, Code2 } from "lucide-react";
 import { DEMO_LAYERS } from "@/data/muscleCatalog";
@@ -35,7 +37,8 @@ export default function Playground() {
   const [layers, setLayers] = useState(() => DEMO_LAYERS.map((l) => ({ ...l })));
   const [activeLayer, setActiveLayer] = useState(0);
   const [bodyColorTouched, setBodyColorTouched] = useState(false);
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const [selectedExercise, setSelectedExercise] = useState(null);
+  const baseUrl = PUBLIC_API;
   const previewBg = theme === "dark" ? "#0a0e17" : "#f1f5f9";
 
   useEffect(() => { loadBodyData().then(setBodyData); }, []);
@@ -50,6 +53,16 @@ export default function Playground() {
   const handleSettingsChange = (next) => {
     if (next.bodyColor !== settings.bodyColor) setBodyColorTouched(true);
     setSettings(next);
+  };
+
+  const handleExerciseSelect = (layers, ex) => {
+    if (!layers) {
+      setSelectedExercise(null);
+      return;
+    }
+    setLayers(layers);
+    setActiveLayer(0);
+    setSelectedExercise(ex || null);
   };
 
   const handleMuscleClick = (slug) => {
@@ -86,6 +99,14 @@ export default function Playground() {
                 <div className="rounded-xl border border-border overflow-hidden" style={{ backgroundColor: previewBg }}>{preview}</div>
               </div>
               <p className="px-4 pb-4 text-xs text-muted-foreground">Click a muscle to toggle it in the active layer. Hover for its anatomical name.</p>
+              {selectedExercise && (
+                <div className="px-4 pb-4">
+                  <ExerciseGifPreview
+                    exercise={selectedExercise}
+                    onClear={() => setSelectedExercise(null)}
+                  />
+                </div>
+              )}
             </Section>
             <Section icon={SlidersHorizontal} title="Body">
               <BodyControls settings={settings} onChange={handleSettingsChange} />
@@ -96,7 +117,7 @@ export default function Playground() {
         {/* Right: exercise library, layers, request */}
         <div className="space-y-6">
           <Section icon={Dumbbell} title="Exercise Library">
-            <ExerciseSearch onSelect={(l) => { setLayers(l); setActiveLayer(0); }} />
+            <ExerciseSearch onSelect={handleExerciseSelect} />
           </Section>
           <Section icon={Layers} title="Layers">
             <p className="text-xs text-muted-foreground mb-3">Default: bench press with primary (red), secondary (amber), and stabilizers (yellow, 50% opacity). ExerciseDB resolves primary + secondary only — add more layers here or via the API.</p>
@@ -111,12 +132,18 @@ export default function Playground() {
       {/* Mobile */}
       <div className="md:hidden space-y-4">
         <div className="rounded-2xl border border-border overflow-hidden" style={{ backgroundColor: previewBg }}>{preview}</div>
+        {selectedExercise && (
+          <ExerciseGifPreview
+            exercise={selectedExercise}
+            onClear={() => setSelectedExercise(null)}
+          />
+        )}
         <p className="text-xs text-muted-foreground px-1">Tap a muscle to toggle it in the active layer.</p>
         <Accordion type="single" collapsible defaultValue="library" className="space-y-3">
           <AccordionItem value="library" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Dumbbell className="w-4 h-4 text-primary" /> Exercise Library</span></AccordionTrigger>
             <AccordionContent className="pt-1 pb-4">
-              <ExerciseSearch onSelect={(l) => { setLayers(l); setActiveLayer(0); }} />
+              <ExerciseSearch onSelect={handleExerciseSelect} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="layers" className="rounded-2xl border border-border bg-card px-4">

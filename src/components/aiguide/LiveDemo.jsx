@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { API_BASE } from "@/lib/apiBase";
+import { absApiUrl } from "@/lib/apiBase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, AlertTriangle } from "lucide-react";
 import MuscleGroupsList from "@/components/aiguide/MuscleGroupsList";
-
-const absUrl = (u) => (u ? (u.startsWith("http") ? u : `${API_BASE}${u}`) : null);
 
 const SUGGESTIONS = ["the exercise where you bench a barbell lying down", "king of leg exercises with a barbell on your back", "curling a dumbbell to work the front of your arm"];
 
@@ -71,7 +69,7 @@ export default function LiveDemo() {
       {result && (
         <div className="grid sm:grid-cols-[200px_1fr] gap-4 items-start pt-2">
           <div className="rounded-xl border border-border overflow-hidden bg-secondary/40">
-            {result.anatome_imageSrc && <img src={absUrl(result.anatome_imageSrc)} alt={result.exercise_name_extracted} className="w-full" />}
+            {result.anatome_imageSrc && <img src={absApiUrl(result.anatome_imageSrc)} alt={result.exercise_name_extracted} className="w-full" />}
           </div>
           <div className="space-y-3 text-sm">
             {result.matched && (

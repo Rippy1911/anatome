@@ -59,7 +59,7 @@ Deno.serve(async () => {
       license: { name: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
     },
     servers: [
-      { url: "https://anatome-form-flow.base44.app/functions", description: "Base44 hosted" },
+      { url: "https://anatome.dev/functions", description: "Base44 marketing site" },
     ],
     tags: [
       { name: "Image Generation", description: "Render anatomical SVG diagrams" },

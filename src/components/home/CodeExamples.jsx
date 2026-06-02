@@ -7,7 +7,7 @@ const TABS = (base) => ([
     key: "img",
     label: "<img> HTML",
     code: `<img
-  src="${base}/functions/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw"
+  src="${base}/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw"
   alt="Muscle diagram"
   width="384"
 />`,
@@ -15,7 +15,7 @@ const TABS = (base) => ([
   {
     key: "fetch",
     label: "fetch (JS)",
-    code: `const res = await fetch("${base}/functions/generateImage", {
+    code: `const res = await fetch("${base}/generateImage", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ gender: "male", view: "front", layers: [{ color: "#DC2626", muscles: ["chest"] }] })
@@ -25,10 +25,10 @@ const { svg } = await res.json();`,
   {
     key: "curl",
     label: "curl",
-    code: `curl "${base}/functions/generateImage?layers=DC2626:chest,abs&view=front&output=raw" \\
+    code: `curl "${base}/generateImage?layers=DC2626:chest,abs&view=front&output=raw" \\
   -o body.svg
 # Or search exercises:
-curl "${base}/functions/searchExercises?q=bench&limit=5"`,
+curl "${base}/searchExercises?q=bench&limit=5"`,
   },
 ]);
 

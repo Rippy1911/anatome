@@ -51,11 +51,14 @@ export default function Docs() {
       <P><span className="font-mono text-foreground">last-wins:</span> if muscle X is in layer 1 (red) and layer 3 (blue), it renders blue.</P>
 
       <H2 id="endpoints">Endpoints</H2>
-      <P><span className="font-mono text-foreground">POST /functions/generateImage</span> — main renderer (full JSON schema). Also supports GET with a simplified query syntax.</P>
-      <P><span className="font-mono text-foreground">GET /functions/listMuscles</span> — full muscle catalog (slugs + anatomical names + view presence).</P>
-      <P><span className="font-mono text-foreground">GET/POST /functions/resolveExercise</span> — resolve an exercise name into colored layers.</P>
-      <P><span className="font-mono text-foreground">POST /functions/mcp</span> — MCP JSON-RPC 2.0 server. Production: <span className="font-mono text-foreground">POST https://api.anatome.dev/mcp</span>.</P>
-      <P><span className="font-mono text-foreground">GET /functions/openapi</span> — OpenAPI 3.1 spec. <span className="font-mono text-foreground">GET /functions/selfTest</span> — test suite.</P>
+      <P>Production base URL: <span className="font-mono text-foreground">https://api.anatome.dev</span> (marketing site: <span className="font-mono text-foreground">https://anatome.dev</span>).</P>
+      <P><span className="font-mono text-foreground">POST /generateImage</span> — main renderer (full JSON schema). Also supports GET with a simplified query syntax.</P>
+      <P><span className="font-mono text-foreground">POST /workoutImage</span> — session heatmap from a list of exercise names.</P>
+      <P><span className="font-mono text-foreground">GET /searchExercises</span> · <span className="font-mono text-foreground">GET /getExercise</span> · <span className="font-mono text-foreground">GET/POST /resolveExercise</span> — ExerciseDB + muscle layers.</P>
+      <P><span className="font-mono text-foreground">GET /exerciseGif</span> — hosted 2-frame demo GIF per exercise (<span className="font-mono text-foreground">?id=&lt;ext_id&gt;</span>).</P>
+      <P><span className="font-mono text-foreground">GET /listMuscles</span> · <span className="font-mono text-foreground">GET /muscleInfo</span> · <span className="font-mono text-foreground">GET /listEquipment</span> — discovery.</P>
+      <P><span className="font-mono text-foreground">POST /mcp</span> — MCP JSON-RPC 2.0. <span className="font-mono text-foreground">GET /openapi</span> · <span className="font-mono text-foreground">GET /selfTest</span>.</P>
+      <P className="text-xs text-muted-foreground">Legacy Base44 paths: <span className="font-mono">https://anatome.dev/functions/&lt;name&gt;</span> (same handlers during migration).</P>
       <P>Response (output=json): <span className="font-mono text-foreground">{`{ ok, svg, format, gender, view, muscles_rendered, attribution, license, duration_ms }`}</span>. With <span className="font-mono text-foreground">output=raw</span> the SVG is returned directly with <span className="font-mono text-foreground">Content-Type: image/svg+xml</span>.</P>
 
       <H2 id="benchmarks">Benchmarks</H2>
@@ -80,7 +83,7 @@ pecs     → chest         hamstrings → hamstring`}</Code>
 
       <P><span className="font-semibold text-foreground">Endpoint URL</span></P>
       <Code>{`https://api.anatome.dev/mcp`}</Code>
-      <P className="text-xs text-muted-foreground">Legacy Base44 host: <span className="font-mono">https://anatome-form-flow.base44.app/functions/mcp</span></P>
+      <P className="text-xs text-muted-foreground">Legacy Base44 host: <span className="font-mono">https://anatome.dev/functions/mcp</span></P>
 
       <P><span className="font-semibold text-foreground">Tools exposed (5)</span></P>
       <P><span className="font-mono text-foreground">generate_muscle_image</span> — render an SVG of highlighted muscles. Params: <span className="font-mono">gender, view, layers[], defs?, width?, height?, background?, body_color?</span></P>
@@ -133,7 +136,7 @@ curl -X POST https://api.anatome.dev/mcp \\
 
       <H2 id="examples">Examples</H2>
       <Code>{`# Three-tier bench press (primary / secondary / stabilizers)
-curl -X POST /functions/generateImage \\
+curl -X POST https://api.anatome.dev/generateImage \\
   -H 'Content-Type: application/json' \\
   -d '{"view":"dual","layers":[
     {"color":"#DC2626","muscles":["chest"]},
@@ -142,10 +145,10 @@ curl -X POST /functions/generateImage \\
   ]}'
 
 # Compact GET with the same three layers
-GET /functions/generateImage?layers=DC2626:chest|F59E0B:triceps,deltoids|FCD34D@0.5:abs&output=raw
+GET https://api.anatome.dev/generateImage?layers=DC2626:chest|F59E0B:triceps,deltoids|FCD34D@0.5:abs&output=raw
 
 # Resolve an exercise from the 873-exercise database (primary + secondary)
-GET /functions/resolveExercise?exercise=bench+press`}</Code>
+GET https://api.anatome.dev/resolveExercise?exercise=bench+press`}</Code>
 
       <H2 id="attribution">Attribution & License</H2>
       <ul className="text-sm text-muted-foreground leading-relaxed my-2 space-y-1.5 list-disc pl-5">
