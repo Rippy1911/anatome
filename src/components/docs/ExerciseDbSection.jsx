@@ -1,7 +1,7 @@
 import React from "react";
 
 function Code({ children }) {
-  return <pre className="bg-[#0a0e17] border border-border rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-foreground/90 my-3"><code>{children}</code></pre>;
+  return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
 }
 
 const PATTERN_A = `const { results } = await fetch("/functions/searchExercises?q=bench&limit=5").then(r => r.json());

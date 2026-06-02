@@ -23,7 +23,7 @@ const EXAMPLES = [
   ["Three layers", "?gender=male&view=front&layers=DC2626:chest|F59E0B:triceps|FCD34D:abs&output=raw"],
   ["Female back view", "?gender=female&view=back&layers=DC2626:hamstring,gluteal&output=raw"],
   ["Tall portrait, custom colors", "?width=512&height=900&body_color=%23e5e7eb&background=%23ffffff&layers=DC2626:chest&output=raw"],
-  ["mertronlp-compatible legacy URL", "?muscles=chest,triceps&color=%23FF0000&output=raw"],
+  ["Single-layer shortcut (muscles + color)", "?muscles=chest,triceps&color=%23FF0000&output=raw"],
 ];
 
 const POST_EXAMPLE = `const response = await fetch("https://anatome-form-flow.base44.app/functions/generateImage", {
@@ -39,7 +39,7 @@ const POST_EXAMPLE = `const response = await fetch("https://anatome-form-flow.ba
 const { svg } = await response.json();`;
 
 function Code({ children }) {
-  return <pre className="bg-[#0a0e17] border border-border rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-foreground/90 my-3"><code>{children}</code></pre>;
+  return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
 }
 
 export default function ImgUrlSpec() {

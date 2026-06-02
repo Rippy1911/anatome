@@ -4,7 +4,7 @@ import ImgUrlSpec from "@/components/docs/ImgUrlSpec";
 import ExerciseDbSection from "@/components/docs/ExerciseDbSection";
 
 function Code({ children }) {
-  return <pre className="bg-[#0a0e17] border border-border rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-foreground/90 my-3"><code>{children}</code></pre>;
+  return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
 }
 function H2({ id, children }) {
   return <h2 id={id} className="font-display text-xl font-bold tracking-tight mt-12 mb-3 scroll-mt-24">{children}</h2>;
@@ -18,13 +18,13 @@ export default function Docs() {
       <p className="text-muted-foreground mt-2">A self-hosted muscle group image generator API. Returns SVG diagrams of the human body with arbitrary muscles highlighted in arbitrary colors.</p>
 
       <nav className="flex flex-wrap gap-2 mt-6 text-xs">
-        {[["overview","Overview"],["schema","Schema"],["endpoints","Endpoints"],["img-urls","Building <img> URLs"],["exercise-db","Exercise Database"],["migration","mertronlp Migration"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
+        {[["overview","Overview"],["schema","Schema"],["endpoints","Endpoints"],["img-urls","Building <img> URLs"],["exercise-db","Exercise Database"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
           <a key={id} href={`#${id}`} className="px-2.5 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors">{l}</a>
         ))}
       </nav>
 
       <H2 id="overview">Overview</H2>
-      <P>Anatome renders human-body muscle diagrams as SVG. You describe what to highlight using <span className="font-mono text-foreground">layers</span> — each layer is a color plus a list of muscle slugs. The Apache-2.0 licensed, more flexible alternative to mertronlp's muscle-group-image-generator.</P>
+      <P>Anatome renders human-body muscle diagrams as SVG. You describe what to highlight using <span className="font-mono text-foreground">layers</span> — each layer is a color plus a list of muscle slugs. Apache-2.0 licensed and self-hostable.</P>
       <P>There are 23 canonical muscle slugs. Render priority (highest wins): <span className="font-mono text-foreground">per_muscle[slug].fill</span> → <span className="font-mono text-foreground">layers[].color</span> (last layer wins if a muscle appears in multiple) → <span className="font-mono text-foreground">body_color</span>.</P>
 
       <H2 id="schema">Request Schema</H2>
@@ -62,34 +62,24 @@ export default function Docs() {
       <H2 id="exercise-db">Exercise Database (873 exercises)</H2>
       <ExerciseDbSection />
 
-      <H2 id="migration">mertronlp Migration Guide</H2>
-      <P>Slug names follow react-native-body-highlighter, not mertronlp. Aliases are auto-normalized, so existing slugs mostly still work:</P>
+      <H2 id="muscle-slugs">Muscle Slug Aliases</H2>
+      <P>Slug names follow react-native-body-highlighter. Common aliases are auto-normalized, so these all resolve correctly:</P>
       <Code>{`shoulders → deltoids     calfs → calves      quads → quadriceps
 gluteus  → gluteal       lats  → upper-back  traps → trapezius
 pecs     → chest         hamstrings → hamstring`}</Code>
-      <P>Endpoint equivalents:</P>
-      <Code>{`/getImage?muscleGroups=chest,abs&color=#FF0000
-  → { layers: [{ color: "#FF0000", muscles: ["chest","abs"] }] }
-
-/getMulticolorImage?primaryMuscleGroups=chest&secondaryMuscleGroups=triceps
-                    &primaryColor=red&secondaryColor=blue
-  → { layers: [{color:"red",muscles:["chest"]},
-               {color:"blue",muscles:["triceps"]}] }
-
-/getIndividualColorImage
-  → one layer per muscle`}</Code>
 
       <H2 id="mcp">MCP Server</H2>
-      <P>Anatome ships a Model Context Protocol (MCP) server over JSON-RPC 2.0. Point any MCP-compatible client at the endpoint below and it gains three muscle-visualization tools.</P>
+      <P>Anatome ships a Model Context Protocol (MCP) server over JSON-RPC 2.0. Point any MCP-compatible client at the endpoint below and it gains five muscle-visualization tools.</P>
 
       <P><span className="font-semibold text-foreground">Endpoint URL</span></P>
-      <Code>{`https://anatome-form-flow.base44.app/functions/mcp     # current
-https://api.anatome.dev/mcp                            # v2.0, coming soon`}</Code>
+      <Code>{`https://anatome-form-flow.base44.app/functions/mcp`}</Code>
 
-      <P><span className="font-semibold text-foreground">Tools exposed (3)</span></P>
+      <P><span className="font-semibold text-foreground">Tools exposed (5)</span></P>
       <P><span className="font-mono text-foreground">generate_muscle_image</span> — render an SVG of highlighted muscles. Params: <span className="font-mono">gender, view, layers[], defs?, width?, height?, background?, body_color?</span></P>
       <P><span className="font-mono text-foreground">list_muscles</span> — get the catalog of 23 muscle slugs + anatomical names + which view they appear on.</P>
       <P><span className="font-mono text-foreground">resolve_exercise</span> — fuzzy-match an exercise name, return ready-to-render layers (backed by our 873-exercise database).</P>
+      <P><span className="font-mono text-foreground">search_exercises</span> — search the 873-exercise database with optional muscle/equipment/level filters.</P>
+      <P><span className="font-mono text-foreground">get_exercise</span> — fetch a single exercise (by name, id, or random) with full instructions, images, and anatome layers.</P>
 
       <P><span className="font-semibold text-foreground">JSON-RPC 2.0 quickstart</span></P>
       <Code>{`# 1. initialize — handshake
@@ -131,7 +121,7 @@ curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
 }`}</Code>
 
       <P><span className="font-semibold text-foreground">Other clients</span> — any JSON-RPC 2.0 MCP client works. See <a className="text-primary hover:underline" href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">modelcontextprotocol.io</a>.</P>
-      <P><span className="font-mono text-foreground">Rate limit:</span> MCP calls count against the same 100/day/IP free tier. Trusted clients can bypass via the <span className="font-mono text-xs">X-Mcp-Trusted-Key</span> header (contact us for a key).</P>
+      <P><span className="font-mono text-foreground">Rate limit:</span> the free tier allows 1000 requests/day from localhost and 100 requests/month per public host. Trusted clients can bypass via the <span className="font-mono text-xs">X-Mcp-Trusted-Key</span> header (contact us for a key).</P>
 
       <H2 id="examples">Examples</H2>
       <Code>{`# Single muscle group, red, front view
