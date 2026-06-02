@@ -11,6 +11,7 @@ import Playground from '@/pages/Playground';
 import Docs from '@/pages/Docs';
 import AiGuide from '@/pages/AiGuide';
 import Api from '@/pages/Api';
+import Tos from '@/pages/Tos';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/docs" element={<Docs />} />
               <Route path="/ai-guide" element={<AiGuide />} />
               <Route path="/api" element={<Api />} />
+              <Route path="/tos" element={<Tos />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>

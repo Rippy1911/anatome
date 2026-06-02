@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function SiteFooter() {
   return (
@@ -12,7 +13,11 @@ export default function SiteFooter() {
         >
           Built with ♥ by NextSolutions
         </a>
-        <span>© 2026 NextSolutions</span>
+        <span className="flex items-center gap-2">
+          <Link to="/tos" className="hover:text-foreground transition-colors">Terms</Link>
+          <span aria-hidden="true">·</span>
+          <span>© 2026 NextSolutions</span>
+        </span>
         <a
           href="https://airon.coach"
           target="_blank"

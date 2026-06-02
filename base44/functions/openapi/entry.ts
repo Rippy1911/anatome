@@ -54,7 +54,7 @@ Deno.serve(async () => {
       title: "Anatome — Muscle Group Image Generator API",
       version: "1.0.0",
       description: "Anatome — Apache-2.0 licensed muscle group image generator + ExerciseDB API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercises from free-exercise-db (CC0). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible. Built by NextSolutions — nextsolutions.studio",
-      termsOfService: "https://nextsolutions.studio",
+      termsOfService: "https://anatome.dev/tos",
       contact: { name: "NextSolutions", url: "https://nextsolutions.studio", email: "contact@nextsolutions.studio" },
       license: { name: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
     },

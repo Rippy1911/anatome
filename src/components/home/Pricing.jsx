@@ -12,42 +12,37 @@ function Feature({ children }) {
 
 export default function Pricing() {
   return (
-    <div className="grid md:grid-cols-2 gap-5">
-      {/* FREE / DEMO */}
-      <div className="rounded-2xl border border-border bg-card p-6 flex flex-col">
-        <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Free / Demo</div>
-        <div className="mt-2 flex items-baseline gap-1">
-          <span className="text-3xl font-display font-bold">$0</span>
-          <span className="text-sm text-muted-foreground">/month</span>
-        </div>
-        <p className="text-sm text-muted-foreground mt-1">No API key needed</p>
-        <ul className="space-y-2.5 mt-5 flex-1">
-          <Feature>Unlimited from localhost & 127.0.0.1 (perfect for development)</Feature>
-          <Feature>1000 requests/day per IP · 100 requests/day per public host</Feature>
-          <Feature>All endpoints included</Feature>
-          <Feature>Apache-2.0 self-hosting always free</Feature>
-        </ul>
-      </div>
-
-      {/* PRO */}
+    <div className="max-w-lg mx-auto">
       <div className="rounded-2xl border-2 border-primary bg-card p-6 flex flex-col relative">
-        <div className="absolute -top-3 left-6 bg-primary text-primary-foreground text-[11px] font-semibold px-2.5 py-0.5 rounded-full">RapidAPI</div>
-        <div className="text-xs font-mono uppercase tracking-wider text-primary">Pro</div>
-        <div className="mt-2 flex items-baseline gap-1">
-          <span className="text-3xl font-display font-bold">$5</span>
-          <span className="text-sm text-muted-foreground">/month via RapidAPI</span>
+        <div className="absolute -top-3 left-6 bg-primary text-primary-foreground text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
+          Basic
         </div>
-        <p className="text-sm text-muted-foreground mt-1">For production apps</p>
+        <div className="text-xs font-mono uppercase tracking-wider text-primary">Via RapidAPI</div>
+        <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+          <span className="text-3xl font-display font-bold">$0</span>
+          <span className="text-sm text-muted-foreground">base · pay only for overage</span>
+        </div>
+        <p className="text-sm text-muted-foreground mt-1">
+          1,000 requests included every month, then{" "}
+          <span className="font-mono text-foreground">$0.0001</span> per request.
+        </p>
         <ul className="space-y-2.5 mt-5 flex-1">
-          <Feature>50,000 requests/month</Feature>
-          <Feature>Same endpoints, no rate limit on public hosts</Feature>
-          <Feature>$0.0001/request overage</Feature>
-          <Feature>Email support</Feature>
+          <Feature>1,000 requests/month included (Basic plan)</Feature>
+          <Feature>$0.0001 per request above the monthly allowance</Feature>
+          <Feature>All endpoints — images, ExerciseDB, MCP</Feature>
+          <Feature>Unlimited from localhost for development & testing</Feature>
+          <Feature>Apache-2.0 — self-host for free anytime</Feature>
         </ul>
         <p className="text-xs text-muted-foreground mt-5 leading-relaxed border-t border-border pt-4">
-          Pricing is cost-recovery — we aim for no profit. Any surplus funds infrastructure and development of the project.
-          Self-host for free at{" "}
-          <a href="https://github.com/Rippy1911/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">github.com/Rippy1911/anatome</a>.
+          Pricing is cost-recovery — we aim for no profit. Any surplus funds infrastructure and development.
+          Self-host at{" "}
+          <a href="https://github.com/Rippy1911/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            github.com/Rippy1911/anatome
+          </a>
+          {" "}or subscribe on{" "}
+          <a href="https://rapidapi.com/anatome/api/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            RapidAPI
+          </a>.
         </p>
       </div>
     </div>

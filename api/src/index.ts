@@ -249,7 +249,9 @@ app.get("/mcp", (c) => c.json({ ok: true, server: "anatome", version: "2.0.0", p
 app.post("/mcp", async (c) => {
   const rl = await checkRateLimit(c.req.raw, c.env);
   if (!rl.allowed) {
-    const msg = rl.key_type === "host_day" ? `Rate limit exceeded: free tier ${rl.limit} req/day per public host. Upgrade via RapidAPI.` : `Rate limit exceeded: free tier ${rl.limit} req/day per IP. Upgrade via RapidAPI.`;
+    const msg = rl.key_type === "host_day"
+      ? `Rate limit exceeded (${rl.limit}/day per host). Basic on RapidAPI: 1,000/month included, $0.0001/request overage.`
+      : `Rate limit exceeded (${rl.limit}/day per IP). Basic on RapidAPI: 1,000/month included, $0.0001/request overage.`;
     return c.json({ jsonrpc: "2.0", id: null, error: { code: -32000, message: msg } }, 429, { "Retry-After": String(rl.retry_after) });
   }
   let body: unknown;

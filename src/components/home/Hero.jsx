@@ -31,7 +31,7 @@ export default function Hero({ baseUrl }) {
         </h1>
 
         <p className="mt-5 text-sm sm:text-base text-muted-foreground font-mono">
-          Open source · Apache-2.0 · 100 free requests/month · MCP-compatible · 873 exercises included
+          Open source · Apache-2.0 · 1,000 free requests/month · MCP-compatible · 873 exercises included
         </p>
         <p className="mt-2 text-xs text-muted-foreground font-mono">
           {HERO_PERF_TAGLINE}
@@ -41,7 +41,7 @@ export default function Hero({ baseUrl }) {
           <Link to="/playground" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
             Try the Playground <ArrowRight className="w-4 h-4" />
           </Link>
-          <a href="#" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border bg-card font-semibold text-sm hover:bg-secondary transition-colors">
+          <a href="https://rapidapi.com/anatome/api/anatome" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border bg-card font-semibold text-sm hover:bg-secondary transition-colors">
             View on RapidAPI <ExternalLink className="w-4 h-4" />
           </a>
         </div>
