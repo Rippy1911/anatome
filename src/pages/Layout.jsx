@@ -37,7 +37,8 @@ export default function Layout() {
             </div>
           </Link>
           <nav className="flex items-center gap-1">
-            <NavLink to="/">Playground</NavLink>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/playground">Playground</NavLink>
             <NavLink to="/docs">Docs</NavLink>
             <NavLink to="/ai-guide">AI Guide</NavLink>
             <NavLink to="/api">API</NavLink>

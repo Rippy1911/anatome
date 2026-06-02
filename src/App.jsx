@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 import Layout from '@/pages/Layout';
+import Home from '@/pages/Home';
 import Playground from '@/pages/Playground';
 import Docs from '@/pages/Docs';
 import AiGuide from '@/pages/AiGuide';
@@ -18,8 +19,8 @@ function App() {
         <Router>
           <Routes>
             <Route element={<Layout />}>
-              <Route path="/" element={<Playground />} />
-              <Route path="/playground" element={<Navigate to="/" replace />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/playground" element={<Playground />} />
               <Route path="/docs" element={<Docs />} />
               <Route path="/ai-guide" element={<AiGuide />} />
               <Route path="/api" element={<Api />} />

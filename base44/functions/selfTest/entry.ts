@@ -151,48 +151,68 @@ Deno.serve(async (req)=>{
       return (Array.isArray(rec.instructions) && rec.instructions.length>=3) || `instructions length ${(rec.instructions||[]).length}`;
     });
 
-    // ---- Rate-limit logic, tested inline against the helper (no HTTP) ----
-    const RATE_LIMIT=100;
+    // ---- Rate-limit logic v1.2 dual model, tested inline against a faithful copy of the production helper ----
+    const IP_DAY_LIMIT=1000; const HOST_MONTH_LIMIT=100;
     const sha256=async (str)=>{ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); };
-    const utcMidnightUnix=()=>{ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); };
-    // Self-contained copy of the rate-limit helper that takes a raw ip (so we can drive it with synthetic IPs).
-    const rateLimitForIp=async (ip)=>{
-      const ip_hash=await sha256(ip); const date=new Date().toISOString().slice(0,10);
-      const existing=await base44.asServiceRole.entities.RateLimit.filter({ ip_hash, date }); const reset=utcMidnightUnix();
+    const isPrivateIp=(ip)=>{ if(!ip||ip==="unknown") return true; if(ip==="::1"||ip==="localhost") return true; if(ip.startsWith("127.")||ip.startsWith("192.168.")||ip.startsWith("10.")) return true; const m=ip.match(/^172\.(\d+)\./); if(m){ const o=Number(m[1]); if(o>=16&&o<=31) return true; } return false; };
+    const referrerHost=(headers)=>{ const raw=headers.referer||headers.origin||""; if(!raw) return null; try { return new URL(raw).hostname; } catch { return raw.replace(/^https?:\/\//,"").split("/")[0]||null; } };
+    const nextUtcMidnightUnix=()=>{ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); };
+    const nextMonthUnix=()=>{ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth()+1,1,0,0,0)/1000); };
+    // sim takes { ip, headers:{referer,origin,...} } so we can exercise all detection branches without HTTP.
+    const simRateLimit=async ({ ip="unknown", headers={} })=>{
+      if(headers["x-rapidapi-proxy-secret"]) return { allowed:true, source:"rapidapi", bypass:true };
+      if(headers["x-mcp-trusted-key"]) return { allowed:true, source:"mcp_trusted", bypass:true };
+      const host=referrerHost(headers); const useIpDay=isPrivateIp(ip)||!host;
+      const limit=useIpDay?IP_DAY_LIMIT:HOST_MONTH_LIMIT; const key_type=useIpDay?"ip_day":"host_month";
+      const reset=useIpDay?nextUtcMidnightUnix():nextMonthUnix(); const reset_at=new Date(reset*1000).toISOString(); const now=new Date();
+      let query, createData;
+      if(useIpDay){ const ip_hash=await sha256(ip); const date=now.toISOString().slice(0,10); query={ key_type, ip_hash, date }; createData={ key_type, ip_hash, date }; }
+      else { const host_hash=await sha256(host); const date=now.toISOString().slice(0,7); query={ key_type, host_hash, date }; createData={ key_type, host_hash, date }; }
+      const existing=await base44.asServiceRole.entities.RateLimit.filter(query);
       if(existing && existing.length>0){ const rec=existing[0]; const count=rec.count||0;
-        if(count>=RATE_LIMIT) return { allowed:false, source:"free", used:count, remaining:0, reset, retry_after:reset-Math.floor(Date.now()/1000) };
-        await base44.asServiceRole.entities.RateLimit.update(rec.id,{ count:count+1, last_request_at:new Date().toISOString() });
-        return { allowed:true, source:"free", remaining:RATE_LIMIT-(count+1), reset }; }
-      await base44.asServiceRole.entities.RateLimit.create({ ip_hash, date, count:1, last_request_at:new Date().toISOString() });
-      return { allowed:true, source:"free", remaining:RATE_LIMIT-1, reset };
+        if(count>=limit) return { allowed:false, key_type, limit, used:count, remaining:0, reset, reset_at, retry_after:reset-Math.floor(Date.now()/1000), _query:query };
+        await base44.asServiceRole.entities.RateLimit.update(rec.id,{ count:count+1, last_request_at:now.toISOString() }); return { allowed:true, source:"free", key_type, limit, remaining:limit-(count+1), reset_at, _query:query }; }
+      await base44.asServiceRole.entities.RateLimit.create({ ...createData, count:1, last_request_at:now.toISOString() }); return { allowed:true, source:"free", key_type, limit, remaining:limit-1, reset_at, _query:query };
     };
+    const cleanup=async (query)=>{ const recs=await base44.asServiceRole.entities.RateLimit.filter(query); for(const rec of recs) await base44.asServiceRole.entities.RateLimit.delete(rec.id); };
 
     await TA("rate_limit_entity_created", async ()=>{
-      const probe={ ip_hash:"selftest_probe_"+Date.now(), date:"1970-01-01", count:0 };
+      const probe={ key_type:"ip_day", ip_hash:"selftest_probe_"+Date.now(), date:"1970-01-01", count:0 };
       const rec=await base44.asServiceRole.entities.RateLimit.create(probe);
       const back=await base44.asServiceRole.entities.RateLimit.filter({ id:rec.id }, "", 1);
       await base44.asServiceRole.entities.RateLimit.delete(rec.id);
       return (back && back.length===1) || "could not read back";
     });
-    await TA("rate_limit_increments", async ()=>{
-      const ip="selftest_inc_"+Date.now();
-      const r1=await rateLimitForIp(ip);
-      const r2=await rateLimitForIp(ip);
-      // cleanup
-      const ih=await sha256(ip); const date=new Date().toISOString().slice(0,10);
-      const recs=await base44.asServiceRole.entities.RateLimit.filter({ ip_hash:ih, date });
-      for(const rec of recs) await base44.asServiceRole.entities.RateLimit.delete(rec.id);
-      return (r1.remaining===RATE_LIMIT-1 && r2.remaining===RATE_LIMIT-2) || `r1=${r1.remaining} r2=${r2.remaining}`;
+    // localhost / no Referer -> ip_day bucket, limit 1000
+    await TA("rate_limit_localhost_allows_1000", async ()=>{
+      const ip="127.0.0.1_selftest_"+Date.now();
+      const r1=await simRateLimit({ ip, headers:{} });
+      const r2=await simRateLimit({ ip, headers:{} });
+      await cleanup(r1._query);
+      return (r1.key_type==="ip_day" && r1.limit===1000 && r1.remaining===999 && r2.remaining===998) || `key=${r1.key_type} limit=${r1.limit} r1=${r1.remaining} r2=${r2.remaining}`;
     });
-    await TA("rate_limit_blocks_at_100", async ()=>{
-      const ip="selftest_block_"+Date.now();
-      const ip_hash=await sha256(ip); const date=new Date().toISOString().slice(0,10);
-      // Seed a record already at the limit, then assert the helper blocks.
-      await base44.asServiceRole.entities.RateLimit.create({ ip_hash, date, count:RATE_LIMIT, last_request_at:new Date().toISOString() });
-      const r=await rateLimitForIp(ip);
-      const recs=await base44.asServiceRole.entities.RateLimit.filter({ ip_hash, date });
-      for(const rec of recs) await base44.asServiceRole.entities.RateLimit.delete(rec.id);
-      return (r.allowed===false && r.remaining===0) || `allowed=${r.allowed}`;
+    // public Referer -> host_month bucket, limit 100, key uses YYYY-MM (not YYYY-MM-DD)
+    await TA("rate_limit_host_uses_month_bucket", async ()=>{
+      const host="selftest-"+Date.now()+".example.com";
+      const r=await simRateLimit({ ip:"203.0.113.5", headers:{ referer:`https://${host}/page` } });
+      const monthKey=new Date().toISOString().slice(0,7);
+      const isMonthFormat=/^\d{4}-\d{2}$/.test(r._query.date) && r._query.date===monthKey;
+      await cleanup(r._query);
+      return (r.key_type==="host_month" && r.limit===100 && isMonthFormat) || `key=${r.key_type} limit=${r.limit} date=${r._query.date}`;
+    });
+    // bucket full -> 429 (allowed:false)
+    await TA("rate_limit_blocks_at_quota", async ()=>{
+      const host="selftest-block-"+Date.now()+".example.com";
+      const host_hash=await sha256(host); const date=new Date().toISOString().slice(0,7);
+      await base44.asServiceRole.entities.RateLimit.create({ key_type:"host_month", host_hash, date, count:HOST_MONTH_LIMIT, last_request_at:new Date().toISOString() });
+      const r=await simRateLimit({ ip:"203.0.113.9", headers:{ referer:`https://${host}/` } });
+      await cleanup({ key_type:"host_month", host_hash, date });
+      return (r.allowed===false && r.remaining===0 && r.retry_after>0) || `allowed=${r.allowed} remaining=${r.remaining}`;
+    });
+    // RapidAPI proxy secret -> bypass, no increment
+    await TA("rate_limit_rapidapi_bypass", async ()=>{
+      const r=await simRateLimit({ ip:"203.0.113.50", headers:{ referer:"https://anyhost.com/", "x-rapidapi-proxy-secret":"any-value" } });
+      return (r.allowed===true && r.bypass===true && r._query===undefined) || `allowed=${r.allowed} bypass=${r.bypass}`;
     });
 
     const passed=tests.filter((t)=>t.passed).length;

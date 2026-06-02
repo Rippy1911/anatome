@@ -118,22 +118,28 @@ async function getExerciseLogic(base44,{ name, id, random }, base){
   return { match:"none", exercise:null };
 }
 
-// ---- Rate limiting (with MCP trusted-key + RapidAPI bypass) ----
-const RATE_LIMIT=100;
+// ---- Rate limiting (v1.2 dual model, with MCP trusted-key + RapidAPI bypass) ----
+const IP_DAY_LIMIT=1000; const HOST_MONTH_LIMIT=100;
 async function sha256(str){ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); }
 function clientIp(req){ return req.headers.get("cf-connecting-ip")||(req.headers.get("x-forwarded-for")||"").split(",")[0].trim()||"unknown"; }
-function utcMidnightUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); }
+function isPrivateIp(ip){ if(!ip||ip==="unknown") return true; if(ip==="::1"||ip==="localhost") return true; if(ip.startsWith("127.")||ip.startsWith("192.168.")||ip.startsWith("10.")) return true; const m=ip.match(/^172\.(\d+)\./); if(m){ const o=Number(m[1]); if(o>=16&&o<=31) return true; } return false; }
+function referrerHost(req){ const raw=req.headers.get("referer")||req.headers.get("origin")||""; if(!raw) return null; try { return new URL(raw).hostname; } catch { return raw.replace(/^https?:\/\//,"").split("/")[0]||null; } }
+function nextUtcMidnightUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); }
+function nextMonthUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth()+1,1,0,0,0)/1000); }
 async function checkRateLimit(req,base44){
-  const mcpKey=req.headers.get("x-mcp-trusted-key"); const mcpExpected=Deno.env.get("MCP_TRUSTED_KEY");
-  if(mcpKey && mcpExpected && mcpKey===mcpExpected) return { allowed:true, source:"mcp_trusted" };
-  const proxy=req.headers.get("x-rapidapi-proxy-secret"); const proxyExpected=Deno.env.get("PROXY_SECRET");
-  if(proxy && proxyExpected && proxy===proxyExpected) return { allowed:true, source:"rapidapi" };
-  const ip_hash=await sha256(clientIp(req)); const date=new Date().toISOString().slice(0,10);
-  const existing=await base44.asServiceRole.entities.RateLimit.filter({ ip_hash, date }); const reset=utcMidnightUnix();
+  const mcpKey=req.headers.get("x-mcp-trusted-key"); if(mcpKey && Deno.env.get("MCP_TRUSTED_KEY") && mcpKey===Deno.env.get("MCP_TRUSTED_KEY")) return { allowed:true, source:"mcp_trusted", bypass:true };
+  const proxy=req.headers.get("x-rapidapi-proxy-secret"); if(proxy && Deno.env.get("PROXY_SECRET") && proxy===Deno.env.get("PROXY_SECRET")) return { allowed:true, source:"rapidapi", bypass:true };
+  const ip=clientIp(req); const host=referrerHost(req); const useIpDay=isPrivateIp(ip)||!host;
+  const limit=useIpDay?IP_DAY_LIMIT:HOST_MONTH_LIMIT; const key_type=useIpDay?"ip_day":"host_month";
+  const reset=useIpDay?nextUtcMidnightUnix():nextMonthUnix(); const reset_at=new Date(reset*1000).toISOString(); const now=new Date();
+  let query, createData;
+  if(useIpDay){ const ip_hash=await sha256(ip); const date=now.toISOString().slice(0,10); query={ key_type, ip_hash, date }; createData={ key_type, ip_hash, date }; }
+  else { const host_hash=await sha256(host); const date=now.toISOString().slice(0,7); query={ key_type, host_hash, date }; createData={ key_type, host_hash, date }; }
+  const existing=await base44.asServiceRole.entities.RateLimit.filter(query);
   if(existing && existing.length>0){ const rec=existing[0]; const count=rec.count||0;
-    if(count>=RATE_LIMIT) return { allowed:false, source:"free", used:count, retry_after:reset-Math.floor(Date.now()/1000) };
-    await base44.asServiceRole.entities.RateLimit.update(rec.id,{ count:count+1, last_request_at:new Date().toISOString() }); return { allowed:true, source:"free", remaining:RATE_LIMIT-(count+1) }; }
-  await base44.asServiceRole.entities.RateLimit.create({ ip_hash, date, count:1, last_request_at:new Date().toISOString() }); return { allowed:true, source:"free", remaining:RATE_LIMIT-1 };
+    if(count>=limit) return { allowed:false, key_type, limit, used:count, reset, reset_at, retry_after:reset-Math.floor(Date.now()/1000) };
+    await base44.asServiceRole.entities.RateLimit.update(rec.id,{ count:count+1, last_request_at:now.toISOString() }); return { allowed:true, source:"free", key_type, limit, remaining:limit-(count+1) }; }
+  await base44.asServiceRole.entities.RateLimit.create({ ...createData, count:1, last_request_at:now.toISOString() }); return { allowed:true, source:"free", key_type, limit, remaining:limit-1 };
 }
 
 const TOOLS = [
@@ -175,7 +181,7 @@ Deno.serve(async (req)=>{
 
   const base44=createClientFromRequest(req);
   const rl=await checkRateLimit(req,base44);
-  if(!rl.allowed){ return new Response(JSON.stringify(rpcError(null,-32000,"Rate limit exceeded: free tier 100 req/day per IP. Upgrade via RapidAPI for unlimited.")),{ status:429, headers:{ ...cors, "Content-Type":"application/json", "Retry-After":String(rl.retry_after) } }); }
+  if(!rl.allowed){ const msg=rl.key_type==="host_month" ? `Rate limit exceeded: free tier ${rl.limit} req/month per public host. Upgrade via RapidAPI.` : `Rate limit exceeded: free tier ${rl.limit} req/day from localhost. Upgrade via RapidAPI.`; return new Response(JSON.stringify(rpcError(null,-32000,msg)),{ status:429, headers:{ ...cors, "Content-Type":"application/json", "Retry-After":String(rl.retry_after) } }); }
   let body; try { body=await req.json(); } catch { return Response.json(rpcError(null,-32700,"Parse error"),{headers:cors}); }
   const { id=null, method, params={} }=body||{};
 

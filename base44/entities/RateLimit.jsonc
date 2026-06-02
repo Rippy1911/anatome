@@ -2,18 +2,31 @@
   "name": "RateLimit",
   "type": "object",
   "properties": {
+    "key_type": {
+      "type": "string",
+      "enum": [
+        "ip_day",
+        "host_month"
+      ],
+      "default": "ip_day",
+      "description": "Bucket type: ip_day (localhost/private IPs, 1000/day) or host_month (public hosts, 100/month)"
+    },
     "ip_hash": {
       "type": "string",
-      "description": "SHA-256 hash of the client IP (no raw IPs stored, GDPR-safe)"
+      "description": "SHA-256 hash of the client IP (ip_day buckets). No raw IPs stored, GDPR-safe"
+    },
+    "host_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the public hostname (host_month buckets)"
     },
     "date": {
       "type": "string",
-      "description": "UTC date bucket, YYYY-MM-DD"
+      "description": "Bucket period: YYYY-MM-DD for ip_day, YYYY-MM for host_month"
     },
     "count": {
       "type": "number",
       "default": 0,
-      "description": "Requests made in this date bucket"
+      "description": "Requests made in this bucket"
     },
     "last_request_at": {
       "type": "string",
@@ -22,7 +35,6 @@
     }
   },
   "required": [
-    "ip_hash",
     "date"
   ]
 }
