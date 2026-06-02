@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { absApiUrl, exerciseMediaUrl } from "@/lib/apiBase";
 import { Search, Loader2, Dumbbell } from "lucide-react";
 
@@ -22,13 +21,15 @@ export default function SearchDemoCard({ baseUrl }) {
     timer.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await base44.functions.invoke("searchExercises", { q, limit: 6 });
-        setResults(res.data?.results || []);
+        const params = new URLSearchParams({ q, limit: "6" });
+        const res = await fetch(`${baseUrl}/searchExercises?${params}`);
+        const data = await res.json();
+        setResults(data?.results || []);
       } catch { setResults([]); }
       setLoading(false);
     }, 350);
     return () => timer.current && clearTimeout(timer.current);
-  }, [q]);
+  }, [q, baseUrl]);
 
   const pick = (e) => { setSelected(e); setImgLoaded(false); };
   const imgSrc = selected?.anatome_imageSrc ? absApiUrl(selected.anatome_imageSrc) : null;

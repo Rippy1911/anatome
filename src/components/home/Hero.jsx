@@ -29,7 +29,7 @@ export default function Hero({ baseUrl }) {
         </h1>
 
         <p className="mt-5 text-sm sm:text-base text-muted-foreground font-mono">
-          Open source · Apache-2.0 · 1,000 free requests/month · MCP-compatible · 873 exercises included
+          Open source · Apache-2.0 · 300 free requests/month · MCP-compatible · 873 exercises included
         </p>
         <p className="mt-2 text-xs text-muted-foreground font-mono">
           {HERO_PERF_TAGLINE}

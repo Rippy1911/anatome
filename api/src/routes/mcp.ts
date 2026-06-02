@@ -14,7 +14,7 @@ import {
   type ExerciseRow,
 } from "../lib/exercises.ts";
 import { parseFieldsParam, SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
-import { ATTRIBUTION, ATTRIBUTION_SOURCE, BUILT_BY, TRY_ALSO, EXERCISE_DB_ATTRIBUTION } from "../lib/attribution.ts";
+import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, BUILT_BY, TRY_ALSO, EXERCISE_DB_ATTRIBUTION } from "../lib/attribution.ts";
 
 export const TOOLS = [
   { name: "generate_muscle_image", description: "Render an SVG diagram of the human body with arbitrary muscles highlighted in arbitrary colors. Returns an SVG string.",
@@ -88,11 +88,11 @@ export function handleMcp(body: McpBody, base: string): object {
     }
     if (name === "list_muscles") {
       const muscles = MUSCLES.map((slug) => ({ slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug] }));
-      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles, built_by: BUILT_BY, try_also: TRY_ALSO } });
+      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO } });
     }
     if (name === "resolve_exercise") {
       const r = resolveEx(args.exercise, base);
-      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(r) }], structuredContent: { ...r, built_by: BUILT_BY, try_also: TRY_ALSO } });
+      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(r) }], structuredContent: { ...r, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, built_by: BUILT_BY, try_also: TRY_ALSO } });
     }
     if (name === "search_exercises") {
       const fields = parseFieldsParam(args.fields, SEARCH_DEFAULT_FIELDS);
@@ -100,7 +100,8 @@ export function handleMcp(body: McpBody, base: string): object {
       const payload = {
         total_matched: total, offset, limit,
         results: results.map((e) => formatExercise(e, base, "search", fields)),
-        built_by: BUILT_BY, try_also: TRY_ALSO,
+        attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE,
+        exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, built_by: BUILT_BY, try_also: TRY_ALSO,
       };
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload });
     }
@@ -113,7 +114,7 @@ export function handleMcp(body: McpBody, base: string): object {
       else if (args.random) { const rec = getRandom(); r = rec ? { match: "random", exercise: fullExercise(rec, base, args.fields) } : { match: "none", exercise: null }; }
       else if (args.name) { const m = getByName(args.name); r = { match: m.match, exercise: fullExercise(m.exercise, base, args.fields) }; }
       else { r = { match: "none", exercise: null }; }
-      const payload = { ...r, attribution: ATTRIBUTION, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, built_by: BUILT_BY, try_also: TRY_ALSO };
+      const payload = { ...r, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, built_by: BUILT_BY, try_also: TRY_ALSO };
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload });
     }
     return rpcError(id, -32602, `Unknown tool: ${name}`);

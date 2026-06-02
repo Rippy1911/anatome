@@ -23,12 +23,12 @@ export default function Pricing() {
           <span className="text-sm text-muted-foreground">base · pay only for overage</span>
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-          1,000 requests included every month, then{" "}
-          <span className="font-mono text-foreground">$0.0001</span> per request.
+          300 requests included every month, then{" "}
+          <span className="font-mono text-foreground">$0.001</span> per request.
         </p>
         <ul className="space-y-2.5 mt-5 flex-1">
-          <Feature>1,000 requests/month included (Basic plan)</Feature>
-          <Feature>$0.0001 per request above the monthly allowance</Feature>
+          <Feature>300 requests/month included (Basic plan)</Feature>
+          <Feature>$0.001 per request above the monthly allowance</Feature>
           <Feature>All endpoints — images, ExerciseDB, MCP</Feature>
           <Feature>Unlimited from localhost for development & testing</Feature>
           <Feature>Apache-2.0 — self-host for free anytime</Feature>

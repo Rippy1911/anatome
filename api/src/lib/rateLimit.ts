@@ -6,7 +6,7 @@
 //   - bypass on X-RapidAPI-Proxy-Secret (== PROXY_SECRET)
 //                or X-Mcp-Trusted-Key (== MCP_TRUSTED_KEY)
 //
-// The Basic plan on RapidAPI: 1,000 requests/month included, $0.0001/request overage
+// The Basic plan on RapidAPI: 300 requests/month included, $0.001/request overage
 // (enforced at the RapidAPI layer; PROXY_SECRET bypasses Worker day limits).
 // Direct public access to the Worker still uses per-day fair-use limits below.
 
@@ -133,7 +133,7 @@ export function rateLimitBody(rl: RateResult) {
     retry_after_seconds: rl.retry_after,
     upgrade_url: UPGRADE_URL,
     message: rl.key_type === "host_day"
-      ? `Daily fair-use limit (${rl.limit}/day per host). Basic on RapidAPI: 1,000 requests/month included, $0.0001/request overage.`
-      : `Daily fair-use limit (${rl.limit}/day per IP). Basic on RapidAPI: 1,000 requests/month included, $0.0001/request overage.`,
+      ? `Daily fair-use limit (${rl.limit}/day per host). Basic on RapidAPI: 300 requests/month included, $0.001/request overage.`
+      : `Daily fair-use limit (${rl.limit}/day per IP). Basic on RapidAPI: 300 requests/month included, $0.001/request overage.`,
   };
 }

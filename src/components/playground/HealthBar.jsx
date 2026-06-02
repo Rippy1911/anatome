@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { PUBLIC_API } from "@/lib/apiBase";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Check, X as XIcon, Activity, ExternalLink } from "lucide-react";
 import { ATTRIBUTION_SOURCE } from "@/data/muscleCatalog";
@@ -9,9 +9,9 @@ export default function HealthBar() {
   const [result, setResult] = useState(null);
 
   useEffect(() => {
-    base44.functions.invoke("selfTest", {})
-      .then((res) => {
-        const d = res.data;
+    fetch(`${PUBLIC_API}/selfTest`)
+      .then((res) => res.json())
+      .then((d) => {
         setResult(d);
         if (d.failed === 0) setStatus("green");
         else if (d.passed > d.failed) setStatus("yellow");

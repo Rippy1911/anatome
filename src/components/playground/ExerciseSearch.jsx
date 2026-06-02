@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Loader2, X, Database } from "lucide-react";
 import { MUSCLES } from "@/data/muscleCatalog";
 import ExerciseResultRow from "./ExerciseResultRow";
-import { exerciseMediaUrl } from "@/lib/apiBase";
+import { PUBLIC_API, exerciseMediaUrl } from "@/lib/apiBase";
 
 const EQUIPMENT = ["any", "barbell", "dumbbell", "cable", "machine", "body only", "kettlebells", "bands", "medicine ball", "exercise ball", "e-z curl bar", "foam roll", "other"];
 const LEVELS = ["any", "beginner", "intermediate", "expert"];
@@ -41,8 +40,14 @@ export default function ExerciseSearch({ onSelect }) {
     }
     setLoading(true);
     try {
-      const res = await base44.functions.invoke("searchExercises", { q, muscle, equipment, level, limit: 20 });
-      if (res.data?.ok) { setResults(res.data.results || []); setTotal(res.data.total_matched || 0); }
+      const params = new URLSearchParams({ limit: "20" });
+      if (q.trim()) params.set("q", q);
+      if (muscle !== "any") params.set("muscle", muscle);
+      if (equipment !== "any") params.set("equipment", equipment);
+      if (level !== "any") params.set("level", level);
+      const res = await fetch(`${PUBLIC_API}/searchExercises?${params}`);
+      const data = await res.json();
+      if (data?.ok) { setResults(data.results || []); setTotal(data.total_matched || 0); }
     } finally {
       setLoading(false);
     }

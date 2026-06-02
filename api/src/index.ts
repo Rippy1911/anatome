@@ -88,7 +88,7 @@ app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const muscles = MUSCLES.map((slug) => ({
     slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug], body_region: BODY_REGION[slug] || null,
   }));
-  return c.json({ ok: true, count: MUSCLES.length, muscles, attribution: ATTRIBUTION, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO });
+  return c.json({ ok: true, count: MUSCLES.length, muscles, ...baseAttribution() });
 }));
 
 // ---- muscleInfo ----
@@ -194,7 +194,7 @@ async function resolveRoute(c: { req: { raw: Request; query: () => Record<string
   const r = resolveEx(exercise, baseUrl(c));
   return new Response(JSON.stringify({
     ok: true, ...r,
-    attribution: ATTRIBUTION, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO,
+    ...exerciseAttribution(),
   }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
 }
 app.get("/resolveExercise", (c) => resolveRoute(c));
@@ -250,8 +250,8 @@ app.post("/mcp", async (c) => {
   const rl = await checkRateLimit(c.req.raw, c.env);
   if (!rl.allowed) {
     const msg = rl.key_type === "host_day"
-      ? `Rate limit exceeded (${rl.limit}/day per host). Basic on RapidAPI: 1,000/month included, $0.0001/request overage.`
-      : `Rate limit exceeded (${rl.limit}/day per IP). Basic on RapidAPI: 1,000/month included, $0.0001/request overage.`;
+      ? `Rate limit exceeded (${rl.limit}/day per host). Basic on RapidAPI: 300/month included, $0.001/request overage.`
+      : `Rate limit exceeded (${rl.limit}/day per IP). Basic on RapidAPI: 300/month included, $0.001/request overage.`;
     return c.json({ jsonrpc: "2.0", id: null, error: { code: -32000, message: msg } }, 429, { "Retry-After": String(rl.retry_after) });
   }
   let body: unknown;

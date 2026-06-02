@@ -132,7 +132,7 @@ curl -X POST https://api.anatome.dev/mcp \\
 }`}</Code>
 
       <P><span className="font-semibold text-foreground">Other clients</span> — any JSON-RPC 2.0 MCP client works. See <a className="text-primary hover:underline" href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">modelcontextprotocol.io</a>.</P>
-      <P><span className="font-mono text-foreground">Pricing:</span> Basic plan on RapidAPI — <span className="font-medium text-foreground">1,000 requests/month included</span>, then <span className="font-mono text-foreground">$0.0001</span> per request. Localhost and 127.0.0.1 are <span className="font-medium text-foreground">unlimited</span> for development. Production traffic via RapidAPI uses <span className="font-mono text-xs">X-RapidAPI-Proxy-Secret</span>; MCP integrations can use <span className="font-mono text-xs">X-Mcp-Trusted-Key</span>.</P>
+      <P><span className="font-mono text-foreground">Pricing:</span> Basic plan on RapidAPI — <span className="font-medium text-foreground">300 requests/month included</span>, then <span className="font-mono text-foreground">$0.001</span> per request. Localhost and 127.0.0.1 are <span className="font-medium text-foreground">unlimited</span> for development. Production traffic via RapidAPI uses <span className="font-mono text-xs">X-RapidAPI-Proxy-Secret</span>; MCP integrations can use <span className="font-mono text-xs">X-Mcp-Trusted-Key</span>.</P>
 
       <H2 id="examples">Examples</H2>
       <Code>{`# Three-tier bench press (primary / secondary / stabilizers)

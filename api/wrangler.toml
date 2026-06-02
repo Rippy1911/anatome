@@ -25,7 +25,7 @@ PUBLIC_BASE_URL = "https://api.anatome.dev"
 # ---- Production environment ----
 [env.production]
 name = "anatome-api"
-workers_dev = true
+workers_dev = false
 routes = [
   { pattern = "api.anatome.dev/*", zone_name = "anatome.dev" }
 ]

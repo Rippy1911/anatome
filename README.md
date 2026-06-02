@@ -23,7 +23,7 @@ pre-mapped to 23 muscle slugs) and speaks the [Model Context Protocol](https://m
 - 🎨 Multi-color layered muscle rendering (`<img src>`-friendly, `?output=raw`)
 - 💪 873 exercises searchable + resolvable to muscle layers + hosted demo GIFs
 - 🤖 MCP server (5 tools) + OpenAPI 3.1 spec
-- 🆓 Basic plan: 1,000 requests/month free on RapidAPI, then $0.0001/request; unlimited localhost for dev
+- 🆓 Basic plan: 300 requests/month free on RapidAPI, then $0.001/request; unlimited localhost for dev
 
 ## Repository layout
 
