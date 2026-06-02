@@ -1,0 +1,19 @@
+Anatome — Muscle Group Image Generator API
+Copyright 2026 NextSolutions — https://nextsolutions.studio
+
+This product includes anatomical SVG path data from
+react-native-body-highlighter (MIT licensed):
+  Copyright (c) Hicham El Boussarghini
+  https://github.com/HichamELBSI/react-native-body-highlighter
+
+This product includes exercise metadata from free-exercise-db (CC0-1.0):
+  https://github.com/yuhonas/free-exercise-db
+  CC0 Public Domain dedication
+
+ATTRIBUTION
+When using Anatome publicly, attribution is appreciated but not required.
+Mentioning "Anatome by NextSolutions" or linking to https://anatome.dev
+(or the GitHub repo) helps the project grow.
+
+NextSolutions also makes airon.coach — an AI personal trainer that uses
+Anatome under the hood. Check it out.

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
 
 export default function Api() {
   const [ready, setReady] = useState(false);
