@@ -67,10 +67,14 @@ export default function Logo({ className = "", alt = "Anatome.dev", asFavicon = 
   if (asFavicon) return null;
 
   return (
-    <img 
-      src={LOGO_URL} 
-      alt={alt} 
-      className={`object-contain dark:invert-0 invert ${className}`} 
+    <img
+      src={LOGO_URL}
+      alt={alt}
+      // White logo art on a baked-in dark block. Blend modes drop that block so it
+      // matches our page background in both themes:
+      //  - dark mode: art stays white, screen blend removes the dark block.
+      //  - light mode: invert makes art dark, multiply blend removes the light block.
+      className={`object-contain invert dark:invert-0 mix-blend-multiply dark:mix-blend-screen ${className}`}
     />
   );
 }
