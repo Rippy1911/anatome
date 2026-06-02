@@ -9,10 +9,11 @@ import { renderMuscleSvg } from "../lib/muscleEngine.ts";
 import { getBodyData } from "../lib/bodyData.ts";
 import { MUSCLES, ANATOMICAL_NAMES, SIDE_PRESENCE } from "../data/muscleCatalog.ts";
 import {
-  searchExercisesLogic, searchResult, getByExtId, getRandom, getByName,
-  cleanExercise, absoluteImageSrc, exerciseDbImageUrl, resolveExercise as resolveEx,
+  searchExercisesLogic, formatExercise, getByExtId, getRandom, getByName,
+  cleanExercise, resolveExercise as resolveEx,
   type ExerciseRow,
 } from "../lib/exercises.ts";
+import { parseFieldsParam, SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
 import { ATTRIBUTION, ATTRIBUTION_SOURCE, BUILT_BY, TRY_ALSO, EXERCISE_DB_ATTRIBUTION } from "../lib/attribution.ts";
 
 export const TOOLS = [
@@ -27,7 +28,7 @@ export const TOOLS = [
       required: ["layers"] } },
   { name: "list_muscles", description: "List all 23 supported muscle slugs with anatomical names and which views they appear on.",
     inputSchema: { type: "object", properties: {} } },
-  { name: "resolve_exercise", description: "Resolve an exercise name (e.g. 'bench press') into concrete colored muscle layers using a primary/secondary/accessory palette.",
+  { name: "resolve_exercise", description: "Resolve an exercise name against the 873-exercise database into primary/secondary muscle layers. Use generate_muscle_image with custom layers for additional tiers (e.g. accessory stabilizers).",
     inputSchema: { type: "object", properties: { exercise: { type: "string" } }, required: ["exercise"] } },
   { name: "search_exercises", description: "Search the 873-exercise database (free-exercise-db) by name with optional muscle/equipment/level filters. Returns enriched results with ready-to-embed anatome_imageSrc URLs.",
     inputSchema: { type: "object", properties: {
@@ -35,13 +36,16 @@ export const TOOLS = [
       muscle: { type: "string", description: "Filter by Anatome muscle slug, e.g. 'chest'" },
       equipment: { type: "string", description: "Filter by equipment, e.g. 'barbell'" },
       level: { type: "string", enum: ["beginner", "intermediate", "expert"], description: "Filter by difficulty" },
-      limit: { type: "number", default: 20, description: "Max results (1-50)" } },
+      limit: { type: "number", default: 20, description: "Max results (1-50)" },
+      offset: { type: "number", default: 0, description: "Pagination offset" },
+      fields: { type: "string", description: "Comma-separated fields, or all/* (default: lean search set)" } },
       required: ["q"] } },
-  { name: "get_exercise", description: "Fetch a single exercise with FULL instructions, images, and all anatome_* fields. Provide exactly one of: name (fuzzy), id (uuid), or random (boolean).",
+  { name: "get_exercise", description: "Fetch exercise(s). Full record by default; use fields to trim (e.g. name,instructions,gif_url). One of: name, id, random.",
     inputSchema: { type: "object", properties: {
       name: { type: "string", description: "Exercise name (fuzzy match), e.g. 'bench press'" },
-      id: { type: "string", description: "Exercise UUID / ext_id" },
-      random: { type: "boolean", description: "Return a random exercise" } } } },
+      id: { type: "string", description: "Exercise ext_id" },
+      random: { type: "boolean", description: "Return a random exercise" },
+      fields: { type: "string", description: "Comma-separated fields, or all/*" } } } },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,12 +53,13 @@ function rpcResult(id: any, result: unknown) { return { jsonrpc: "2.0", id, resu
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rpcError(id: any, code: number, message: string) { return { jsonrpc: "2.0", id, error: { code, message } }; }
 
-function fullExercise(e: ExerciseRow | null, base: string) {
+function fullExercise(e: ExerciseRow | null, base: string, fieldsRaw?: string) {
   if (!e) return null;
   const cleaned = cleanExercise(e) as ExerciseRow;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { name_lower, ...rest } = cleaned;
-  return { ...rest, image_url: exerciseDbImageUrl(e.images), anatome_imageSrc: absoluteImageSrc(e.anatome_imageSrc, base) };
+  const row = { ...cleaned };
+  delete (row as { name_lower?: string }).name_lower;
+  const fields = parseFieldsParam(fieldsRaw, null);
+  return formatExercise(row, base, "full", fields);
 }
 
 export interface McpBody {
@@ -86,19 +91,24 @@ export function handleMcp(body: McpBody, base: string): object {
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles, built_by: BUILT_BY, try_also: TRY_ALSO } });
     }
     if (name === "resolve_exercise") {
-      const r = resolveEx(args.exercise);
+      const r = resolveEx(args.exercise, base);
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(r) }], structuredContent: { ...r, built_by: BUILT_BY, try_also: TRY_ALSO } });
     }
     if (name === "search_exercises") {
-      const { total, results } = searchExercisesLogic(args);
-      const payload = { total_matched: total, results: results.map((e) => searchResult(e, base)), built_by: BUILT_BY, try_also: TRY_ALSO };
+      const fields = parseFieldsParam(args.fields, SEARCH_DEFAULT_FIELDS);
+      const { total, offset, limit, results } = searchExercisesLogic(args);
+      const payload = {
+        total_matched: total, offset, limit,
+        results: results.map((e) => formatExercise(e, base, "search", fields)),
+        built_by: BUILT_BY, try_also: TRY_ALSO,
+      };
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload });
     }
     if (name === "get_exercise") {
       let r: { match: string; exercise: unknown };
-      if (args.id) { const rec = getByExtId(args.id); r = rec ? { match: "exact", exercise: fullExercise(rec, base) } : { match: "none", exercise: null }; }
-      else if (args.random) { const rec = getRandom(); r = rec ? { match: "random", exercise: fullExercise(rec, base) } : { match: "none", exercise: null }; }
-      else if (args.name) { const m = getByName(args.name); r = { match: m.match, exercise: fullExercise(m.exercise, base) }; }
+      if (args.id) { const rec = getByExtId(args.id); r = rec ? { match: "exact", exercise: fullExercise(rec, base, args.fields) } : { match: "none", exercise: null }; }
+      else if (args.random) { const rec = getRandom(); r = rec ? { match: "random", exercise: fullExercise(rec, base, args.fields) } : { match: "none", exercise: null }; }
+      else if (args.name) { const m = getByName(args.name); r = { match: m.match, exercise: fullExercise(m.exercise, base, args.fields) }; }
       else { r = { match: "none", exercise: null }; }
       const payload = { ...r, attribution: ATTRIBUTION, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, built_by: BUILT_BY, try_also: TRY_ALSO };
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload });

@@ -1,0 +1,59 @@
+import { describe, it, expect } from "vitest";
+import { parseFieldsParam, projectRecord, SEARCH_DEFAULT_FIELDS } from "../src/lib/exerciseFields.ts";
+import { buildExerciseRecord, formatExercise } from "../src/lib/exercises.ts";
+import type { ExerciseRow } from "../src/lib/exercises.ts";
+
+const sample: ExerciseRow = {
+  ext_id: "Bench_Press",
+  name: "Bench Press",
+  instructions: ["Lie on bench.", "Press up."],
+  primaryMuscles: ["chest"],
+  secondaryMuscles: ["triceps"],
+  anatome_primary_slugs: ["chest"],
+  anatome_secondary_slugs: ["triceps"],
+  equipment: "barbell",
+  level: "intermediate",
+};
+
+describe("parseFieldsParam", () => {
+  it("uses search defaults when omitted", () => {
+    expect(parseFieldsParam(undefined, SEARCH_DEFAULT_FIELDS)).toEqual(SEARCH_DEFAULT_FIELDS);
+  });
+
+  it("returns all fields for getExercise when omitted", () => {
+    expect(parseFieldsParam(undefined, null)).toBeNull();
+  });
+
+  it("parses comma list", () => {
+    const f = parseFieldsParam("name,instructions,gif_url", SEARCH_DEFAULT_FIELDS);
+    expect(f?.has("instructions")).toBe(true);
+    expect(f?.has("gif_url")).toBe(true);
+    expect(f?.has("anatome_imageSrc")).toBe(false);
+  });
+
+  it("all expands to null", () => {
+    expect(parseFieldsParam("all", SEARCH_DEFAULT_FIELDS)).toBeNull();
+  });
+});
+
+describe("formatExercise", () => {
+  const base = "https://api.anatome.dev";
+
+  it("includes instructions when requested", () => {
+    const row = formatExercise(sample, base, "search", new Set(["name", "instructions"]));
+    expect(row.instructions).toEqual(["Lie on bench.", "Press up."]);
+    expect(row.name).toBe("Bench Press");
+    expect(row.gif_url).toBeUndefined();
+  });
+
+  it("buildExerciseRecord always has instructions", () => {
+    const full = buildExerciseRecord(sample, base);
+    expect(full.instructions).toHaveLength(2);
+    expect(full.gif_url).toContain("/exerciseGif?id=Bench_Press");
+  });
+
+  it("projectRecord drops unlisted keys", () => {
+    const slim = projectRecord({ a: 1, b: 2 }, new Set(["a"] as never));
+    expect(slim).toEqual({ a: 1 });
+  });
+});

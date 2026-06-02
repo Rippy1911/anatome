@@ -8,10 +8,30 @@ const WRAPPER = { male:{front:{viewBox:"0 0 724 1448"},back:{viewBox:"724 0 724 
 const DEFAULTS = { gender:"male",view:"dual",width:768,height:1024,background:"transparent",body_color:"#3f3f3f",border_color:"#dfdfdf",border_width:1 };
 const PALETTE = { primary:"#DC2626",secondary:"#F59E0B",accessory:"#FCD34D",accessoryOpacity:0.5 };
 
-const EXERCISE_MAP = {
-  "bench press":{layers:[{intensity:"primary",muscles:["chest"]},{intensity:"secondary",muscles:["triceps","deltoids"]},{intensity:"accessory",muscles:["abs"]}]},
-  "deadlift":{layers:[{intensity:"primary",muscles:["gluteal","hamstring","lower-back"]},{intensity:"secondary",muscles:["quadriceps","trapezius","upper-back"]},{intensity:"accessory",muscles:["abs","forearm"]}]},
-};
+const PREFERRED_EQUIPMENT=["barbell","dumbbell","bodyweight","body only"];
+function equipmentPrefixBonus(nameLower){ for(let i=0;i<PREFERRED_EQUIPMENT.length;i++){ if(nameLower.startsWith(PREFERRED_EQUIPMENT[i]+" ")) return (PREFERRED_EQUIPMENT.length-i)*15; } return 0; }
+function scoreExerciseNameMatch(nameLower,key){
+  if(!nameLower||!key) return 0;
+  if(nameLower===key) return 10000;
+  const keyWords=key.split(/\s+/);
+  for(const equip of PREFERRED_EQUIPMENT){
+    const ideal=`${equip} ${key}`;
+    if(nameLower===ideal||nameLower.startsWith(`${ideal} `)||nameLower.startsWith(`${ideal} -`)) return 9500-nameLower.length+equipmentPrefixBonus(nameLower);
+  }
+  const words=nameLower.split(/\s+/);
+  if(words.length>=keyWords.length&&words.slice(-keyWords.length).join(" ")===key){
+    return 8000-(words.length-keyWords.length)*200+equipmentPrefixBonus(nameLower);
+  }
+  const idx=nameLower.indexOf(key);
+  if(idx>=0){ const suffixLen=nameLower.slice(idx+key.length).length; return 3000-nameLower.length-suffixLen*5+equipmentPrefixBonus(nameLower); }
+  if(key.includes(nameLower)) return 500+nameLower.length;
+  return 0;
+}
+function findBestInList(all,key){
+  let best=null,bestScore=0;
+  for(const e of all){ const s=scoreExerciseNameMatch(e.name_lower||"",key); if(s>bestScore){ bestScore=s; best=e; } }
+  return bestScore>0?best:null;
+}
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function buildResolution(payload){ const res={}; const layers=Array.isArray(payload.layers)?payload.layers:[];
@@ -31,8 +51,29 @@ function renderMuscleSvg(payload,bodyData){ const p={...DEFAULTS,...payload}; co
 
 function parseCompactLayers(str){ if(!str) return []; return str.split("|").map((layerStr)=>{ const idx=layerStr.indexOf(":"); const colorPart=idx===-1?layerStr:layerStr.slice(0,idx); const musclesPart=idx===-1?"":layerStr.slice(idx+1); const [colorRaw,opacityStr]=colorPart.split("@"); let color=colorRaw; if(/^[0-9a-fA-F]{3,8}$/.test(colorRaw)) color="#"+colorRaw; const muscles=(musclesPart||"").split(",").map((s)=>s.trim()).filter(Boolean); const layer={color,muscles}; if(opacityStr) layer.opacity=parseFloat(opacityStr); return layer; }).filter((l)=>l.muscles.length>0); }
 
-function intensityLayers(plan){ return plan.layers.filter((l)=>l.muscles.length>0).map((l)=>{ if(l.intensity==="primary") return {color:PALETTE.primary,muscles:l.muscles}; if(l.intensity==="secondary") return {color:PALETTE.secondary,muscles:l.muscles}; return {color:PALETTE.accessory,muscles:l.muscles,opacity:PALETTE.accessoryOpacity}; }); }
-function resolveExercise(exerciseRaw){ const key=String(exerciseRaw||"").trim().toLowerCase().replace(/\s+/g," "); if(EXERCISE_MAP[key]){ return { exercise:key, matched:true, source:"exact", layers:intensityLayers(EXERCISE_MAP[key]) }; } const hits=MUSCLES.filter((m)=>key.includes(m)); if(hits.length>0) return { exercise:key, matched:true, source:"keyword_fallback", layers:[{color:PALETTE.primary,muscles:hits}] }; return { exercise:key, matched:false, source:"unmatched", layers:[] }; }
+function keywordResolve(exerciseRaw){
+  const key=String(exerciseRaw||"").trim().toLowerCase().replace(/\s+/g," ");
+  const hits=MUSCLES.filter((m)=>key.includes(m));
+  if(hits.length>0) return { exercise:key, matched:true, source:"keyword_fallback", layers:[{color:PALETTE.primary,muscles:hits}] };
+  return { exercise:key, matched:false, source:"unmatched", layers:[] };
+}
+
+async function resolveExerciseFromDb(base44, exerciseRaw){
+  const key=String(exerciseRaw||"").trim().toLowerCase().replace(/\s+/g," ");
+  if(!key) return keywordResolve(exerciseRaw);
+  let rec=null;
+  const exact=await base44.asServiceRole.entities.Exercise.filter({ name_lower:key }, "", 1);
+  if(exact && exact[0]) rec=exact[0];
+  if(!rec){
+    const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
+    rec=findBestInList(all,key);
+  }
+  if(!rec) return keywordResolve(exerciseRaw);
+  const layers=[];
+  if((rec.anatome_primary_slugs||[]).length) layers.push({ color:PALETTE.primary, muscles:rec.anatome_primary_slugs });
+  if((rec.anatome_secondary_slugs||[]).length) layers.push({ color:PALETTE.secondary, muscles:rec.anatome_secondary_slugs });
+  return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers };
+}
 
 const TOOLS = [{ name:"generate_muscle_image" },{ name:"list_muscles" },{ name:"resolve_exercise" }];
 function mcpHandle(method, params, bodyData){
@@ -74,9 +115,17 @@ Deno.serve(async (req)=>{
 
     T("compact_get_layers_parses", ()=>{ const layers=parseCompactLayers("DC2626:chest,abs|F59E0B:triceps,deltoids"); const s=renderMuscleSvg({gender:"male",view:"front",layers},bodyData).svg; return (s.includes("#DC2626")&&s.includes("#F59E0B")) || "missing color"; });
 
-    T("exercise_resolve_bench_press", ()=>{ const r=resolveExercise("bench press"); return r.layers[0].muscles.includes("chest"); });
-    T("exercise_resolve_deadlift", ()=>{ const r=resolveExercise("deadlift"); const p=r.layers[0].muscles; return p.includes("hamstring")&&p.includes("gluteal")&&p.includes("lower-back"); });
-    T("exercise_resolve_unmatched", ()=>{ const r=resolveExercise("zzzzz nonsense"); return r.matched===false; });
+    await TA("exercise_resolve_bench_press", async ()=>{
+      const r=await resolveExerciseFromDb(base44, "bench press");
+      return r.source==="exercise_db" && r.layers[0].muscles.includes("chest");
+    });
+    await TA("exercise_resolve_deadlift", async ()=>{
+      const r=await resolveExerciseFromDb(base44, "deadlift");
+      const primary=r.layers[0]?.muscles||[];
+      const secondary=r.layers[1]?.muscles||[];
+      return r.source==="exercise_db" && primary.includes("lower-back") && secondary.includes("hamstring") && secondary.includes("gluteal");
+    });
+    T("exercise_resolve_unmatched", ()=>{ const r=keywordResolve("zzzzz nonsense"); return r.matched===false; });
 
     T("mcp_initialize", ()=>{ const r=mcpHandle("initialize",{},bodyData); return r.serverInfo.name==="anatome" && r.protocolVersion==="2024-11-05"; });
     T("mcp_tools_list", ()=>{ const r=mcpHandle("tools/list",{},bodyData); return r.tools.length===3; });

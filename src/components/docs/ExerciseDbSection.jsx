@@ -53,6 +53,8 @@ export default function ExerciseDbSection() {
       <p className="text-sm text-muted-foreground leading-relaxed my-2">
         Anatome ships with 873 exercises from free-exercise-db (CC0, public domain by yuhonas), pre-mapped to our 23 muscle slugs.
         Every exercise has a pre-built <span className="font-mono text-foreground">anatome_imageSrc</span> URL ready for <span className="font-mono text-foreground">{"<img src>"}</span>.
+        ExerciseDB entries include <span className="font-semibold text-foreground">primary</span> and <span className="font-semibold text-foreground">secondary</span> muscle layers.
+        For a third tier (accessory stabilizers, custom colors, per-layer opacity), pass additional layers to <span className="font-mono text-foreground">generateImage</span> — see the Playground default or the Examples section.
       </p>
 
       <h3 className="font-display font-semibold mt-6 mb-1">Pattern A — Search-and-render</h3>

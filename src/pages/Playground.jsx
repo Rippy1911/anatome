@@ -9,6 +9,7 @@ import RequestPanel from "@/components/playground/RequestPanel";
 import HealthBar from "@/components/playground/HealthBar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Layers, SlidersHorizontal, Dumbbell, Code2 } from "lucide-react";
+import { DEMO_LAYERS } from "@/data/muscleCatalog";
 
 const DEFAULT_SETTINGS = {
   gender: "male", view: "dual", bodyColor: "#3f3f3f", borderColor: "#dfdfdf",
@@ -31,7 +32,7 @@ export default function Playground() {
   const { theme } = useTheme();
   const [bodyData, setBodyData] = useState(null);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-  const [layers, setLayers] = useState([{ color: "#DC2626", muscles: [], opacity: 1 }]);
+  const [layers, setLayers] = useState(() => DEMO_LAYERS.map((l) => ({ ...l })));
   const [activeLayer, setActiveLayer] = useState(0);
   const [bodyColorTouched, setBodyColorTouched] = useState(false);
   const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
@@ -98,6 +99,7 @@ export default function Playground() {
             <ExerciseSearch onSelect={(l) => { setLayers(l); setActiveLayer(0); }} />
           </Section>
           <Section icon={Layers} title="Layers">
+            <p className="text-xs text-muted-foreground mb-3">Default: bench press with primary (red), secondary (amber), and stabilizers (yellow, 50% opacity). ExerciseDB resolves primary + secondary only — add more layers here or via the API.</p>
             <LayerEditor layers={layers} setLayers={setLayers} activeLayer={activeLayer} setActiveLayer={setActiveLayer} />
           </Section>
           <Section icon={Code2} title="API Request">

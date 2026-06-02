@@ -106,7 +106,52 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       },
       "/listMuscles": {
         get: { tags: ["Discovery"], summary: "List all supported muscles", responses: { "200": { description: "Muscle catalog",
-          content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, count: { type: "integer" }, muscles: { type: "array", items: { type: "object", properties: { slug: { type: "string" }, name: { type: "string" }, views: { type: "array", items: { type: "string" } } } } } } } } } } } },
+          content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, count: { type: "integer" }, muscles: { type: "array", items: { type: "object", properties: { slug: { type: "string" }, name: { type: "string" }, views: { type: "array", items: { type: "string" } }, body_region: { type: "string", nullable: true } } } } } } } } } } },
+      },
+      "/muscleInfo": {
+        get: {
+          tags: ["Discovery"],
+          summary: "Per-muscle reference with exercise counts",
+          parameters: [{ name: "slug", in: "query", required: true, schema: { type: "string" }, example: "chest" }],
+          responses: {
+            "200": { description: "Muscle detail" },
+            "404": { description: "Unknown slug" },
+          },
+        },
+      },
+      "/listEquipment": {
+        get: {
+          tags: ["Discovery"],
+          summary: "List distinct equipment values from the exercise bundle",
+          responses: { "200": { description: "Equipment list" } },
+        },
+      },
+      "/workoutImage": {
+        post: {
+          tags: ["Image Generation"],
+          summary: "Session heatmap — stack muscle activation across multiple exercises",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    exercises: { type: "array", items: { type: "string" }, example: ["bench press", "squat", "overhead press"] },
+                    gender: { type: "string", enum: ["male", "female"], default: "male" },
+                    view: { type: "string", enum: ["front", "back", "dual"], default: "dual" },
+                    output: { type: "string", enum: ["json", "raw"], default: "json" },
+                  },
+                  required: ["exercises"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": { description: "Combined workout SVG + muscle hit counts" },
+            "400": { description: "Missing exercises array" },
+          },
+        },
       },
       "/searchExercises": {
         get: {
@@ -119,10 +164,12 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
             { name: "equipment", in: "query", schema: { type: "string" }, example: "barbell" },
             { name: "level", in: "query", schema: { type: "string", enum: ["beginner", "intermediate", "expert"] } },
             { name: "limit", in: "query", schema: { type: "integer", default: 20, maximum: 50 }, example: 5 },
+            { name: "offset", in: "query", schema: { type: "integer", default: 0, minimum: 0 }, example: 0 },
+            { name: "fields", in: "query", schema: { type: "string" }, description: "Comma-separated field list, or all/* for full records" },
           ],
           responses: {
             "200": { description: "Search results", content: { "application/json": { schema: { type: "object", properties: {
-              ok: { type: "boolean" }, total_matched: { type: "integer" }, results: { type: "array", items: exerciseResultSchema },
+              ok: { type: "boolean" }, total_matched: { type: "integer" }, offset: { type: "integer" }, limit: { type: "integer" }, results: { type: "array", items: exerciseResultSchema },
               attribution: { type: "string" }, license: { type: "string" }, built_by: { type: "string" }, try_also: { type: "string" },
             } } } } },
           },
@@ -139,10 +186,22 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
             { name: "muscle", in: "query", schema: { type: "string" }, example: "chest" },
             { name: "limit", in: "query", schema: { type: "integer", default: 10 } },
             { name: "random", in: "query", schema: { type: "integer", enum: [1] }, example: 1 },
+            { name: "fields", in: "query", schema: { type: "string" }, description: "Comma-separated field list, or all/* (default: full record incl. instructions)" },
           ],
           responses: {
             "200": { description: "Exercise found" },
             "404": { description: "No match" },
+          },
+        },
+      },
+      "/exerciseGif": {
+        get: {
+          tags: ["Exercise Database"],
+          summary: "Exercise demonstration GIF (2-frame, CC0 source)",
+          parameters: [{ name: "id", in: "query", required: true, schema: { type: "string" }, example: "Barbell_Bench_Press_-_Medium_Grip", description: "Exercise ext_id" }],
+          responses: {
+            "200": { description: "Animated GIF", content: { "image/gif": { schema: { type: "string", format: "binary" } } } },
+            "404": { description: "GIF not generated yet" },
           },
         },
       },

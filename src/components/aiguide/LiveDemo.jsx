@@ -4,6 +4,7 @@ import { API_BASE } from "@/lib/apiBase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, AlertTriangle } from "lucide-react";
+import MuscleGroupsList from "@/components/aiguide/MuscleGroupsList";
 
 const absUrl = (u) => (u ? (u.startsWith("http") ? u : `${API_BASE}${u}`) : null);
 
@@ -72,23 +73,34 @@ export default function LiveDemo() {
           <div className="rounded-xl border border-border overflow-hidden bg-secondary/40">
             {result.anatome_imageSrc && <img src={absUrl(result.anatome_imageSrc)} alt={result.exercise_name_extracted} className="w-full" />}
           </div>
-          <div className="space-y-2 text-sm">
-            <div><span className="text-muted-foreground">LLM extracted:</span> <span className="font-semibold capitalize">{result.exercise_name_extracted}</span></div>
-            <div className="text-xs text-muted-foreground">Source: <span className="font-mono">{result.source}</span></div>
+          <div className="space-y-3 text-sm">
+            {result.matched && (
+              <div>
+                <span className="text-muted-foreground">Matched exercise:</span>{" "}
+                <span className="font-semibold capitalize">{result.exercise_name_extracted}</span>
+              </div>
+            )}
+            {!result.matched && (
+              <div>
+                <span className="text-muted-foreground">Resolved as:</span>{" "}
+                <span className="font-semibold capitalize">{result.exercise_name_extracted}</span>
+              </div>
+            )}
+            <div className="text-xs text-muted-foreground">
+              Match: <span className="font-mono">{result.source}</span>
+              {result.matched === false && " (no muscle map)"}
+            </div>
+            <MuscleGroupsList
+              layers={result.layers}
+              muscleGroups={result.muscle_groups}
+              matched={result.matched}
+            />
             {result.exercise_image_url && (
               <div className="pt-1">
-                <div className="text-[11px] text-muted-foreground mb-1">Matched exercise (ExerciseDB):</div>
+                <div className="text-[11px] text-muted-foreground mb-1">ExerciseDB reference photo</div>
                 <img src={result.exercise_image_url} alt={result.exercise_name_extracted} className="rounded-lg border border-border max-h-28 w-auto" />
               </div>
             )}
-            <div className="space-y-1">
-              {(result.layers || []).map((l, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs">
-                  <span className="w-3 h-3 rounded-sm border border-border" style={{ backgroundColor: l.color, opacity: l.opacity || 1 }} />
-                  <span className="text-muted-foreground">{(l.muscles || []).join(", ")}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       )}

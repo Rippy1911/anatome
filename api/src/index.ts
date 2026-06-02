@@ -5,15 +5,18 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { renderMuscleSvg } from "./lib/muscleEngine.ts";
-import { listMuscles as listMusclesCatalog } from "./lib/muscleEngine.ts";
-import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES } from "./data/muscleCatalog.ts";
+import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION } from "./data/muscleCatalog.ts";
 import { getBodyData } from "./lib/bodyData.ts";
 import { payloadFromQuery, sha256 } from "./lib/query.ts";
 import {
-  searchExercisesLogic, searchResult, getByExtId, getByMuscle, getRandom, getByName,
-  cleanExercise, absoluteImageSrc, exerciseDbImageUrl, resolveExercise as resolveEx,
+  searchExercisesLogic, formatExercise, getByExtId, getByMuscle, getRandom, getByName,
+  cleanExercise,
+  resolveExercise as resolveEx,
+  listEquipment, getMuscleInfo,
   type ExerciseRow,
 } from "./lib/exercises.ts";
+import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
+import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
 import { checkRateLimit, rateHeaders, rateLimitBody, type Env } from "./lib/rateLimit.ts";
 import { baseAttribution, exerciseAttribution, ATTRIBUTION, LICENSE, BUILT_BY, TRY_ALSO } from "./lib/attribution.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
@@ -30,7 +33,14 @@ function baseUrl(c: { env: Env }): string {
   return c.env.PUBLIC_BASE_URL || "https://api.anatome.dev";
 }
 
-app.get("/", (c) => c.json({ ok: true, service: "anatome-api", version: "2.0.0", endpoints: ["/generateImage", "/searchExercises", "/getExercise", "/resolveExercise", "/listMuscles", "/mcp", "/openapi", "/selfTest"], ...baseAttribution() }));
+app.get("/", (c) => c.json({
+  ok: true, service: "anatome-api", version: "2.0.0",
+  endpoints: [
+    "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
+    "/exerciseGif", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/selfTest",
+  ],
+  ...baseAttribution(),
+}));
 
 // ---- generateImage (GET query + POST JSON) ----
 async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Response> {
@@ -72,8 +82,25 @@ app.post("/generateImage", (c) => generateImage(c));
 
 // ---- listMuscles ----
 app.get("/listMuscles", (c) => {
-  const muscles = MUSCLES.map((slug) => ({ slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug] }));
+  const muscles = MUSCLES.map((slug) => ({
+    slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug], body_region: BODY_REGION[slug] || null,
+  }));
   return c.json({ ok: true, count: MUSCLES.length, muscles, attribution: ATTRIBUTION, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO });
+});
+
+// ---- muscleInfo ----
+app.get("/muscleInfo", (c) => {
+  const slug = c.req.query("slug");
+  if (!slug) return c.json({ ok: false, error: "provide slug query param", ...baseAttribution() }, 400);
+  const info = getMuscleInfo(slug, baseUrl(c));
+  if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...baseAttribution() }, 404);
+  return c.json({ ok: true, ...info, ...baseAttribution() });
+});
+
+// ---- listEquipment ----
+app.get("/listEquipment", (c) => {
+  const equipment = listEquipment();
+  return c.json({ ok: true, count: equipment.length, equipment, ...exerciseAttribution() });
 });
 
 // ---- searchExercises ----
@@ -81,18 +108,52 @@ app.get("/searchExercises", async (c) => {
   const rl = await checkRateLimit(c.req.raw, c.env);
   if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
   const q = c.req.query();
-  const { total, results } = searchExercisesLogic({ q: q.q, muscle: q.muscle, equipment: q.equipment, level: q.level, limit: q.limit });
   const base = baseUrl(c);
-  return c.json({ ok: true, total_matched: total, results: results.map((e) => searchResult(e, base)), ...exerciseAttribution() }, 200, rateHeaders(rl));
+  const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
+  const { total, offset, limit, results } = searchExercisesLogic({
+    q: q.q, muscle: q.muscle, equipment: q.equipment, level: q.level, limit: q.limit, offset: q.offset,
+  });
+  return c.json({
+    ok: true, total_matched: total, offset, limit,
+    results: results.map((e) => formatExercise(e, base, "search", fields)),
+    ...exerciseAttribution(),
+  }, 200, rateHeaders(rl));
+});
+
+// ---- exercise GIF (static assets: api/public/gifs/<ext_id>.gif) ----
+app.get("/exerciseGif", async (c) => {
+  const id = c.req.query("id");
+  if (!id) return c.json({ ok: false, error: "id required (exercise ext_id)" }, 400);
+  const assets = c.env.ASSETS;
+  if (!assets) return c.json({ ok: false, error: "assets not configured" }, 503);
+  const assetUrl = new URL(c.req.url);
+  assetUrl.pathname = `/gifs/${id}.gif`;
+  const res = await assets.fetch(new Request(assetUrl.toString(), { headers: { Accept: "image/gif" } }));
+  if (res.status === 200) {
+    return new Response(res.body, {
+      status: 200,
+      headers: { "Content-Type": "image/gif", "Cache-Control": CACHE_CONTROL },
+    });
+  }
+  return c.json({
+    ok: false,
+    error: "gif not found",
+    hint: "python3 scripts/generate-exercise-gifs.py",
+    ext_id: id,
+  }, 404);
 });
 
 // ---- getExercise (4 modes) ----
-function fullExercise(e: ExerciseRow | null, base: string) {
+function fullExercise(
+  e: ExerciseRow | null,
+  base: string,
+  fields: ReturnType<typeof parseFieldsParam>,
+) {
   if (!e) return null;
   const cleaned = cleanExercise(e) as ExerciseRow;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { name_lower, ...rest } = cleaned;
-  return { ...rest, image_url: exerciseDbImageUrl(e.images), anatome_imageSrc: absoluteImageSrc(e.anatome_imageSrc, base) };
+  const row = { ...cleaned };
+  delete (row as { name_lower?: string }).name_lower;
+  return formatExercise(row, base, "full", fields);
 }
 app.get("/getExercise", async (c) => {
   const rl = await checkRateLimit(c.req.raw, c.env);
@@ -101,11 +162,12 @@ app.get("/getExercise", async (c) => {
   const base = baseUrl(c);
   const meta = exerciseAttribution();
   const limit = Math.min(Number(q.limit || 10), 50);
+  const fields = parseFieldsParam(q.fields, null);
 
-  if (q.id) { const rec = getByExtId(q.id); return c.json({ ok: !!rec, exercise: fullExercise(rec, base), ...meta }, rec ? 200 : 404, rateHeaders(rl)); }
-  if (q.muscle) { const list = getByMuscle(q.muscle, limit); return c.json({ ok: true, muscle: q.muscle.toLowerCase(), count: list.length, exercises: list.map((e) => fullExercise(e, base)), ...meta }, 200, rateHeaders(rl)); }
-  if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, exercise: fullExercise(rec, base), ...meta }, rec ? 200 : 404, rateHeaders(rl)); }
-  if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base), ...meta }, m.exercise ? 200 : 404, rateHeaders(rl)); }
+  if (q.id) { const rec = getByExtId(q.id); return c.json({ ok: !!rec, exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, rateHeaders(rl)); }
+  if (q.muscle) { const list = getByMuscle(q.muscle, limit); return c.json({ ok: true, muscle: q.muscle.toLowerCase(), count: list.length, exercises: list.map((e) => fullExercise(e, base, fields)), ...meta }, 200, rateHeaders(rl)); }
+  if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, rateHeaders(rl)); }
+  if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base, fields), ...meta }, m.exercise ? 200 : 404, rateHeaders(rl)); }
   return c.json({ ok: false, error: "provide one of: id, name, random=1, muscle", ...meta }, 400, rateHeaders(rl));
 });
 
@@ -117,11 +179,58 @@ async function resolveRoute(c: { req: { raw: Request; query: () => Record<string
   let exercise = "";
   if (req.method === "POST") { try { const b = await req.json() as { exercise?: string }; exercise = b.exercise || ""; } catch { exercise = ""; } }
   else { exercise = c.req.query().exercise || ""; }
-  const r = resolveEx(exercise);
-  return new Response(JSON.stringify({ ok: true, ...r, attribution: ATTRIBUTION, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
+  const r = resolveEx(exercise, baseUrl(c));
+  return new Response(JSON.stringify({
+    ok: true, ...r,
+    attribution: ATTRIBUTION, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO,
+  }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
 }
 app.get("/resolveExercise", (c) => resolveRoute(c));
 app.post("/resolveExercise", (c) => resolveRoute(c));
+
+// ---- workoutImage (POST JSON) ----
+app.post("/workoutImage", async (c) => {
+  const rl = await checkRateLimit(c.req.raw, c.env);
+  if (!rl.allowed) {
+    return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
+  }
+  let body: Record<string, unknown> = {};
+  try { body = await c.req.json(); } catch { body = {}; }
+  const exercises = Array.isArray(body.exercises) ? body.exercises.map(String) : [];
+  if (!exercises.length) {
+    return c.json({ ok: false, error: "provide exercises array with at least one name", ...baseAttribution() }, 400, rateHeaders(rl));
+  }
+  const base = baseUrl(c);
+  const result = workoutImageLogic({
+    exercises,
+    gender: body.gender as string | undefined,
+    view: body.view as string | undefined,
+    width: body.width != null ? Number(body.width) : undefined,
+    height: body.height != null ? Number(body.height) : undefined,
+  }, getBodyData());
+  const counts = result.per_muscle_count;
+  const slugs = Object.keys(counts);
+  const per_muscle = Object.fromEntries(
+    slugs.map((slug) => [slug, { fill: "#DC2626", opacity: counts[slug] >= 3 ? 1 : counts[slug] === 2 ? 0.65 : 0.4 }]),
+  );
+  const anatome_imageSrc = workoutImageSrc({
+    gender: result.gender,
+    view: result.view,
+    layers: slugs.length ? [{ color: "#DC2626", muscles: slugs }] : [],
+    per_muscle,
+  }, base);
+  const output = body.output === "raw" ? "raw" : "json";
+  if (output === "raw") {
+    return new Response(result.svg, {
+      status: 200,
+      headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ...rateHeaders(rl) },
+    });
+  }
+  return c.json({
+    ok: true, ...result, anatome_imageSrc,
+    ...baseAttribution(),
+  }, 200, rateHeaders(rl));
+});
 
 // ---- mcp (JSON-RPC) ----
 app.get("/mcp", (c) => c.json({ ok: true, server: "anatome", version: "2.0.0", protocol: "mcp/2024-11-05", tools: TOOLS.map((t) => t.name) }));

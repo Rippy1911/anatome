@@ -60,6 +60,7 @@ Each full row should contain (see `base44/entities/Exercise.jsonc`):
   "primaryMuscles": ["chest"], "secondaryMuscles": ["triceps", "shoulders"],
   "instructions": ["..."],
   "images": ["Bench_Press/0.jpg", "Bench_Press/1.jpg"],
+  "gif_url": "https://api.anatome.dev/exerciseGif?id=Bench_Press",
   "anatome_primary_slugs": ["chest"],
   "anatome_secondary_slugs": ["triceps", "deltoids"],
   "anatome_layers_payload": [ /* generateImage layer JSON */ ],
@@ -67,6 +68,27 @@ Each full row should contain (see `base44/entities/Exercise.jsonc`):
   "unmapped_source_muscle": []
 }
 ```
+
+## Exercise GIFs (optional, pre-deploy)
+
+Two-frame animated GIFs are built from yuhonas CC0 JPEG pairs and served at
+`GET /exerciseGif?id=<ext_id>`:
+
+```bash
+pip install Pillow
+python3 scripts/generate-exercise-gifs.py    # writes api/public/gifs/<ext_id>.gif
+```
+
+## API field selection
+
+Bulk-friendly responses support sparse field projection:
+
+- `GET /searchExercises?q=bench&fields=name,anatome_imageSrc,gif_url` — lean list (default omits `instructions`)
+- `GET /getExercise?name=bench+press&fields=name,instructions,gif_url,anatome_imageSrc`
+- `fields=all` or `fields=*` — every field on the record
+
+**Instructions** are stored in each bundled row (`instructions: string[]`) from
+free-exercise-db at import time; request them explicitly when listing many exercises.
 
 ## Notes
 

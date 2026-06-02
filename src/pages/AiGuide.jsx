@@ -4,6 +4,9 @@ import FlowDiagram from "@/components/aiguide/FlowDiagram";
 import CodeBlock from "@/components/aiguide/CodeBlock";
 import LiveDemo from "@/components/aiguide/LiveDemo";
 import AironPromo from "@/components/AironPromo";
+import { API_BASE } from "@/lib/apiBase";
+
+const FN = `${API_BASE}/functions`;
 
 const TOOL_DEF = `{
   "name": "generate_muscle_image",
@@ -18,7 +21,7 @@ const TOOL_DEF = `{
 }`;
 
 const RESOLVE_THEN_RENDER = `// 1. Resolve an exercise name to muscle layers
-const r = await fetch("https://anatome.app/functions/resolveExercise", {
+const r = await fetch("${FN}/resolveExercise", {
   method: "POST",
   body: JSON.stringify({ exercise: "bench press" })
 }).then((res) => res.json());
@@ -45,7 +48,7 @@ const tools = [{
 
 // When the model calls the tool, hit Anatome and return the image URL:
 async function generate_muscle_image({ exercise }) {
-  const r = await fetch("https://anatome.app/functions/resolveExercise", {
+  const r = await fetch("${FN}/resolveExercise", {
     method: "POST", body: JSON.stringify({ exercise })
   }).then((x) => x.json());
   return r.image_src; // drop this into your message as an image
@@ -82,8 +85,10 @@ export default function AiGuide() {
 
       <Heading icon={Wrench}>Try it live</Heading>
       <p className="text-sm text-muted-foreground mb-4">
-        This demo runs a real LLM extraction + Anatome render — the exact flow above. It's
-        rate-limited to keep the demo free; the manual <a href="/" className="text-primary underline">Playground</a> is unlimited.
+        This demo runs a real LLM extraction + Anatome render via the Base44-hosted{" "}
+        <span className="font-mono text-xs">aiDemo</span> function (not on the public API or MCP).
+        It's rate-limited to keep the demo free; the manual{" "}
+        <a href="/playground" className="text-primary underline">Playground</a> is unlimited.
       </p>
       <LiveDemo />
 

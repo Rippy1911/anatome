@@ -112,39 +112,12 @@ export const PALETTE = {
   accessoryOpacity: 0.5,
 };
 
-export const EXERCISE_MAP = {
-  "bench press": { layers: [{ intensity: "primary", muscles: ["chest"] }, { intensity: "secondary", muscles: ["triceps", "deltoids"] }, { intensity: "accessory", muscles: ["abs"] }] },
-  "incline bench press": { layers: [{ intensity: "primary", muscles: ["chest", "deltoids"] }, { intensity: "secondary", muscles: ["triceps"] }, { intensity: "accessory", muscles: ["abs"] }] },
-  "overhead press": { layers: [{ intensity: "primary", muscles: ["deltoids"] }, { intensity: "secondary", muscles: ["triceps", "trapezius"] }, { intensity: "accessory", muscles: ["abs", "upper-back"] }] },
-  "deadlift": { layers: [{ intensity: "primary", muscles: ["gluteal", "hamstring", "lower-back"] }, { intensity: "secondary", muscles: ["quadriceps", "trapezius", "upper-back"] }, { intensity: "accessory", muscles: ["abs", "forearm"] }] },
-  "squat": { layers: [{ intensity: "primary", muscles: ["quadriceps", "gluteal"] }, { intensity: "secondary", muscles: ["hamstring", "adductors", "lower-back"] }, { intensity: "accessory", muscles: ["abs", "calves"] }] },
-  "pull up": { layers: [{ intensity: "primary", muscles: ["upper-back"] }, { intensity: "secondary", muscles: ["biceps", "forearm"] }, { intensity: "accessory", muscles: ["abs", "trapezius"] }] },
-  "barbell row": { layers: [{ intensity: "primary", muscles: ["upper-back", "lower-back"] }, { intensity: "secondary", muscles: ["biceps", "trapezius"] }, { intensity: "accessory", muscles: ["forearm"] }] },
-  "bicep curl": { layers: [{ intensity: "primary", muscles: ["biceps"] }, { intensity: "secondary", muscles: ["forearm"] }, { intensity: "accessory", muscles: [] }] },
-  "tricep extension": { layers: [{ intensity: "primary", muscles: ["triceps"] }, { intensity: "secondary", muscles: [] }, { intensity: "accessory", muscles: [] }] },
-  "lateral raise": { layers: [{ intensity: "primary", muscles: ["deltoids"] }, { intensity: "secondary", muscles: ["trapezius"] }, { intensity: "accessory", muscles: [] }] },
-  "lat pulldown": { layers: [{ intensity: "primary", muscles: ["upper-back"] }, { intensity: "secondary", muscles: ["biceps"] }, { intensity: "accessory", muscles: ["forearm", "trapezius"] }] },
-  "romanian deadlift": { layers: [{ intensity: "primary", muscles: ["hamstring", "gluteal"] }, { intensity: "secondary", muscles: ["lower-back"] }, { intensity: "accessory", muscles: ["forearm"] }] },
-  "leg press": { layers: [{ intensity: "primary", muscles: ["quadriceps", "gluteal"] }, { intensity: "secondary", muscles: ["hamstring", "adductors"] }, { intensity: "accessory", muscles: ["calves"] }] },
-  "leg curl": { layers: [{ intensity: "primary", muscles: ["hamstring"] }, { intensity: "secondary", muscles: ["calves"] }, { intensity: "accessory", muscles: [] }] },
-  "leg extension": { layers: [{ intensity: "primary", muscles: ["quadriceps"] }, { intensity: "secondary", muscles: [] }, { intensity: "accessory", muscles: [] }] },
-  "calf raise": { layers: [{ intensity: "primary", muscles: ["calves"] }, { intensity: "secondary", muscles: ["tibialis"] }, { intensity: "accessory", muscles: [] }] },
-  "plank": { layers: [{ intensity: "primary", muscles: ["abs", "obliques"] }, { intensity: "secondary", muscles: ["lower-back", "deltoids"] }, { intensity: "accessory", muscles: ["gluteal", "quadriceps"] }] },
-  "crunch": { layers: [{ intensity: "primary", muscles: ["abs"] }, { intensity: "secondary", muscles: [] }, { intensity: "accessory", muscles: [] }] },
-  "russian twist": { layers: [{ intensity: "primary", muscles: ["obliques"] }, { intensity: "secondary", muscles: ["abs"] }, { intensity: "accessory", muscles: ["lower-back"] }] },
-  "hip thrust": { layers: [{ intensity: "primary", muscles: ["gluteal"] }, { intensity: "secondary", muscles: ["hamstring"] }, { intensity: "accessory", muscles: ["abs"] }] },
-  "dip": { layers: [{ intensity: "primary", muscles: ["chest", "triceps"] }, { intensity: "secondary", muscles: ["deltoids"] }, { intensity: "accessory", muscles: ["abs"] }] },
-  "push up": { layers: [{ intensity: "primary", muscles: ["chest"] }, { intensity: "secondary", muscles: ["triceps", "deltoids"] }, { intensity: "accessory", muscles: ["abs", "obliques"] }] },
-  "face pull": { layers: [{ intensity: "primary", muscles: ["deltoids", "trapezius"] }, { intensity: "secondary", muscles: ["upper-back"] }, { intensity: "accessory", muscles: [] }] },
-  "hammer curl": { layers: [{ intensity: "primary", muscles: ["biceps", "forearm"] }, { intensity: "secondary", muscles: [] }, { intensity: "accessory", muscles: [] }] },
-  "lunge": { layers: [{ intensity: "primary", muscles: ["quadriceps", "gluteal"] }, { intensity: "secondary", muscles: ["hamstring", "adductors"] }, { intensity: "accessory", muscles: ["abs", "calves"] }] },
-  "front squat": { layers: [{ intensity: "primary", muscles: ["quadriceps"] }, { intensity: "secondary", muscles: ["gluteal", "abs"] }, { intensity: "accessory", muscles: ["upper-back"] }] },
-  "seated cable row": { layers: [{ intensity: "primary", muscles: ["upper-back"] }, { intensity: "secondary", muscles: ["biceps", "trapezius"] }, { intensity: "accessory", muscles: ["forearm"] }] },
-  "rear delt fly": { layers: [{ intensity: "primary", muscles: ["deltoids"] }, { intensity: "secondary", muscles: ["trapezius", "upper-back"] }, { intensity: "accessory", muscles: [] }] },
-  "shrug": { layers: [{ intensity: "primary", muscles: ["trapezius"] }, { intensity: "secondary", muscles: ["forearm"] }, { intensity: "accessory", muscles: [] }] },
-  "tricep pushdown": { layers: [{ intensity: "primary", muscles: ["triceps"] }, { intensity: "secondary", muscles: [] }, { intensity: "accessory", muscles: [] }] },
-  "hanging leg raise": { layers: [{ intensity: "primary", muscles: ["abs"] }, { intensity: "secondary", muscles: ["obliques", "forearm"] }, { intensity: "accessory", muscles: ["adductors"] }] },
-};
+/** Playground/docs sample — three-tier coloring (primary / secondary / stabilizers). */
+export const DEMO_LAYERS = [
+  { color: PALETTE.primary, muscles: ["chest"], opacity: 1 },
+  { color: PALETTE.secondary, muscles: ["triceps", "deltoids"], opacity: 1 },
+  { color: PALETTE.accessory, muscles: ["abs"], opacity: PALETTE.accessoryOpacity },
+];
 
 export const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 export const ATTRIBUTION_SOURCE = "https://github.com/HichamELBSI/react-native-body-highlighter";

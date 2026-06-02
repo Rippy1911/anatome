@@ -3,8 +3,9 @@ import { API_BASE } from "@/lib/apiBase";
 import Hero from "@/components/home/Hero";
 import ImageDemoCard from "@/components/home/ImageDemoCard";
 import SearchDemoCard from "@/components/home/SearchDemoCard";
-import AiDemoCard from "@/components/home/AiDemoCard";
 import McpDemoCard from "@/components/home/McpDemoCard";
+import { Link } from "react-router-dom";
+import { Bot, ArrowRight } from "lucide-react";
 import CodeExamples from "@/components/home/CodeExamples";
 import Pricing from "@/components/home/Pricing";
 
@@ -30,7 +31,19 @@ export default function Home() {
           <SectionHead eyebrow="Live demos" title="Everything below is calling the real API" />
           <ImageDemoCard baseUrl={baseUrl} />
           <SearchDemoCard baseUrl={baseUrl} />
-          <AiDemoCard baseUrl={baseUrl} />
+          <Link
+            to="/ai-guide"
+            className="block rounded-2xl border border-border bg-card p-6 hover:bg-secondary/40 transition-colors"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <Bot className="w-4 h-4 text-primary" />
+              <h3 className="font-display font-semibold">AI Guide — describe an exercise in plain English</h3>
+              <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto" />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Live LLM extraction + muscle diagram demo (rate-limited). Integrate Anatome into chatbots via resolveExercise — no AI endpoint on the public API.
+            </p>
+          </Link>
           <McpDemoCard />
         </section>
 

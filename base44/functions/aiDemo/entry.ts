@@ -5,48 +5,40 @@ const PALETTE = { primary:"#DC2626", secondary:"#F59E0B", accessory:"#FCD34D", a
 const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 const AI_DEMO_LIMIT = 10;
 
-const EXERCISE_MAP = {
-  "bench press":{layers:[{intensity:"primary",muscles:["chest"]},{intensity:"secondary",muscles:["triceps","deltoids"]},{intensity:"accessory",muscles:["abs"]}]},
-  "incline bench press":{layers:[{intensity:"primary",muscles:["chest","deltoids"]},{intensity:"secondary",muscles:["triceps"]},{intensity:"accessory",muscles:["abs"]}]},
-  "overhead press":{layers:[{intensity:"primary",muscles:["deltoids"]},{intensity:"secondary",muscles:["triceps","trapezius"]},{intensity:"accessory",muscles:["abs","upper-back"]}]},
-  "deadlift":{layers:[{intensity:"primary",muscles:["gluteal","hamstring","lower-back"]},{intensity:"secondary",muscles:["quadriceps","trapezius","upper-back"]},{intensity:"accessory",muscles:["abs","forearm"]}]},
-  "squat":{layers:[{intensity:"primary",muscles:["quadriceps","gluteal"]},{intensity:"secondary",muscles:["hamstring","adductors","lower-back"]},{intensity:"accessory",muscles:["abs","calves"]}]},
-  "pull up":{layers:[{intensity:"primary",muscles:["upper-back"]},{intensity:"secondary",muscles:["biceps","forearm"]},{intensity:"accessory",muscles:["abs","trapezius"]}]},
-  "barbell row":{layers:[{intensity:"primary",muscles:["upper-back","lower-back"]},{intensity:"secondary",muscles:["biceps","trapezius"]},{intensity:"accessory",muscles:["forearm"]}]},
-  "bicep curl":{layers:[{intensity:"primary",muscles:["biceps"]},{intensity:"secondary",muscles:["forearm"]},{intensity:"accessory",muscles:[]}]},
-  "tricep extension":{layers:[{intensity:"primary",muscles:["triceps"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
-  "lateral raise":{layers:[{intensity:"primary",muscles:["deltoids"]},{intensity:"secondary",muscles:["trapezius"]},{intensity:"accessory",muscles:[]}]},
-  "lat pulldown":{layers:[{intensity:"primary",muscles:["upper-back"]},{intensity:"secondary",muscles:["biceps"]},{intensity:"accessory",muscles:["forearm","trapezius"]}]},
-  "romanian deadlift":{layers:[{intensity:"primary",muscles:["hamstring","gluteal"]},{intensity:"secondary",muscles:["lower-back"]},{intensity:"accessory",muscles:["forearm"]}]},
-  "leg press":{layers:[{intensity:"primary",muscles:["quadriceps","gluteal"]},{intensity:"secondary",muscles:["hamstring","adductors"]},{intensity:"accessory",muscles:["calves"]}]},
-  "leg curl":{layers:[{intensity:"primary",muscles:["hamstring"]},{intensity:"secondary",muscles:["calves"]},{intensity:"accessory",muscles:[]}]},
-  "leg extension":{layers:[{intensity:"primary",muscles:["quadriceps"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
-  "calf raise":{layers:[{intensity:"primary",muscles:["calves"]},{intensity:"secondary",muscles:["tibialis"]},{intensity:"accessory",muscles:[]}]},
-  "plank":{layers:[{intensity:"primary",muscles:["abs","obliques"]},{intensity:"secondary",muscles:["lower-back","deltoids"]},{intensity:"accessory",muscles:["gluteal","quadriceps"]}]},
-  "crunch":{layers:[{intensity:"primary",muscles:["abs"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
-  "russian twist":{layers:[{intensity:"primary",muscles:["obliques"]},{intensity:"secondary",muscles:["abs"]},{intensity:"accessory",muscles:["lower-back"]}]},
-  "hip thrust":{layers:[{intensity:"primary",muscles:["gluteal"]},{intensity:"secondary",muscles:["hamstring"]},{intensity:"accessory",muscles:["abs"]}]},
-  "dip":{layers:[{intensity:"primary",muscles:["chest","triceps"]},{intensity:"secondary",muscles:["deltoids"]},{intensity:"accessory",muscles:["abs"]}]},
-  "push up":{layers:[{intensity:"primary",muscles:["chest"]},{intensity:"secondary",muscles:["triceps","deltoids"]},{intensity:"accessory",muscles:["abs","obliques"]}]},
-  "face pull":{layers:[{intensity:"primary",muscles:["deltoids","trapezius"]},{intensity:"secondary",muscles:["upper-back"]},{intensity:"accessory",muscles:[]}]},
-  "hammer curl":{layers:[{intensity:"primary",muscles:["biceps","forearm"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
-  "lunge":{layers:[{intensity:"primary",muscles:["quadriceps","gluteal"]},{intensity:"secondary",muscles:["hamstring","adductors"]},{intensity:"accessory",muscles:["abs","calves"]}]},
-};
-
-function intensityLayers(plan){
-  return plan.layers.filter((l)=>l.muscles.length>0).map((l)=>{
-    if(l.intensity==="primary") return { color:PALETTE.primary, muscles:l.muscles };
-    if(l.intensity==="secondary") return { color:PALETTE.secondary, muscles:l.muscles };
-    return { color:PALETTE.accessory, muscles:l.muscles, opacity:PALETTE.accessoryOpacity };
-  });
+const PREFERRED_EQUIPMENT=["barbell","dumbbell","bodyweight","body only"];
+function equipmentPrefixBonus(nameLower){ for(let i=0;i<PREFERRED_EQUIPMENT.length;i++){ if(nameLower.startsWith(PREFERRED_EQUIPMENT[i]+" ")) return (PREFERRED_EQUIPMENT.length-i)*15; } return 0; }
+function scoreExerciseNameMatch(nameLower,key){
+  if(!nameLower||!key) return 0;
+  if(nameLower===key) return 10000;
+  const keyWords=key.split(/\s+/);
+  for(const equip of PREFERRED_EQUIPMENT){
+    const ideal=`${equip} ${key}`;
+    if(nameLower===ideal||nameLower.startsWith(`${ideal} `)||nameLower.startsWith(`${ideal} -`)) return 9500-nameLower.length+equipmentPrefixBonus(nameLower);
+  }
+  const words=nameLower.split(/\s+/);
+  if(words.length>=keyWords.length&&words.slice(-keyWords.length).join(" ")===key){
+    return 8000-(words.length-keyWords.length)*200+equipmentPrefixBonus(nameLower);
+  }
+  const idx=nameLower.indexOf(key);
+  if(idx>=0){ const suffixLen=nameLower.slice(idx+key.length).length; return 3000-nameLower.length-suffixLen*5+equipmentPrefixBonus(nameLower); }
+  if(key.includes(nameLower)) return 500+nameLower.length;
+  return 0;
+}
+function findBestInList(all,key){
+  let best=null,bestScore=0;
+  for(const e of all){ const s=scoreExerciseNameMatch(e.name_lower||"",key); if(s>bestScore){ bestScore=s; best=e; } }
+  return bestScore>0?best:null;
 }
 
-function resolveBuiltin(exerciseRaw){
-  const key=String(exerciseRaw||"").trim().toLowerCase().replace(/\s+/g," ");
-  if(EXERCISE_MAP[key]) return { exercise:key, matched:true, source:"exact", layers:intensityLayers(EXERCISE_MAP[key]) };
-  const prefix=Object.keys(EXERCISE_MAP).find((k)=>k.startsWith(key)||key.startsWith(k));
-  if(prefix) return { exercise:prefix, matched:true, source:"prefix", layers:intensityLayers(EXERCISE_MAP[prefix]) };
-  return null;
+function muscleGroupsFromLayers(layers){
+  const seen=new Set();
+  const out=[];
+  for(const l of layers||[]){
+    for(const m of l.muscles||[]){
+      if(!seen.has(m)){ seen.add(m); out.push(m); }
+    }
+  }
+  return out;
 }
 
 async function resolveFromDb(base44, exerciseRaw){
@@ -57,7 +49,7 @@ async function resolveFromDb(base44, exerciseRaw){
   if(exact && exact[0]) rec=exact[0];
   if(!rec){
     const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
-    rec=all.find((e)=>(e.name_lower||"").includes(key)) || all.find((e)=>key.includes(e.name_lower||"___"));
+    rec=findBestInList(all,key);
   }
   if(!rec) return null;
   const layers=[];
@@ -80,7 +72,7 @@ async function findDbExercise(base44, name){
   const exact=await base44.asServiceRole.entities.Exercise.filter({ name_lower:key }, "", 1);
   if(exact && exact[0]) return exact[0];
   const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
-  return all.find((e)=>(e.name_lower||"").includes(key)) || all.find((e)=>key.includes(e.name_lower||"___")) || null;
+  return findBestInList(all,key);
 }
 
 function keywordFallback(exerciseRaw){
@@ -91,8 +83,8 @@ function keywordFallback(exerciseRaw){
 }
 
 async function resolveExerciseInline(base44, exercise){
-  let r=resolveBuiltin(exercise);
-  if(!r){ try { r=await resolveFromDb(base44, exercise); } catch(e){ console.warn("db fallback failed:", e.message); } }
+  let r=null;
+  try { r=await resolveFromDb(base44, exercise); } catch(e){ console.warn("db fallback failed:", e.message); }
   if(!r) r=keywordFallback(exercise);
   return r;
 }
@@ -173,15 +165,16 @@ Deno.serve(async (req)=>{
       catch(e){ console.warn("db image lookup failed:", e.message); }
     }
 
+    const layers=resolved.layers||[];
     return new Response(JSON.stringify({
       ok:true,
       exercise_name_extracted: resolved.exercise || exerciseName,
-      layers: resolved.layers,
+      layers,
+      muscle_groups: muscleGroupsFromLayers(layers),
       matched: resolved.matched,
       source: resolved.source,
       anatome_imageSrc: imageSrc,
       exercise_image_url: exerciseImageUrl,
-      llm_response_raw: String(llmRaw||""),
       remaining: limit.remaining,
       attribution: ATTRIBUTION,
       license: "Apache-2.0",

@@ -14,7 +14,9 @@ import { parseCompactLayers } from "../lib/query.ts";
 import { MUSCLES } from "../data/muscleCatalog.ts";
 import {
   resolveExercise, searchExercisesLogic, getByName, getByMuscle, getRandom, getByExtId, count as exerciseCount, allExercises,
+  listEquipment, getMuscleInfo,
 } from "../lib/exercises.ts";
+import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { handleMcp, TOOLS } from "./mcp.ts";
 import { ATTRIBUTION } from "../lib/attribution.ts";
 import { IP_DAY_LIMIT, HOST_DAY_LIMIT, isPrivateIp, isLocalHost } from "../lib/rateLimit.ts";
@@ -53,9 +55,17 @@ export function runSelfTest(bodyData: BodyData) {
 
   T("compact_get_layers_parses", () => { const layers = parseCompactLayers("DC2626:chest,abs|F59E0B:triceps,deltoids"); const s = renderMuscleSvg({ gender: "male", view: "front", layers }, bodyData).svg; return (s.includes("#DC2626") && s.includes("#F59E0B")) || "missing color"; });
 
-  // ---- exercise resolution (builtin map — works without bundled data) ----
-  T("exercise_resolve_bench_press", () => resolveExercise("bench press").layers[0].muscles.includes("chest"));
-  T("exercise_resolve_deadlift", () => { const p = resolveExercise("deadlift").layers[0].muscles; return p.includes("hamstring") && p.includes("gluteal") && p.includes("lower-back"); });
+  // ---- exercise resolution (873-exercise database) ----
+  T("exercise_resolve_bench_press", () => {
+    const r = resolveExercise("bench press");
+    return r.source === "exercise_db" && r.layers[0].muscles.includes("chest");
+  });
+  T("exercise_resolve_deadlift", () => {
+    const r = resolveExercise("deadlift");
+    const primary = r.layers[0]?.muscles || [];
+    const secondary = r.layers[1]?.muscles || [];
+    return r.source === "exercise_db" && primary.includes("lower-back") && secondary.includes("hamstring") && secondary.includes("gluteal");
+  });
   T("exercise_resolve_unmatched", () => resolveExercise("zzzzz nonsense").matched === false);
 
   // ---- MCP ----
@@ -87,6 +97,24 @@ export function runSelfTest(bodyData: BodyData) {
   T("get_exercise_by_muscle_chest", () => { const list = getByMuscle("chest", 10); return list.length >= 5 || `count ${list.length}`; });
   T("get_exercise_random", () => { const r = getRandom(); return r ? Boolean(r.name) : "no exercises"; });
   T("search_exercises_returns_results", () => { const { results } = searchExercisesLogic({ q: "bench", limit: 20 }); if (results.length < 3) return `only ${results.length} matches`; return results.every((e) => Array.isArray(e.anatome_layers_payload) && (e.anatome_layers_payload as unknown[]).length > 0) || "some missing layers payload"; });
+  T("search_exercises_offset", () => {
+    const a = searchExercisesLogic({ q: "", limit: 5, offset: 0 });
+    const b = searchExercisesLogic({ q: "", limit: 5, offset: 5 });
+    return a.results.length === 5 && b.results.length === 5 && a.results[0]?.ext_id !== b.results[0]?.ext_id || "offset pagination failed";
+  });
+  T("list_equipment", () => listEquipment().includes("barbell") || "missing barbell");
+  T("muscle_info_chest", () => {
+    const info = getMuscleInfo("chest", "https://api.anatome.dev");
+    return info && info.exercise_count.primary > 5 && info.body_region === "upper-body" || "muscleInfo failed";
+  });
+  T("resolve_exercise_image_src", () => {
+    const r = resolveExercise("bench press", "https://api.anatome.dev");
+    return typeof r.anatome_imageSrc === "string" && r.anatome_imageSrc.startsWith("https://") || "missing anatome_imageSrc";
+  });
+  T("workout_image_session", () => {
+    const r = workoutImageLogic({ exercises: ["bench press", "squat"], view: "dual" }, bodyData);
+    return r.muscles_hit.length >= 3 && r.svg.includes("<svg") || "workoutImage failed";
+  });
 
   // ---- MCP tool-surface ----
   T("mcp_search_exercises_call", () => {

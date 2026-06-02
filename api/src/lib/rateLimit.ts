@@ -12,6 +12,7 @@
 
 export interface Env {
   RATE_LIMIT_KV: KVNamespace;
+  ASSETS?: Fetcher;
   PROXY_SECRET?: string;
   MCP_TRUSTED_KEY?: string;
   PUBLIC_BASE_URL?: string;

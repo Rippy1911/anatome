@@ -24,7 +24,7 @@ export default function Docs() {
       </nav>
 
       <H2 id="overview">Overview</H2>
-      <P>Anatome renders human-body muscle diagrams as SVG. You describe what to highlight using <span className="font-mono text-foreground">layers</span> — each layer is a color plus a list of muscle slugs. Apache-2.0 licensed and self-hostable.</P>
+      <P>Anatome renders human-body muscle diagrams as SVG. You describe what to highlight using <span className="font-mono text-foreground">layers</span> — each layer is a color plus a list of muscle slugs. Stack as many layers as you need (primary, secondary, accessory stabilizers, custom palettes). Apache-2.0 licensed and self-hostable.</P>
       <P>There are 23 canonical muscle slugs. Render priority (highest wins): <span className="font-mono text-foreground">per_muscle[slug].fill</span> → <span className="font-mono text-foreground">layers[].color</span> (last layer wins if a muscle appears in multiple) → <span className="font-mono text-foreground">body_color</span>.</P>
 
       <H2 id="schema">Request Schema</H2>
@@ -124,16 +124,20 @@ curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
       <P><span className="font-mono text-foreground">Rate limit:</span> localhost and 127.0.0.1 are <span className="text-foreground font-medium">unlimited</span> (perfect for development). Without a token, public traffic is limited to 1000 requests/day per IP and 100 requests/day per host. Trusted clients can bypass via the <span className="font-mono text-xs">X-Mcp-Trusted-Key</span> header (contact us for a key).</P>
 
       <H2 id="examples">Examples</H2>
-      <Code>{`# Single muscle group, red, front view
+      <Code>{`# Three-tier bench press (primary / secondary / stabilizers)
 curl -X POST /functions/generateImage \\
   -H 'Content-Type: application/json' \\
-  -d '{"view":"front","layers":[{"color":"#DC2626","muscles":["chest","abs"]}]}'
+  -d '{"view":"dual","layers":[
+    {"color":"#DC2626","muscles":["chest"]},
+    {"color":"#F59E0B","muscles":["triceps","deltoids"]},
+    {"color":"#FCD34D","muscles":["abs"],"opacity":0.5}
+  ]}'
 
-# Raw SVG (embed directly in <img> after data-uri encoding)
-GET /functions/generateImage?muscles=biceps,triceps&color=%23DC2626&output=raw
+# Compact GET with the same three layers
+GET /functions/generateImage?layers=DC2626:chest|F59E0B:triceps,deltoids|FCD34D@0.5:abs&output=raw
 
-# Resolve an exercise
-GET /functions/resolveExercise?exercise=deadlift`}</Code>
+# Resolve an exercise from the 873-exercise database (primary + secondary)
+GET /functions/resolveExercise?exercise=bench+press`}</Code>
 
       <H2 id="attribution">Attribution & License</H2>
       <ul className="text-sm text-muted-foreground leading-relaxed my-2 space-y-1.5 list-disc pl-5">
