@@ -8,6 +8,7 @@ import { AuthProvider } from '@/lib/AuthContext';
 import Layout from '@/pages/Layout';
 import Playground from '@/pages/Playground';
 import Docs from '@/pages/Docs';
+import AiGuide from '@/pages/AiGuide';
 import Api from '@/pages/Api';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" element={<Playground />} />
               <Route path="/playground" element={<Navigate to="/" replace />} />
               <Route path="/docs" element={<Docs />} />
+              <Route path="/ai-guide" element={<AiGuide />} />
               <Route path="/api" element={<Api />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />

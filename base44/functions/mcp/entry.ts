@@ -11,6 +11,8 @@ const DEFAULTS = { gender:"male",view:"dual",width:768,height:1024,background:"t
 const PALETTE = { primary:"#DC2626",secondary:"#F59E0B",accessory:"#FCD34D",accessoryOpacity:0.5 };
 const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 const ATTRIBUTION_SOURCE = "https://github.com/HichamELBSI/react-native-body-highlighter";
+const BUILT_BY = "NextSolutions — nextsolutions.studio";
+const TRY_ALSO = "AI fitness coach at airon.coach";
 
 const EXERCISE_MAP = {
   "bench press":{layers:[{intensity:"primary",muscles:["chest"]},{intensity:"secondary",muscles:["triceps","deltoids"]},{intensity:"accessory",muscles:["abs"]}]},
@@ -132,15 +134,15 @@ Deno.serve(async (req)=>{
       if(name==="generate_muscle_image"){
         const bodyData=await loadBody(base44);
         const { svg, muscles_rendered }=renderMuscleSvg(args,bodyData);
-        return Response.json(rpcResult(id,{ content:[{ type:"text", text:svg }], structuredContent:{ muscles_rendered, attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE } }),{headers:cors});
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:svg }], structuredContent:{ muscles_rendered, attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE, built_by:BUILT_BY, try_also:TRY_ALSO } }),{headers:cors});
       }
       if(name==="list_muscles"){
         const muscles=MUSCLES.map((slug)=>({ slug, name:ANATOMICAL_NAMES[slug], views:SIDE_PRESENCE[slug] }));
-        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(muscles) }], structuredContent:{ count:MUSCLES.length, muscles } }),{headers:cors});
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(muscles) }], structuredContent:{ count:MUSCLES.length, muscles, built_by:BUILT_BY, try_also:TRY_ALSO } }),{headers:cors});
       }
       if(name==="resolve_exercise"){
         const r=resolveExercise(args.exercise);
-        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(r) }], structuredContent:r }),{headers:cors});
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(r) }], structuredContent:{ ...r, built_by:BUILT_BY, try_also:TRY_ALSO } }),{headers:cors});
       }
       return Response.json(rpcError(id,-32602,`Unknown tool: ${name}`),{headers:cors});
     }

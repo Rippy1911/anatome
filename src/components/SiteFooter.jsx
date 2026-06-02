@@ -1,0 +1,17 @@
+import React from "react";
+
+export default function SiteFooter() {
+  return (
+    <footer className="border-t border-border bg-background/60">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-muted-foreground">
+        <a href="https://nextsolutions.studio" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+          Built with ♥ by NextSolutions
+        </a>
+        <span>© 2026 NextSolutions</span>
+        <a href="https://airon.coach" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+          Try our AI fitness coach: airon.coach →
+        </a>
+      </div>
+    </footer>
+  );
+}

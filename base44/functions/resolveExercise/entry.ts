@@ -118,7 +118,7 @@ Deno.serve(async (req)=>{
     if(!r){ try { r=await resolveFromDb(base44, exercise); } catch(e){ console.warn("db fallback failed:", e.message); } }
     if(!r) r=keywordFallback(exercise);
 
-    return new Response(JSON.stringify({ ok:true, ...r, attribution:ATTRIBUTION, license:"MIT" }), { headers:{ ...cors, "Content-Type":"application/json", ...rateHeaders(rl) } });
+    return new Response(JSON.stringify({ ok:true, ...r, attribution:ATTRIBUTION, license:"MIT", built_by:"NextSolutions — nextsolutions.studio", try_also:"AI fitness coach at airon.coach" }), { headers:{ ...cors, "Content-Type":"application/json", ...rateHeaders(rl) } });
   } catch(error){
     return Response.json({ ok:false, error:error.message }, { status:500, headers:cors });
   }

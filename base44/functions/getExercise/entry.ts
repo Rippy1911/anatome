@@ -38,7 +38,7 @@ Deno.serve(async (req)=>{
     const url=new URL(req.url); const q=url.searchParams;
     const id=q.get("id"); const name=q.get("name"); const random=q.get("random"); const muscle=q.get("muscle");
     const limit=Math.min(Number(q.get("limit")||10),50);
-    const meta={ attribution:ATTRIBUTION, exercise_db_attribution:EXERCISE_DB_ATTRIBUTION, license:"MIT + CC0-1.0" };
+    const meta={ attribution:ATTRIBUTION, exercise_db_attribution:EXERCISE_DB_ATTRIBUTION, license:"MIT + CC0-1.0", built_by:"NextSolutions — nextsolutions.studio", try_also:"AI fitness coach at airon.coach" };
     const headers={ ...cors, "Content-Type":"application/json", ...rateHeaders(rl) };
 
     if(id){

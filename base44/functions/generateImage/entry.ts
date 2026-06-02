@@ -9,6 +9,8 @@ const WRAPPER = { male:{front:{viewBox:"0 0 724 1448"},back:{viewBox:"724 0 724 
 const DEFAULTS = { gender:"male",view:"dual",width:768,height:1024,background:"transparent",body_color:"#3f3f3f",border_color:"#dfdfdf",border_width:1 };
 const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 const ATTRIBUTION_SOURCE = "https://github.com/HichamELBSI/react-native-body-highlighter";
+const BUILT_BY = "NextSolutions — nextsolutions.studio";
+const TRY_ALSO = "AI fitness coach at airon.coach";
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
@@ -179,6 +181,7 @@ Deno.serve(async (req)=>{
       ...(png_status?{png_status}:{}),
       rate_limit:{ source:rl.source, remaining:rl.remaining!=null?rl.remaining:null, limit:RATE_LIMIT },
       attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE, license:"MIT", duration_ms,
+      built_by:BUILT_BY, try_also:TRY_ALSO,
     }), { headers:{ ...cors, "Content-Type":"application/json", ...rateHeaders(rl) } });
   } catch(error){
     return Response.json({ ok:false, error:error.message }, { status:500, headers:cors });

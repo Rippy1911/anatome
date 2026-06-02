@@ -122,6 +122,16 @@ Deno.serve(async (req)=>{
       return list.length>=5 || `count ${list.length}`;
     });
 
+    // searchExercises core logic inlined: query "bench", expect >=3 results each with layers payload.
+    await TA("search_exercises_returns_results", async ()=>{
+      const key="bench";
+      const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
+      const matches=all.filter((e)=>(e.name_lower||e.name||"").toLowerCase().includes(key)).slice(0,20);
+      if(matches.length<3) return `only ${matches.length} matches`;
+      const allHaveLayers=matches.every((e)=>Array.isArray(e.anatome_layers_payload) && e.anatome_layers_payload.length>0);
+      return allHaveLayers || "some results missing anatome_layers_payload";
+    });
+
     // ---- Rate-limit logic, tested inline against the helper (no HTTP) ----
     const RATE_LIMIT=100;
     const sha256=async (str)=>{ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); };

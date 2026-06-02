@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation, Outlet } from "react-router-dom";
 import { Activity } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import SiteFooter from "@/components/SiteFooter";
 import { useTheme } from "@/hooks/useTheme";
 
 function NavLink({ to, children }) {
@@ -45,6 +46,7 @@ export default function Layout() {
         </div>
       </header>
       <main><Outlet /></main>
+      <SiteFooter />
     </div>
   );
 }

@@ -4,11 +4,11 @@ import { loadBodyData } from "@/data/bodyDataLoader";
 import MuscleBody from "@/components/playground/MuscleBody";
 import LayerEditor from "@/components/playground/LayerEditor";
 import BodyControls from "@/components/playground/BodyControls";
-import AIAssist from "@/components/playground/AIAssist";
+import ExerciseSearch from "@/components/playground/ExerciseSearch";
 import RequestPanel from "@/components/playground/RequestPanel";
 import HealthBar from "@/components/playground/HealthBar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Layers, SlidersHorizontal, Sparkles, Code2 } from "lucide-react";
+import { Layers, SlidersHorizontal, Dumbbell, Code2 } from "lucide-react";
 
 const DEFAULT_SETTINGS = {
   gender: "male", view: "dual", bodyColor: "#3f3f3f", borderColor: "#dfdfdf",
@@ -92,13 +92,13 @@ export default function Playground() {
           </div>
         </div>
 
-        {/* Right: layers, AI, request */}
+        {/* Right: exercise library, layers, request */}
         <div className="space-y-6">
+          <Section icon={Dumbbell} title="Exercise Library">
+            <ExerciseSearch onSelect={(l) => { setLayers(l); setActiveLayer(0); }} />
+          </Section>
           <Section icon={Layers} title="Layers">
             <LayerEditor layers={layers} setLayers={setLayers} activeLayer={activeLayer} setActiveLayer={setActiveLayer} />
-          </Section>
-          <Section icon={Sparkles} title="AI Assist">
-            <AIAssist onResolve={(l) => { setLayers(l); setActiveLayer(0); }} currentLayers={layers} />
           </Section>
           <Section icon={Code2} title="API Request">
             <RequestPanel settings={settings} layers={layers} baseUrl={baseUrl} />
@@ -110,7 +110,13 @@ export default function Playground() {
       <div className="md:hidden space-y-4">
         <div className="rounded-2xl border border-border overflow-hidden" style={{ backgroundColor: previewBg }}>{preview}</div>
         <p className="text-xs text-muted-foreground px-1">Tap a muscle to toggle it in the active layer.</p>
-        <Accordion type="single" collapsible defaultValue="layers" className="space-y-3">
+        <Accordion type="single" collapsible defaultValue="library" className="space-y-3">
+          <AccordionItem value="library" className="rounded-2xl border border-border bg-card px-4">
+            <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Dumbbell className="w-4 h-4 text-primary" /> Exercise Library</span></AccordionTrigger>
+            <AccordionContent className="pt-1 pb-4">
+              <ExerciseSearch onSelect={(l) => { setLayers(l); setActiveLayer(0); }} />
+            </AccordionContent>
+          </AccordionItem>
           <AccordionItem value="layers" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Layers className="w-4 h-4 text-primary" /> Layers</span></AccordionTrigger>
             <AccordionContent className="pt-1 pb-4">
@@ -120,10 +126,6 @@ export default function Playground() {
           <AccordionItem value="body" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><SlidersHorizontal className="w-4 h-4 text-primary" /> Body</span></AccordionTrigger>
             <AccordionContent className="pt-1 pb-4"><BodyControls settings={settings} onChange={handleSettingsChange} /></AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="ai" className="rounded-2xl border border-border bg-card px-4">
-            <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-primary" /> AI Assist</span></AccordionTrigger>
-            <AccordionContent className="pt-1 pb-4"><AIAssist onResolve={(l) => { setLayers(l); setActiveLayer(0); }} currentLayers={layers} /></AccordionContent>
           </AccordionItem>
           <AccordionItem value="api" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Code2 className="w-4 h-4 text-primary" /> API Request</span></AccordionTrigger>
