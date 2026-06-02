@@ -39,11 +39,27 @@ describe("parseFieldsParam", () => {
 describe("formatExercise", () => {
   const base = "https://api.anatome.dev";
 
+  it("search defaults include gif_url", () => {
+    expect(SEARCH_DEFAULT_FIELDS.has("gif_url")).toBe(true);
+  });
+
+  it("search projection uses anatome-hosted gif", () => {
+    const row = formatExercise(sample, base, "search", SEARCH_DEFAULT_FIELDS);
+    expect(row.gif_url).toMatch(/\/exerciseGif\?id=Bench_Press$/);
+    expect(String(row.gif_url)).not.toContain("githubusercontent");
+  });
+
   it("includes instructions when requested", () => {
     const row = formatExercise(sample, base, "search", new Set(["name", "instructions"]));
     expect(row.instructions).toEqual(["Lie on bench.", "Press up."]);
     expect(row.name).toBe("Bench Press");
     expect(row.gif_url).toBeUndefined();
+  });
+
+  it("buildExerciseRecord image_url matches gif_url on Anatome", () => {
+    const full = buildExerciseRecord(sample, base);
+    expect(full.image_url).toBe(full.gif_url);
+    expect(String(full.image_url)).toContain("/exerciseGif?id=Bench_Press");
   });
 
   it("buildExerciseRecord always has instructions", () => {

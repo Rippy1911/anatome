@@ -35,6 +35,13 @@ describe("P1 API features", () => {
     expect(info!.top_exercises[0].anatome_imageSrc).toMatch(/^https:\/\//);
   });
 
+  it("resolveExercise includes gif_url when base is provided", () => {
+    const bench = resolveExercise("bench press", BASE);
+    expect(bench.matched).toBe(true);
+    expect(bench.gif_url).toMatch(/\/exerciseGif\?id=/);
+    expect(String(bench.gif_url)).not.toContain("githubusercontent");
+  });
+
   it("resolveExercise includes anatome_imageSrc when base is provided", () => {
     const bench = resolveExercise("bench press", BASE);
     expect(bench.matched).toBe(true);

@@ -35,6 +35,7 @@ export const SEARCH_DEFAULT_FIELDS: ReadonlySet<ExerciseFieldKey> = new Set([
   "secondaryMuscles",
   "equipment",
   "level",
+  "gif_url",
   "anatome_imageSrc",
 ]);
 

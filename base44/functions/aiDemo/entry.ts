@@ -58,11 +58,12 @@ async function resolveFromDb(base44, exerciseRaw){
   return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers, image_src:rec.anatome_imageSrc, exercise_image_url:dbImageUrl(rec) };
 }
 
-// Build the GitHub raw image URL for a matched exercise record.
+// Build the Anatome-hosted demo GIF URL for a matched exercise record.
+const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
 function dbImageUrl(rec){
-  const img=(rec.images||[])[0];
-  if(!img) return null;
-  return `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/${img}`;
+  if(!rec?.ext_id) return null;
+  const base = API_PUBLIC.replace(/\/$/, "");
+  return `${base}/exerciseGif?id=${encodeURIComponent(rec.ext_id)}`;
 }
 
 // Find the matching DB record for an exercise name (to attach its real photo).

@@ -83,7 +83,7 @@ python3 scripts/generate-exercise-gifs.py    # writes api/public/gifs/<ext_id>.g
 
 Bulk-friendly responses support sparse field projection:
 
-- `GET /searchExercises?q=bench&fields=name,anatome_imageSrc,gif_url` — lean list (default omits `instructions`)
+- `GET /searchExercises?q=bench` — lean list includes `gif_url` + `anatome_imageSrc` (default omits `instructions`)
 - `GET /getExercise?name=bench+press&fields=name,instructions,gif_url,anatome_imageSrc`
 - `fields=all` or `fields=*` — every field on the record
 

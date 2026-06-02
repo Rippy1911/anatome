@@ -2,7 +2,12 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 const EXERCISE_DB_ATTRIBUTION = "Exercise data from free-exercise-db (CC0-1.0, public domain) by yuhonas.";
-const EXDB_IMG_BASE = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
+function exerciseMediaUrl(extId) {
+  if (!extId) return null;
+  const base = API_PUBLIC.replace(/\/$/, "");
+  return `${base}/exerciseGif?id=${encodeURIComponent(extId)}`;
+}
 // ---- Rate limiting (v1.3 dev-friendly model) ----
 // localhost / private IPs / no-referer => unlimited; public IP => 1000/day; public host => 100/day
 const IP_DAY_LIMIT=1000; const HOST_DAY_LIMIT=100; const UPGRADE_URL="https://rapidapi.com/anatome/api/anatome";
@@ -65,16 +70,17 @@ export async function searchExercisesLogic(base44, { q, muscle, equipment, level
 function toResult(e, base){
   let imageSrc = e.anatome_imageSrc || null;
   if(base && typeof imageSrc==="string" && imageSrc.startsWith("/")) imageSrc=`${base}${imageSrc}`;
-  let imageUrl = (e.images && e.images[0]) || null;
-  if(imageUrl && !/^https?:\/\//.test(imageUrl)) imageUrl = `${EXDB_IMG_BASE}${imageUrl}`;
+  const mediaUrl = exerciseMediaUrl(e.ext_id);
   return {
     id: e.id,
+    ext_id: e.ext_id,
     name: e.name,
     primaryMuscles: e.anatome_primary_slugs || [],
     secondaryMuscles: e.anatome_secondary_slugs || [],
     equipment: e.equipment || null,
     level: e.level || null,
-    image_url: imageUrl,
+    image_url: mediaUrl,
+    gif_url: mediaUrl,
     anatome_imageSrc: imageSrc,
     anatome_layers_payload: e.anatome_layers_payload || [],
   };

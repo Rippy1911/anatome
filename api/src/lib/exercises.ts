@@ -36,8 +36,6 @@ export interface ExerciseRow {
   [k: string]: any;
 }
 
-const EXDB_IMG_BASE = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
-
 const ALL: ExerciseRow[] = exercisesJson as unknown as ExerciseRow[];
 
 export function allExercises(): ExerciseRow[] {
@@ -54,17 +52,16 @@ export function absoluteImageSrc(src: string | undefined | null, base: string): 
   return src;
 }
 
-export function exerciseDbImageUrl(images?: string[]): string | null {
-  const first = images && images[0];
-  if (!first) return null;
-  return /^https?:\/\//.test(first) ? first : `${EXDB_IMG_BASE}${first}`;
-}
-
-/** Animated GIF (2-frame) served from Worker static assets when generated. */
+/** Anatome-hosted exercise demo GIF (2-frame, CC0 source). */
 export function exerciseGifUrl(extId: string | undefined | null, base: string): string | null {
   if (!extId) return null;
   const b = base.replace(/\/$/, "");
   return `${b}/exerciseGif?id=${encodeURIComponent(extId)}`;
+}
+
+/** Back-compat alias — same Anatome-hosted GIF as gif_url (no external hotlinks). */
+export function exerciseImageUrl(extId: string | undefined | null, base: string): string | null {
+  return exerciseGifUrl(extId, base);
 }
 
 export type ExerciseRecordVariant = "search" | "full";
@@ -90,7 +87,7 @@ export function buildExerciseRecord(e: ExerciseRow, base: string): Record<string
     anatome_secondary_slugs: slugsSecondary,
     instructions: e.instructions || [],
     images: e.images || [],
-    image_url: exerciseDbImageUrl(e.images),
+    image_url: exerciseImageUrl(e.ext_id, base),
     gif_url: exerciseGifUrl(e.ext_id, base),
     anatome_imageSrc: absoluteImageSrc(e.anatome_imageSrc, base),
     anatome_layers_payload: e.anatome_layers_payload || [],

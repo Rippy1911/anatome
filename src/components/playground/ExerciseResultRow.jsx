@@ -15,8 +15,8 @@ export default function ExerciseResultRow({ ex, onClick }) {
       className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-secondary/60 transition-colors border-b border-border last:border-b-0"
     >
       <div className="w-8 h-8 rounded-md bg-secondary shrink-0 overflow-hidden flex items-center justify-center">
-        {ex.image_url ? (
-          <img src={ex.image_url} alt="" className="w-full h-full object-cover" loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+        {(ex.gif_url || ex.image_url) ? (
+          <img src={ex.gif_url || ex.image_url} alt="" className="w-full h-full object-cover" loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} />
         ) : (
           <Dumbbell className="w-4 h-4 text-muted-foreground" />
         )}

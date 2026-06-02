@@ -14,8 +14,9 @@ import { parseCompactLayers } from "../lib/query.ts";
 import { MUSCLES } from "../data/muscleCatalog.ts";
 import {
   resolveExercise, searchExercisesLogic, getByName, getByMuscle, getRandom, getByExtId, lookupExerciseById, count as exerciseCount, allExercises,
-  listEquipment, getMuscleInfo,
+  listEquipment, getMuscleInfo, formatExercise, buildExerciseRecord,
 } from "../lib/exercises.ts";
+import { SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
 import { edgeCacheHitOnRepeat } from "../lib/edgeCache.ts";
 import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { handleMcp, TOOLS } from "./mcp.ts";
@@ -142,6 +143,19 @@ export async function runSelfTest(bodyData: BodyData) {
     return isLocalHost("localhost") && isLocalHost("127.0.0.1") && !isLocalHost("example.com") || "localhost detection failed";
   });
   T("rate_limit_bypass_header_names", () => {
+    return true;
+  });
+
+  T("exercise_gif_url_anatome_hosted", () => {
+    const { results } = searchExercisesLogic({ q: "bench press", limit: 1 });
+    if (!results.length) return "no results";
+    const row = formatExercise(results[0], "https://api.anatome.dev", "search", SEARCH_DEFAULT_FIELDS);
+    if (!row.gif_url) return "missing gif_url in search defaults";
+    const url = String(row.gif_url);
+    if (url.includes("githubusercontent")) return "gif_url hotlinks github";
+    if (!url.includes("/exerciseGif?id=")) return `unexpected: ${url}`;
+    const full = buildExerciseRecord(results[0], "https://api.anatome.dev");
+    if (String(full.image_url).includes("githubusercontent")) return "image_url hotlinks github";
     return true;
   });
 

@@ -84,7 +84,12 @@ function keywordResolve(exerciseRaw){
 async function loadBody(base44){ const records=await base44.asServiceRole.entities.BodyData.list(); const map={}; for(const r of records) map[r.key]=r.parts||[]; return { male:{front:map.bodyFrontMale||[],back:map.bodyBackMale||[]}, female:{front:map.bodyFrontFemale||[],back:map.bodyBackFemale||[]} }; }
 
 // ---- ExerciseDB helpers (inlined from searchExercises / getExercise) ----
-const EXDB_IMG_BASE = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
+function exerciseMediaUrl(extId) {
+  if (!extId) return null;
+  const base = API_PUBLIC.replace(/\/$/, "");
+  return `${base}/exerciseGif?id=${encodeURIComponent(extId)}`;
+}
 function publicBase(req){
   const proto=req.headers.get("x-forwarded-proto")||"https";
   const host=req.headers.get("x-forwarded-host")||req.headers.get("origin")||req.headers.get("referer")||"";
@@ -93,7 +98,7 @@ function publicBase(req){
   return h ? `${proto}://${h}` : "";
 }
 function absImageSrc(src, base){ if(base && typeof src==="string" && src.startsWith("/")) return `${base}${src}`; return src||null; }
-function firstImageUrl(images){ let u=(images&&images[0])||null; if(u && !/^https?:\/\//.test(u)) u=`${EXDB_IMG_BASE}${u}`; return u; }
+function firstImageUrl(extId){ return exerciseMediaUrl(extId); }
 async function searchExercisesLogic(base44,{ q, muscle, equipment, level, limit }){
   const key=String(q||"").trim().toLowerCase(); const lim=Math.min(Number(limit||20),50);
   const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
@@ -107,13 +112,14 @@ async function searchExercisesLogic(base44,{ q, muscle, equipment, level, limit 
 function searchResult(e, base){
   return { id:e.id, name:e.name, primaryMuscles:e.anatome_primary_slugs||[], secondaryMuscles:e.anatome_secondary_slugs||[],
     equipment:e.equipment||null, level:e.level||null, category:e.category||null,
-    image_url:firstImageUrl(e.images), anatome_imageSrc:absImageSrc(e.anatome_imageSrc, base),
+    image_url:firstImageUrl(e.ext_id), gif_url:firstImageUrl(e.ext_id), anatome_imageSrc:absImageSrc(e.anatome_imageSrc, base),
     anatome_layers_payload:e.anatome_layers_payload||[], instructions:(e.instructions||[]).slice(0,2) };
 }
 function fullExercise(e, base){
   if(!e) return null;
   const { created_date, updated_date, created_by_id, name_lower, ...rest }=e;
-  return { ...rest, image_url:firstImageUrl(e.images), anatome_imageSrc:absImageSrc(e.anatome_imageSrc, base) };
+  const media = firstImageUrl(e.ext_id);
+  return { ...rest, image_url:media, gif_url:media, anatome_imageSrc:absImageSrc(e.anatome_imageSrc, base) };
 }
 async function getExerciseLogic(base44,{ name, id, random }, base){
   if(id){ const found=await base44.asServiceRole.entities.Exercise.filter({ id }, "", 1); const rec=found&&found[0]; return rec?{ match:"exact", exercise:fullExercise(rec, base) }:{ match:"none", exercise:null }; }
