@@ -1,0 +1,131 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+
+// ---- Inlined catalog + engine + resolver (MCP must be self-contained) ----
+const MUSCLES = ["abs","adductors","ankles","biceps","calves","chest","deltoids","feet","forearm","gluteal","hamstring","hands","hair","head","knees","lower-back","neck","obliques","quadriceps","tibialis","trapezius","triceps","upper-back"];
+const ANATOMICAL_NAMES = { abs:"Rectus Abdominis",adductors:"Adductor Group",ankles:"Ankles",biceps:"Biceps Brachii",calves:"Gastrocnemius / Soleus",chest:"Pectoralis Major",deltoids:"Deltoids",feet:"Feet",forearm:"Forearm Flexors / Extensors",gluteal:"Gluteus Maximus / Medius",hamstring:"Hamstrings",hands:"Hands",hair:"Hair",head:"Head",knees:"Knees","lower-back":"Erector Spinae (Lower Back)",neck:"Sternocleidomastoid (Neck)",obliques:"Obliques",quadriceps:"Quadriceps Femoris",tibialis:"Tibialis Anterior",trapezius:"Trapezius",triceps:"Triceps Brachii","upper-back":"Latissimus Dorsi (Upper Back)" };
+const SIDE_PRESENCE = { abs:["front"],adductors:["front","back"],ankles:["front","back"],biceps:["front"],calves:["front","back"],chest:["front"],deltoids:["front","back"],feet:["front","back"],forearm:["front","back"],gluteal:["back"],hamstring:["back"],hands:["front","back"],hair:["front","back"],head:["front","back"],knees:["front"],"lower-back":["back"],neck:["front","back"],obliques:["front"],quadriceps:["front"],tibialis:["front"],trapezius:["front","back"],triceps:["front","back"],"upper-back":["back"] };
+const ALIASES = { shoulders:"deltoids",deltoid:"deltoids",shoulder:"deltoids",gluteus:"gluteal",glutes:"gluteal",glute:"gluteal",calfs:"calves",calf:"calves",quads:"quadriceps",quad:"quadriceps",hamstrings:"hamstring",abdominals:"abs",ab:"abs",lats:"upper-back",lat:"upper-back",back:"upper-back",traps:"trapezius",trap:"trapezius",bicep:"biceps",tricep:"triceps",pecs:"chest",pec:"chest",oblique:"obliques",lowerback:"lower-back",upperback:"upper-back" };
+function normalizeSlug(input){ if(!input) return input; const s=String(input).trim().toLowerCase(); if(MUSCLES.includes(s)) return s; if(ALIASES[s]) return ALIASES[s]; return s; }
+const WRAPPER = { male:{front:{viewBox:"0 0 724 1448"},back:{viewBox:"724 0 724 1448"}}, female:{front:{viewBox:"-50 -40 734 1538"},back:{viewBox:"756 0 774 1448"}} };
+const DEFAULTS = { gender:"male",view:"dual",width:768,height:1024,background:"transparent",body_color:"#3f3f3f",border_color:"#dfdfdf",border_width:1 };
+const PALETTE = { primary:"#DC2626",secondary:"#F59E0B",accessory:"#FCD34D",accessoryOpacity:0.5 };
+const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
+const ATTRIBUTION_SOURCE = "https://github.com/HichamELBSI/react-native-body-highlighter";
+
+const EXERCISE_MAP = {
+  "bench press":{layers:[{intensity:"primary",muscles:["chest"]},{intensity:"secondary",muscles:["triceps","deltoids"]},{intensity:"accessory",muscles:["abs"]}]},
+  "incline bench press":{layers:[{intensity:"primary",muscles:["chest","deltoids"]},{intensity:"secondary",muscles:["triceps"]},{intensity:"accessory",muscles:["abs"]}]},
+  "overhead press":{layers:[{intensity:"primary",muscles:["deltoids"]},{intensity:"secondary",muscles:["triceps","trapezius"]},{intensity:"accessory",muscles:["abs","upper-back"]}]},
+  "deadlift":{layers:[{intensity:"primary",muscles:["gluteal","hamstring","lower-back"]},{intensity:"secondary",muscles:["quadriceps","trapezius","upper-back"]},{intensity:"accessory",muscles:["abs","forearm"]}]},
+  "squat":{layers:[{intensity:"primary",muscles:["quadriceps","gluteal"]},{intensity:"secondary",muscles:["hamstring","adductors","lower-back"]},{intensity:"accessory",muscles:["abs","calves"]}]},
+  "pull up":{layers:[{intensity:"primary",muscles:["upper-back"]},{intensity:"secondary",muscles:["biceps","forearm"]},{intensity:"accessory",muscles:["abs","trapezius"]}]},
+  "barbell row":{layers:[{intensity:"primary",muscles:["upper-back","lower-back"]},{intensity:"secondary",muscles:["biceps","trapezius"]},{intensity:"accessory",muscles:["forearm"]}]},
+  "bicep curl":{layers:[{intensity:"primary",muscles:["biceps"]},{intensity:"secondary",muscles:["forearm"]},{intensity:"accessory",muscles:[]}]},
+  "tricep extension":{layers:[{intensity:"primary",muscles:["triceps"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
+  "lateral raise":{layers:[{intensity:"primary",muscles:["deltoids"]},{intensity:"secondary",muscles:["trapezius"]},{intensity:"accessory",muscles:[]}]},
+  "lat pulldown":{layers:[{intensity:"primary",muscles:["upper-back"]},{intensity:"secondary",muscles:["biceps"]},{intensity:"accessory",muscles:["forearm","trapezius"]}]},
+  "romanian deadlift":{layers:[{intensity:"primary",muscles:["hamstring","gluteal"]},{intensity:"secondary",muscles:["lower-back"]},{intensity:"accessory",muscles:["forearm"]}]},
+  "leg press":{layers:[{intensity:"primary",muscles:["quadriceps","gluteal"]},{intensity:"secondary",muscles:["hamstring","adductors"]},{intensity:"accessory",muscles:["calves"]}]},
+  "leg curl":{layers:[{intensity:"primary",muscles:["hamstring"]},{intensity:"secondary",muscles:["calves"]},{intensity:"accessory",muscles:[]}]},
+  "leg extension":{layers:[{intensity:"primary",muscles:["quadriceps"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
+  "calf raise":{layers:[{intensity:"primary",muscles:["calves"]},{intensity:"secondary",muscles:["tibialis"]},{intensity:"accessory",muscles:[]}]},
+  "plank":{layers:[{intensity:"primary",muscles:["abs","obliques"]},{intensity:"secondary",muscles:["lower-back","deltoids"]},{intensity:"accessory",muscles:["gluteal","quadriceps"]}]},
+  "crunch":{layers:[{intensity:"primary",muscles:["abs"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
+  "russian twist":{layers:[{intensity:"primary",muscles:["obliques"]},{intensity:"secondary",muscles:["abs"]},{intensity:"accessory",muscles:["lower-back"]}]},
+  "hip thrust":{layers:[{intensity:"primary",muscles:["gluteal"]},{intensity:"secondary",muscles:["hamstring"]},{intensity:"accessory",muscles:["abs"]}]},
+  "dip":{layers:[{intensity:"primary",muscles:["chest","triceps"]},{intensity:"secondary",muscles:["deltoids"]},{intensity:"accessory",muscles:["abs"]}]},
+  "push up":{layers:[{intensity:"primary",muscles:["chest"]},{intensity:"secondary",muscles:["triceps","deltoids"]},{intensity:"accessory",muscles:["abs","obliques"]}]},
+  "face pull":{layers:[{intensity:"primary",muscles:["deltoids","trapezius"]},{intensity:"secondary",muscles:["upper-back"]},{intensity:"accessory",muscles:[]}]},
+  "hammer curl":{layers:[{intensity:"primary",muscles:["biceps","forearm"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
+  "lunge":{layers:[{intensity:"primary",muscles:["quadriceps","gluteal"]},{intensity:"secondary",muscles:["hamstring","adductors"]},{intensity:"accessory",muscles:["abs","calves"]}]},
+  "front squat":{layers:[{intensity:"primary",muscles:["quadriceps"]},{intensity:"secondary",muscles:["gluteal","abs"]},{intensity:"accessory",muscles:["upper-back"]}]},
+  "seated cable row":{layers:[{intensity:"primary",muscles:["upper-back"]},{intensity:"secondary",muscles:["biceps","trapezius"]},{intensity:"accessory",muscles:["forearm"]}]},
+  "rear delt fly":{layers:[{intensity:"primary",muscles:["deltoids"]},{intensity:"secondary",muscles:["trapezius","upper-back"]},{intensity:"accessory",muscles:[]}]},
+  "shrug":{layers:[{intensity:"primary",muscles:["trapezius"]},{intensity:"secondary",muscles:["forearm"]},{intensity:"accessory",muscles:[]}]},
+  "tricep pushdown":{layers:[{intensity:"primary",muscles:["triceps"]},{intensity:"secondary",muscles:[]},{intensity:"accessory",muscles:[]}]},
+  "hanging leg raise":{layers:[{intensity:"primary",muscles:["abs"]},{intensity:"secondary",muscles:["obliques","forearm"]},{intensity:"accessory",muscles:["adductors"]}]},
+};
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function buildResolution(payload){ const res={}; const layers=Array.isArray(payload.layers)?payload.layers:[];
+  layers.forEach((layer)=>{ const color=layer.color; const op=layer.opacity!=null?layer.opacity:1; (layer.muscles||[]).forEach((m)=>{ const slug=normalizeSlug(m); res[slug]={fill:color,opacity:op,stroke:layer.stroke,strokeWidth:layer.strokeWidth}; }); });
+  const pm=payload.per_muscle||{}; Object.keys(pm).forEach((m)=>{ const slug=normalizeSlug(m); const o=pm[m]||{}; res[slug]={ fill:o.fill!=null?o.fill:(res[slug]&&res[slug].fill), opacity:o.opacity!=null?o.opacity:(res[slug]?res[slug].opacity:1), stroke:o.stroke!=null?o.stroke:(res[slug]&&res[slug].stroke), strokeWidth:o.strokeWidth!=null?o.strokeWidth:(res[slug]&&res[slug].strokeWidth) }; });
+  return res; }
+function defsBlock(defs){ if(!Array.isArray(defs)||defs.length===0) return ""; const parts=defs.map((d)=>{ const stops=(d.stops||[]).map((s)=>`<stop offset="${esc(s.offset)}" stop-color="${esc(s.color)}"${s.opacity!=null?` stop-opacity="${s.opacity}"`:""}/>`).join(""); if(d.type==="linearGradient"){ const coords=`${d.x1!=null?` x1="${esc(d.x1)}"`:""}${d.y1!=null?` y1="${esc(d.y1)}"`:""}${d.x2!=null?` x2="${esc(d.x2)}"`:""}${d.y2!=null?` y2="${esc(d.y2)}"`:""}`; return `<linearGradient id="${esc(d.id)}"${coords}>${stops}</linearGradient>`; } if(d.type==="radialGradient") return `<radialGradient id="${esc(d.id)}">${stops}</radialGradient>`; return ""; }); return `<defs>${parts.join("")}</defs>`; }
+function renderSide(parts,res,opts,sideFilter,transform){ const {body_color,border_color,border_width}=opts; const rendered=new Set(); const out=[];
+  parts.forEach((part)=>{ const slug=part.slug; const style=res[slug]; const filterSide=sideFilter&&sideFilter[slug]; const path=part.path||{};
+    const emit=(d,whichSide)=>{ let fill=body_color,opacity=1,stroke=border_color,strokeWidth=border_width; if(style&&style.fill!=null){ if(!filterSide||filterSide===whichSide||whichSide==="common"){ fill=style.fill; if(style.opacity!=null)opacity=style.opacity; if(style.stroke!=null)stroke=style.stroke; if(style.strokeWidth!=null)strokeWidth=style.strokeWidth; } } if(MUSCLES.includes(slug)||style) rendered.add(slug); out.push(`<path d="${d}" fill="${esc(fill)}" stroke="${esc(stroke)}" stroke-width="${strokeWidth}" opacity="${opacity}" data-muscle="${esc(slug)}"/>`); };
+    (path.common||[]).forEach((d)=>emit(d,"common")); (path.left||[]).forEach((d)=>emit(d,"left")); (path.right||[]).forEach((d)=>emit(d,"right")); });
+  const g=transform?`<g transform="${transform}">${out.join("")}</g>`:out.join(""); return {svg:g,rendered:Array.from(rendered)}; }
+function renderMuscleSvg(payload,bodyData){ const p={...DEFAULTS,...payload}; const gender=p.gender==="female"?"female":"male"; const view=["front","back","dual"].includes(p.view)?p.view:"dual"; const data=(bodyData&&bodyData[gender])||{front:[],back:[]}; const res=buildResolution(p); const sideFilter=p.side_filter||null; let inner="",viewBox; const renderedSet=new Set(); const collect=(r)=>r.rendered.forEach((s)=>renderedSet.add(s));
+  if(view==="front"){ const r=renderSide(data.front,res,p,sideFilter,null); inner=r.svg; collect(r); viewBox=WRAPPER[gender].front.viewBox; }
+  else if(view==="back"){ const r=renderSide(data.back,res,p,sideFilter,null); inner=r.svg; collect(r); viewBox=WRAPPER[gender].back.viewBox; }
+  else { const rf=renderSide(data.front,res,p,sideFilter,null); const rb=renderSide(data.back,res,p,sideFilter,"translate(0, 0)"); collect(rf); collect(rb); inner=`${rf.svg}${rb.svg}`; viewBox="0 0 1448 1448"; }
+  const defs=defsBlock(p.defs); const bg=p.background&&p.background!=="transparent"?`<rect x="-99999" y="-99999" width="199998" height="199998" fill="${esc(p.background)}"/>`:""; const vb=viewBox.split(" ").map(Number); const attrX=(vb[0]||0)+(vb[2]||724)-8; const attrY=(vb[1]||0)+(vb[3]||1448)-10; const attribution=`<text x="${attrX}" y="${attrY}" text-anchor="end" font-family="sans-serif" font-size="14" fill="#888888" opacity="0.5">Anatomy paths © Hicham El Boussarghini (MIT)</text>`; const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="${p.width}" height="${p.height}" preserveAspectRatio="xMidYMid meet">`+defs+bg+inner+attribution+`</svg>`; return {svg,muscles_rendered:Array.from(renderedSet).filter((s)=>MUSCLES.includes(s))}; }
+
+function intensityLayers(plan){ return plan.layers.filter((l)=>l.muscles.length>0).map((l)=>{ if(l.intensity==="primary") return {color:PALETTE.primary,muscles:l.muscles}; if(l.intensity==="secondary") return {color:PALETTE.secondary,muscles:l.muscles}; return {color:PALETTE.accessory,muscles:l.muscles,opacity:PALETTE.accessoryOpacity}; }); }
+function resolveExercise(exerciseRaw){ const exercise=String(exerciseRaw||"").trim(); const key=exercise.toLowerCase().replace(/\s+/g," ").trim();
+  if(EXERCISE_MAP[key]){ const plan=EXERCISE_MAP[key]; return { exercise:key, matched:true, source:"exact", layers:intensityLayers(plan), explanation:`"${key}" — primary: ${plan.layers[0].muscles.join(", ")||"none"}; secondary: ${plan.layers[1].muscles.join(", ")||"none"}; accessory: ${plan.layers[2].muscles.join(", ")||"none"}.` }; }
+  const prefix=Object.keys(EXERCISE_MAP).find((k)=>k.startsWith(key)||key.startsWith(k)); if(prefix){ const plan=EXERCISE_MAP[prefix]; return { exercise:prefix, matched:true, source:"prefix", layers:intensityLayers(plan), explanation:`Closest match for "${key}" is "${prefix}".` }; }
+  const hits=MUSCLES.filter((m)=>key.includes(m)||key.includes(m.replace("-"," "))); if(hits.length>0){ return { exercise:key, matched:true, source:"keyword_fallback", layers:[{color:PALETTE.primary,muscles:hits}], explanation:`Matched muscle keywords: ${hits.join(", ")}.` }; }
+  return { exercise:key, matched:false, source:"unmatched", layers:[], explanation:`Could not resolve "${key}".` }; }
+
+async function loadBody(base44){ const records=await base44.asServiceRole.entities.BodyData.list(); const map={}; for(const r of records) map[r.key]=r.parts||[]; return { male:{front:map.bodyFrontMale||[],back:map.bodyBackMale||[]}, female:{front:map.bodyFrontFemale||[],back:map.bodyBackFemale||[]} }; }
+
+const TOOLS = [
+  { name:"generate_muscle_image", description:"Render an SVG diagram of the human body with arbitrary muscles highlighted in arbitrary colors. Returns an SVG string.",
+    inputSchema:{ type:"object", properties:{
+      gender:{type:"string",enum:["male","female"],default:"male"},
+      view:{type:"string",enum:["front","back","dual"],default:"dual"},
+      layers:{type:"array",items:{type:"object",properties:{color:{type:"string"},muscles:{type:"array",items:{type:"string"}},opacity:{type:"number"}},required:["color","muscles"]}},
+      body_color:{type:"string",default:"#3f3f3f"}, border_color:{type:"string",default:"#dfdfdf"}, border_width:{type:"number",default:1},
+      background:{type:"string",default:"transparent"}, width:{type:"number",default:768}, height:{type:"number",default:1024},
+      per_muscle:{type:"object"}, side_filter:{type:"object"}, defs:{type:"array"} },
+      required:["layers"] } },
+  { name:"list_muscles", description:"List all 23 supported muscle slugs with anatomical names and which views they appear on.",
+    inputSchema:{ type:"object", properties:{} } },
+  { name:"resolve_exercise", description:"Resolve an exercise name (e.g. 'bench press') into concrete colored muscle layers using a primary/secondary/accessory palette.",
+    inputSchema:{ type:"object", properties:{ exercise:{type:"string"} }, required:["exercise"] } },
+];
+
+function rpcResult(id,result){ return { jsonrpc:"2.0", id, result }; }
+function rpcError(id,code,message){ return { jsonrpc:"2.0", id, error:{ code, message } }; }
+
+Deno.serve(async (req)=>{
+  const cors={ "Access-Control-Allow-Origin":"*", "Access-Control-Allow-Headers":"*", "Access-Control-Allow-Methods":"POST, GET, OPTIONS" };
+  if(req.method==="OPTIONS") return new Response(null,{headers:cors});
+  if(req.method==="GET") return Response.json({ ok:true, server:"anatome", version:"1.0.0", protocol:"mcp/2024-11-05", tools:TOOLS.map((t)=>t.name) },{headers:cors});
+
+  const base44=createClientFromRequest(req);
+  let body; try { body=await req.json(); } catch { return Response.json(rpcError(null,-32700,"Parse error"),{headers:cors}); }
+  const { id=null, method, params={} }=body||{};
+
+  try {
+    if(method==="initialize"){
+      return Response.json(rpcResult(id,{ protocolVersion:"2024-11-05", capabilities:{ tools:{} }, serverInfo:{ name:"anatome", version:"1.0.0" } }),{headers:cors});
+    }
+    if(method==="tools/list"){
+      return Response.json(rpcResult(id,{ tools:TOOLS }),{headers:cors});
+    }
+    if(method==="tools/call"){
+      const name=params.name; const args=params.arguments||{};
+      if(name==="generate_muscle_image"){
+        const bodyData=await loadBody(base44);
+        const { svg, muscles_rendered }=renderMuscleSvg(args,bodyData);
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:svg }], structuredContent:{ muscles_rendered, attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE } }),{headers:cors});
+      }
+      if(name==="list_muscles"){
+        const muscles=MUSCLES.map((slug)=>({ slug, name:ANATOMICAL_NAMES[slug], views:SIDE_PRESENCE[slug] }));
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(muscles) }], structuredContent:{ count:MUSCLES.length, muscles } }),{headers:cors});
+      }
+      if(name==="resolve_exercise"){
+        const r=resolveExercise(args.exercise);
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(r) }], structuredContent:r }),{headers:cors});
+      }
+      return Response.json(rpcError(id,-32602,`Unknown tool: ${name}`),{headers:cors});
+    }
+    return Response.json(rpcError(id,-32601,`Method not found: ${method}`),{headers:cors});
+  } catch(error){
+    return Response.json(rpcError(id,-32603,error.message),{headers:cors});
+  }
+});
