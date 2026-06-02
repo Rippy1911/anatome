@@ -53,14 +53,15 @@ Deno.serve(async (req)=>{
     const user=await base44.auth.me().catch(()=>null);
     if(user && user.role!=="admin"){ return Response.json({ ok:false, error:"Forbidden: admin only" }, { status:403 }); }
 
-    const origin=new URL(req.url).origin;
     const resp=await fetch(SOURCE_URL);
     if(!resp.ok) return Response.json({ ok:false, error:`fetch ${resp.status}` }, { status:502 });
     const data=await resp.json();
 
-    // Clear existing to keep import idempotent.
+    // Clear existing to keep import idempotent (concurrent batches to avoid timeout).
     const existing=await base44.asServiceRole.entities.Exercise.list("-created_date", 2000);
-    for(const e of existing){ await base44.asServiceRole.entities.Exercise.delete(e.id); }
+    for(let i=0;i<existing.length;i+=25){
+      await Promise.all(existing.slice(i,i+25).map((e)=>base44.asServiceRole.entities.Exercise.delete(e.id)));
+    }
 
     const unmapped=new Set();
     const records=data.map((ex)=>{
@@ -70,8 +71,10 @@ Deno.serve(async (req)=>{
       if(primary.length) layers.push({ color:PALETTE.primary, muscles:primary });
       if(secondary.length) layers.push({ color:PALETTE.secondary, muscles:secondary });
       const compact=compactLayers(primary, secondary);
+      // Stored as a relative path; getExercise/resolveExercise rewrite to an absolute
+      // public URL using the request's forwarded host so <img src> works anonymously.
       const imageSrc=compact
-        ? `${origin}/functions/generateImage?gender=male&view=dual&layers=${encodeURIComponent(compact)}&output=raw`
+        ? `/functions/generateImage?gender=male&view=dual&layers=${encodeURIComponent(compact)}&output=raw`
         : "";
       const exUnmapped=[];
       [...(ex.primaryMuscles||[]),...(ex.secondaryMuscles||[])].forEach((n)=>{ const k=String(n||"").trim().toLowerCase(); if(!MUSCLE_NAME_MAP[k]) exUnmapped.push(k); });
