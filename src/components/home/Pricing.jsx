@@ -40,7 +40,7 @@ export default function Pricing() {
             github.com/Rippy1911/anatome
           </a>
           {" "}or subscribe on{" "}
-          <a href="https://rapidapi.com/anatome/api/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+          <a href="https://rapidapi.com/slaczka.sebastian/api/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
             RapidAPI
           </a>.
         </p>

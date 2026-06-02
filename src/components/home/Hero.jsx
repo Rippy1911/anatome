@@ -39,7 +39,7 @@ export default function Hero({ baseUrl }) {
           <Link to="/playground" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
             Try the Playground <ArrowRight className="w-4 h-4" />
           </Link>
-          <a href="https://rapidapi.com/anatome/api/anatome" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border bg-card font-semibold text-sm hover:bg-secondary transition-colors">
+          <a href="https://rapidapi.com/slaczka.sebastian/api/anatome" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border bg-card font-semibold text-sm hover:bg-secondary transition-colors">
             View on RapidAPI <ExternalLink className="w-4 h-4" />
           </a>
         </div>
