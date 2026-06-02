@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { API_BASE } from "@/lib/apiBase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, AlertTriangle } from "lucide-react";
+
+const absUrl = (u) => (u ? (u.startsWith("http") ? u : `${API_BASE}${u}`) : null);
 
 const SUGGESTIONS = ["the exercise where you bench a barbell lying down", "king of leg exercises with a barbell on your back", "curling a dumbbell to work the front of your arm"];
 
@@ -67,11 +70,17 @@ export default function LiveDemo() {
       {result && (
         <div className="grid sm:grid-cols-[200px_1fr] gap-4 items-start pt-2">
           <div className="rounded-xl border border-border overflow-hidden bg-secondary/40">
-            {result.anatome_imageSrc && <img src={result.anatome_imageSrc} alt={result.exercise_name_extracted} className="w-full" />}
+            {result.anatome_imageSrc && <img src={absUrl(result.anatome_imageSrc)} alt={result.exercise_name_extracted} className="w-full" />}
           </div>
           <div className="space-y-2 text-sm">
             <div><span className="text-muted-foreground">LLM extracted:</span> <span className="font-semibold capitalize">{result.exercise_name_extracted}</span></div>
             <div className="text-xs text-muted-foreground">Source: <span className="font-mono">{result.source}</span></div>
+            {result.exercise_image_url && (
+              <div className="pt-1">
+                <div className="text-[11px] text-muted-foreground mb-1">Matched exercise (ExerciseDB):</div>
+                <img src={result.exercise_image_url} alt={result.exercise_name_extracted} className="rounded-lg border border-border max-h-28 w-auto" />
+              </div>
+            )}
             <div className="space-y-1">
               {(result.layers || []).map((l, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs">

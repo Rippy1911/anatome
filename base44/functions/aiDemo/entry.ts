@@ -63,7 +63,24 @@ async function resolveFromDb(base44, exerciseRaw){
   const layers=[];
   if((rec.anatome_primary_slugs||[]).length) layers.push({ color:PALETTE.primary, muscles:rec.anatome_primary_slugs });
   if((rec.anatome_secondary_slugs||[]).length) layers.push({ color:PALETTE.secondary, muscles:rec.anatome_secondary_slugs });
-  return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers, image_src:rec.anatome_imageSrc };
+  return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers, image_src:rec.anatome_imageSrc, exercise_image_url:dbImageUrl(rec) };
+}
+
+// Build the GitHub raw image URL for a matched exercise record.
+function dbImageUrl(rec){
+  const img=(rec.images||[])[0];
+  if(!img) return null;
+  return `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/${img}`;
+}
+
+// Find the matching DB record for an exercise name (to attach its real photo).
+async function findDbExercise(base44, name){
+  const key=String(name||"").trim().toLowerCase().replace(/\s+/g," ");
+  if(!key) return null;
+  const exact=await base44.asServiceRole.entities.Exercise.filter({ name_lower:key }, "", 1);
+  if(exact && exact[0]) return exact[0];
+  const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
+  return all.find((e)=>(e.name_lower||"").includes(key)) || all.find((e)=>key.includes(e.name_lower||"___")) || null;
 }
 
 function keywordFallback(exerciseRaw){
@@ -149,6 +166,13 @@ Deno.serve(async (req)=>{
     let imageSrc=resolved.image_src || buildImageSrc(resolved.layers);
     if(base && typeof imageSrc==="string" && imageSrc.startsWith("/")) imageSrc=`${base}${imageSrc}`;
 
+    // 3b) Attach the real exercise photo from the database when available.
+    let exerciseImageUrl=resolved.exercise_image_url || null;
+    if(!exerciseImageUrl){
+      try { const rec=await findDbExercise(base44, resolved.exercise || exerciseName); if(rec) exerciseImageUrl=dbImageUrl(rec); }
+      catch(e){ console.warn("db image lookup failed:", e.message); }
+    }
+
     return new Response(JSON.stringify({
       ok:true,
       exercise_name_extracted: resolved.exercise || exerciseName,
@@ -156,6 +180,7 @@ Deno.serve(async (req)=>{
       matched: resolved.matched,
       source: resolved.source,
       anatome_imageSrc: imageSrc,
+      exercise_image_url: exerciseImageUrl,
       llm_response_raw: String(llmRaw||""),
       remaining: limit.remaining,
       attribution: ATTRIBUTION,

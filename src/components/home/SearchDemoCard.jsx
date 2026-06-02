@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { API_BASE } from "@/lib/apiBase";
 import { Search, Loader2, Dumbbell } from "lucide-react";
 
 function Chip({ children, tone = "primary" }) {
@@ -31,7 +32,7 @@ export default function SearchDemoCard({ baseUrl }) {
 
   const pick = (e) => { setSelected(e); setImgLoaded(false); };
   const imgSrc = selected?.anatome_imageSrc
-    ? (selected.anatome_imageSrc.startsWith("http") ? selected.anatome_imageSrc : `${baseUrl}${selected.anatome_imageSrc}`)
+    ? (selected.anatome_imageSrc.startsWith("http") ? selected.anatome_imageSrc : `${API_BASE}${selected.anatome_imageSrc}`)
     : null;
 
   return (

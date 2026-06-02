@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { API_BASE } from "@/lib/apiBase";
 import { Sparkles, Loader2, AlertTriangle } from "lucide-react";
 
 const SUGGESTIONS = [
@@ -39,7 +40,7 @@ export default function AiDemoCard({ baseUrl }) {
   // Resolve a usable absolute image source. aiDemo returns anatome_imageSrc;
   // make relative paths absolute against the live API host so it always loads.
   const imgSrc = result?.anatome_imageSrc
-    ? (result.anatome_imageSrc.startsWith("http") ? result.anatome_imageSrc : `${baseUrl}${result.anatome_imageSrc}`)
+    ? (result.anatome_imageSrc.startsWith("http") ? result.anatome_imageSrc : `${API_BASE}${result.anatome_imageSrc}`)
     : null;
 
   return (
@@ -106,9 +107,17 @@ export default function AiDemoCard({ baseUrl }) {
           {!result && !loading && <p className="text-xs text-muted-foreground px-4">Describe an exercise to render its muscle diagram.</p>}
           {loading && <Loader2 className="w-6 h-6 text-muted-foreground animate-spin" />}
           {result && imgSrc && (
-            <div className="flex-1 flex items-center justify-center w-full">
-              {!imgLoaded && <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />}
-              <img src={imgSrc} alt={result.exercise_name_extracted} onLoad={() => setImgLoaded(true)} className={`max-h-48 w-auto ${imgLoaded ? "block" : "hidden"}`} />
+            <div className="flex-1 flex items-center justify-center gap-4 w-full">
+              <div className="flex items-center justify-center">
+                {!imgLoaded && <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />}
+                <img src={imgSrc} alt={result.exercise_name_extracted} onLoad={() => setImgLoaded(true)} className={`max-h-48 w-auto ${imgLoaded ? "block" : "hidden"}`} />
+              </div>
+              {result.exercise_image_url && (
+                <div className="flex flex-col items-center gap-1">
+                  <img src={result.exercise_image_url} alt={result.exercise_name_extracted} className="max-h-40 w-auto rounded-lg border border-border bg-white" />
+                  <span className="text-[10px] text-muted-foreground">ExerciseDB photo</span>
+                </div>
+              )}
             </div>
           )}
         </div>
