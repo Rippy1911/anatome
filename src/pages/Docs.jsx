@@ -22,7 +22,7 @@ export default function Docs() {
       </nav>
 
       <H2 id="overview">Overview</H2>
-      <P>Anatome renders human-body muscle diagrams as SVG. You describe what to highlight using <span className="font-mono text-foreground">layers</span> — each layer is a color plus a list of muscle slugs. The MIT-licensed, more flexible alternative to mertronlp's muscle-group-image-generator.</P>
+      <P>Anatome renders human-body muscle diagrams as SVG. You describe what to highlight using <span className="font-mono text-foreground">layers</span> — each layer is a color plus a list of muscle slugs. The Apache-2.0 licensed, more flexible alternative to mertronlp's muscle-group-image-generator.</P>
       <P>There are 23 canonical muscle slugs. Render priority (highest wins): <span className="font-mono text-foreground">per_muscle[slug].fill</span> → <span className="font-mono text-foreground">layers[].color</span> (last layer wins if a muscle appears in multiple) → <span className="font-mono text-foreground">body_color</span>.</P>
 
       <H2 id="schema">Request Schema</H2>
@@ -138,7 +138,11 @@ GET /functions/generateImage?muscles=biceps,triceps&color=%23DC2626&output=raw
 GET /functions/resolveExercise?exercise=deadlift`}</Code>
 
       <H2 id="attribution">Attribution & License</H2>
-      <P>Anatomy paths © Hicham El Boussarghini (MIT), ported from <a className="text-primary hover:underline" href="https://github.com/HichamELBSI/react-native-body-highlighter" target="_blank" rel="noopener noreferrer">react-native-body-highlighter</a> (converted from React Native SVG to server-rendered SVG). Anatome by NextSolutions. Licensed MIT.</P>
+      <ul className="text-sm text-muted-foreground leading-relaxed my-2 space-y-1.5 list-disc pl-5">
+        <li><span className="text-foreground font-medium">This API (Anatome):</span> Apache-2.0 — by NextSolutions.</li>
+        <li><span className="text-foreground font-medium">Anatomical SVG path data:</span> MIT (© Hicham El Boussarghini), ported from <a className="text-primary hover:underline" href="https://github.com/HichamELBSI/react-native-body-highlighter" target="_blank" rel="noopener noreferrer">react-native-body-highlighter</a>.</li>
+        <li><span className="text-foreground font-medium">Exercise metadata:</span> CC0 (public domain) — free-exercise-db by yuhonas.</li>
+      </ul>
 
       <div className="mt-10"><AironPromo /></div>
     </div>

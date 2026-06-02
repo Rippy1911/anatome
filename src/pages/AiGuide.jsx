@@ -105,8 +105,9 @@ export default function AiGuide() {
       <div className="mt-10"><AironPromo /></div>
 
       <div className="mt-8 pt-6 border-t border-border text-xs text-muted-foreground">
-        Anatomy paths © Hicham El Boussarghini (MIT). Exercise data from free-exercise-db (CC0-1.0).
-        Anatome by NextSolutions.
+        Anatome — Apache-2.0 licensed, by NextSolutions. Anatomical SVG paths from
+        react-native-body-highlighter (MIT, © Hicham El Boussarghini). Exercise data from
+        free-exercise-db (CC0, public domain).
       </div>
     </div>
   );
