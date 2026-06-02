@@ -1,0 +1,28 @@
+{
+  "name": "RateLimit",
+  "type": "object",
+  "properties": {
+    "ip_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the client IP (no raw IPs stored, GDPR-safe)"
+    },
+    "date": {
+      "type": "string",
+      "description": "UTC date bucket, YYYY-MM-DD"
+    },
+    "count": {
+      "type": "number",
+      "default": 0,
+      "description": "Requests made in this date bucket"
+    },
+    "last_request_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the last request"
+    }
+  },
+  "required": [
+    "ip_hash",
+    "date"
+  ]
+}

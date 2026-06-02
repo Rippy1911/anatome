@@ -61,7 +61,7 @@ function renderMuscleSvg(payload,bodyData){ const p={...DEFAULTS,...payload}; co
   if(view==="front"){ const r=renderSide(data.front,res,p,sideFilter,null); inner=r.svg; collect(r); viewBox=WRAPPER[gender].front.viewBox; }
   else if(view==="back"){ const r=renderSide(data.back,res,p,sideFilter,null); inner=r.svg; collect(r); viewBox=WRAPPER[gender].back.viewBox; }
   else { const rf=renderSide(data.front,res,p,sideFilter,null); const rb=renderSide(data.back,res,p,sideFilter,"translate(0, 0)"); collect(rf); collect(rb); inner=`${rf.svg}${rb.svg}`; viewBox="0 0 1448 1448"; }
-  const defs=defsBlock(p.defs); const bg=p.background&&p.background!=="transparent"?`<rect x="-99999" y="-99999" width="199998" height="199998" fill="${esc(p.background)}"/>`:""; const vb=viewBox.split(" ").map(Number); const attrX=(vb[0]||0)+(vb[2]||724)-8; const attrY=(vb[1]||0)+(vb[3]||1448)-10; const attribution=`<text x="${attrX}" y="${attrY}" text-anchor="end" font-family="sans-serif" font-size="14" fill="#888888" opacity="0.5">Anatomy paths © Hicham El Boussarghini (MIT)</text>`; const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="${p.width}" height="${p.height}" preserveAspectRatio="xMidYMid meet">`+defs+bg+inner+attribution+`</svg>`; return {svg,muscles_rendered:Array.from(renderedSet).filter((s)=>MUSCLES.includes(s))}; }
+  const defs=defsBlock(p.defs); const bg=p.background&&p.background!=="transparent"?`<rect x="-99999" y="-99999" width="199998" height="199998" fill="${esc(p.background)}"/>`:""; const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="${p.width}" height="${p.height}" preserveAspectRatio="xMidYMid meet">`+defs+bg+inner+`</svg>`; return {svg,muscles_rendered:Array.from(renderedSet).filter((s)=>MUSCLES.includes(s))}; }
 
 function intensityLayers(plan){ return plan.layers.filter((l)=>l.muscles.length>0).map((l)=>{ if(l.intensity==="primary") return {color:PALETTE.primary,muscles:l.muscles}; if(l.intensity==="secondary") return {color:PALETTE.secondary,muscles:l.muscles}; return {color:PALETTE.accessory,muscles:l.muscles,opacity:PALETTE.accessoryOpacity}; }); }
 function resolveExercise(exerciseRaw){ const exercise=String(exerciseRaw||"").trim(); const key=exercise.toLowerCase().replace(/\s+/g," ").trim();
@@ -71,6 +71,24 @@ function resolveExercise(exerciseRaw){ const exercise=String(exerciseRaw||"").tr
   return { exercise:key, matched:false, source:"unmatched", layers:[], explanation:`Could not resolve "${key}".` }; }
 
 async function loadBody(base44){ const records=await base44.asServiceRole.entities.BodyData.list(); const map={}; for(const r of records) map[r.key]=r.parts||[]; return { male:{front:map.bodyFrontMale||[],back:map.bodyBackMale||[]}, female:{front:map.bodyFrontFemale||[],back:map.bodyBackFemale||[]} }; }
+
+// ---- Rate limiting (with MCP trusted-key + RapidAPI bypass) ----
+const RATE_LIMIT=100;
+async function sha256(str){ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); }
+function clientIp(req){ return req.headers.get("cf-connecting-ip")||(req.headers.get("x-forwarded-for")||"").split(",")[0].trim()||"unknown"; }
+function utcMidnightUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); }
+async function checkRateLimit(req,base44){
+  const mcpKey=req.headers.get("x-mcp-trusted-key"); const mcpExpected=Deno.env.get("MCP_TRUSTED_KEY");
+  if(mcpKey && mcpExpected && mcpKey===mcpExpected) return { allowed:true, source:"mcp_trusted" };
+  const proxy=req.headers.get("x-rapidapi-proxy-secret"); const proxyExpected=Deno.env.get("PROXY_SECRET");
+  if(proxy && proxyExpected && proxy===proxyExpected) return { allowed:true, source:"rapidapi" };
+  const ip_hash=await sha256(clientIp(req)); const date=new Date().toISOString().slice(0,10);
+  const existing=await base44.asServiceRole.entities.RateLimit.filter({ ip_hash, date }); const reset=utcMidnightUnix();
+  if(existing && existing.length>0){ const rec=existing[0]; const count=rec.count||0;
+    if(count>=RATE_LIMIT) return { allowed:false, source:"free", used:count, retry_after:reset-Math.floor(Date.now()/1000) };
+    await base44.asServiceRole.entities.RateLimit.update(rec.id,{ count:count+1, last_request_at:new Date().toISOString() }); return { allowed:true, source:"free", remaining:RATE_LIMIT-(count+1) }; }
+  await base44.asServiceRole.entities.RateLimit.create({ ip_hash, date, count:1, last_request_at:new Date().toISOString() }); return { allowed:true, source:"free", remaining:RATE_LIMIT-1 };
+}
 
 const TOOLS = [
   { name:"generate_muscle_image", description:"Render an SVG diagram of the human body with arbitrary muscles highlighted in arbitrary colors. Returns an SVG string.",
@@ -97,6 +115,8 @@ Deno.serve(async (req)=>{
   if(req.method==="GET") return Response.json({ ok:true, server:"anatome", version:"1.0.0", protocol:"mcp/2024-11-05", tools:TOOLS.map((t)=>t.name) },{headers:cors});
 
   const base44=createClientFromRequest(req);
+  const rl=await checkRateLimit(req,base44);
+  if(!rl.allowed){ return new Response(JSON.stringify(rpcError(null,-32000,"Rate limit exceeded: free tier 100 req/day per IP. Upgrade via RapidAPI for unlimited.")),{ status:429, headers:{ ...cors, "Content-Type":"application/json", "Retry-After":String(rl.retry_after) } }); }
   let body; try { body=await req.json(); } catch { return Response.json(rpcError(null,-32700,"Parse error"),{headers:cors}); }
   const { id=null, method, params={} }=body||{};
 

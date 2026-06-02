@@ -153,16 +153,9 @@ export function renderMuscleSvg(payload = {}, bodyData) {
     ? `<rect x="-99999" y="-99999" width="199998" height="199998" fill="${esc(p.background)}"/>`
     : "";
 
-  // Attribution text, bottom-right, subtle.
-  const vbParts = viewBox.split(" ").map(Number);
-  const vbX = vbParts[0] || 0, vbY = vbParts[1] || 0, vbW = vbParts[2] || 724, vbH = vbParts[3] || 1448;
-  const attrX = vbX + vbW - 8;
-  const attrY = vbY + vbH - 10;
-  const attribution = `<text x="${attrX}" y="${attrY}" text-anchor="end" font-family="sans-serif" font-size="14" fill="#888888" opacity="0.5">Anatomy paths © Hicham El Boussarghini (MIT)</text>`;
-
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="${p.width}" height="${p.height}" preserveAspectRatio="xMidYMid meet">` +
-    defs + bg + inner + attribution +
+    defs + bg + inner +
     `</svg>`;
 
   return { svg, muscles_rendered: Array.from(renderedSet).filter((s) => MUSCLES.includes(s)) };
