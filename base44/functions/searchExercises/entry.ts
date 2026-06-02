@@ -3,10 +3,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 const EXERCISE_DB_ATTRIBUTION = "Exercise data from free-exercise-db (CC0-1.0, public domain) by yuhonas.";
 const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
+const GIF_PLAYBACK_VERSION = "4";
 function exerciseMediaUrl(extId) {
   if (!extId) return null;
   const base = API_PUBLIC.replace(/\/$/, "");
-  return `${base}/exerciseGif?id=${encodeURIComponent(extId)}`;
+  return `${base}/exerciseGif?id=${encodeURIComponent(extId)}&v=${GIF_PLAYBACK_VERSION}`;
 }
 // ---- Rate limiting (v1.3 dev-friendly model) ----
 // localhost / private IPs / no-referer => unlimited; public IP => 1000/day; public host => 100/day

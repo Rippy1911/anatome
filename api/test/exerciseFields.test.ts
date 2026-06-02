@@ -45,7 +45,7 @@ describe("formatExercise", () => {
 
   it("search projection uses anatome-hosted gif", () => {
     const row = formatExercise(sample, base, "search", SEARCH_DEFAULT_FIELDS);
-    expect(row.gif_url).toMatch(/\/exerciseGif\?id=Bench_Press$/);
+    expect(row.gif_url).toMatch(/\/exerciseGif\?id=Bench_Press&v=4$/);
     expect(String(row.gif_url)).not.toContain("githubusercontent");
   });
 
@@ -59,13 +59,13 @@ describe("formatExercise", () => {
   it("buildExerciseRecord image_url matches gif_url on Anatome", () => {
     const full = buildExerciseRecord(sample, base);
     expect(full.image_url).toBe(full.gif_url);
-    expect(String(full.image_url)).toContain("/exerciseGif?id=Bench_Press");
+    expect(String(full.image_url)).toContain("/exerciseGif?id=Bench_Press&v=4");
   });
 
   it("buildExerciseRecord always has instructions", () => {
     const full = buildExerciseRecord(sample, base);
     expect(full.instructions).toHaveLength(2);
-    expect(full.gif_url).toContain("/exerciseGif?id=Bench_Press");
+    expect(full.gif_url).toContain("/exerciseGif?id=Bench_Press&v=4");
   });
 
   it("projectRecord drops unlisted keys", () => {

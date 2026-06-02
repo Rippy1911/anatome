@@ -52,11 +52,14 @@ export function absoluteImageSrc(src: string | undefined | null, base: string): 
   return src;
 }
 
+/** Bump when GIF frame timing changes — busts CDN/browser cache on gif_url. */
+export const GIF_PLAYBACK_VERSION = "4";
+
 /** Anatome-hosted exercise demo GIF (2-frame, CC0 source). */
 export function exerciseGifUrl(extId: string | undefined | null, base: string): string | null {
   if (!extId) return null;
   const b = base.replace(/\/$/, "");
-  return `${b}/exerciseGif?id=${encodeURIComponent(extId)}`;
+  return `${b}/exerciseGif?id=${encodeURIComponent(extId)}&v=${GIF_PLAYBACK_VERSION}`;
 }
 
 /** Back-compat alias — same Anatome-hosted GIF as gif_url (no external hotlinks). */

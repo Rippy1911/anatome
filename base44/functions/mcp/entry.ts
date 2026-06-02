@@ -85,10 +85,11 @@ async function loadBody(base44){ const records=await base44.asServiceRole.entiti
 
 // ---- ExerciseDB helpers (inlined from searchExercises / getExercise) ----
 const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
+const GIF_PLAYBACK_VERSION = "4";
 function exerciseMediaUrl(extId) {
   if (!extId) return null;
   const base = API_PUBLIC.replace(/\/$/, "");
-  return `${base}/exerciseGif?id=${encodeURIComponent(extId)}`;
+  return `${base}/exerciseGif?id=${encodeURIComponent(extId)}&v=${GIF_PLAYBACK_VERSION}`;
 }
 function publicBase(req){
   const proto=req.headers.get("x-forwarded-proto")||"https";

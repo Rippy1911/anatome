@@ -60,10 +60,11 @@ async function resolveFromDb(base44, exerciseRaw){
 
 // Build the Anatome-hosted demo GIF URL for a matched exercise record.
 const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
+const GIF_PLAYBACK_VERSION = "4";
 function dbImageUrl(rec){
   if(!rec?.ext_id) return null;
   const base = API_PUBLIC.replace(/\/$/, "");
-  return `${base}/exerciseGif?id=${encodeURIComponent(rec.ext_id)}`;
+  return `${base}/exerciseGif?id=${encodeURIComponent(rec.ext_id)}&v=${GIF_PLAYBACK_VERSION}`;
 }
 
 // Find the matching DB record for an exercise name (to attach its real photo).
