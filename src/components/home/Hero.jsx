@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Activity, ArrowRight, ExternalLink } from "lucide-react";
 
+import { HERO_PERF_TAGLINE } from "@/lib/apiBenchmarks";
+
 const HERO_QS = "?gender=male&view=dual&layers=DC2626:chest,quadriceps,biceps|F59E0B:deltoids,abs,calves|FCD34D:triceps,gluteal,trapezius&output=raw";
 
 export default function Hero({ baseUrl }) {
@@ -32,7 +34,7 @@ export default function Hero({ baseUrl }) {
           Open source · Apache-2.0 · 100 free requests/month · MCP-compatible · 873 exercises included
         </p>
         <p className="mt-2 text-xs text-muted-foreground font-mono">
-          &lt; 600ms cold render · &lt; 50ms cached · 300+ edge POPs
+          {HERO_PERF_TAGLINE}
         </p>
 
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">

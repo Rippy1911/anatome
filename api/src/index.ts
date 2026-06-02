@@ -23,6 +23,7 @@ import { baseAttribution, exerciseAttribution, ATTRIBUTION, LICENSE, BUILT_BY, T
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, TOOLS } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
+import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
 
@@ -55,9 +56,10 @@ async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Re
   if (req.method === "POST") { try { payload = await req.json(); } catch { payload = {}; } }
   else { payload = payloadFromQuery(url) as Record<string, unknown>; }
 
-  const t0 = Date.now();
+  const t0 = performance.now();
   const { svg, muscles_rendered } = renderMuscleSvg(payload, getBodyData());
-  const duration_ms = Date.now() - t0;
+  const duration_ms = elapsedMs(t0);
+  const timing = renderTimingHeaders(duration_ms);
 
   const etag = `"a-${await sha256(svg)}"`;
   const ifNoneMatch = req.headers.get("if-none-match");
@@ -69,14 +71,14 @@ async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Re
   const view = ["front", "back", "dual"].includes((payload as { view?: string }).view as string) ? (payload as { view?: string }).view : "dual";
 
   if (output === "raw") {
-    return new Response(svg, { status: 200, headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl) } });
+    return new Response(svg, { status: 200, headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl), ...timing } });
   }
   return new Response(JSON.stringify({
     ok: true, svg, format: "svg", gender, view, muscles_rendered,
     available_muscles_count: MUSCLES.length,
     rate_limit: { source: rl.source, limit_type: rl.key_type, remaining: rl.remaining != null ? rl.remaining : null, limit: rl.limit, reset_at: rl.reset_at },
     ...baseAttribution(), duration_ms,
-  }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl) } });
+  }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl), ...timing } });
 }
 app.get("/generateImage", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => generateImage(c)));
 app.post("/generateImage", (c) => generateImage(c));
