@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useLocation, Outlet } from "react-router-dom";
 import { Activity } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/hooks/useTheme";
 
 function NavLink({ to, children }) {
   const { pathname } = useLocation();
@@ -18,6 +20,8 @@ function NavLink({ to, children }) {
 }
 
 export default function Layout() {
+  // Initialize theme on mount (applies stored/system preference before first paint of children).
+  useTheme();
   return (
     <div className="min-h-screen bg-background text-foreground font-body antialiased">
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
@@ -34,7 +38,9 @@ export default function Layout() {
           <nav className="flex items-center gap-1">
             <NavLink to="/">Playground</NavLink>
             <NavLink to="/docs">Docs</NavLink>
+            <NavLink to="/ai-guide">AI Guide</NavLink>
             <NavLink to="/api">API</NavLink>
+            <div className="ml-1 pl-1 border-l border-border"><ThemeToggle /></div>
           </nav>
         </div>
       </header>

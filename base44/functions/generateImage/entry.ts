@@ -170,7 +170,7 @@ Deno.serve(async (req)=>{
     if(format==="png") png_status="not_supported_in_v1, use SVG and convert client-side";
 
     if(output==="raw"){
-      return new Response(svg, { status:200, headers:{ "Content-Type":"image/svg+xml; charset=utf-8", ...cors, ...rateHeaders(rl) } });
+      return new Response(svg, { status:200, headers:{ "Content-Type":"image/svg+xml; charset=utf-8", "Cache-Control":"public, max-age=3600", ...cors, ...rateHeaders(rl) } });
     }
 
     return new Response(JSON.stringify({

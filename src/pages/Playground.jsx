@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "@/hooks/useTheme";
 import { loadBodyData } from "@/data/bodyDataLoader";
 import MuscleBody from "@/components/playground/MuscleBody";
 import LayerEditor from "@/components/playground/LayerEditor";
@@ -27,13 +28,28 @@ function Section({ icon: Icon, title, children, className = "" }) {
 }
 
 export default function Playground() {
+  const { theme } = useTheme();
   const [bodyData, setBodyData] = useState(null);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [layers, setLayers] = useState([{ color: "#DC2626", muscles: [], opacity: 1 }]);
   const [activeLayer, setActiveLayer] = useState(0);
+  const [bodyColorTouched, setBodyColorTouched] = useState(false);
   const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const previewBg = theme === "dark" ? "#0a0e17" : "#f1f5f9";
 
   useEffect(() => { loadBodyData().then(setBodyData); }, []);
+
+  // Default body color follows the theme until the user picks one manually.
+  useEffect(() => {
+    if (!bodyColorTouched) {
+      setSettings((s) => ({ ...s, bodyColor: theme === "dark" ? "#3f3f3f" : "#d4d4d8" }));
+    }
+  }, [theme, bodyColorTouched]);
+
+  const handleSettingsChange = (next) => {
+    if (next.bodyColor !== settings.bodyColor) setBodyColorTouched(true);
+    setSettings(next);
+  };
 
   const handleMuscleClick = (slug) => {
     setLayers((prev) => prev.map((l, i) => {
@@ -66,12 +82,12 @@ export default function Playground() {
           <div className="sticky top-20 space-y-6">
             <Section icon={SlidersHorizontal} title="Preview" className="p-0 overflow-hidden">
               <div className="px-2 pb-2">
-                <div className="rounded-xl bg-[#0a0e17] border border-border overflow-hidden">{preview}</div>
+                <div className="rounded-xl border border-border overflow-hidden" style={{ backgroundColor: previewBg }}>{preview}</div>
               </div>
               <p className="px-4 pb-4 text-xs text-muted-foreground">Click a muscle to toggle it in the active layer. Hover for its anatomical name.</p>
             </Section>
             <Section icon={SlidersHorizontal} title="Body">
-              <BodyControls settings={settings} onChange={setSettings} />
+              <BodyControls settings={settings} onChange={handleSettingsChange} />
             </Section>
           </div>
         </div>
@@ -92,7 +108,7 @@ export default function Playground() {
 
       {/* Mobile */}
       <div className="md:hidden space-y-4">
-        <div className="rounded-2xl bg-[#0a0e17] border border-border overflow-hidden">{preview}</div>
+        <div className="rounded-2xl border border-border overflow-hidden" style={{ backgroundColor: previewBg }}>{preview}</div>
         <p className="text-xs text-muted-foreground px-1">Tap a muscle to toggle it in the active layer.</p>
         <Accordion type="single" collapsible defaultValue="layers" className="space-y-3">
           <AccordionItem value="layers" className="rounded-2xl border border-border bg-card px-4">
@@ -103,7 +119,7 @@ export default function Playground() {
           </AccordionItem>
           <AccordionItem value="body" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><SlidersHorizontal className="w-4 h-4 text-primary" /> Body</span></AccordionTrigger>
-            <AccordionContent className="pt-1 pb-4"><BodyControls settings={settings} onChange={setSettings} /></AccordionContent>
+            <AccordionContent className="pt-1 pb-4"><BodyControls settings={settings} onChange={handleSettingsChange} /></AccordionContent>
           </AccordionItem>
           <AccordionItem value="ai" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-primary" /> AI Assist</span></AccordionTrigger>
