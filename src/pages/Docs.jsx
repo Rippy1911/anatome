@@ -1,5 +1,7 @@
 import React from "react";
 import AironPromo from "@/components/AironPromo";
+import ImgUrlSpec from "@/components/docs/ImgUrlSpec";
+import ExerciseDbSection from "@/components/docs/ExerciseDbSection";
 
 function Code({ children }) {
   return <pre className="bg-[#0a0e17] border border-border rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-foreground/90 my-3"><code>{children}</code></pre>;
@@ -16,7 +18,7 @@ export default function Docs() {
       <p className="text-muted-foreground mt-2">A self-hosted muscle group image generator API. Returns SVG diagrams of the human body with arbitrary muscles highlighted in arbitrary colors.</p>
 
       <nav className="flex flex-wrap gap-2 mt-6 text-xs">
-        {[["overview","Overview"],["schema","Schema"],["endpoints","Endpoints"],["migration","mertronlp Migration"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
+        {[["overview","Overview"],["schema","Schema"],["endpoints","Endpoints"],["img-urls","Building <img> URLs"],["exercise-db","Exercise Database"],["migration","mertronlp Migration"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
           <a key={id} href={`#${id}`} className="px-2.5 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors">{l}</a>
         ))}
       </nav>
@@ -53,6 +55,12 @@ export default function Docs() {
       <P><span className="font-mono text-foreground">POST /functions/mcp</span> — MCP JSON-RPC 2.0 server.</P>
       <P><span className="font-mono text-foreground">GET /functions/openapi</span> — OpenAPI 3.1 spec. <span className="font-mono text-foreground">GET /functions/selfTest</span> — test suite.</P>
       <P>Response (output=json): <span className="font-mono text-foreground">{`{ ok, svg, format, gender, view, muscles_rendered, attribution, license, duration_ms }`}</span>. With <span className="font-mono text-foreground">output=raw</span> the SVG is returned directly with <span className="font-mono text-foreground">Content-Type: image/svg+xml</span>.</P>
+
+      <H2 id="img-urls">Building &lt;img&gt; URLs (Full Spec)</H2>
+      <ImgUrlSpec />
+
+      <H2 id="exercise-db">Exercise Database (873 exercises)</H2>
+      <ExerciseDbSection />
 
       <H2 id="migration">mertronlp Migration Guide</H2>
       <P>Slug names follow react-native-body-highlighter, not mertronlp. Aliases are auto-normalized, so existing slugs mostly still work:</P>

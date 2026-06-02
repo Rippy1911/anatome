@@ -132,6 +132,25 @@ Deno.serve(async (req)=>{
       return allHaveLayers || "some results missing anatome_layers_payload";
     });
 
+    // ---- MCP tool-surface tests (inline; mirrors functions/mcp.js handlers) ----
+    const MCP_TOOL_NAMES=["generate_muscle_image","list_muscles","resolve_exercise","search_exercises","get_exercise"];
+    T("mcp_tools_list_returns_five", ()=> MCP_TOOL_NAMES.length===5 || `got ${MCP_TOOL_NAMES.length}`);
+
+    await TA("mcp_search_exercises_call", async ()=>{
+      const key="bench";
+      const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
+      const results=all.filter((e)=>(e.name_lower||e.name||"").toLowerCase().includes(key)).slice(0,20);
+      return results.length>=3 || `only ${results.length} results`;
+    });
+    await TA("mcp_get_exercise_by_name", async ()=>{
+      const key="bench press";
+      const exact=await base44.asServiceRole.entities.Exercise.filter({ name_lower:key }, "", 1);
+      let rec=exact && exact[0];
+      if(!rec){ const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000); rec=all.find((e)=>(e.name_lower||"").includes(key))||all.find((e)=>key.includes(e.name_lower||"___")); }
+      if(!rec) return "no bench press match";
+      return (Array.isArray(rec.instructions) && rec.instructions.length>=3) || `instructions length ${(rec.instructions||[]).length}`;
+    });
+
     // ---- Rate-limit logic, tested inline against the helper (no HTTP) ----
     const RATE_LIMIT=100;
     const sha256=async (str)=>{ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); };

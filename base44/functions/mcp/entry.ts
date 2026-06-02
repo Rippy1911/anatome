@@ -74,6 +74,50 @@ function resolveExercise(exerciseRaw){ const exercise=String(exerciseRaw||"").tr
 
 async function loadBody(base44){ const records=await base44.asServiceRole.entities.BodyData.list(); const map={}; for(const r of records) map[r.key]=r.parts||[]; return { male:{front:map.bodyFrontMale||[],back:map.bodyBackMale||[]}, female:{front:map.bodyFrontFemale||[],back:map.bodyBackFemale||[]} }; }
 
+// ---- ExerciseDB helpers (inlined from searchExercises / getExercise) ----
+const EXDB_IMG_BASE = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+function publicBase(req){
+  const proto=req.headers.get("x-forwarded-proto")||"https";
+  const host=req.headers.get("x-forwarded-host")||req.headers.get("origin")||req.headers.get("referer")||"";
+  let h=host;
+  try { if(host.startsWith("http")) h=new URL(host).host; } catch { /* keep */ }
+  return h ? `${proto}://${h}` : "";
+}
+function absImageSrc(src, base){ if(base && typeof src==="string" && src.startsWith("/")) return `${base}${src}`; return src||null; }
+function firstImageUrl(images){ let u=(images&&images[0])||null; if(u && !/^https?:\/\//.test(u)) u=`${EXDB_IMG_BASE}${u}`; return u; }
+async function searchExercisesLogic(base44,{ q, muscle, equipment, level, limit }){
+  const key=String(q||"").trim().toLowerCase(); const lim=Math.min(Number(limit||20),50);
+  const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
+  let matches=all;
+  if(key) matches=matches.filter((e)=>(e.name_lower||e.name||"").toLowerCase().includes(key));
+  if(muscle && muscle!=="any"){ const m=String(muscle).toLowerCase(); matches=matches.filter((e)=>(e.anatome_primary_slugs||[]).includes(m)||(e.anatome_secondary_slugs||[]).includes(m)); }
+  if(equipment && equipment!=="any"){ const eq=String(equipment).toLowerCase(); matches=matches.filter((e)=>String(e.equipment||"").toLowerCase()===eq); }
+  if(level && level!=="any"){ const lv=String(level).toLowerCase(); matches=matches.filter((e)=>String(e.level||"").toLowerCase()===lv); }
+  return { total:matches.length, results:matches.slice(0,lim) };
+}
+function searchResult(e, base){
+  return { id:e.id, name:e.name, primaryMuscles:e.anatome_primary_slugs||[], secondaryMuscles:e.anatome_secondary_slugs||[],
+    equipment:e.equipment||null, level:e.level||null, category:e.category||null,
+    image_url:firstImageUrl(e.images), anatome_imageSrc:absImageSrc(e.anatome_imageSrc, base),
+    anatome_layers_payload:e.anatome_layers_payload||[], instructions:(e.instructions||[]).slice(0,2) };
+}
+function fullExercise(e, base){
+  if(!e) return null;
+  const { created_date, updated_date, created_by_id, name_lower, ...rest }=e;
+  return { ...rest, image_url:firstImageUrl(e.images), anatome_imageSrc:absImageSrc(e.anatome_imageSrc, base) };
+}
+async function getExerciseLogic(base44,{ name, id, random }, base){
+  if(id){ const found=await base44.asServiceRole.entities.Exercise.filter({ id }, "", 1); const rec=found&&found[0]; return rec?{ match:"exact", exercise:fullExercise(rec, base) }:{ match:"none", exercise:null }; }
+  if(random){ const total=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000); if(!total.length) return { match:"none", exercise:null }; return { match:"random", exercise:fullExercise(total[Math.floor(Math.random()*total.length)], base) }; }
+  if(name){ const key=String(name).trim().toLowerCase().replace(/\s+/g," ");
+    const exact=await base44.asServiceRole.entities.Exercise.filter({ name_lower:key }, "", 1);
+    if(exact && exact[0]) return { match:"exact", exercise:fullExercise(exact[0], base) };
+    const all=await base44.asServiceRole.entities.Exercise.list("-created_date", 1000);
+    const fuzzy=all.find((e)=>(e.name_lower||"").includes(key)) || all.find((e)=>key.includes(e.name_lower||"___"));
+    return fuzzy?{ match:"fuzzy", exercise:fullExercise(fuzzy, base) }:{ match:"none", exercise:null }; }
+  return { match:"none", exercise:null };
+}
+
 // ---- Rate limiting (with MCP trusted-key + RapidAPI bypass) ----
 const RATE_LIMIT=100;
 async function sha256(str){ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); }
@@ -106,6 +150,19 @@ const TOOLS = [
     inputSchema:{ type:"object", properties:{} } },
   { name:"resolve_exercise", description:"Resolve an exercise name (e.g. 'bench press') into concrete colored muscle layers using a primary/secondary/accessory palette.",
     inputSchema:{ type:"object", properties:{ exercise:{type:"string"} }, required:["exercise"] } },
+  { name:"search_exercises", description:"Search the 873-exercise database (free-exercise-db) by name with optional muscle/equipment/level filters. Returns enriched results with ready-to-embed anatome_imageSrc URLs.",
+    inputSchema:{ type:"object", properties:{
+      q:{type:"string",description:"Name search query, e.g. 'bench'"},
+      muscle:{type:"string",description:"Filter by Anatome muscle slug, e.g. 'chest'"},
+      equipment:{type:"string",description:"Filter by equipment, e.g. 'barbell'"},
+      level:{type:"string",enum:["beginner","intermediate","expert"],description:"Filter by difficulty"},
+      limit:{type:"number",default:20,description:"Max results (1-50)"} },
+      required:["q"] } },
+  { name:"get_exercise", description:"Fetch a single exercise with FULL instructions, images, and all anatome_* fields. Provide exactly one of: name (fuzzy), id (uuid), or random (boolean).",
+    inputSchema:{ type:"object", properties:{
+      name:{type:"string",description:"Exercise name (fuzzy match), e.g. 'bench press'"},
+      id:{type:"string",description:"Exercise UUID"},
+      random:{type:"boolean",description:"Return a random exercise"} } } },
 ];
 
 function rpcResult(id,result){ return { jsonrpc:"2.0", id, result }; }
@@ -143,6 +200,18 @@ Deno.serve(async (req)=>{
       if(name==="resolve_exercise"){
         const r=resolveExercise(args.exercise);
         return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(r) }], structuredContent:{ ...r, built_by:BUILT_BY, try_also:TRY_ALSO } }),{headers:cors});
+      }
+      if(name==="search_exercises"){
+        const base=publicBase(req);
+        const { total, results }=await searchExercisesLogic(base44, args);
+        const payload={ total_matched:total, results:results.map((e)=>searchResult(e, base)), built_by:BUILT_BY, try_also:TRY_ALSO };
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(payload) }], structuredContent:payload }),{headers:cors});
+      }
+      if(name==="get_exercise"){
+        const base=publicBase(req);
+        const r=await getExerciseLogic(base44, args, base);
+        const payload={ ...r, attribution:ATTRIBUTION, exercise_db_attribution:"Exercise data from free-exercise-db (CC0-1.0, public domain) by yuhonas.", built_by:BUILT_BY, try_also:TRY_ALSO };
+        return Response.json(rpcResult(id,{ content:[{ type:"text", text:JSON.stringify(payload) }], structuredContent:payload }),{headers:cors});
       }
       return Response.json(rpcError(id,-32602,`Unknown tool: ${name}`),{headers:cors});
     }
