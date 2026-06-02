@@ -9,7 +9,7 @@ import { renderMuscleSvg } from "../lib/muscleEngine.ts";
 import { getBodyData } from "../lib/bodyData.ts";
 import { MUSCLES, ANATOMICAL_NAMES, SIDE_PRESENCE } from "../data/muscleCatalog.ts";
 import {
-  searchExercisesLogic, formatExercise, getByExtId, getRandom, getByName,
+  searchExercisesLogic, formatExercise, getByExtId, getRandom, getByName, lookupExerciseById,
   cleanExercise, resolveExercise as resolveEx,
   type ExerciseRow,
 } from "../lib/exercises.ts";
@@ -106,7 +106,10 @@ export function handleMcp(body: McpBody, base: string): object {
     }
     if (name === "get_exercise") {
       let r: { match: string; exercise: unknown };
-      if (args.id) { const rec = getByExtId(args.id); r = rec ? { match: "exact", exercise: fullExercise(rec, base, args.fields) } : { match: "none", exercise: null }; }
+      if (args.id) {
+        const { exercise, match } = lookupExerciseById(args.id);
+        r = exercise ? { match, exercise: fullExercise(exercise, base, args.fields) } : { match: "none", exercise: null };
+      }
       else if (args.random) { const rec = getRandom(); r = rec ? { match: "random", exercise: fullExercise(rec, base, args.fields) } : { match: "none", exercise: null }; }
       else if (args.name) { const m = getByName(args.name); r = { match: m.match, exercise: fullExercise(m.exercise, base, args.fields) }; }
       else { r = { match: "none", exercise: null }; }

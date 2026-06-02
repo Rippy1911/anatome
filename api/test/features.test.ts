@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getBodyData } from "../src/lib/bodyData.ts";
 import {
-  searchExercisesLogic, listEquipment, getMuscleInfo, resolveExercise,
+  searchExercisesLogic, listEquipment, getMuscleInfo, resolveExercise, lookupExerciseById,
 } from "../src/lib/exercises.ts";
 import { workoutImageLogic } from "../src/lib/workoutImage.ts";
 
@@ -44,6 +44,12 @@ describe("P1 API features", () => {
     if (db.source === "exercise_db") {
       expect(db.anatome_imageSrc).toMatch(/^https:\/\//);
     }
+  });
+
+  it("lookupExerciseById falls back from Bench_Press to fuzzy name", () => {
+    const { exercise, match } = lookupExerciseById("Bench_Press");
+    expect(exercise).not.toBeNull();
+    expect(match).toBe("id_fallback_to_name");
   });
 
   it("workoutImageLogic stacks muscles across a session", () => {

@@ -9,12 +9,13 @@ import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION } from "./data/mu
 import { getBodyData } from "./lib/bodyData.ts";
 import { payloadFromQuery, sha256 } from "./lib/query.ts";
 import {
-  searchExercisesLogic, formatExercise, getByExtId, getByMuscle, getRandom, getByName,
+  searchExercisesLogic, formatExercise, lookupExerciseById, getByMuscle, getRandom, getByName,
   cleanExercise,
   resolveExercise as resolveEx,
   listEquipment, getMuscleInfo,
   type ExerciseRow,
 } from "./lib/exercises.ts";
+import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
 import { checkRateLimit, rateHeaders, rateLimitBody, type Env } from "./lib/rateLimit.ts";
@@ -77,51 +78,54 @@ async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Re
     ...baseAttribution(), duration_ms,
   }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl) } });
 }
-app.get("/generateImage", (c) => generateImage(c));
+app.get("/generateImage", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => generateImage(c)));
 app.post("/generateImage", (c) => generateImage(c));
 
 // ---- listMuscles ----
-app.get("/listMuscles", (c) => {
+app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const muscles = MUSCLES.map((slug) => ({
     slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug], body_region: BODY_REGION[slug] || null,
   }));
   return c.json({ ok: true, count: MUSCLES.length, muscles, attribution: ATTRIBUTION, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO });
-});
+}));
 
 // ---- muscleInfo ----
-app.get("/muscleInfo", (c) => {
+app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const slug = c.req.query("slug");
   if (!slug) return c.json({ ok: false, error: "provide slug query param", ...baseAttribution() }, 400);
   const info = getMuscleInfo(slug, baseUrl(c));
   if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...baseAttribution() }, 404);
   return c.json({ ok: true, ...info, ...baseAttribution() });
-});
+}));
 
 // ---- listEquipment ----
-app.get("/listEquipment", (c) => {
+app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const equipment = listEquipment();
   return c.json({ ok: true, count: equipment.length, equipment, ...exerciseAttribution() });
-});
+}));
 
 // ---- searchExercises ----
 app.get("/searchExercises", async (c) => {
   const rl = await checkRateLimit(c.req.raw, c.env);
   if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  const q = c.req.query();
-  const base = baseUrl(c);
-  const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
-  const { total, offset, limit, results } = searchExercisesLogic({
-    q: q.q, muscle: q.muscle, equipment: q.equipment, level: q.level, limit: q.limit, offset: q.offset,
-  });
-  return c.json({
-    ok: true, total_matched: total, offset, limit,
-    results: results.map((e) => formatExercise(e, base, "search", fields)),
-    ...exerciseAttribution(),
-  }, 200, rateHeaders(rl));
+  const extra = rateHeaders(rl);
+  return withEdgeCache(c.req.raw, c.executionCtx, () => {
+    const q = c.req.query();
+    const base = baseUrl(c);
+    const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
+    const { total, offset, limit, results } = searchExercisesLogic({
+      q: q.q, muscle: q.muscle, equipment: q.equipment, level: q.level, limit: q.limit, offset: q.offset,
+    });
+    return c.json({
+      ok: true, total_matched: total, offset, limit,
+      results: results.map((e) => formatExercise(e, base, "search", fields)),
+      ...exerciseAttribution(),
+    }, 200, extra);
+  }, extra);
 });
 
 // ---- exercise GIF (static assets: api/public/gifs/<ext_id>.gif) ----
-app.get("/exerciseGif", async (c) => {
+app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, async () => {
   const id = c.req.query("id");
   if (!id) return c.json({ ok: false, error: "id required (exercise ext_id)" }, 400);
   const assets = c.env.ASSETS;
@@ -141,7 +145,7 @@ app.get("/exerciseGif", async (c) => {
     hint: "python3 scripts/generate-exercise-gifs.py",
     ext_id: id,
   }, 404);
-});
+}));
 
 // ---- getExercise (4 modes) ----
 function fullExercise(
@@ -158,17 +162,23 @@ function fullExercise(
 app.get("/getExercise", async (c) => {
   const rl = await checkRateLimit(c.req.raw, c.env);
   if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  const q = c.req.query();
-  const base = baseUrl(c);
-  const meta = exerciseAttribution();
-  const limit = Math.min(Number(q.limit || 10), 50);
-  const fields = parseFieldsParam(q.fields, null);
+  const extra = rateHeaders(rl);
+  return withEdgeCache(c.req.raw, c.executionCtx, async () => {
+    const q = c.req.query();
+    const base = baseUrl(c);
+    const meta = exerciseAttribution();
+    const limit = Math.min(Number(q.limit || 10), 50);
+    const fields = parseFieldsParam(q.fields, null);
 
-  if (q.id) { const rec = getByExtId(q.id); return c.json({ ok: !!rec, exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, rateHeaders(rl)); }
-  if (q.muscle) { const list = getByMuscle(q.muscle, limit); return c.json({ ok: true, muscle: q.muscle.toLowerCase(), count: list.length, exercises: list.map((e) => fullExercise(e, base, fields)), ...meta }, 200, rateHeaders(rl)); }
-  if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, rateHeaders(rl)); }
-  if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base, fields), ...meta }, m.exercise ? 200 : 404, rateHeaders(rl)); }
-  return c.json({ ok: false, error: "provide one of: id, name, random=1, muscle", ...meta }, 400, rateHeaders(rl));
+    if (q.id) {
+      const { exercise, match } = lookupExerciseById(q.id);
+      return c.json({ ok: !!exercise, match, exercise: fullExercise(exercise, base, fields), ...meta }, exercise ? 200 : 404, extra);
+    }
+    if (q.muscle) { const list = getByMuscle(q.muscle, limit); return c.json({ ok: true, muscle: q.muscle.toLowerCase(), count: list.length, exercises: list.map((e) => fullExercise(e, base, fields)), ...meta }, 200, extra); }
+    if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, match: rec ? "random" : "none", exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, extra); }
+    if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base, fields), ...meta }, m.exercise ? 200 : 404, extra); }
+    return c.json({ ok: false, error: "provide one of: id, name, random=1, muscle", ...meta }, 400, extra);
+  }, extra);
 });
 
 // ---- resolveExercise (GET + POST) ----
@@ -246,11 +256,13 @@ app.post("/mcp", async (c) => {
 });
 
 // ---- openapi ----
-app.get("/openapi", (c) => c.json(buildOpenApiSpec(baseUrl(c))));
+app.get("/openapi", (c) => withEdgeCache(c.req.raw, c.executionCtx, () =>
+  c.json(buildOpenApiSpec(baseUrl(c))),
+));
 
 // ---- selfTest ----
-app.get("/selfTest", (c) => {
-  const result = runSelfTest(getBodyData());
+app.get("/selfTest", async (c) => {
+  const result = await runSelfTest(getBodyData());
   return c.json(result, result.ok ? 200 : 500);
 });
 

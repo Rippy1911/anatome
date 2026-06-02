@@ -48,11 +48,11 @@ describe("resolveExercise", () => {
 });
 
 describe("selfTest harness", () => {
-  it("runs all selfTest cases green", () => {
-    const result = runSelfTest(getBodyData());
+  it("runs all selfTest cases green", async () => {
+    const result = await runSelfTest(getBodyData());
     expect(result.ok).toBe(true);
     expect(result.passed).toBe(result.total);
-    expect(result.total).toBeGreaterThanOrEqual(39);
+    expect(result.total).toBeGreaterThanOrEqual(46);
     expect(result.failed).toBe(0);
     if (result.failed > 0) {
       result.failed_tests.forEach((t) => console.log(`  FAIL: ${t.name}: ${t.detail}`));

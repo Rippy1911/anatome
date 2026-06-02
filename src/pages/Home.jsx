@@ -7,6 +7,7 @@ import McpDemoCard from "@/components/home/McpDemoCard";
 import { Link } from "react-router-dom";
 import { Bot, ArrowRight } from "lucide-react";
 import CodeExamples from "@/components/home/CodeExamples";
+import BenchmarksSection from "@/components/home/BenchmarksSection";
 import Pricing from "@/components/home/Pricing";
 
 function SectionHead({ eyebrow, title }) {
@@ -51,6 +52,11 @@ export default function Home() {
         <section>
           <SectionHead eyebrow="Drop-in" title="Three ways to integrate" />
           <CodeExamples baseUrl={baseUrl} />
+        </section>
+
+        {/* Benchmarks */}
+        <section>
+          <BenchmarksSection />
         </section>
 
         {/* Pricing */}

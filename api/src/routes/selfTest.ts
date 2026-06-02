@@ -13,9 +13,10 @@ import { renderMuscleSvg, type BodyData } from "../lib/muscleEngine.ts";
 import { parseCompactLayers } from "../lib/query.ts";
 import { MUSCLES } from "../data/muscleCatalog.ts";
 import {
-  resolveExercise, searchExercisesLogic, getByName, getByMuscle, getRandom, getByExtId, count as exerciseCount, allExercises,
+  resolveExercise, searchExercisesLogic, getByName, getByMuscle, getRandom, getByExtId, lookupExerciseById, count as exerciseCount, allExercises,
   listEquipment, getMuscleInfo,
 } from "../lib/exercises.ts";
+import { edgeCacheHitOnRepeat } from "../lib/edgeCache.ts";
 import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { handleMcp, TOOLS } from "./mcp.ts";
 import { ATTRIBUTION } from "../lib/attribution.ts";
@@ -25,7 +26,7 @@ const BODY_DEFAULT_COLOR = "#282828";
 
 interface TestResult { name: string; passed: boolean; detail?: string }
 
-export function runSelfTest(bodyData: BodyData) {
+export async function runSelfTest(bodyData: BodyData) {
   const tests: TestResult[] = [];
   const T = (name: string, fn: () => boolean | string | undefined) => {
     try { const r = fn(); if (r === true || r === undefined) tests.push({ name, passed: true }); else tests.push({ name, passed: false, detail: String(r) }); }
@@ -143,6 +144,15 @@ export function runSelfTest(bodyData: BodyData) {
   T("rate_limit_bypass_header_names", () => {
     return true;
   });
+
+  T("get_exercise_id_friendly_fallback", () => {
+    const { exercise, match } = lookupExerciseById("Bench_Press");
+    return exercise && match === "id_fallback_to_name" || `match=${match}`;
+  });
+
+  // ---- edge cache ----
+  const cacheOk = await edgeCacheHitOnRepeat("https://selftest.anatome.dev/cache-probe");
+  T("cache_hit_on_repeat", () => cacheOk || "cache miss on repeat");
 
   const passed = tests.filter((t) => t.passed).length;
   const failed = tests.length - passed;

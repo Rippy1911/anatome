@@ -3,13 +3,18 @@ main = "src/index.ts"
 compatibility_date = "2024-11-06"
 compatibility_flags = ["nodejs_compat"]
 
+# Exercise demo GIFs (generate: python3 scripts/generate-exercise-gifs.py)
+[assets]
+directory = "public"
+binding = "ASSETS"
+
 # Rate-limit storage (replaces the Base44 RateLimit entity).
 # Create with:  wrangler kv namespace create RATE_LIMIT_KV
 # then paste the returned id below (and a separate preview_id for `wrangler dev`).
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-preview_id = "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+id = "42bad01f54734ee2a1a97efdb7cc617d"
+preview_id = "c3ba21bd8352432d9754e6a9c68b594b"
 
 [vars]
 # Non-secret config only. Secrets are set with `wrangler secret put`:
@@ -20,13 +25,18 @@ PUBLIC_BASE_URL = "https://api.anatome.dev"
 # ---- Production environment ----
 [env.production]
 name = "anatome-api"
+workers_dev = true
 routes = [
   { pattern = "api.anatome.dev/*", zone_name = "anatome.dev" }
 ]
 
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "42bad01f54734ee2a1a97efdb7cc617d"
 
 [env.production.vars]
 PUBLIC_BASE_URL = "https://api.anatome.dev"
+
+[env.production.assets]
+directory = "public"
+binding = "ASSETS"

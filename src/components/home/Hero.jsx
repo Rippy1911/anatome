@@ -31,6 +31,9 @@ export default function Hero({ baseUrl }) {
         <p className="mt-5 text-sm sm:text-base text-muted-foreground font-mono">
           Open source · Apache-2.0 · 100 free requests/month · MCP-compatible · 873 exercises included
         </p>
+        <p className="mt-2 text-xs text-muted-foreground font-mono">
+          &lt; 600ms cold render · &lt; 50ms cached · 300+ edge POPs
+        </p>
 
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link to="/playground" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">

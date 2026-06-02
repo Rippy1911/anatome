@@ -204,6 +204,23 @@ export function cleanExercise(rec: ExerciseRow | null | undefined): ExerciseRow 
 export function getByExtId(id: string): ExerciseRow | null {
   return ALL.find((e) => e.ext_id === id) || null;
 }
+
+/** Exact ext_id lookup, then fuzzy name match (underscores → spaces). */
+export function lookupExerciseById(id: string): {
+  exercise: ExerciseRow | null;
+  match: "exact" | "id_fallback_to_name" | "none";
+} {
+  const trimmed = String(id || "").trim();
+  if (!trimmed) return { exercise: null, match: "none" };
+  const exact = getByExtId(trimmed);
+  if (exact) return { exercise: exact, match: "exact" };
+  const asName = trimmed.replace(/_/g, " ");
+  const bySpaced = getByName(asName);
+  if (bySpaced.exercise) return { exercise: bySpaced.exercise, match: "id_fallback_to_name" };
+  const byRaw = getByName(trimmed);
+  if (byRaw.exercise) return { exercise: byRaw.exercise, match: "id_fallback_to_name" };
+  return { exercise: null, match: "none" };
+}
 export function getByMuscle(slug: string, limit: number): ExerciseRow[] {
   const m = slug.trim().toLowerCase();
   const primary = ALL.filter((e) => (e.anatome_primary_slugs || []).includes(m));
