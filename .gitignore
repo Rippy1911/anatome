@@ -44,4 +44,5 @@ demo/
 # Local agent / demo tooling (not part of the product)
 .demo-venv/
 AGENTS.md
+ROADMAP.md
 .cursor/rules/anatome.mdc
