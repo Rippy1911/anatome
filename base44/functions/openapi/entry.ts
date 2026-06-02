@@ -1,7 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-
 Deno.serve(async (req) => {
-  createClientFromRequest(req);
   const base = new URL(req.url).origin + "/functions";
 
   const layerSchema = {
