@@ -121,7 +121,7 @@ curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
 }`}</Code>
 
       <P><span className="font-semibold text-foreground">Other clients</span> — any JSON-RPC 2.0 MCP client works. See <a className="text-primary hover:underline" href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">modelcontextprotocol.io</a>.</P>
-      <P><span className="font-mono text-foreground">Rate limit:</span> the free tier allows 1000 requests/day from localhost and 100 requests/month per public host. Trusted clients can bypass via the <span className="font-mono text-xs">X-Mcp-Trusted-Key</span> header (contact us for a key).</P>
+      <P><span className="font-mono text-foreground">Rate limit:</span> localhost and 127.0.0.1 are <span className="text-foreground font-medium">unlimited</span> (perfect for development). Without a token, public traffic is limited to 1000 requests/day per IP and 100 requests/day per host. Trusted clients can bypass via the <span className="font-mono text-xs">X-Mcp-Trusted-Key</span> header (contact us for a key).</P>
 
       <H2 id="examples">Examples</H2>
       <Code>{`# Single muscle group, red, front view

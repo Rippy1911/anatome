@@ -10,9 +10,9 @@ const PARAMS = [
   ["color", "string", "#DC2626", "Color for muscles param (single-layer)"],
   ["width", "int", "768", "100–2048"],
   ["height", "int", "1024", "100–2048"],
-  ["body_color", "string", "#3f3f3f", "Unselected muscle fill"],
+  ["body_color", "string", "#282828", "Unselected muscle fill"],
   ["border_color", "string", "#dfdfdf", "Outline color"],
-  ["border_width", "number", "1", "Outline thickness"],
+  ["border_width", "number", "1.5", "Outline thickness"],
   ["background", "string", "transparent", "Background fill"],
   ["output", "enum", "json", "json (wrapped) or raw (image/svg+xml)"],
 ];

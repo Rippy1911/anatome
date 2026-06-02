@@ -6,7 +6,7 @@ const ALIASES = { shoulders:"deltoids",deltoid:"deltoids",shoulder:"deltoids",gl
 function normalizeSlug(input){ if(!input) return input; const s=String(input).trim().toLowerCase(); if(MUSCLES.includes(s)) return s; if(ALIASES[s]) return ALIASES[s]; return s; }
 
 const WRAPPER = { male:{front:{viewBox:"0 0 724 1448"},back:{viewBox:"724 0 724 1448"}}, female:{front:{viewBox:"-50 -40 734 1538"},back:{viewBox:"756 0 774 1448"}} };
-const DEFAULTS = { gender:"male",view:"dual",width:768,height:1024,background:"transparent",body_color:"#3f3f3f",border_color:"#dfdfdf",border_width:1 };
+const DEFAULTS = { gender:"male",view:"dual",width:768,height:1024,background:"transparent",body_color:"#282828",border_color:"#dfdfdf",border_width:1.5 };
 const ATTRIBUTION = "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 const ATTRIBUTION_SOURCE = "https://github.com/HichamELBSI/react-native-body-highlighter";
 const BUILT_BY = "NextSolutions — nextsolutions.studio";
@@ -106,12 +106,13 @@ function payloadFromQuery(url){
   return p;
 }
 
-// ---- Rate limiting (v1.2 dual model) ----
-// localhost / private IPs / no-referer => 1000/day per IP (ip_day bucket)
-// public hosts => 100/month per host (host_month bucket)
+// ---- Rate limiting (v1.3 dev-friendly model) ----
+// localhost / 127.0.0.1 / private IPs / no-referer => UNLIMITED (perfect for dev)
+// public IP, no token   => 1000/day per IP   (ip_day bucket)
+// public host, no token => 100/day per host  (host_day bucket)
 // RapidAPI proxy secret / MCP trusted key => bypass entirely
 const IP_DAY_LIMIT=1000;
-const HOST_MONTH_LIMIT=100;
+const HOST_DAY_LIMIT=100;
 const UPGRADE_URL="https://rapidapi.com/anatome/api/anatome";
 async function sha256(str){ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map((b)=>b.toString(16).padStart(2,"0")).join(""); }
 function clientIp(req){ return req.headers.get("cf-connecting-ip")||(req.headers.get("x-forwarded-for")||"").split(",")[0].trim()||"unknown"; }
@@ -127,8 +128,8 @@ function referrerHost(req){
   if(!raw) return null;
   try { return new URL(raw).hostname; } catch { return raw.replace(/^https?:\/\//,"").split("/")[0]||null; }
 }
+function isLocalHost(host){ if(!host) return false; return host==="localhost"||host==="127.0.0.1"||host==="::1"||host.endsWith(".localhost"); }
 function nextUtcMidnightUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); }
-function nextMonthUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth()+1,1,0,0,0)/1000); }
 async function checkRateLimit(req,base44){
   const proxySecret=req.headers.get("x-rapidapi-proxy-secret");
   if(proxySecret && Deno.env.get("PROXY_SECRET") && proxySecret===Deno.env.get("PROXY_SECRET")) return { allowed:true, source:"rapidapi", bypass:true };
@@ -136,15 +137,19 @@ async function checkRateLimit(req,base44){
   if(mcpKey && Deno.env.get("MCP_TRUSTED_KEY") && mcpKey===Deno.env.get("MCP_TRUSTED_KEY")) return { allowed:true, source:"mcp_trusted", bypass:true };
 
   const ip=clientIp(req); const host=referrerHost(req);
-  const useIpDay=isPrivateIp(ip)||!host;
-  const limit=useIpDay?IP_DAY_LIMIT:HOST_MONTH_LIMIT;
-  const key_type=useIpDay?"ip_day":"host_month";
-  const reset=useIpDay?nextUtcMidnightUnix():nextMonthUnix();
+  // localhost / private IPs / localhost referer => unlimited (dev)
+  if(isPrivateIp(ip)||isLocalHost(host)) return { allowed:true, source:"localhost", bypass:true };
+
+  const reset=nextUtcMidnightUnix();
   const reset_at=new Date(reset*1000).toISOString();
-  const now=new Date();
+  const now=new Date(); const date=now.toISOString().slice(0,10);
+  // Prefer per-host daily bucket when a public host is present, else per-IP daily.
+  const useHost=!!host;
+  const limit=useHost?HOST_DAY_LIMIT:IP_DAY_LIMIT;
+  const key_type=useHost?"host_day":"ip_day";
   let query, createData;
-  if(useIpDay){ const ip_hash=await sha256(ip); const date=now.toISOString().slice(0,10); query={ key_type, ip_hash, date }; createData={ key_type, ip_hash, date }; }
-  else { const host_hash=await sha256(host); const date=now.toISOString().slice(0,7); query={ key_type, host_hash, date }; createData={ key_type, host_hash, date }; }
+  if(useHost){ const host_hash=await sha256(host); query={ key_type, host_hash, date }; createData={ key_type, host_hash, date }; }
+  else { const ip_hash=await sha256(ip); query={ key_type, ip_hash, date }; createData={ key_type, ip_hash, date }; }
 
   const existing=await base44.asServiceRole.entities.RateLimit.filter(query);
   if(existing && existing.length>0){
@@ -157,11 +162,12 @@ async function checkRateLimit(req,base44){
   return { allowed:true, source:"free", key_type, limit, used:1, remaining:limit-1, reset, reset_at };
 }
 function rateHeaders(rl){
+  if(rl.bypass) return { "X-RateLimit-Limit":"unlimited", "X-RateLimit-Remaining":"unlimited" };
   return { "X-RateLimit-Limit":String(rl.limit||IP_DAY_LIMIT), "X-RateLimit-Remaining":String(rl.remaining!=null?rl.remaining:""), "X-RateLimit-Reset":String(rl.reset||nextUtcMidnightUnix()) };
 }
 function rateLimitBody(rl){
   return { ok:false, error:"rate_limit_exceeded", limit_type:rl.key_type, limit:rl.limit, used:rl.used, reset_at:rl.reset_at, retry_after_seconds:rl.retry_after, upgrade_url:UPGRADE_URL,
-    message:rl.key_type==="host_month" ? `Free tier: ${rl.limit} requests/month per public host. Upgrade via RapidAPI.` : `Free tier: ${rl.limit} requests/day from localhost. Upgrade via RapidAPI.` };
+    message:rl.key_type==="host_day" ? `Free tier: ${rl.limit} requests/day per public host. Upgrade via RapidAPI.` : `Free tier: ${rl.limit} requests/day per IP. Upgrade via RapidAPI.` };
 }
 
 Deno.serve(async (req)=>{
@@ -184,6 +190,15 @@ Deno.serve(async (req)=>{
     const bodyData=await loadBody(base44);
     const { svg, muscles_rendered }=renderMuscleSvg(payload,bodyData);
     const duration_ms=Date.now()-t0;
+
+    // Output is fully deterministic from the inputs, so it's safe to cache hard.
+    // Build a weak ETag from the SVG and honor conditional requests.
+    const etag=`"a-${await sha256(svg)}"`;
+    const ifNoneMatch=req.headers.get("if-none-match");
+    const CACHE_CONTROL="public, max-age=86400, s-maxage=604800, immutable";
+    if(ifNoneMatch && ifNoneMatch===etag){
+      return new Response(null, { status:304, headers:{ ...cors, "ETag":etag, "Cache-Control":CACHE_CONTROL, ...rateHeaders(rl) } });
+    }
     const format=payload.format==="png"?"png":"svg";
     const output=payload.output==="raw"?"raw":"json";
     const gender=payload.gender==="female"?"female":"male";
@@ -193,7 +208,7 @@ Deno.serve(async (req)=>{
     if(format==="png") png_status="not_supported_in_v1, use SVG and convert client-side";
 
     if(output==="raw"){
-      return new Response(svg, { status:200, headers:{ "Content-Type":"image/svg+xml; charset=utf-8", "Cache-Control":"public, max-age=3600", ...cors, ...rateHeaders(rl) } });
+      return new Response(svg, { status:200, headers:{ "Content-Type":"image/svg+xml; charset=utf-8", "Cache-Control":CACHE_CONTROL, "ETag":etag, ...cors, ...rateHeaders(rl) } });
     }
 
     return new Response(JSON.stringify({
@@ -203,7 +218,7 @@ Deno.serve(async (req)=>{
       rate_limit:{ source:rl.source, limit_type:rl.key_type, remaining:rl.remaining!=null?rl.remaining:null, limit:rl.limit, reset_at:rl.reset_at },
       attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE, license:"MIT", duration_ms,
       built_by:BUILT_BY, try_also:TRY_ALSO,
-    }), { headers:{ ...cors, "Content-Type":"application/json", ...rateHeaders(rl) } });
+    }), { headers:{ ...cors, "Content-Type":"application/json", "Cache-Control":CACHE_CONTROL, "ETag":etag, ...rateHeaders(rl) } });
   } catch(error){
     return Response.json({ ok:false, error:error.message }, { status:500, headers:cors });
   }

@@ -6,10 +6,10 @@
       "type": "string",
       "enum": [
         "ip_day",
-        "host_month"
+        "host_day"
       ],
       "default": "ip_day",
-      "description": "Bucket type: ip_day (localhost/private IPs, 1000/day) or host_month (public hosts, 100/month)"
+      "description": "Bucket type: ip_day (public IP, 1000/day) or host_day (public host, 100/day). Localhost/private IPs are unlimited and never stored."
     },
     "ip_hash": {
       "type": "string",
@@ -17,11 +17,11 @@
     },
     "host_hash": {
       "type": "string",
-      "description": "SHA-256 hash of the public hostname (host_month buckets)"
+      "description": "SHA-256 hash of the public hostname (host_day buckets)"
     },
     "date": {
       "type": "string",
-      "description": "Bucket period: YYYY-MM-DD for ip_day, YYYY-MM for host_month"
+      "description": "Bucket period: YYYY-MM-DD (daily)"
     },
     "count": {
       "type": "number",

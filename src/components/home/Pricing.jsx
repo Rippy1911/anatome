@@ -22,8 +22,8 @@ export default function Pricing() {
         </div>
         <p className="text-sm text-muted-foreground mt-1">No API key needed</p>
         <ul className="space-y-2.5 mt-5 flex-1">
-          <Feature>1000 requests/day from localhost (perfect for development)</Feature>
-          <Feature>100 requests/month per public host</Feature>
+          <Feature>Unlimited from localhost & 127.0.0.1 (perfect for development)</Feature>
+          <Feature>1000 requests/day per IP · 100 requests/day per public host</Feature>
           <Feature>All endpoints included</Feature>
           <Feature>Apache-2.0 self-hosting always free</Feature>
         </ul>

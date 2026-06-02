@@ -1,7 +1,9 @@
 import React from "react";
+import { API_BASE } from "@/lib/apiBase";
 import Hero from "@/components/home/Hero";
 import ImageDemoCard from "@/components/home/ImageDemoCard";
 import SearchDemoCard from "@/components/home/SearchDemoCard";
+import AiDemoCard from "@/components/home/AiDemoCard";
 import McpDemoCard from "@/components/home/McpDemoCard";
 import CodeExamples from "@/components/home/CodeExamples";
 import Pricing from "@/components/home/Pricing";
@@ -16,7 +18,7 @@ function SectionHead({ eyebrow, title }) {
 }
 
 export default function Home() {
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const baseUrl = API_BASE;
 
   return (
     <div>
@@ -28,6 +30,7 @@ export default function Home() {
           <SectionHead eyebrow="Live demos" title="Everything below is calling the real API" />
           <ImageDemoCard baseUrl={baseUrl} />
           <SearchDemoCard baseUrl={baseUrl} />
+          <AiDemoCard baseUrl={baseUrl} />
           <McpDemoCard />
         </section>
 
