@@ -3,6 +3,7 @@ import AironPromo from "@/components/AironPromo";
 import ImgUrlSpec from "@/components/docs/ImgUrlSpec";
 import ExerciseDbSection from "@/components/docs/ExerciseDbSection";
 import DocsBenchmarksSection from "@/components/docs/DocsBenchmarksSection";
+import DocsMcpCursorSection from "@/components/docs/DocsMcpCursorSection";
 
 function Code({ children }) {
   return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
@@ -53,7 +54,7 @@ export default function Docs() {
       <P><span className="font-mono text-foreground">POST /functions/generateImage</span> — main renderer (full JSON schema). Also supports GET with a simplified query syntax.</P>
       <P><span className="font-mono text-foreground">GET /functions/listMuscles</span> — full muscle catalog (slugs + anatomical names + view presence).</P>
       <P><span className="font-mono text-foreground">GET/POST /functions/resolveExercise</span> — resolve an exercise name into colored layers.</P>
-      <P><span className="font-mono text-foreground">POST /functions/mcp</span> — MCP JSON-RPC 2.0 server.</P>
+      <P><span className="font-mono text-foreground">POST /functions/mcp</span> — MCP JSON-RPC 2.0 server. Production: <span className="font-mono text-foreground">POST https://api.anatome.dev/mcp</span>.</P>
       <P><span className="font-mono text-foreground">GET /functions/openapi</span> — OpenAPI 3.1 spec. <span className="font-mono text-foreground">GET /functions/selfTest</span> — test suite.</P>
       <P>Response (output=json): <span className="font-mono text-foreground">{`{ ok, svg, format, gender, view, muscles_rendered, attribution, license, duration_ms }`}</span>. With <span className="font-mono text-foreground">output=raw</span> the SVG is returned directly with <span className="font-mono text-foreground">Content-Type: image/svg+xml</span>.</P>
 
@@ -75,8 +76,11 @@ pecs     → chest         hamstrings → hamstring`}</Code>
       <H2 id="mcp">MCP Server</H2>
       <P>Anatome ships a Model Context Protocol (MCP) server over JSON-RPC 2.0. Point any MCP-compatible client at the endpoint below and it gains five muscle-visualization tools.</P>
 
+      <DocsMcpCursorSection />
+
       <P><span className="font-semibold text-foreground">Endpoint URL</span></P>
-      <Code>{`https://anatome-form-flow.base44.app/functions/mcp`}</Code>
+      <Code>{`https://api.anatome.dev/mcp`}</Code>
+      <P className="text-xs text-muted-foreground">Legacy Base44 host: <span className="font-mono">https://anatome-form-flow.base44.app/functions/mcp</span></P>
 
       <P><span className="font-semibold text-foreground">Tools exposed (5)</span></P>
       <P><span className="font-mono text-foreground">generate_muscle_image</span> — render an SVG of highlighted muscles. Params: <span className="font-mono">gender, view, layers[], defs?, width?, height?, background?, body_color?</span></P>
@@ -87,17 +91,17 @@ pecs     → chest         hamstrings → hamstring`}</Code>
 
       <P><span className="font-semibold text-foreground">JSON-RPC 2.0 quickstart</span></P>
       <Code>{`# 1. initialize — handshake
-curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
+curl -X POST https://api.anatome.dev/mcp \\
   -H 'Content-Type: application/json' \\
   -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}'
 
-# 2. tools/list — discover the 3 tools
-curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
+# 2. tools/list — discover the 5 tools
+curl -X POST https://api.anatome.dev/mcp \\
   -H 'Content-Type: application/json' \\
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}'
 
 # 3. tools/call — render bench press
-curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
+curl -X POST https://api.anatome.dev/mcp \\
   -H 'Content-Type: application/json' \\
   -d '{"jsonrpc":"2.0","id":3,"method":"tools/call",
        "params":{"name":"generate_muscle_image",
@@ -109,16 +113,16 @@ curl -X POST https://anatome-form-flow.base44.app/functions/mcp \\
       <Code>{`{
   "mcpServers": {
     "anatome": {
-      "url": "https://anatome-form-flow.base44.app/functions/mcp"
+      "url": "https://api.anatome.dev/mcp"
     }
   }
 }`}</Code>
 
-      <P><span className="font-semibold text-foreground">Continue.dev / Cline / Cursor</span> — same URL in their MCP config:</P>
+      <P><span className="font-semibold text-foreground">Continue.dev / Cline / Cursor</span> — same URL in their MCP config (see screenshot above):</P>
       <Code>{`{
   "mcpServers": {
     "anatome": {
-      "url": "https://anatome-form-flow.base44.app/functions/mcp",
+      "url": "https://api.anatome.dev/mcp",
       "transport": "http"
     }
   }
