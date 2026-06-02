@@ -26,6 +26,8 @@ import { runSelfTest } from "./routes/selfTest.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
+/** GIFs are regenerated in-place; avoid immutable so timing fixes can roll out. */
+const GIF_CACHE_CONTROL = "public, max-age=86400, s-maxage=86400";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -138,7 +140,7 @@ app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, as
   if (res.status === 200) {
     return new Response(res.body, {
       status: 200,
-      headers: { "Content-Type": "image/gif", "Cache-Control": CACHE_CONTROL },
+      headers: { "Content-Type": "image/gif", "Cache-Control": GIF_CACHE_CONTROL },
     });
   }
   return c.json({

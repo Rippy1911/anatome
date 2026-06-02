@@ -34,7 +34,7 @@ IMG_BASE = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exer
 OUT_DIR = ROOT / "api" / "public" / "gifs"
 DEFAULT_SIZE = 480
 # Per-frame hold in ms (Pillow `duration` is milliseconds, not centiseconds).
-DEFAULT_DELAY_MS = 900
+DEFAULT_DELAY_MS = 750
 
 
 def fetch_bytes(url: str) -> bytes | None:
@@ -43,6 +43,24 @@ def fetch_bytes(url: str) -> bytes | None:
             return resp.read()
     except Exception:
         return None
+
+
+def save_gif(path: Path, frames: list[Image.Image], delay_ms: int) -> None:
+    """Write GIF with explicit per-frame duration (ms) for all browsers."""
+    duration_ms = max(50, delay_ms)
+    if len(frames) == 1:
+        frames[0].save(path, save_all=False, optimize=True, loop=0)
+        return
+    durations = [duration_ms] * len(frames)
+    frames[0].save(
+        path,
+        save_all=True,
+        append_images=frames[1:],
+        duration=durations,
+        loop=0,
+        optimize=True,
+        disposal=2,
+    )
 
 
 def retime_gif(path: Path, delay_ms: int) -> bool:
@@ -60,18 +78,7 @@ def retime_gif(path: Path, delay_ms: int) -> bool:
         pass
     if not frames:
         return False
-    duration_ms = max(50, delay_ms)
-    if len(frames) == 1:
-        frames[0].save(path, save_all=False, optimize=True, loop=0)
-    else:
-        frames[0].save(
-            path,
-            save_all=True,
-            append_images=frames[1:],
-            duration=duration_ms,
-            loop=0,
-            optimize=True,
-        )
+    save_gif(path, frames, delay_ms)
     return True
 
 
@@ -91,19 +98,7 @@ def make_gif(ex_id: str, images: list[str], size: int, delay_ms: int) -> bool:
     if not frames:
         return False
 
-    out = OUT_DIR / f"{ex_id}.gif"
-    duration_ms = max(50, delay_ms)
-    if len(frames) == 1:
-        frames[0].save(out, save_all=False, optimize=True, loop=0)
-    else:
-        frames[0].save(
-            out,
-            save_all=True,
-            append_images=frames[1:],
-            duration=duration_ms,
-            loop=0,
-            optimize=True,
-        )
+    save_gif(OUT_DIR / f"{ex_id}.gif", frames, delay_ms)
     return True
 
 

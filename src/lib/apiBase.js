@@ -2,7 +2,11 @@
 // Site: https://anatome.dev · API: https://api.anatome.dev
 
 export const SITE_BASE = "https://anatome.dev";
-export const PUBLIC_API = "https://api.anatome.dev";
+/** Override in `.env.local` with `VITE_PUBLIC_API=http://localhost:8787` for local Worker + GIFs. */
+export const PUBLIC_API = import.meta.env.VITE_PUBLIC_API || "https://api.anatome.dev";
+
+/** Bump when regenerating GIF frame timing — busts `Cache-Control: immutable` in browsers. */
+const GIF_PLAYBACK_VERSION = "4";
 
 /** OpenAPI 3.1 spec for Swagger UI / RapidAPI upload. */
 export const OPENAPI_SPEC_URL = `${PUBLIC_API}/openapi`;
@@ -22,14 +26,24 @@ export function apiUrl(pathAndQuery) {
 /** Hosted 2-frame exercise GIF (`GET /exerciseGif?id=<ext_id>`). */
 export function exerciseGifUrl(extId) {
   if (!extId) return null;
-  return apiUrl(`/exerciseGif?id=${encodeURIComponent(extId)}`);
+  const id = encodeURIComponent(extId);
+  return apiUrl(`/exerciseGif?id=${id}&v=${GIF_PLAYBACK_VERSION}`);
 }
 
 /** Best URL for exercise media from search/getExercise rows. */
 export function exerciseMediaUrl(ex) {
   if (!ex) return null;
-  if (ex.gif_url) return ex.gif_url;
-  return exerciseGifUrl(ex.ext_id || ex.id);
+  const raw = ex.gif_url || exerciseGifUrl(ex.ext_id || ex.id);
+  if (!raw) return null;
+  if (!String(raw).includes("/exerciseGif")) return raw;
+  try {
+    const base = raw.startsWith("http") ? undefined : PUBLIC_API;
+    const u = new URL(raw, base);
+    u.searchParams.set("v", GIF_PLAYBACK_VERSION);
+    return u.toString();
+  } catch {
+    return raw;
+  }
 }
 
 /** Prefix relative Worker paths (e.g. /generateImage?...) with the public API host. */
