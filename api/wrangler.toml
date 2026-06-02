@@ -1,0 +1,32 @@
+name = "anatome-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-06"
+compatibility_flags = ["nodejs_compat"]
+
+# Rate-limit storage (replaces the Base44 RateLimit entity).
+# Create with:  wrangler kv namespace create RATE_LIMIT_KV
+# then paste the returned id below (and a separate preview_id for `wrangler dev`).
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+
+[vars]
+# Non-secret config only. Secrets are set with `wrangler secret put`:
+#   wrangler secret put PROXY_SECRET
+#   wrangler secret put MCP_TRUSTED_KEY
+PUBLIC_BASE_URL = "https://api.anatome.dev"
+
+# ---- Production environment ----
+[env.production]
+name = "anatome-api"
+routes = [
+  { pattern = "api.anatome.dev/*", zone_name = "anatome.dev" }
+]
+
+[[env.production.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[env.production.vars]
+PUBLIC_BASE_URL = "https://api.anatome.dev"

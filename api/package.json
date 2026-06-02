@@ -1,0 +1,24 @@
+{
+  "name": "anatome-api",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Anatome public API on Cloudflare Workers (Hono).",
+  "license": "Apache-2.0",
+  "scripts": {
+    "worker:dev": "wrangler dev",
+    "worker:test": "vitest run",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "hono": "^4.6.14"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "typescript": "^5.8.2",
+    "vitest": "^2.1.8",
+    "wrangler": "^3.95.0"
+  }
+}
