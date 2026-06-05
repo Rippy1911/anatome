@@ -44,3 +44,6 @@ demo/
 AGENTS.md
 ROADMAP.md
 .cursor/rules/anatome.mdc
+
+# Experiment videos (large binary assets)
+experiments/**/*.webm
