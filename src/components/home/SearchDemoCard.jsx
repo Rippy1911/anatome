@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { absApiUrl, exerciseMediaUrl } from "@/lib/apiBase";
 import { fetchSearchDemo, SEARCH_DEMO_SOURCES } from "@/lib/searchDemoSources";
 import { Search, Loader2, Dumbbell } from "lucide-react";
 import { cn } from "@/lib/utils";
+import MuscleDiagramSkeleton, { DIAGRAM_IMG_CLASS, preloadDiagramSkeleton } from "@/components/home/MuscleDiagramSkeleton";
 
 function Chip({ children, tone = "primary" }) {
   const cls = tone === "primary" ? "bg-primary/10 text-primary" : "bg-secondary text-secondary-foreground";
@@ -29,7 +30,12 @@ export default function SearchDemoCard({ baseUrl }) {
   const muscleImgRef = useRef(null);
   const diagramStartRef = useRef(null);
   const diagramDoneRef = useRef(false);
+  const loadTargetRef = useRef(null);
   const browsing = !q.trim();
+
+  useEffect(() => {
+    preloadDiagramSkeleton(baseUrl);
+  }, [baseUrl]);
 
   const finishDiagramTiming = () => {
     if (diagramStartRef.current == null || diagramDoneRef.current) return;
@@ -70,34 +76,51 @@ export default function SearchDemoCard({ baseUrl }) {
 
   const pick = (e) => {
     setSelected(e);
-    setImgLoaded(false);
     setImgError(false);
-    setDiagramTiming(null);
-    diagramDoneRef.current = false;
   };
 
   const imgSrc = selected?.anatome_imageSrc ? absApiUrl(selected.anatome_imageSrc) : null;
   const gifSrc = selected ? exerciseMediaUrl(selected) : null;
+  const diagramKey = selected && imgSrc ? `${exerciseKey(selected)}|${imgSrc}` : null;
 
-  useEffect(() => {
-    setImgLoaded(false);
+  const markDiagramLoaded = () => {
+    if (loadTargetRef.current !== diagramKey) return;
+    setImgLoaded(true);
+    finishDiagramTiming();
+  };
+
+  useLayoutEffect(() => {
     setImgError(false);
     setDiagramTiming(null);
     diagramDoneRef.current = false;
-    if (!imgSrc) {
+    loadTargetRef.current = diagramKey;
+
+    if (!diagramKey || !imgSrc) {
       diagramStartRef.current = null;
+      setImgLoaded(false);
       return;
     }
+
     diagramStartRef.current = performance.now();
-    const frame = requestAnimationFrame(() => {
+    setImgLoaded(false);
+
+    const syncFromDom = () => {
+      if (loadTargetRef.current !== diagramKey) return;
       const el = muscleImgRef.current;
-      if (el?.complete && el.naturalWidth > 0) {
+      // SVG diagrams may report naturalWidth 0; `complete` is the reliable signal.
+      if (el?.complete) {
         setImgLoaded(true);
         finishDiagramTiming();
       }
-    });
+    };
+
+    syncFromDom();
+    let frame = 0;
+    if (!muscleImgRef.current?.complete) {
+      frame = requestAnimationFrame(syncFromDom);
+    }
     return () => cancelAnimationFrame(frame);
-  }, [imgSrc]);
+  }, [diagramKey, imgSrc]);
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">
@@ -200,29 +223,28 @@ export default function SearchDemoCard({ baseUrl }) {
           {selected && (
             <>
               <div className="flex-1 flex items-center justify-center gap-3 w-full min-h-[10rem] relative">
-                <div className="relative flex items-center justify-center min-w-[5rem] min-h-[10rem]">
+                <div className="relative flex items-center justify-center h-40 w-[7.5rem] shrink-0">
                   {imgSrc && !imgLoaded && !imgError && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <MuscleDiagramSkeleton baseUrl={baseUrl} />
                     </div>
                   )}
                   {imgSrc && !imgError && (
                     <img
-                      key={imgSrc}
+                      key={diagramKey}
                       ref={muscleImgRef}
                       src={imgSrc}
                       alt={selected.name}
-                      onLoad={() => {
-                        setImgLoaded(true);
-                        finishDiagramTiming();
-                      }}
+                      onLoad={markDiagramLoaded}
                       onError={() => {
+                        if (loadTargetRef.current !== diagramKey) return;
                         setImgError(true);
+                        setImgLoaded(false);
                         diagramStartRef.current = null;
                         diagramDoneRef.current = false;
                         setDiagramTiming(null);
                       }}
-                      className={`max-h-40 w-auto transition-opacity duration-200 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+                      className={cn(DIAGRAM_IMG_CLASS, "transition-opacity duration-200", imgLoaded ? "opacity-100" : "opacity-0")}
                     />
                   )}
                   {!imgSrc && (

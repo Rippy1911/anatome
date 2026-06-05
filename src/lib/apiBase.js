@@ -11,17 +11,13 @@ const GIF_PLAYBACK_VERSION = "4";
 /** OpenAPI 3.1 spec for Swagger UI / RapidAPI upload. */
 export const OPENAPI_SPEC_URL = `${PUBLIC_API}/openapi`;
 
-/** RapidAPI marketplace host for the Anatome API. */
-export const RAPIDAPI_HOST = "anatome.p.rapidapi.com";
-
-/** RapidAPI gateway base URL for the Anatome API. */
-export const RAPIDAPI_BASE = `https://${RAPIDAPI_HOST}`;
-
-/** Public RapidAPI marketplace listing for the Anatome API. */
-export const RAPIDAPI_LISTING_URL = "https://rapidapi.com/slaczka.sebastian/api/anatome";
-
 /** Legacy alias — prefer PUBLIC_API for Worker routes. */
 export const API_BASE = PUBLIC_API;
+
+/** RapidAPI marketplace host — all production calls need X-RapidAPI-Key + this Host header. */
+export const RAPIDAPI_HOST = "anatome.p.rapidapi.com";
+export const RAPIDAPI_BASE = `https://${RAPIDAPI_HOST}`;
+export const RAPIDAPI_LISTING_URL = "https://rapidapi.com/slaczka.sebastian/api/anatome";
 
 /** Base44 serverless paths on the marketing site (aiDemo, entity-backed invokes). */
 export const BASE44_FUNCTIONS = `${SITE_BASE}/functions`;
@@ -55,9 +51,26 @@ export function exerciseMediaUrl(ex) {
   }
 }
 
+/** Strip Base44 legacy `/functions/` prefix before embedding Worker URLs. */
+function normalizeLegacyFunctionPath(url) {
+  if (!url) return url;
+  if (url.startsWith("/functions/")) return url.replace(/^\/functions/, "");
+  try {
+    const u = new URL(url);
+    if (u.pathname.startsWith("/functions/")) {
+      u.pathname = u.pathname.replace(/^\/functions/, "");
+      return u.toString();
+    }
+  } catch {
+    /* relative */
+  }
+  return url;
+}
+
 /** Prefix relative Worker paths (e.g. /generateImage?...) with the public API host. */
 export function absApiUrl(url) {
   if (!url) return null;
-  if (url.startsWith("http")) return url;
-  return `${PUBLIC_API}${url.startsWith("/") ? url : `/${url}`}`;
+  const normalized = normalizeLegacyFunctionPath(url);
+  if (normalized.startsWith("http")) return normalized;
+  return `${PUBLIC_API}${normalized.startsWith("/") ? normalized : `/${normalized}`}`;
 }

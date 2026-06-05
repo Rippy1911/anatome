@@ -68,6 +68,10 @@ module.exports = {
   			mono: ['var(--font-mono)']
   		},
   		keyframes: {
+  			'diagram-skeleton-pulse': {
+  				'0%, 100%': { opacity: '0.45' },
+  				'50%': { opacity: '0.9' },
+  			},
   			'accordion-down': {
   				from: {
   					height: '0'
@@ -86,6 +90,7 @@ module.exports = {
   			}
   		},
   		animation: {
+  			'diagram-skeleton-pulse': 'diagram-skeleton-pulse 1.8s ease-in-out infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
