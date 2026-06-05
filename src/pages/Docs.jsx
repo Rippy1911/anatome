@@ -20,7 +20,7 @@ export default function Docs() {
       <p className="text-muted-foreground mt-2">A self-hosted muscle group image generator API. Returns SVG diagrams of the human body with arbitrary muscles highlighted in arbitrary colors.</p>
 
       <nav className="flex flex-wrap gap-2 mt-6 text-xs">
-        {[["overview","Overview"],["schema","Schema"],["endpoints","Endpoints"],["benchmarks","Benchmarks"],["img-urls","Building <img> URLs"],["exercise-db","Exercise Database"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
+        {[["overview","Overview"],["schema","Schema"],["authentication","Authentication"],["endpoints","Endpoints"],["benchmarks","Benchmarks"],["img-urls","Building <img> URLs"],["exercise-db","Exercise Database"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
           <a key={id} href={`#${id}`} className="px-2.5 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors">{l}</a>
         ))}
       </nav>
@@ -50,8 +50,15 @@ export default function Docs() {
 }`}</Code>
       <P><span className="font-mono text-foreground">last-wins:</span> if muscle X is in layer 1 (red) and layer 3 (blue), it renders blue.</P>
 
+      <H2 id="authentication">Authentication</H2>
+      <P>Production traffic goes through <a className="text-primary hover:underline" href="https://rapidapi.com/slaczka.sebastian/api/anatome" target="_blank" rel="noopener noreferrer">RapidAPI</a>. Every request needs two headers:</P>
+      <Code>{`X-RapidAPI-Key: <your Application Key>
+X-RapidAPI-Host: anatome.p.rapidapi.com`}</Code>
+      <P>Base URL for subscribed calls: <span className="font-mono text-foreground">https://anatome.p.rapidapi.com</span> (same paths as the Worker). Never expose your key in browser-visible <span className="font-mono text-foreground">&lt;img src&gt;</span> URLs — browsers cannot attach auth headers to image requests. Use fetch + blob URL, a server-side proxy, or self-host for embeddable SVGs.</P>
+      <P>Direct <span className="font-mono text-foreground">https://api.anatome.dev</span> works without headers for development and low-traffic embeds (fair-use: 100 req/day per public host, 1000/day per IP). Localhost is unlimited.</P>
+
       <H2 id="endpoints">Endpoints</H2>
-      <P>Production base URL: <span className="font-mono text-foreground">https://api.anatome.dev</span> (marketing site: <span className="font-mono text-foreground">https://anatome.dev</span>).</P>
+      <P>Worker base URL: <span className="font-mono text-foreground">https://api.anatome.dev</span> · RapidAPI: <span className="font-mono text-foreground">https://anatome.p.rapidapi.com</span> (marketing site: <span className="font-mono text-foreground">https://anatome.dev</span>).</P>
       <P><span className="font-mono text-foreground">POST /generateImage</span> — main renderer (full JSON schema). Also supports GET with a simplified query syntax.</P>
       <P><span className="font-mono text-foreground">POST /workoutImage</span> — session heatmap from a list of exercise names.</P>
       <P><span className="font-mono text-foreground">GET /searchExercises</span> · <span className="font-mono text-foreground">GET /getExercise</span> · <span className="font-mono text-foreground">GET/POST /resolveExercise</span> — ExerciseDB + muscle layers.</P>
@@ -135,8 +142,11 @@ curl -X POST https://api.anatome.dev/mcp \\
       <P><span className="font-mono text-foreground">Pricing:</span> Basic plan on RapidAPI — <span className="font-medium text-foreground">300 requests/month included</span>, then <span className="font-mono text-foreground">$0.001</span> per request. Localhost and 127.0.0.1 are <span className="font-medium text-foreground">unlimited</span> for development. Production traffic via RapidAPI uses <span className="font-mono text-xs">X-RapidAPI-Proxy-Secret</span>; MCP integrations can use <span className="font-mono text-xs">X-Mcp-Trusted-Key</span>.</P>
 
       <H2 id="examples">Examples</H2>
+      <P>RapidAPI (production) — same headers on every call:</P>
       <Code>{`# Three-tier bench press (primary / secondary / stabilizers)
-curl -X POST https://api.anatome.dev/generateImage \\
+curl -X POST https://anatome.p.rapidapi.com/generateImage \\
+  -H 'X-RapidAPI-Key: $RAPIDAPI_KEY' \\
+  -H 'X-RapidAPI-Host: anatome.p.rapidapi.com' \\
   -H 'Content-Type: application/json' \\
   -d '{"view":"dual","layers":[
     {"color":"#DC2626","muscles":["chest"]},
@@ -145,10 +155,17 @@ curl -X POST https://api.anatome.dev/generateImage \\
   ]}'
 
 # Compact GET with the same three layers
-GET https://api.anatome.dev/generateImage?layers=DC2626:chest|F59E0B:triceps,deltoids|FCD34D@0.5:abs&output=raw
+curl "https://anatome.p.rapidapi.com/generateImage?layers=DC2626:chest|F59E0B:triceps,deltoids|FCD34D@0.5:abs&output=raw" \\
+  -H "X-RapidAPI-Key: $RAPIDAPI_KEY" \\
+  -H "X-RapidAPI-Host: anatome.p.rapidapi.com" \\
+  -o bench.svg
 
 # Resolve an exercise from the 873-exercise database (primary + secondary)
-GET https://api.anatome.dev/resolveExercise?exercise=bench+press`}</Code>
+curl "https://anatome.p.rapidapi.com/resolveExercise?exercise=bench+press" \\
+  -H "X-RapidAPI-Key: $RAPIDAPI_KEY" \\
+  -H "X-RapidAPI-Host: anatome.p.rapidapi.com"`}</Code>
+      <P>Direct Worker (dev / self-host / low-traffic embeds — no auth headers):</P>
+      <Code>{`GET https://api.anatome.dev/generateImage?layers=DC2626:chest|F59E0B:triceps,deltoids|FCD34D@0.5:abs&output=raw`}</Code>
 
       <H2 id="attribution">Attribution & License</H2>
       <ul className="text-sm text-muted-foreground leading-relaxed my-2 space-y-1.5 list-disc pl-5">

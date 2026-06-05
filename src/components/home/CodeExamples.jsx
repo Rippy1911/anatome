@@ -1,50 +1,80 @@
 import React, { useState } from "react";
 import { Code2 } from "lucide-react";
+import { PUBLIC_API, RAPIDAPI_BASE, RAPIDAPI_HOST, RAPIDAPI_LISTING_URL } from "@/lib/apiBase";
 import CopyBlock from "./CopyBlock";
 
-const TABS = (base) => ([
+const TABS = [
+  {
+    key: "rapidapi-fetch",
+    label: "RapidAPI (fetch)",
+    code: `// Subscribe at rapidapi.com — keep the key server-side in production
+const res = await fetch(
+  "${RAPIDAPI_BASE}/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw",
+  {
+    headers: {
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
+      "X-RapidAPI-Host": "${RAPIDAPI_HOST}",
+    },
+  }
+);
+const blob = await res.blob();
+// Browser: attach to <img> via blob URL (headers cannot be set on <img src>)
+img.src = URL.createObjectURL(blob);`,
+  },
+  {
+    key: "rapidapi-curl",
+    label: "RapidAPI (curl)",
+    code: `curl "${RAPIDAPI_BASE}/generateImage?layers=DC2626:chest,abs&view=front&output=raw" \\
+  -H "X-RapidAPI-Key: $RAPIDAPI_KEY" \\
+  -H "X-RapidAPI-Host: ${RAPIDAPI_HOST}" \\
+  -o body.svg
+
+# Search exercises (same headers on every endpoint):
+curl "${RAPIDAPI_BASE}/searchExercises?q=bench&limit=5" \\
+  -H "X-RapidAPI-Key: $RAPIDAPI_KEY" \\
+  -H "X-RapidAPI-Host: ${RAPIDAPI_HOST}"`,
+  },
   {
     key: "img",
-    label: "<img> HTML",
-    code: `<img
-  src="${base}/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw"
+    label: "<img> embed",
+    note: (
+      <>
+        Browsers cannot send <span className="font-mono text-foreground">X-RapidAPI-Key</span> on{" "}
+        <span className="font-mono text-foreground">&lt;img src&gt;</span> — use RapidAPI fetch + blob URL above,
+        a server-side proxy, or self-host. Direct{" "}
+        <span className="font-mono text-foreground">api.anatome.dev</span> works for drop-in embeds but is
+        fair-use limited (100 req/day per public host).{" "}
+        <a href={RAPIDAPI_LISTING_URL} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+          Subscribe on RapidAPI
+        </a>{" "}
+        for production server-side traffic.
+      </>
+    ),
+    code: `<!-- Self-host (Apache-2.0) or low-traffic direct embed — no auth headers -->
+<img
+  src="${PUBLIC_API}/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw"
   alt="Muscle diagram"
   width="384"
 />`,
   },
-  {
-    key: "fetch",
-    label: "fetch (JS)",
-    code: `const res = await fetch("${base}/generateImage", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ gender: "male", view: "front", layers: [{ color: "#DC2626", muscles: ["chest"] }] })
-});
-const { svg } = await res.json();`,
-  },
-  {
-    key: "curl",
-    label: "curl",
-    code: `curl "${base}/generateImage?layers=DC2626:chest,abs&view=front&output=raw" \\
-  -o body.svg
-# Or search exercises:
-curl "${base}/searchExercises?q=bench&limit=5"`,
-  },
-]);
+];
 
-export default function CodeExamples({ baseUrl }) {
-  const tabs = TABS(baseUrl);
-  const [active, setActive] = useState("img");
-  const current = tabs.find((t) => t.key === active);
+export default function CodeExamples() {
+  const [active, setActive] = useState("rapidapi-fetch");
+  const current = TABS.find((t) => t.key === active);
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-1">
         <Code2 className="w-4 h-4 text-primary" />
-        <h3 className="font-display font-semibold">Three ways to use it</h3>
+        <h3 className="font-display font-semibold">Three ways to integrate</h3>
       </div>
+      <p className="text-xs text-muted-foreground mb-4">
+        Production integrations authenticate via RapidAPI headers. The{" "}
+        <span className="font-mono text-foreground">&lt;img&gt;</span> tab is for self-host or dev only.
+      </p>
       <div className="flex gap-1 mb-3 flex-wrap">
-        {tabs.map((t) => (
+        {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setActive(t.key)}
@@ -54,7 +84,7 @@ export default function CodeExamples({ baseUrl }) {
           </button>
         ))}
       </div>
-      <CopyBlock code={current.code} />
+      <CopyBlock code={current.code} note={current.note} />
     </div>
   );
 }

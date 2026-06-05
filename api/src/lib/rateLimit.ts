@@ -15,6 +15,7 @@ export interface Env {
   ASSETS?: Fetcher;
   PROXY_SECRET?: string;
   MCP_TRUSTED_KEY?: string;
+  RAPIDAPI_KEY?: string;
   PUBLIC_BASE_URL?: string;
 }
 

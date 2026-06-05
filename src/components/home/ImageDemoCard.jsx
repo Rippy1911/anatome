@@ -27,7 +27,10 @@ export default function ImageDemoCard({ baseUrl }) {
           />
         </div>
         <div className="min-w-0 space-y-3">
-          <CopyBlock code={displayUrl} label="The exact URL used:" />
+          <CopyBlock
+            code={displayUrl}
+            label="The exact URL used (direct api.anatome.dev — fair-use embed path):"
+          />
           <Link to="/playground" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:gap-1.5 transition-all">
             Try changing the URL <ArrowRight className="w-3.5 h-3.5" />
           </Link>

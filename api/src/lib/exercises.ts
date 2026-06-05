@@ -49,11 +49,29 @@ export function count(): number {
   return ALL.length;
 }
 
+/** Strip Base44 legacy `/functions/` prefix (RapidAPI still returns these on some rows). */
+export function normalizeLegacyFunctionPath(src: string): string {
+  if (src.startsWith("/functions/")) return src.replace(/^\/functions/, "");
+  try {
+    const u = new URL(src);
+    if (u.pathname.startsWith("/functions/")) {
+      u.pathname = u.pathname.replace(/^\/functions/, "");
+      return u.toString();
+    }
+  } catch {
+    /* relative or invalid — return as-is */
+  }
+  return src;
+}
+
 /** Make a relative anatome_imageSrc absolute against the public base. */
 export function absoluteImageSrc(src: string | undefined | null, base: string): string | null {
   if (!src) return null;
-  if (typeof src === "string" && src.startsWith("/")) return `${base}${src}`;
-  return src;
+  const normalized = normalizeLegacyFunctionPath(src);
+  const b = base.replace(/\/$/, "");
+  if (normalized.startsWith("http")) return normalized;
+  if (normalized.startsWith("/")) return `${b}${normalized}`;
+  return normalized;
 }
 
 /** Bump when GIF frame timing changes — busts CDN/browser cache on gif_url. */

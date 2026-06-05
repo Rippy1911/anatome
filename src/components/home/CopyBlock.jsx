@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
-export default function CopyBlock({ code, label }) {
+export default function CopyBlock({ code, label, note }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
     navigator.clipboard.writeText(code);
@@ -11,6 +11,7 @@ export default function CopyBlock({ code, label }) {
   return (
     <div className="relative group">
       {label && <div className="text-[11px] font-mono text-muted-foreground mb-1.5">{label}</div>}
+      {note && <p className="text-xs text-muted-foreground leading-relaxed mb-2">{note}</p>}
       <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 pr-12 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100"><code>{code}</code></pre>
       <button
         onClick={copy}

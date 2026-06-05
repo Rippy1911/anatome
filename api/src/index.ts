@@ -23,6 +23,7 @@ import { baseAttribution, exerciseAttribution, ATTRIBUTION, LICENSE, BUILT_BY, T
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, TOOLS } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
+import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
@@ -140,6 +141,15 @@ app.get("/searchExercises", async (c) => {
       ...exerciseAttribution(),
     }, 200, extra);
   }, extra);
+});
+
+// ---- RapidAPI benchmark proxy (marketing site latency comparison; not in OpenAPI) ----
+app.get("/benchmark/rapidapiSearch", async (c) => {
+  const rl = await checkRateLimit(c.req.raw, c.env);
+  if (!rl.allowed) {
+    return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
+  }
+  return rapidapiSearchBenchmark(c.req.query(), c.env);
 });
 
 // ---- exercise GIF (static assets: api/public/gifs/<ext_id>.gif) ----

@@ -52,6 +52,11 @@ python3 scripts/gif-to-video.py --backend blend --suffix .blend --id Air_Bike
 - **KV:** `RATE_LIMIT_KV`
 - **Assets:** `public/` → `ASSETS` binding for `/exerciseGif`
 - **Secrets:** `wrangler secret put PROXY_SECRET` · `wrangler secret put MCP_TRUSTED_KEY`
+- **Optional (home RapidAPI latency demo):** `RAPIDAPI_KEY` — your [RapidAPI Application Key](https://rapidapi.com/slaczka.sebastian/api/anatome) after subscribing (not `PROXY_SECRET`). Set with:
+  ```bash
+  # rapidapi.txt: KEY=your-application-key
+  ./scripts/set-rapidapi-worker-secret.sh
+  ```
 - **Vars:** `PUBLIC_BASE_URL=https://api.anatome.dev`
 
 ## Rules
