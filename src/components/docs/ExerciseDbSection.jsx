@@ -45,6 +45,10 @@ const SCHEMA = `{
     { "color": "#DC2626", "muscles": ["chest"] },
     { "color": "#F59E0B", "muscles": ["deltoids", "triceps"] }
   ],
+  "movementType": "compound",
+  "keywords": ["wide-grip barbell bench press", "chest", "barbell", "intermediate", "strength"],
+  "variations": [{ "ext_id": "Barbell_Bench_Press_-_Medium_Grip", "name": "Barbell Bench Press - Medium Grip", "anatome_imageSrc": "..." }],
+  "relatedExerciseIds": ["Decline_Barbell_Bench_Press", "Dumbbell_Bench_Press"],
   "anatome_imageSrc": "https://api.anatome.dev/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:deltoids,triceps&output=raw"
 }`;
 
