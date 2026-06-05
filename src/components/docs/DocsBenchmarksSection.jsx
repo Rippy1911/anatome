@@ -38,7 +38,7 @@ export default function DocsBenchmarksSection() {
           </tbody>
         </table>
       </div>
-      <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{`# Server render time (Worker compute)
+      <pre className="bg-card border border-border rounded-lg p-4 overflow-x-auto text-xs leading-relaxed font-mono my-3"><code>{`# Server render time (Worker compute)
 curl -sI "${LIVE_API}/generateImage?layers=DC2626:chest&output=raw&probe=1" | grep -i x-render-ms
 
 # Edge cache on repeat GET (not HEAD)

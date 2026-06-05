@@ -40,7 +40,7 @@ const POST_EXAMPLE = `const response = await fetch("${PUBLIC_API}/generateImage"
 const { svg } = await response.json();`;
 
 function Code({ children }) {
-  return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
+  return <pre className="bg-card border border-border rounded-lg p-4 overflow-x-auto text-xs leading-relaxed font-mono my-3"><code>{children}</code></pre>;
 }
 
 export default function ImgUrlSpec() {
@@ -83,7 +83,7 @@ export default function ImgUrlSpec() {
           <div key={i}>
             <p className="text-sm font-medium text-foreground mb-1">{i + 1}. {label}</p>
             <Code>{`GET /generateImage${qs}`}</Code>
-            <div className="rounded-lg border border-border bg-[#f1f5f9] dark:bg-[#0a0e17] p-3 flex justify-center">
+            <div className="rounded-lg border border-border bg-secondary/30 p-3 flex justify-center">
               <img src={`${BASE}${qs}`} alt={label} loading="lazy" className="max-h-64 w-auto" />
             </div>
           </div>

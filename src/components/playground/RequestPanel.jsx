@@ -51,7 +51,7 @@ function CodeBlock({ code }) {
       <Button size="icon" variant="ghost" onClick={copy} className="absolute top-2 right-2 h-7 w-7 z-10">
         {copied ? <Check className="w-3.5 h-3.5 text-primary" /> : <Copy className="w-3.5 h-3.5" />}
       </Button>
-      <pre className="bg-[#0a0e17] border border-border rounded-lg p-3 pr-10 overflow-x-auto text-[11px] leading-relaxed font-mono text-foreground/90 max-h-72">
+      <pre className="bg-card border border-border rounded-lg p-3 pr-10 overflow-x-auto text-[11px] leading-relaxed font-mono text-foreground/90 max-h-72">
         <code>{code}</code>
       </pre>
     </div>

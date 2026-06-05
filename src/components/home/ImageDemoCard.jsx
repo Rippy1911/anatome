@@ -17,7 +17,7 @@ export default function ImageDemoCard({ baseUrl }) {
         <h3 className="font-display font-semibold">See it in action</h3>
       </div>
       <div className="grid sm:grid-cols-[200px_1fr] gap-5 items-start">
-        <div className="rounded-xl border border-border bg-[#f1f5f9] dark:bg-[#0a0e17] flex items-center justify-center h-56 overflow-hidden">
+        <div className="rounded-xl border border-border bg-secondary/30 flex items-center justify-center h-56 overflow-hidden">
           {!loaded && <div className="w-24 h-44 rounded-lg bg-muted animate-pulse" />}
           <img
             src={src}

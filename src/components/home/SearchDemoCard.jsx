@@ -214,7 +214,7 @@ export default function SearchDemoCard({ baseUrl }) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-border bg-[#f1f5f9] dark:bg-[#0a0e17] p-3 min-h-[15rem] flex flex-col items-center justify-center text-center">
+        <div className="rounded-xl border border-border bg-secondary/30 p-3 min-h-[15rem] flex flex-col items-center justify-center text-center">
           {!selected && !loading && (
             <p className="text-xs text-muted-foreground px-4">
               {browsing ? "Pick any exercise below to preview its muscle diagram." : "Click a result to render its muscle diagram."}

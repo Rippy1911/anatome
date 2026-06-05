@@ -18,7 +18,7 @@ export default function DocsMcpCursorSection() {
         <span className="font-mono text-xs">Settings → MCP</span> or{" "}
         <span className="font-mono text-xs">~/.cursor/mcp.json</span>:
       </p>
-      <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{`{
+      <pre className="bg-card border border-border rounded-lg p-4 overflow-x-auto text-xs leading-relaxed font-mono my-3"><code>{`{
   "mcpServers": {
     "anatome": {
       "url": "${MCP_URL}"

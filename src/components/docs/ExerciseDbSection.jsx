@@ -1,7 +1,7 @@
 import React from "react";
 
 function Code({ children }) {
-  return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
+  return <pre className="bg-card border border-border rounded-lg p-4 overflow-x-auto text-xs leading-relaxed font-mono my-3"><code>{children}</code></pre>;
 }
 
 const RAPIDAPI_HEADERS = `{ "X-RapidAPI-Key": process.env.RAPIDAPI_KEY, "X-RapidAPI-Host": "anatome.p.rapidapi.com" }`;
