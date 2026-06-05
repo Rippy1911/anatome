@@ -66,7 +66,30 @@ export default function Api() {
           Loading spec…
         </div>
       )}
-      <div className="bg-white rounded-2xl overflow-hidden border border-border [&_.swagger-ui]:text-black">
+      <div className="rounded-2xl overflow-hidden border border-border bg-card">
+        <style>{`
+          .swagger-ui, .swagger-ui .opblock-body, .swagger-ui .opblock-section-header,
+          .swagger-ui .opblock, .swagger-ui .info .title,
+          .swagger-ui .opblock-tag, .swagger-ui .opblock-summary-control,
+          .swagger-ui .opblock-summary-description, .swagger-ui .parameter__name,
+          .swagger-ui .btn, .swagger-ui .response-col_status,
+          .swagger-ui .response-col_description, .swagger-ui .responses-inner,
+          .swagger-ui .response-col_links { color: hsl(var(--foreground)) !important; }
+          .swagger-ui, .swagger-ui .opblock-body,
+          .swagger-ui .opblock-section-header, .swagger-ui .opblock,
+          .swagger-ui .scheme-container, .swagger-ui .model-container,
+          .swagger-ui .info, .swagger-ui .responses-inner {
+            background: hsl(var(--card)) !important;
+          }
+          .swagger-ui .opblock-tag, .swagger-ui section .opblock-tag {
+            border-bottom-color: hsl(var(--border)) !important;
+          }
+          .swagger-ui .opblock .opblock-section-header {
+            box-shadow: none !important;
+          }
+          .swagger-ui .btn { border-color: hsl(var(--border)) !important; }
+          .swagger-ui .btn:hover { background: hsl(var(--secondary)) !important; }
+        `}</style>
         <div id="swagger-root" />
       </div>
     </div>
