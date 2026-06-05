@@ -11,6 +11,15 @@ const GIF_PLAYBACK_VERSION = "4";
 /** OpenAPI 3.1 spec for Swagger UI / RapidAPI upload. */
 export const OPENAPI_SPEC_URL = `${PUBLIC_API}/openapi`;
 
+/** RapidAPI marketplace host for the Anatome API. */
+export const RAPIDAPI_HOST = "anatome.p.rapidapi.com";
+
+/** RapidAPI gateway base URL for the Anatome API. */
+export const RAPIDAPI_BASE = `https://${RAPIDAPI_HOST}`;
+
+/** Public RapidAPI marketplace listing for the Anatome API. */
+export const RAPIDAPI_LISTING_URL = "https://rapidapi.com/slaczka.sebastian/api/anatome";
+
 /** Legacy alias — prefer PUBLIC_API for Worker routes. */
 export const API_BASE = PUBLIC_API;
 
