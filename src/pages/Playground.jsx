@@ -142,23 +142,23 @@ export default function Playground() {
         <Accordion type="single" collapsible defaultValue="library" className="space-y-3">
           <AccordionItem value="library" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Dumbbell className="w-4 h-4 text-primary" /> Exercise Library</span></AccordionTrigger>
-            <AccordionContent className="pt-1 pb-4">
+            <AccordionContent className="pt-2 pb-5">
               <ExerciseSearch onSelect={handleExerciseSelect} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="layers" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Layers className="w-4 h-4 text-primary" /> Layers</span></AccordionTrigger>
-            <AccordionContent className="pt-1 pb-4">
+            <AccordionContent className="pt-2 pb-5">
               <LayerEditor layers={layers} setLayers={setLayers} activeLayer={activeLayer} setActiveLayer={setActiveLayer} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="body" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><SlidersHorizontal className="w-4 h-4 text-primary" /> Body</span></AccordionTrigger>
-            <AccordionContent className="pt-1 pb-4"><BodyControls settings={settings} onChange={handleSettingsChange} /></AccordionContent>
+            <AccordionContent className="pt-2 pb-5"><BodyControls settings={settings} onChange={handleSettingsChange} /></AccordionContent>
           </AccordionItem>
           <AccordionItem value="api" className="rounded-2xl border border-border bg-card px-4">
             <AccordionTrigger className="text-sm font-semibold"><span className="flex items-center gap-2"><Code2 className="w-4 h-4 text-primary" /> API Request</span></AccordionTrigger>
-            <AccordionContent className="pt-1 pb-4"><RequestPanel settings={settings} layers={layers} baseUrl={baseUrl} /></AccordionContent>
+            <AccordionContent className="pt-2 pb-5"><RequestPanel settings={settings} layers={layers} baseUrl={baseUrl} /></AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>
