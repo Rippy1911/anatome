@@ -14,7 +14,7 @@ export default function Hero({ baseUrl }) {
   return (
     <section className="relative overflow-hidden border-b border-border">
       {/* Background live SVG from our own API */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.07] dark:opacity-[0.12]">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.07] dark:opacity-[0.12] overflow-hidden">
         <img src={heroSrc} alt="" onLoad={() => setLoaded(true)} className="h-[120%] w-auto max-w-none" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background pointer-events-none" />
