@@ -104,6 +104,33 @@ export async function runSelfTest(bodyData: BodyData) {
     const b = searchExercisesLogic({ q: "", limit: 5, offset: 5 });
     return a.results.length === 5 && b.results.length === 5 && a.results[0]?.ext_id !== b.results[0]?.ext_id || "offset pagination failed";
   });
+  T("search_exercises_cursor", () => {
+    const first = searchExercisesLogic({ q: "press", limit: 3, offset: 0 });
+    if (!first.next_cursor) return "missing next_cursor";
+    const second = searchExercisesLogic({ cursor: first.next_cursor, limit: 3 });
+    return second.results.length >= 1 && second.results[0]?.ext_id !== first.results[0]?.ext_id || "cursor pagination failed";
+  });
+  T("exercise_keywords_movement_type", () => {
+    const m = getByName("bench press");
+    if (!m.exercise) return "no bench press";
+    const row = buildExerciseRecord(m.exercise, "https://api.anatome.dev");
+    return (
+      Array.isArray(row.keywords) && (row.keywords as string[]).length >= 3 &&
+      "movementType" in row
+    ) || "keywords/movementType missing";
+  });
+  T("exercise_variations_related", () => {
+    const m = getByName("bench press");
+    if (!m.exercise) return "no bench press";
+    const row = buildExerciseRecord(m.exercise, "https://api.anatome.dev", { withRelations: true });
+    const vars = row.variations as unknown[];
+    const related = row.relatedExerciseIds as string[];
+    return (Array.isArray(vars) && vars.length >= 1 && Array.isArray(related) && related.length >= 1) || "variations/related empty";
+  });
+  T("muscle_info_antagonists", () => {
+    const info = getMuscleInfo("chest", "https://api.anatome.dev");
+    return info && Array.isArray(info.antagonists) && info.antagonists.includes("upper-back") || "antagonists missing";
+  });
   T("list_equipment", () => listEquipment().includes("barbell") || "missing barbell");
   T("muscle_info_chest", () => {
     const info = getMuscleInfo("chest", "https://api.anatome.dev");
@@ -146,6 +173,15 @@ export async function runSelfTest(bodyData: BodyData) {
     return true;
   });
 
+  T("search_default_includes_instructions", () => {
+    const { results } = searchExercisesLogic({ q: "bench press", limit: 1 });
+    if (!results.length) return "no results";
+    const row = formatExercise(results[0], "https://api.anatome.dev", "search", SEARCH_DEFAULT_FIELDS);
+    return (
+      Array.isArray(row.instructions) && (row.instructions as string[]).length >= 1 &&
+      Array.isArray(row.anatome_layers_payload)
+    ) || "search default missing instructions or layers";
+  });
   T("exercise_gif_url_anatome_hosted", () => {
     const { results } = searchExercisesLogic({ q: "bench press", limit: 1 });
     if (!results.length) return "no results";

@@ -5,7 +5,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { renderMuscleSvg } from "./lib/muscleEngine.ts";
-import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION } from "./data/muscleCatalog.ts";
+import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION, ANTAGONISTS } from "./data/muscleCatalog.ts";
 import { getBodyData } from "./lib/bodyData.ts";
 import { payloadFromQuery, sha256 } from "./lib/query.ts";
 import {
@@ -88,7 +88,11 @@ app.post("/generateImage", (c) => generateImage(c));
 // ---- listMuscles ----
 app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const muscles = MUSCLES.map((slug) => ({
-    slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug], body_region: BODY_REGION[slug] || null,
+    slug,
+    name: ANATOMICAL_NAMES[slug],
+    views: SIDE_PRESENCE[slug],
+    body_region: BODY_REGION[slug] || null,
+    antagonists: ANTAGONISTS[slug] || [],
   }));
   return c.json({ ok: true, count: MUSCLES.length, muscles, ...baseAttribution() });
 }));
@@ -117,11 +121,21 @@ app.get("/searchExercises", async (c) => {
     const q = c.req.query();
     const base = baseUrl(c);
     const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
-    const { total, offset, limit, results } = searchExercisesLogic({
-      q: q.q, muscle: q.muscle, equipment: q.equipment, level: q.level, limit: q.limit, offset: q.offset,
+    const { total, offset, limit, next_cursor, results } = searchExercisesLogic({
+      q: q.q,
+      muscle: q.muscle,
+      equipment: q.equipment,
+      level: q.level,
+      limit: q.limit,
+      offset: q.offset,
+      cursor: q.cursor,
     });
     return c.json({
-      ok: true, total_matched: total, offset, limit,
+      ok: true,
+      total_matched: total,
+      offset,
+      limit,
+      next_cursor,
       results: results.map((e) => formatExercise(e, base, "search", fields)),
       ...exerciseAttribution(),
     }, 200, extra);

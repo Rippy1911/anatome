@@ -32,6 +32,8 @@ export default function ExerciseSearch({ onSelect }) {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(null);
+  const [loadedDetail, setLoadedDetail] = useState(null);
+  const [detailLoading, setDetailLoading] = useState(false);
   const debounceRef = useRef(null);
 
   const runSearch = async () => {
@@ -60,14 +62,28 @@ export default function ExerciseSearch({ onSelect }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, muscle, equipment, level]);
 
-  const handleSelect = (ex) => {
+  const handleSelect = async (ex) => {
     const payload = ex.anatome_layers_payload || [];
-    // Build editor layers: red primary, orange secondary, accessory empty (per spec).
     const layers = payload.length
       ? payload.map((l) => ({ color: l.color, muscles: l.muscles || [], opacity: l.opacity != null ? l.opacity : 1 }))
       : [{ color: "#DC2626", muscles: ex.primaryMuscles || [], opacity: 1 }];
     onSelect(layers, ex);
     setLoaded(ex);
+    setLoadedDetail(null);
+    setDetailLoading(true);
+    try {
+      const id = ex.ext_id || ex.id;
+      const params = new URLSearchParams({
+        fields: "name,instructions,keywords,movementType,variations,relatedExerciseIds",
+      });
+      if (id) params.set("id", id);
+      else if (ex.name) params.set("name", ex.name);
+      const res = await fetch(`${PUBLIC_API}/getExercise?${params}`);
+      const data = await res.json();
+      if (data?.ok && data.exercise) setLoadedDetail(data.exercise);
+    } finally {
+      setDetailLoading(false);
+    }
   };
 
   return (
@@ -87,12 +103,27 @@ export default function ExerciseSearch({ onSelect }) {
           </span>
           <button
             type="button"
-            onClick={() => { setLoaded(null); onSelect(null, null); }}
+            onClick={() => { setLoaded(null); setLoadedDetail(null); onSelect(null, null); }}
             className="text-muted-foreground hover:text-foreground shrink-0"
             aria-label="Clear loaded exercise"
           >
             <X className="w-4 h-4" />
           </button>
+        </div>
+      )}
+
+      {loaded && (detailLoading || loadedDetail?.instructions?.length > 0) && (
+        <div className="rounded-lg border border-border bg-secondary/30 px-3 py-2 space-y-1.5">
+          <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Instructions</div>
+          {detailLoading ? (
+            <p className="text-xs text-muted-foreground">Loading steps…</p>
+          ) : (
+            <ol className="list-decimal list-inside text-xs text-foreground space-y-1 max-h-40 overflow-y-auto">
+              {loadedDetail.instructions.map((step, i) => (
+                <li key={i} className="leading-relaxed">{step}</li>
+              ))}
+            </ol>
+          )}
         </div>
       )}
 

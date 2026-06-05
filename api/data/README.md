@@ -83,12 +83,17 @@ python3 scripts/generate-exercise-gifs.py    # writes api/public/gifs/<ext_id>.g
 
 Bulk-friendly responses support sparse field projection:
 
-- `GET /searchExercises?q=bench` — lean list includes `gif_url` + `anatome_imageSrc` (default omits `instructions`)
+- `GET /searchExercises?q=bench` — default includes instructions, images, source muscles, layers, keywords
+- `GET /searchExercises?q=bench&offset=20` or `cursor=<next_cursor>` — pagination
 - `GET /getExercise?name=bench+press&fields=name,instructions,gif_url,anatome_imageSrc`
-- `fields=all` or `fields=*` — every field on the record
+- `fields=all` or `fields=*` — every field on the record (incl. `variations`, `relatedExerciseIds`)
 
 **Instructions** are stored in each bundled row (`instructions: string[]`) from
 free-exercise-db at import time; request them explicitly when listing many exercises.
+
+**Computed fields** (no bundle change): `keywords`, `movementType` (alias of `mechanic`),
+`variations`, `relatedExerciseIds` — included on full `getExercise` responses or when
+listed in `fields=`.
 
 ## Notes
 

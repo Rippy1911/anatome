@@ -7,7 +7,7 @@
 
 import { renderMuscleSvg } from "../lib/muscleEngine.ts";
 import { getBodyData } from "../lib/bodyData.ts";
-import { MUSCLES, ANATOMICAL_NAMES, SIDE_PRESENCE } from "../data/muscleCatalog.ts";
+import { MUSCLES, ANATOMICAL_NAMES, SIDE_PRESENCE, BODY_REGION, ANTAGONISTS } from "../data/muscleCatalog.ts";
 import {
   searchExercisesLogic, formatExercise, getByExtId, getRandom, getByName, lookupExerciseById,
   cleanExercise, resolveExercise as resolveEx,
@@ -37,7 +37,8 @@ export const TOOLS = [
       equipment: { type: "string", description: "Filter by equipment, e.g. 'barbell'" },
       level: { type: "string", enum: ["beginner", "intermediate", "expert"], description: "Filter by difficulty" },
       limit: { type: "number", default: 20, description: "Max results (1-50)" },
-      offset: { type: "number", default: 0, description: "Pagination offset" },
+      offset: { type: "number", default: 0, description: "Pagination offset (ignored when cursor is set)" },
+      cursor: { type: "string", description: "Opaque cursor from a prior search (next page)" },
       fields: { type: "string", description: "Comma-separated fields, or all/* (default: lean search set)" } },
       required: ["q"] } },
   { name: "get_exercise", description: "Fetch exercise(s). Full record by default; use fields to trim (e.g. name,instructions,gif_url). One of: name, id, random.",
@@ -87,7 +88,13 @@ export function handleMcp(body: McpBody, base: string): object {
       return rpcResult(id, { content: [{ type: "text", text: svg }], structuredContent: { muscles_rendered, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, built_by: BUILT_BY, try_also: TRY_ALSO } });
     }
     if (name === "list_muscles") {
-      const muscles = MUSCLES.map((slug) => ({ slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug] }));
+      const muscles = MUSCLES.map((slug) => ({
+        slug,
+        name: ANATOMICAL_NAMES[slug],
+        views: SIDE_PRESENCE[slug],
+        body_region: BODY_REGION[slug] || null,
+        antagonists: ANTAGONISTS[slug] || [],
+      }));
       return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE, built_by: BUILT_BY, try_also: TRY_ALSO } });
     }
     if (name === "resolve_exercise") {
@@ -96,9 +103,9 @@ export function handleMcp(body: McpBody, base: string): object {
     }
     if (name === "search_exercises") {
       const fields = parseFieldsParam(args.fields, SEARCH_DEFAULT_FIELDS);
-      const { total, offset, limit, results } = searchExercisesLogic(args);
+      const { total, offset, limit, next_cursor, results } = searchExercisesLogic(args);
       const payload = {
-        total_matched: total, offset, limit,
+        total_matched: total, offset, limit, next_cursor,
         results: results.map((e) => formatExercise(e, base, "search", fields)),
         attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE,
         exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, built_by: BUILT_BY, try_also: TRY_ALSO,

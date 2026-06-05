@@ -48,6 +48,17 @@ const exerciseResultSchema = {
     gif_url: { type: "string", description: "Anatome-hosted 2-frame exercise demo GIF at /exerciseGif" },
     anatome_imageSrc: { type: "string", description: "Ready-to-embed absolute <img src> URL" },
     anatome_layers_payload: { type: "array", items: { type: "object" } },
+    instructions: { type: "array", items: { type: "string" } },
+    movementType: { type: "string", nullable: true, description: "Alias of mechanic (compound / isolation)" },
+    keywords: { type: "array", items: { type: "string" } },
+    variations: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { ext_id: { type: "string" }, name: { type: "string" }, anatome_imageSrc: { type: "string", nullable: true } },
+      },
+    },
+    relatedExerciseIds: { type: "array", items: { type: "string" } },
   },
 };
 
@@ -107,7 +118,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       },
       "/listMuscles": {
         get: { tags: ["Discovery"], summary: "List all supported muscles", responses: { "200": { description: "Muscle catalog",
-          content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, count: { type: "integer" }, muscles: { type: "array", items: { type: "object", properties: { slug: { type: "string" }, name: { type: "string" }, views: { type: "array", items: { type: "string" } }, body_region: { type: "string", nullable: true } } } } } } } } } } },
+          content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, count: { type: "integer" }, muscles: { type: "array", items: { type: "object", properties: { slug: { type: "string" }, name: { type: "string" }, views: { type: "array", items: { type: "string" } }, body_region: { type: "string", nullable: true }, antagonists: { type: "array", items: { type: "string" } } } } } } } } } } } },
       },
       "/muscleInfo": {
         get: {
@@ -158,7 +169,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
         get: {
           tags: ["Exercise Database"],
           summary: "Search the exercise database",
-          description: "Fuzzy name search across 873 exercises with optional muscle/equipment/level filters.",
+          description: "Fuzzy name search across 873 exercises with optional muscle/equipment/level filters. Default response includes free-exercise-db fields (instructions, images, force, category, etc.) plus Anatome mappings. Use fields= to trim or fields=all for variations and relatedExerciseIds.",
           parameters: [
             { name: "q", in: "query", required: true, schema: { type: "string" }, example: "bench", description: "Name search query" },
             { name: "muscle", in: "query", schema: { type: "string" }, example: "chest", description: "Filter by Anatome muscle slug" },
@@ -166,11 +177,12 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
             { name: "level", in: "query", schema: { type: "string", enum: ["beginner", "intermediate", "expert"] } },
             { name: "limit", in: "query", schema: { type: "integer", default: 20, maximum: 50 }, example: 5 },
             { name: "offset", in: "query", schema: { type: "integer", default: 0, minimum: 0 }, example: 0 },
+            { name: "cursor", in: "query", schema: { type: "string" }, description: "Opaque pagination cursor from prior response next_cursor" },
             { name: "fields", in: "query", schema: { type: "string" }, description: "Comma-separated field list, or all/* for full records" },
           ],
           responses: {
             "200": { description: "Search results", content: { "application/json": { schema: { type: "object", properties: {
-              ok: { type: "boolean" }, total_matched: { type: "integer" }, offset: { type: "integer" }, limit: { type: "integer" }, results: { type: "array", items: exerciseResultSchema },
+              ok: { type: "boolean" }, total_matched: { type: "integer" }, offset: { type: "integer" }, limit: { type: "integer" }, next_cursor: { type: "string", nullable: true }, results: { type: "array", items: exerciseResultSchema },
               attribution: { type: "string" }, license: { type: "string" }, built_by: { type: "string" }, try_also: { type: "string" },
             } } } } },
           },

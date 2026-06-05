@@ -23,20 +23,42 @@ export const EXERCISE_FIELD_KEYS = [
   "anatome_imageSrc",
   "anatome_layers_payload",
   "unmapped_source_muscle",
+  "movementType",
+  "keywords",
+  "variations",
+  "relatedExerciseIds",
 ] as const;
 
 export type ExerciseFieldKey = (typeof EXERCISE_FIELD_KEYS)[number];
 
-/** Default projection for searchExercises (keeps payloads small). */
+/**
+ * Default projection for searchExercises — full free-exercise-db row + Anatome enrichments.
+ * Omits only heavy computed relations (variations, relatedExerciseIds) and unmapped_source_muscle.
+ * Use fields=variations,relatedExerciseIds or fields=all to add those.
+ */
 export const SEARCH_DEFAULT_FIELDS: ReadonlySet<ExerciseFieldKey> = new Set([
+  "id",
   "ext_id",
   "name",
+  "force",
+  "level",
+  "mechanic",
+  "movementType",
+  "equipment",
+  "category",
   "primaryMuscles",
   "secondaryMuscles",
-  "equipment",
-  "level",
+  "source_primaryMuscles",
+  "source_secondaryMuscles",
+  "anatome_primary_slugs",
+  "anatome_secondary_slugs",
+  "instructions",
+  "images",
+  "image_url",
   "gif_url",
   "anatome_imageSrc",
+  "anatome_layers_payload",
+  "keywords",
 ]);
 
 const KEY_SET = new Set<string>(EXERCISE_FIELD_KEYS);

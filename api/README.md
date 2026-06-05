@@ -36,6 +36,17 @@ Regenerate GIFs (optional, already committed under `public/gifs/`):
 python3 scripts/generate-exercise-gifs.py
 ```
 
+Build exercise demo MP4s (OpenRouter + ffmpeg retime to ~1.25s rep):
+
+```bash
+brew install ffmpeg
+export OPENROUTER_API_KEY=sk-or-...
+python3 scripts/gif-to-video.py --id Barbell_Bench_Press_-_Medium_Grip --suffix .openrouter
+# defaults: kling-v3.0-std, 720p, 3s gen → 1.25s rep (~$0.42/video)
+python3 scripts/gif-to-video.py --model alibaba/wan-2.7 --duration 2   # cheaper experiment
+python3 scripts/gif-to-video.py --backend blend --suffix .blend --id Air_Bike
+```
+
 ## Configuration
 
 - **KV:** `RATE_LIMIT_KV`

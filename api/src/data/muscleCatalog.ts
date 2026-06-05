@@ -62,6 +62,27 @@ export const BODY_REGION: Record<string, string> = {
   knees: "lower-body",
 };
 
+/** Opposing / complementary muscle groups for balance-check UX. */
+export const ANTAGONISTS: Record<string, string[]> = {
+  chest: ["upper-back"],
+  "upper-back": ["chest"],
+  biceps: ["triceps"],
+  triceps: ["biceps"],
+  quadriceps: ["hamstring"],
+  hamstring: ["quadriceps"],
+  abs: ["lower-back"],
+  "lower-back": ["abs"],
+  deltoids: ["trapezius"],
+  trapezius: ["deltoids"],
+  gluteal: ["abs"],
+  obliques: ["abs"],
+  forearm: ["biceps"],
+  calves: ["tibialis"],
+  tibialis: ["calves"],
+  adductors: ["gluteal"],
+  neck: ["trapezius"],
+};
+
 export const SIDE_PRESENCE: Record<string, string[]> = {
   abs: ["front"],
   adductors: ["front", "back"],

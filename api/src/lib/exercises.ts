@@ -4,13 +4,17 @@
 
 import exercisesJson from "../../data/exercises.json" assert { type: "json" };
 import {
-  MUSCLES, PALETTE, ANATOMICAL_NAMES, SIDE_PRESENCE, BODY_REGION, normalizeSlug,
+  MUSCLES, PALETTE, ANATOMICAL_NAMES, SIDE_PRESENCE, BODY_REGION, ANTAGONISTS, normalizeSlug,
 } from "../data/muscleCatalog.ts";
 import {
   type ExerciseFieldKey,
   projectRecord,
   SEARCH_DEFAULT_FIELDS,
 } from "./exerciseFields.ts";
+import {
+  deriveKeywords, computeVariations, computeRelatedExerciseIds, needsComputedRelations,
+} from "./exerciseEnrichment.ts";
+import { resolveSearchParams, buildNextSearchCursor } from "./searchCursor.ts";
 
 export interface ExerciseRow {
   id?: string;
@@ -70,16 +74,21 @@ export function exerciseImageUrl(extId: string | undefined | null, base: string)
 export type ExerciseRecordVariant = "search" | "full";
 
 /** Full exercise object before sparse `fields` projection. */
-export function buildExerciseRecord(e: ExerciseRow, base: string): Record<string, unknown> {
+export function buildExerciseRecord(
+  e: ExerciseRow,
+  base: string,
+  opts?: { withRelations?: boolean },
+): Record<string, unknown> {
   const slugsPrimary = e.anatome_primary_slugs || [];
   const slugsSecondary = e.anatome_secondary_slugs || [];
-  return {
+  const record: Record<string, unknown> = {
     id: e.id,
     ext_id: e.ext_id,
     name: e.name,
     force: e.force || null,
     level: e.level || null,
     mechanic: e.mechanic || null,
+    movementType: e.mechanic || null,
     equipment: e.equipment || null,
     category: e.category || null,
     primaryMuscles: e.primaryMuscles || [],
@@ -88,6 +97,7 @@ export function buildExerciseRecord(e: ExerciseRow, base: string): Record<string
     source_secondaryMuscles: e.secondaryMuscles || [],
     anatome_primary_slugs: slugsPrimary,
     anatome_secondary_slugs: slugsSecondary,
+    keywords: deriveKeywords(e),
     instructions: e.instructions || [],
     images: e.images || [],
     image_url: exerciseImageUrl(e.ext_id, base),
@@ -96,6 +106,11 @@ export function buildExerciseRecord(e: ExerciseRow, base: string): Record<string
     anatome_layers_payload: e.anatome_layers_payload || [],
     unmapped_source_muscle: e.unmapped_source_muscle || [],
   };
+  if (opts?.withRelations) {
+    record.variations = computeVariations(e, base);
+    record.relatedExerciseIds = computeRelatedExerciseIds(e);
+  }
+  return record;
 }
 
 export function formatExercise(
@@ -104,7 +119,8 @@ export function formatExercise(
   variant: ExerciseRecordVariant,
   fields: ReadonlySet<ExerciseFieldKey> | null | undefined,
 ): Record<string, unknown> {
-  const record = buildExerciseRecord(e, base);
+  const withRelations = needsComputedRelations(fields === undefined ? null : fields);
+  const record = buildExerciseRecord(e, base, { withRelations });
   if (variant === "search") {
     record.primaryMuscles = e.anatome_primary_slugs || [];
     record.secondaryMuscles = e.anatome_secondary_slugs || [];
@@ -122,33 +138,43 @@ export interface SearchParams {
   level?: string | null;
   limit?: number | string | null;
   offset?: number | string | null;
+  cursor?: string | null;
 }
 
 export function searchExercisesLogic(params: SearchParams): {
   total: number;
   offset: number;
   limit: number;
+  next_cursor: string | null;
   results: ExerciseRow[];
 } {
-  const key = String(params.q || "").trim().toLowerCase();
-  const lim = Math.min(Math.max(Number(params.limit || 20), 1), 50);
-  const off = Math.max(Number(params.offset || 0), 0);
+  const resolved = resolveSearchParams(params);
+  const key = String(resolved.q || "").trim().toLowerCase();
+  const lim = Math.min(Math.max(Number(resolved.limit || 20), 1), 50);
+  const off = Math.max(Number(resolved.offset || 0), 0);
   let matches = ALL;
   if (key) matches = matches.filter((e) => (e.name_lower || e.name || "").toLowerCase().includes(key));
-  if (params.muscle && params.muscle !== "any") {
-    const m = String(params.muscle).toLowerCase();
+  if (resolved.muscle && resolved.muscle !== "any") {
+    const m = String(resolved.muscle).toLowerCase();
     matches = matches.filter((e) =>
       (e.anatome_primary_slugs || []).includes(m) || (e.anatome_secondary_slugs || []).includes(m));
   }
-  if (params.equipment && params.equipment !== "any") {
-    const eq = String(params.equipment).toLowerCase();
+  if (resolved.equipment && resolved.equipment !== "any") {
+    const eq = String(resolved.equipment).toLowerCase();
     matches = matches.filter((e) => String(e.equipment || "").toLowerCase() === eq);
   }
-  if (params.level && params.level !== "any") {
-    const lv = String(params.level).toLowerCase();
+  if (resolved.level && resolved.level !== "any") {
+    const lv = String(resolved.level).toLowerCase();
     matches = matches.filter((e) => String(e.level || "").toLowerCase() === lv);
   }
-  return { total: matches.length, offset: off, limit: lim, results: matches.slice(off, off + lim) };
+  const total = matches.length;
+  return {
+    total,
+    offset: off,
+    limit: lim,
+    next_cursor: buildNextSearchCursor(resolved, off, lim, total),
+    results: matches.slice(off, off + lim),
+  };
 }
 
 export function listEquipment(): string[] {
@@ -160,6 +186,7 @@ export interface MuscleInfo {
   anatomical_name: string;
   views: string[];
   body_region: string | null;
+  antagonists: string[];
   exercise_count: { primary: number; secondary: number };
   top_exercises: { name: string; anatome_imageSrc: string | null }[];
 }
@@ -176,6 +203,7 @@ export function getMuscleInfo(slug: string, base: string, topLimit = 5): MuscleI
     anatomical_name: ANATOMICAL_NAMES[normalized] || normalized,
     views: SIDE_PRESENCE[normalized] || [],
     body_region: BODY_REGION[normalized] || null,
+    antagonists: ANTAGONISTS[normalized] || [],
     exercise_count: { primary: primary.length, secondary: secondary.length },
     top_exercises: primary.slice(0, topLimit).map((e) => ({
       name: e.name as string,

@@ -7,33 +7,66 @@ function Chip({ children, tone = "primary" }) {
   return <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-medium ${cls}`}>{children}</span>;
 }
 
+function exerciseKey(e) {
+  return e?.ext_id || e?.id || e?.name;
+}
+
 export default function SearchDemoCard({ baseUrl }) {
   const [q, setQ] = useState("bench");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
   const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const timer = useRef(null);
+  const muscleImgRef = useRef(null);
 
   useEffect(() => {
     if (timer.current) clearTimeout(timer.current);
-    if (!q.trim()) { setResults([]); return; }
+    if (!q.trim()) { setResults([]); setSelected(null); return; }
     timer.current = setTimeout(async () => {
       setLoading(true);
       try {
         const params = new URLSearchParams({ q, limit: "6" });
         const res = await fetch(`${baseUrl}/searchExercises?${params}`);
         const data = await res.json();
-        setResults(data?.results || []);
-      } catch { setResults([]); }
+        const list = data?.results || [];
+        setResults(list);
+        setSelected((prev) => {
+          const prevKey = exerciseKey(prev);
+          if (prevKey && list.some((e) => exerciseKey(e) === prevKey)) return prev;
+          return list[0] || null;
+        });
+      } catch {
+        setResults([]);
+        setSelected(null);
+      }
       setLoading(false);
     }, 350);
     return () => timer.current && clearTimeout(timer.current);
   }, [q, baseUrl]);
 
-  const pick = (e) => { setSelected(e); setImgLoaded(false); };
+  const pick = (e) => {
+    setSelected(e);
+    setImgLoaded(false);
+    setImgError(false);
+  };
+
   const imgSrc = selected?.anatome_imageSrc ? absApiUrl(selected.anatome_imageSrc) : null;
   const gifSrc = selected ? exerciseMediaUrl(selected) : null;
+
+  // Reset load state when the diagram URL changes; handle browser-cached SVGs that skip onLoad.
+  useEffect(() => {
+    setImgLoaded(false);
+    setImgError(false);
+    const el = muscleImgRef.current;
+    if (el?.complete && el.naturalWidth > 0) setImgLoaded(true);
+  }, [imgSrc]);
+
+  const bindMuscleImg = (node) => {
+    muscleImgRef.current = node;
+    if (node?.complete && node.naturalWidth > 0) setImgLoaded(true);
+  };
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">
@@ -57,7 +90,7 @@ export default function SearchDemoCard({ baseUrl }) {
           <div className="mt-2 rounded-lg border border-border divide-y divide-border max-h-60 overflow-y-auto">
             {results.length === 0 && !loading && <div className="p-3 text-xs text-muted-foreground">No results.</div>}
             {results.map((e) => (
-              <button key={e.id} onClick={() => pick(e)} className={`w-full text-left p-2.5 hover:bg-secondary transition-colors ${selected?.id === e.id ? "bg-secondary" : ""}`}>
+              <button key={exerciseKey(e)} onClick={() => pick(e)} className={`w-full text-left p-2.5 hover:bg-secondary transition-colors ${exerciseKey(selected) === exerciseKey(e) ? "bg-secondary" : ""}`}>
                 <div className="text-sm font-medium truncate">{e.name}</div>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {(e.primaryMuscles || []).slice(0, 3).map((m) => <Chip key={m}>{m}</Chip>)}
@@ -72,13 +105,39 @@ export default function SearchDemoCard({ baseUrl }) {
           {!selected && <p className="text-xs text-muted-foreground px-4">Click a result to render its muscle diagram.</p>}
           {selected && (
             <>
-              <div className="flex-1 flex items-center justify-center gap-3 w-full">
-                <div className="flex items-center justify-center">
-                  {!imgLoaded && <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />}
-                  {imgSrc && <img src={imgSrc} alt={selected.name} onLoad={() => setImgLoaded(true)} className={`max-h-40 w-auto ${imgLoaded ? "block" : "hidden"}`} />}
+              <div className="flex-1 flex items-center justify-center gap-3 w-full min-h-[10rem] relative">
+                <div className="relative flex items-center justify-center min-w-[5rem] min-h-[10rem]">
+                  {imgSrc && !imgLoaded && !imgError && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-40 rounded-lg bg-muted animate-pulse" />
+                    </div>
+                  )}
+                  {imgSrc && !imgError && (
+                    <img
+                      key={imgSrc}
+                      ref={bindMuscleImg}
+                      src={imgSrc}
+                      alt={selected.name}
+                      onLoad={() => setImgLoaded(true)}
+                      onError={() => setImgError(true)}
+                      className={`max-h-40 w-auto transition-opacity duration-200 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+                    />
+                  )}
+                  {!imgSrc && (
+                    <p className="text-[11px] text-muted-foreground px-2">No muscle diagram for this exercise.</p>
+                  )}
+                  {imgError && (
+                    <p className="text-[11px] text-muted-foreground px-2">Diagram failed to load.</p>
+                  )}
                 </div>
                 {gifSrc && (
-                  <img src={gifSrc} alt="" className="max-h-36 w-auto rounded-lg border border-border object-contain bg-background" loading="lazy" />
+                  <img
+                    src={gifSrc}
+                    alt=""
+                    className="max-h-36 w-auto rounded-lg border border-border object-contain bg-background"
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  />
                 )}
               </div>
               <div className="mt-2 w-full">
