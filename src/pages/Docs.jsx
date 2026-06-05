@@ -6,7 +6,7 @@ import DocsBenchmarksSection from "@/components/docs/DocsBenchmarksSection";
 import DocsMcpCursorSection from "@/components/docs/DocsMcpCursorSection";
 
 function Code({ children }) {
-  return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
+  return <pre className="bg-card border border-border rounded-lg p-4 overflow-x-auto text-xs leading-relaxed font-mono text-foreground my-3"><code>{children}</code></pre>;
 }
 function H2({ id, children }) {
   return <h2 id={id} className="font-display text-xl font-bold tracking-tight mt-12 mb-3 scroll-mt-24">{children}</h2>;
