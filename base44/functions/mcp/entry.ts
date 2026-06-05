@@ -71,7 +71,7 @@ async function resolveFromDb(base44, exerciseRaw){
   if((rec.anatome_primary_slugs||[]).length) layers.push({ color:PALETTE.primary, muscles:rec.anatome_primary_slugs });
   if((rec.anatome_secondary_slugs||[]).length) layers.push({ color:PALETTE.secondary, muscles:rec.anatome_secondary_slugs });
   return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers,
-    explanation:`From ExerciseDB: "${rec.name}" — primary: ${(rec.anatome_primary_slugs||[]).join(", ")||"none"}; secondary: ${(rec.anatome_secondary_slugs||[]).join(", ")||"none"}.` };
+    explanation:`From free-exercise-db: "${rec.name}" — primary: ${(rec.anatome_primary_slugs||[]).join(", ")||"none"}; secondary: ${(rec.anatome_secondary_slugs||[]).join(", ")||"none"}.` };
 }
 
 function keywordResolve(exerciseRaw){
@@ -83,7 +83,7 @@ function keywordResolve(exerciseRaw){
 
 async function loadBody(base44){ const records=await base44.asServiceRole.entities.BodyData.list(); const map={}; for(const r of records) map[r.key]=r.parts||[]; return { male:{front:map.bodyFrontMale||[],back:map.bodyBackMale||[]}, female:{front:map.bodyFrontFemale||[],back:map.bodyBackFemale||[]} }; }
 
-// ---- ExerciseDB helpers (inlined from searchExercises / getExercise) ----
+// ---- free-exercise-db helpers (inlined from searchExercises / getExercise) ----
 const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
 const GIF_PLAYBACK_VERSION = "4";
 function exerciseMediaUrl(extId) {

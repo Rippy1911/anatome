@@ -99,7 +99,7 @@ export default function ExerciseSearch({ onSelect }) {
             />
           )}
           <span className="text-xs text-foreground truncate flex-1">
-            Loaded: <span className="font-semibold">{loaded.name}</span> · ExerciseDB (CC0)
+            Loaded: <span className="font-semibold">{loaded.name}</span> · free-exercise-db (CC0)
           </span>
           <button
             type="button"

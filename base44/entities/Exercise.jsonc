@@ -4,7 +4,7 @@
   "properties": {
     "ext_id": {
       "type": "string",
-      "description": "Source ExerciseDB id (e.g. Bench_Press)"
+      "description": "Source free-exercise-db id (e.g. Bench_Press)"
     },
     "name": {
       "type": "string",

@@ -95,7 +95,7 @@ export default function LiveDemo() {
             />
             {result.exercise_image_url && (
               <div className="pt-1">
-                <div className="text-[11px] text-muted-foreground mb-1">ExerciseDB reference photo</div>
+                <div className="text-[11px] text-muted-foreground mb-1">free-exercise-db reference photo</div>
                 <img src={result.exercise_image_url} alt={result.exercise_name_extracted} className="rounded-lg border border-border max-h-28 w-auto" />
               </div>
             )}

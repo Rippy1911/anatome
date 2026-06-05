@@ -120,7 +120,7 @@ export default function Playground() {
             <ExerciseSearch onSelect={handleExerciseSelect} />
           </Section>
           <Section icon={Layers} title="Layers">
-            <p className="text-xs text-muted-foreground mb-3">Default: bench press with primary (red), secondary (amber), and stabilizers (yellow, 50% opacity). ExerciseDB resolves primary + secondary only — add more layers here or via the API.</p>
+            <p className="text-xs text-muted-foreground mb-3">Default: bench press with primary (red), secondary (amber), and stabilizers (yellow, 50% opacity). free-exercise-db resolves primary + secondary only — add more layers here or via the API.</p>
             <LayerEditor layers={layers} setLayers={setLayers} activeLayer={activeLayer} setActiveLayer={setActiveLayer} />
           </Section>
           <Section icon={Code2} title="API Request">

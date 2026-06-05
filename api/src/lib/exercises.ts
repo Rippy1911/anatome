@@ -374,7 +374,7 @@ function resolveFromDb(exerciseRaw: string): Resolved | null {
     exercise: rec.name as string, matched: layers.length > 0, source: "exercise_db", layers,
     image_src: rec.anatome_imageSrc,
     ext_id: rec.ext_id, equipment: rec.equipment, level: rec.level, category: rec.category,
-    explanation: `From ExerciseDB: "${rec.name}" — primary: ${(rec.anatome_primary_slugs || []).join(", ") || "none"}; secondary: ${(rec.anatome_secondary_slugs || []).join(", ") || "none"}.`,
+    explanation: `From free-exercise-db: "${rec.name}" — primary: ${(rec.anatome_primary_slugs || []).join(", ") || "none"}; secondary: ${(rec.anatome_secondary_slugs || []).join(", ") || "none"}.`,
   };
 }
 

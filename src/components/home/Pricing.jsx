@@ -29,7 +29,7 @@ export default function Pricing() {
         <ul className="space-y-2.5 mt-5 flex-1">
           <Feature>300 requests/month included (Basic plan)</Feature>
           <Feature>$0.001 per request above the monthly allowance</Feature>
-          <Feature>All endpoints — images, ExerciseDB, MCP</Feature>
+          <Feature>All endpoints — images, free-exercise-db, MCP</Feature>
           <Feature>Unlimited from localhost for development & testing</Feature>
           <Feature>Apache-2.0 — self-host for free anytime</Feature>
         </ul>

@@ -29,7 +29,7 @@ function findBestInList(all,key){
   return bestScore>0?best:null;
 }
 
-// ExerciseDB entity: fuzzy name match -> build layers from mapped slugs.
+// free-exercise-db entity: fuzzy name match -> build layers from mapped slugs.
 async function resolveFromDb(base44, exerciseRaw){
   const key=String(exerciseRaw||"").trim().toLowerCase().replace(/\s+/g," ");
   if(!key) return null;
@@ -46,7 +46,7 @@ async function resolveFromDb(base44, exerciseRaw){
   if((rec.anatome_secondary_slugs||[]).length) layers.push({ color:PALETTE.secondary, muscles:rec.anatome_secondary_slugs });
   return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers,
     image_src:rec.anatome_imageSrc, ext_id:rec.ext_id, equipment:rec.equipment, level:rec.level, category:rec.category,
-    explanation:`From ExerciseDB: "${rec.name}" — primary: ${(rec.anatome_primary_slugs||[]).join(", ")||"none"}; secondary: ${(rec.anatome_secondary_slugs||[]).join(", ")||"none"}.` };
+    explanation:`From free-exercise-db: "${rec.name}" — primary: ${(rec.anatome_primary_slugs||[]).join(", ")||"none"}; secondary: ${(rec.anatome_secondary_slugs||[]).join(", ")||"none"}.` };
 }
 
 function keywordFallback(exerciseRaw){
@@ -98,7 +98,7 @@ Deno.serve(async (req)=>{
     if(req.method==="POST"){ try { const b=await req.json(); exercise=b.exercise||""; } catch { exercise=""; } }
     else { exercise=new URL(req.url).searchParams.get("exercise")||""; }
 
-    // ExerciseDB fuzzy match, then keyword fallback
+    // free-exercise-db fuzzy match, then keyword fallback
     let r=null;
     try { r=await resolveFromDb(base44, exercise); } catch(e){ console.warn("db fallback failed:", e.message); }
     if(!r) r=keywordFallback(exercise);

@@ -6,10 +6,10 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const SOURCE_URL = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
 
-// Map ExerciseDB source muscle names -> Anatome canonical slugs (arrays, can be 1+).
+// Map free-exercise-db source muscle names -> Anatome canonical slugs (arrays, can be 1+).
 const MUSCLE_NAME_MAP = {
   "abdominals": ["abs"],
-  "abductors": ["adductors"],     // ExerciseDB uses "abductors" for hip work; nearest Anatome slug
+  "abductors": ["adductors"],     // free-exercise-db uses "abductors" for hip work; nearest Anatome slug
   "adductors": ["adductors"],
   "biceps": ["biceps"],
   "calves": ["calves"],
