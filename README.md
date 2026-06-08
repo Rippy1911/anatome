@@ -2,6 +2,8 @@
 
 # Anatome
 
+[![Built with Pi](https://img.shields.io/badge/built_with-pi-purple)](https://pi.dev)
+
 **Muscle group image generator API + ExerciseDB.**
 Multi-color anatomical SVGs, MCP-compatible, 873 exercises pre-mapped. By [NextSolutions](https://nextsolutions.studio).
 
