@@ -13,6 +13,8 @@ _Live example from the production API at [api.anatome.dev](https://api.anatome.d
 
 ---
 
+[![Built with Pi](https://img.shields.io/badge/built_with-pi-purple)](https://pi.dev)
+
 ## What is this?
 
 Anatome turns muscle groups (and exercise names) into clean, colorable anatomical
