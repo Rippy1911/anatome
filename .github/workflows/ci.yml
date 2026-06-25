@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.detect.outputs.exists == 'true'
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
           cache-dependency-path: api/pnpm-lock.yaml
       - name: Install
@@ -96,7 +96,7 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.detect.outputs.exists == 'true'
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
           cache-dependency-path: api/pnpm-lock.yaml
       - name: Install
