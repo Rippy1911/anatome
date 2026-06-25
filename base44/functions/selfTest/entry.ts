@@ -14,22 +14,22 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // trusted internal header; if neither is available, run via the documented Bearer path.
 
 // Constant-time-ish token compare for Deno (no crypto.timingSafeEqual available).
-async function tokenEquals(supplied: string, stored: string): Promise<boolean> {
-  if (!stored) return false;                       // unset config → never accept
+async function tokenEquals(supplied, stored) {
+  if (!stored) return false;
   if (typeof supplied !== 'string' || supplied.length === 0) return false;
   const enc = new TextEncoder();
   const [a, b] = await Promise.all([
     crypto.subtle.digest('SHA-256', enc.encode(supplied)),
     crypto.subtle.digest('SHA-256', enc.encode(stored)),
   ]);
-  const hex = (buf: ArrayBuffer): string => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
+  const hex = (buf) => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
   return hex(a) === hex(b);
 }
 
 // Loopback detection: trust the socket peer if Base44 reports a loopback host. Base44 functions
 // receive req.url as the full URL; we treat an explicit loopback host as internal. We also honor
 // x-forwarded-for only when its FIRST hop is loopback (a direct local proxy), NOT a public chain.
-function isLoopback(req: Request): boolean {
+function isLoopback(req) {
   try {
     const host = new URL(req.url).hostname.toLowerCase();
     if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]') return true;
@@ -41,7 +41,7 @@ function isLoopback(req: Request): boolean {
 
 // Trusted-internal bypass: PROXY_SECRET (RapidAPI) or MCP_TRUSTED_KEY, compared constant-time-ish
 // against the configured env values. Either present-and-valid → allowed.
-async function hasTrustedBypass(req: Request): Promise<boolean> {
+async function hasTrustedBypass(req) {
   const proxySecret = Deno.env.get('PROXY_SECRET');
   const mcpKey = Deno.env.get('MCP_TRUSTED_KEY');
   const proxyHdr = req.headers.get('x-rapidapi-proxy-secret') || '';
@@ -52,7 +52,7 @@ async function hasTrustedBypass(req: Request): Promise<boolean> {
 }
 
 // Returns a Response ONLY if the request is unauthorized; null if it passed.
-async function enforceSelfTestAuth(req: Request): Promise<Response | null> {
+async function enforceSelfTestAuth(req) {
   if (isLoopback(req)) return null;
   if (await hasTrustedBypass(req)) return null;
   const stored = Deno.env.get('ADMIN_TOKEN');

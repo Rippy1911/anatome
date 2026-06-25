@@ -4,29 +4,22 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // maps each exercise's source muscle names to Anatome's 23 canonical slugs,
 // pre-computes the compact GET image URL, and stores everything in the Exercise entity.
 //
-// SECURITY: admin/import endpoint — must NOT be public. Previously had a broken half-check
-// (auth.me() only blocked logged-in non-admins; anonymous callers bypassed it and could wipe +
-// rewrite the entire Exercise table via a single curl). Now gated behind a Bearer ADMIN_TOKEN
-// env var (constant-time-ish compare via SHA-256 digests). Returns 503 if ADMIN_TOKEN is unset
-// (before touching any data — the Exercise.list + delete loop NEVER runs) and 401 on a
-// missing/wrong token.
+// SECURITY: admin/import endpoint — gated behind Bearer ADMIN_TOKEN env var.
+// Returns 503 if ADMIN_TOKEN is unset, 401 on missing/wrong token.
 
-// Constant-time-ish token compare for Deno (no crypto.timingSafeEqual available).
-async function tokenEquals(supplied: string, stored: string): Promise<boolean> {
-  if (!stored) return false;                       // unset config → never accept
+async function tokenEquals(supplied, stored) {
+  if (!stored) return false;
   if (typeof supplied !== 'string' || supplied.length === 0) return false;
   const enc = new TextEncoder();
   const [a, b] = await Promise.all([
     crypto.subtle.digest('SHA-256', enc.encode(supplied)),
     crypto.subtle.digest('SHA-256', enc.encode(stored)),
   ]);
-  const hex = (buf: ArrayBuffer): string => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
+  const hex = (buf) => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
   return hex(a) === hex(b);
 }
 
-// Returns a Response ONLY if the request is unauthorized; null if it passed.
-// ADMIN_TOKEN unset → 503. Missing/wrong Bearer → 401. Correct Bearer → null (proceed).
-async function enforceAdminAuth(req: Request): Promise<Response | null> {
+async function enforceAdminAuth(req) {
   const stored = Deno.env.get('ADMIN_TOKEN');
   if (!stored) {
     return Response.json({ ok: false, error: 'Admin token not configured' }, { status: 503 });
@@ -34,21 +27,20 @@ async function enforceAdminAuth(req: Request): Promise<Response | null> {
   const authHeader = req.headers.get('authorization') || req.headers.get('Authorization') || '';
   const m = /^Bearer\s+(.+)$/i.exec(authHeader.trim());
   if (!m) {
-    return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const ok = await tokenEquals(m[1], stored);
   if (!ok) {
-    return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
   return null;
 }
 
 const SOURCE_URL = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
 
-// Map free-exercise-db source muscle names -> Anatome canonical slugs (arrays, can be 1+).
 const MUSCLE_NAME_MAP = {
   "abdominals": ["abs"],
-  "abductors": ["adductors"],     // free-exercise-db uses "abductors" for hip work; nearest Anatome slug
+  "abductors": ["adductors"],
   "adductors": ["adductors"],
   "biceps": ["biceps"],
   "calves": ["calves"],
@@ -88,8 +80,6 @@ function compactLayers(primarySlugs, secondarySlugs){
 
 Deno.serve(async (req)=>{
   try {
-    // Auth gate — MUST run before fetch(SOURCE_URL) and before the Exercise.list + delete loop.
-    // This replaces the old broken auth.me() half-check that anonymous callers could bypass.
     const authFail = await enforceAdminAuth(req);
     if (authFail) return authFail;
 
@@ -99,7 +89,6 @@ Deno.serve(async (req)=>{
     if(!resp.ok) return Response.json({ ok:false, error:`fetch ${resp.status}` }, { status:502 });
     const data=await resp.json();
 
-    // Clear existing to keep import idempotent (concurrent batches to avoid timeout).
     const existing=await base44.asServiceRole.entities.Exercise.list("-created_date", 2000);
     for(let i=0;i<existing.length;i+=25){
       await Promise.all(existing.slice(i,i+25).map((e)=>base44.asServiceRole.entities.Exercise.delete(e.id)));
@@ -113,8 +102,6 @@ Deno.serve(async (req)=>{
       if(primary.length) layers.push({ color:PALETTE.primary, muscles:primary });
       if(secondary.length) layers.push({ color:PALETTE.secondary, muscles:secondary });
       const compact=compactLayers(primary, secondary);
-      // Stored as a relative path; getExercise/resolveExercise rewrite to an absolute
-      // public URL using the request's forwarded host so <img src> works anonymously.
       const imageSrc=compact
         ? `/functions/generateImage?gender=male&view=dual&layers=${encodeURIComponent(compact)}&output=raw`
         : "";
@@ -131,7 +118,6 @@ Deno.serve(async (req)=>{
       };
     });
 
-    // Bulk insert in chunks.
     let created=0;
     for(let i=0;i<records.length;i+=100){
       const chunk=records.slice(i,i+100);
