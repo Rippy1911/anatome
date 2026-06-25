@@ -110,7 +110,7 @@ Deno.serve(async (req)=>{
       results: results.map((e)=>toResult(e, base)),
       attribution: ATTRIBUTION,
       exercise_db_attribution: EXERCISE_DB_ATTRIBUTION,
-      license: "MIT + CC0-1.0",
+      license: "Apache-2.0",
       built_by: "NextSolutions — nextsolutions.studio",
       try_also: "AI fitness coach at airon.coach",
     }), { headers });

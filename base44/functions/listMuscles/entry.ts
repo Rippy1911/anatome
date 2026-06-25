@@ -10,7 +10,7 @@ Deno.serve(async (req) => {
     createClientFromRequest(req);
     const muscles = MUSCLES.map((slug) => ({ slug, name: ANATOMICAL_NAMES[slug], views: SIDE_PRESENCE[slug] }));
     return Response.json({
-      ok: true, count: MUSCLES.length, muscles, attribution: ATTRIBUTION, license: "MIT",
+      ok: true, count: MUSCLES.length, muscles, attribution: ATTRIBUTION, license: "Apache-2.0",
     }, { headers: { "Access-Control-Allow-Origin": "*" } });
   } catch (error) {
     return Response.json({ ok: false, error: error.message }, { status: 500 });
