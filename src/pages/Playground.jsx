@@ -16,6 +16,7 @@ import { DEMO_LAYERS } from "@/data/muscleCatalog";
 const DEFAULT_SETTINGS = {
   gender: "male", view: "dual", bodyColor: "#3f3f3f", borderColor: "#dfdfdf",
   borderWidth: 1, background: "transparent", width: 768, height: 1024,
+  contour: "on", contourColor: "", contourStroke: "", contourWidth: 1,
 };
 
 function Section({ icon: Icon, title, children, className = "" }) {
@@ -81,6 +82,10 @@ export default function Playground() {
       bodyColor={settings.bodyColor}
       borderColor={settings.borderColor}
       borderWidth={settings.borderWidth}
+      contour={settings.contour}
+      contourColor={settings.contourColor}
+      contourStroke={settings.contourStroke}
+      contourWidth={settings.contourWidth}
       background={settings.background === "transparent" ? "transparent" : settings.background}
       bodyData={bodyData}
       onMuscleClick={handleMuscleClick}

@@ -18,6 +18,11 @@ dist-ssr/
 .env.*
 !.env.*.example
 *.local
+rapidapi.txt
+
+# Stray root-level pnpm artifacts (root project uses npm; api/ has its own)
+/pnpm-lock.yaml
+/pnpm-workspace.yaml
 
 # Logs
 *.log

@@ -19,6 +19,7 @@ export interface Env {
   RAPIDAPI_KEY?: string;
   PUBLIC_BASE_URL?: string;
   ADMIN_TOKEN?: string;
+  GITHUB_TOKEN?: string;
 }
 
 export const IP_DAY_LIMIT = 1000;

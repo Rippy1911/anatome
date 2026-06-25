@@ -35,6 +35,14 @@ export interface RenderPayload {
   body_color?: string;
   border_color?: string;
   border_width?: number;
+  // Body contour (silhouette behind the muscles):
+  //   "on"     — fill with contour_color + stroke contour_stroke (default; POC look)
+  //   "stroke" — outline only (fill none; upstream react-native-body-highlighter look)
+  //   "off"    — do not render the contour (muscles float on the background)
+  contour?: string;
+  contour_color?: string;   // fill of the contour; defaults to body_color
+  contour_stroke?: string;  // stroke of the contour; defaults to border_color
+  contour_width?: number;   // stroke width; defaults to border_width
   layers?: RenderLayer[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   per_muscle?: Record<string, any>;
@@ -59,6 +67,10 @@ const DEFAULTS = {
   body_color: "#282828",
   border_color: "#dfdfdf",
   border_width: 1.5,
+  contour: "on",
+  contour_color: undefined as string | undefined,
+  contour_stroke: undefined as string | undefined,
+  contour_width: undefined as number | undefined,
 };
 
 function esc(s: unknown): string {
@@ -127,19 +139,21 @@ function renderSide(
   transform: string | null,
   outline: string,
 ): { svg: string; rendered: string[] } {
-  const { body_color, border_color, border_width } = opts;
+  const { body_color, border_color, border_width, contour, contour_color, contour_stroke, contour_width } = opts;
   const rendered = new Set<string>();
   const out: string[] = [];
 
-  // Body contour: the silhouette drawn behind the muscles. Filled with the
-  // body color (so the gaps between muscles and the head/hands/feet show the
-  // body base, not the raw canvas background) and stroked with the border color
-  // for the outer silhouette edge. This is what the POC/base44 customization
-  // renders; the upstream library uses fill="none" but Anatome fills it so the
-  // body reads as a solid form rather than floating muscle shapes.
-  if (outline) {
+  // Body contour: the silhouette drawn behind the muscles.
+  //   contour="on"     -> fill=contour_color (default body_color) + stroke (POC look)
+  //   contour="stroke" -> fill=none + stroke (upstream react-native-body-highlighter look)
+  //   contour="off"    -> skip entirely (muscles float on the background)
+  // contour_color/stroke/width default to body_color / border_color / border_width.
+  if (outline && contour !== "off") {
+    const cFill = contour === "stroke" ? "none" : (contour_color || body_color);
+    const cStroke = contour_stroke || border_color;
+    const cWidth = contour_width != null ? contour_width : border_width;
     out.push(
-      `<path d="${outline}" fill="${esc(body_color)}" stroke="${esc(border_color)}" stroke-width="${border_width}" stroke-linecap="butt" data-contour="body"/>`
+      `<path d="${outline}" fill="${esc(cFill)}" stroke="${esc(cStroke)}" stroke-width="${cWidth}" stroke-linecap="butt" data-contour="body"/>`
     );
   }
 
@@ -189,6 +203,8 @@ export function renderMuscleSvg(
   const p = { ...DEFAULTS, ...payload } as typeof DEFAULTS & RenderPayload;
   const gender: "male" | "female" = p.gender === "female" ? "female" : "male";
   const view = ["front", "back", "dual"].includes(p.view as string) ? (p.view as string) : "dual";
+  const contour = ["on", "off", "stroke"].includes(p.contour as string) ? (p.contour as string) : "on";
+  p.contour = contour;
   const data: SideData = (bodyData && bodyData[gender]) || { front: [], back: [] };
 
   const res = buildResolution(p);
