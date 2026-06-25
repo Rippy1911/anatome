@@ -68,7 +68,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
     info: {
       title: "Anatome — Muscle Group Image Generator API",
       version: "2.0.0",
-      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercises from free-exercise-db (CC0). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible. Built by NextSolutions — nextsolutions.studio",
+      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercises from free-exercise-db (CC0). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
       termsOfService: "https://anatome.dev/tos",
       contact: { name: "NextSolutions", url: "https://nextsolutions.studio", email: "contact@nextsolutions.studio" },
       license: { name: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
@@ -97,7 +97,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
             "200": { description: "Rendered SVG", content: { "application/json": { schema: { type: "object", properties: {
               ok: { type: "boolean" }, svg: { type: "string" }, format: { type: "string" }, gender: { type: "string" },
               view: { type: "string" }, muscles_rendered: { type: "array", items: { type: "string" } },
-              available_muscles_count: { type: "integer" }, attribution: { type: "string" }, license: { type: "string" }, duration_ms: { type: "integer" },
+              available_muscles_count: { type: "integer" }, attribution: { type: "string" }, attribution_source: { type: "string" }, license: { type: "string" }, duration_ms: { type: "integer" },
             } } }, "image/svg+xml": { schema: { type: "string" } } } },
             "500": { description: "Server error" },
           },
@@ -183,7 +183,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
           responses: {
             "200": { description: "Search results", content: { "application/json": { schema: { type: "object", properties: {
               ok: { type: "boolean" }, total_matched: { type: "integer" }, offset: { type: "integer" }, limit: { type: "integer" }, next_cursor: { type: "string", nullable: true }, results: { type: "array", items: exerciseResultSchema },
-              attribution: { type: "string" }, license: { type: "string" }, built_by: { type: "string" }, try_also: { type: "string" },
+              exercise_db_attribution: { type: "string" }, license: { type: "string" },
             } } } } },
           },
         },

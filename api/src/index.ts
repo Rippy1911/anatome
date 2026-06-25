@@ -19,7 +19,7 @@ import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
 import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, type Env } from "./lib/rateLimit.ts";
-import { baseAttribution, exerciseAttribution, ATTRIBUTION, LICENSE, BUILT_BY, TRY_ALSO } from "./lib/attribution.ts";
+import { serviceAttribution, imageAttribution, exerciseDataAttribution } from "./lib/attribution.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, TOOLS } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
@@ -44,7 +44,7 @@ app.get("/", (c) => c.json({
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
     "/exerciseGif", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/selfTest",
   ],
-  ...baseAttribution(),
+  ...serviceAttribution(),
 }));
 
 // ---- generateImage (GET query + POST JSON) ----
@@ -80,7 +80,7 @@ async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Re
     ok: true, svg, format: "svg", gender, view, muscles_rendered,
     available_muscles_count: MUSCLES.length,
     rate_limit: { source: rl.source, limit_type: rl.key_type, remaining: rl.remaining != null ? rl.remaining : null, limit: rl.limit, reset_at: rl.reset_at },
-    ...baseAttribution(), duration_ms,
+    ...imageAttribution(), duration_ms,
   }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl), ...timing } });
 }
 app.get("/generateImage", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => generateImage(c)));
@@ -95,22 +95,22 @@ app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
     body_region: BODY_REGION[slug] || null,
     antagonists: ANTAGONISTS[slug] || [],
   }));
-  return c.json({ ok: true, count: MUSCLES.length, muscles, ...baseAttribution() });
+  return c.json({ ok: true, count: MUSCLES.length, muscles });
 }));
 
 // ---- muscleInfo ----
 app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const slug = c.req.query("slug");
-  if (!slug) return c.json({ ok: false, error: "provide slug query param", ...baseAttribution() }, 400);
+  if (!slug) return c.json({ ok: false, error: "provide slug query param", ...imageAttribution() }, 400);
   const info = getMuscleInfo(slug, baseUrl(c));
-  if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...baseAttribution() }, 404);
-  return c.json({ ok: true, ...info, ...baseAttribution() });
+  if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...imageAttribution() }, 404);
+  return c.json({ ok: true, ...info, ...imageAttribution() });
 }));
 
 // ---- listEquipment ----
 app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const equipment = listEquipment();
-  return c.json({ ok: true, count: equipment.length, equipment, ...exerciseAttribution() });
+  return c.json({ ok: true, count: equipment.length, equipment, ...exerciseDataAttribution() });
 }));
 
 // ---- searchExercises ----
@@ -144,7 +144,7 @@ app.get("/searchExercises", (c) => {
       limit,
       next_cursor,
       results: results.map((e) => formatExercise(e, base, "search", fields)),
-      ...exerciseAttribution(),
+      ...exerciseDataAttribution(),
     }, 200, extra);
   }, hitHeaders);
 });
@@ -201,7 +201,7 @@ app.get("/getExercise", (c) => {
     const extra = rateHeaders(rl);
     const q = c.req.query();
     const base = baseUrl(c);
-    const meta = exerciseAttribution();
+    const meta = exerciseDataAttribution();
     const limit = Math.min(Number(q.limit || 10), 50);
     const fields = parseFieldsParam(q.fields, null);
 
@@ -227,7 +227,7 @@ async function resolveRoute(c: { req: { raw: Request; query: () => Record<string
   const r = resolveEx(exercise, baseUrl(c));
   return new Response(JSON.stringify({
     ok: true, ...r,
-    ...exerciseAttribution(),
+    ...exerciseDataAttribution(),
   }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
 }
 app.get("/resolveExercise", (c) => resolveRoute(c));
@@ -243,7 +243,7 @@ app.post("/workoutImage", async (c) => {
   try { body = await c.req.json(); } catch { body = {}; }
   const exercises = Array.isArray(body.exercises) ? body.exercises.map(String) : [];
   if (!exercises.length) {
-    return c.json({ ok: false, error: "provide exercises array with at least one name", ...baseAttribution() }, 400, rateHeaders(rl));
+    return c.json({ ok: false, error: "provide exercises array with at least one name", ...imageAttribution() }, 400, rateHeaders(rl));
   }
   const base = baseUrl(c);
   const result = workoutImageLogic({
@@ -273,7 +273,7 @@ app.post("/workoutImage", async (c) => {
   }
   return c.json({
     ok: true, ...result, anatome_imageSrc,
-    ...baseAttribution(),
+    ...imageAttribution(),
   }, 200, rateHeaders(rl));
 });
 

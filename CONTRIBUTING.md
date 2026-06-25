@@ -57,9 +57,10 @@ PRs with failing checks will not be merged.
 
 ## Things to know before you change the API
 
-- Every public API JSON response must keep its attribution fields
-  (`attribution`, `attribution_source`, `license`, `built_by`, `try_also`).
-  Don't remove them.
+- Every public API JSON response that carries third-party data must keep its
+  legal attribution fields (`attribution`, `attribution_source`, `license`, plus
+  `exercise_db_attribution` on exercise responses). Don't remove them. The
+  `built_by`/`try_also` marketing fields are intentionally omitted.
 - The rate-limit model is intentional (free for testing; per-IP and per-host day
   limits; a monthly tier gate). Don't change it without maintainer sign-off.
 - AI features are internal-only and live in the frontend. The public API has **no**

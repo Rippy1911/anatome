@@ -21,8 +21,8 @@
 - [ ] Frontend: `npm run lint && npm run typecheck` pass
 - [ ] API: `pnpm test && pnpm run worker:test` pass
 - [ ] `selfTest` reports **≥ 39/39** (never fewer)
-- [ ] Attribution fields preserved in all API responses
-      (`attribution`, `attribution_source`, `license`, `built_by`, `try_also`)
+- [ ] Legal attribution fields preserved in API responses
+      (`attribution`, `attribution_source`, `license`, `exercise_db_attribution` where applicable)
 - [ ] No new AI/LLM endpoints in the public API
 - [ ] No breaking changes to existing endpoint URLs / behavior
 - [ ] Rate-limit model unchanged (or change approved by a maintainer)
