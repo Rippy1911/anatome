@@ -69,7 +69,7 @@ const DEFAULTS = {
   // from the contour fill is what gives un-highlighted muscles visible
   // definition — the previous body_color=#282828 + contour filled with
   // body_color merged into one blob.
-  body_color: "#777777",
+  body_color: "#575757",
   border_color: "#c8c8c8",
   border_width: 2,
   contour: "on",
