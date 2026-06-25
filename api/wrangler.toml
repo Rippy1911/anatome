@@ -11,10 +11,21 @@ binding = "ASSETS"
 # Rate-limit storage (replaces the Base44 RateLimit entity).
 # Create with:  wrangler kv namespace create RATE_LIMIT_KV
 # then paste the returned id below (and a separate preview_id for `wrangler dev`).
+# KV is now the fallback; the primary counter is the RateLimiterDO Durable Object
+# below (no daily write quota). KV stays for local dev without a DO binding.
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
 id = "42bad01f54734ee2a1a97efdb7cc617d"
 preview_id = "c3ba21bd8352432d9754e6a9c68b594b"
+
+# Durable Object rate limiter (primary counter). One instance per rate-limit key.
+[[durable_objects.bindings]]
+name = "RATE_LIMIT_DO"
+class_name = "RateLimiterDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiterDO"]
 
 [vars]
 # Non-secret config only. Secrets are set with `wrangler secret put`:
@@ -33,6 +44,14 @@ routes = [
 [[env.production.kv_namespaces]]
 binding = "RATE_LIMIT_KV"
 id = "42bad01f54734ee2a1a97efdb7cc617d"
+
+[[env.production.durable_objects.bindings]]
+name = "RATE_LIMIT_DO"
+class_name = "RateLimiterDO"
+
+[[env.production.migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiterDO"]
 
 [env.production.vars]
 PUBLIC_BASE_URL = "https://api.anatome.dev"

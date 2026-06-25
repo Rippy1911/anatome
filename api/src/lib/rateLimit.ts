@@ -12,6 +12,7 @@
 
 export interface Env {
   RATE_LIMIT_KV: KVNamespace;
+  RATE_LIMIT_DO?: DurableObjectNamespace;
   ASSETS?: Fetcher;
   PROXY_SECRET?: string;
   MCP_TRUSTED_KEY?: string;
@@ -115,6 +116,34 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
   const hash = await sha256(useHost ? (host as string) : ip);
   const key = `${key_type}:${hash}:${date}`;
 
+  // Prefer the Durable Object counter (no KV quota; single-threaded per key).
+  // Fall back to KV when the DO binding is absent (local dev / older deploys).
+  if (env.RATE_LIMIT_DO) {
+    const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
+    const doUrl = new URL("https://do/check");
+    doUrl.searchParams.set("limit", String(limit));
+    doUrl.searchParams.set("key_type", key_type);
+    doUrl.searchParams.set("date", date);
+    doUrl.searchParams.set("reset", String(reset));
+    const res = await stub.fetch(doUrl.toString());
+    const result = (await res.json()) as RateResult;
+    // The DO returns `reset` but not `reset_at`; add it here for response parity.
+    result.reset_at = reset_at;
+    return result;
+  }
+
+  return checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
+}
+
+/** Legacy KV-backed counter — used when no Durable Object binding is configured. */
+async function checkRateLimitKv(
+  env: Env,
+  key: string,
+  key_type: string,
+  limit: number,
+  reset: number,
+  reset_at: string,
+): Promise<RateResult> {
   const current = await env.RATE_LIMIT_KV.get(key);
   const count = current ? parseInt(current, 10) || 0 : 0;
 
