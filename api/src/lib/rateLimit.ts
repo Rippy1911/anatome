@@ -17,6 +17,7 @@ export interface Env {
   MCP_TRUSTED_KEY?: string;
   RAPIDAPI_KEY?: string;
   PUBLIC_BASE_URL?: string;
+  ADMIN_TOKEN?: string;
 }
 
 export const IP_DAY_LIMIT = 1000;
@@ -47,6 +48,7 @@ function clientIp(req: Request): string {
     (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
     "unknown";
 }
+export { clientIp };
 
 export function isPrivateIp(ip: string): boolean {
   if (!ip || ip === "unknown") return true;
