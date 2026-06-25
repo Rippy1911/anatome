@@ -18,9 +18,9 @@ describe("muscleEngine", () => {
       female: { front: [], back: [] },
     };
     const { svg } = renderMuscleSvg({ gender: "male", view: "front", layers: [] }, bodyWithParts);
-    // Option C defaults: muscle fill #3f3f3f, contour fill #e5e7eb (distinct, so
+    // Option C (tuned) defaults: muscle fill #777777, contour fill #e5e7eb (distinct, so
     // un-highlighted muscles keep visible definition against the body silhouette).
-    expect(svg).toContain("#3f3f3f");
+    expect(svg).toContain("#777777");
     expect(svg).toContain("#e5e7eb");
   });
 

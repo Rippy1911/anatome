@@ -4,8 +4,8 @@
 // Two deliberate changes vs the original, both noted for review (see AGENTS.md §7/§8):
 //   1. The original tested a divergent inlined engine whose DEFAULTS were stale.
 //      This port tests the single shared engine, so the color assertions expect
-//      the documented Option C defaults: muscle fill #3f3f3f + contour fill
-//      #e5e7eb (distinct values so un-highlighted muscles keep definition).
+//      the documented Option C (tuned) defaults: muscle fill #777777 + contour
+//      fill #e5e7eb (distinct values so un-highlighted muscles keep definition).
 //   2. Rate-limit classification is tested against the PORTED day-model
 //      (ip_day=1000/day, host_day=100/day) — the original selfTest asserted a
 //      divergent host_month model. Flagged for reconciliation.
@@ -24,7 +24,7 @@ import { handleMcp, TOOLS } from "./mcp.ts";
 import { ATTRIBUTION } from "../lib/attribution.ts";
 import { IP_DAY_LIMIT, HOST_DAY_LIMIT, isPrivateIp, isLocalHost } from "../lib/rateLimit.ts";
 
-const BODY_DEFAULT_COLOR = "#3f3f3f";
+const BODY_DEFAULT_COLOR = "#777777";
 const CONTOUR_DEFAULT_COLOR = "#e5e7eb";
 
 interface TestResult { name: string; passed: boolean; detail?: string }
