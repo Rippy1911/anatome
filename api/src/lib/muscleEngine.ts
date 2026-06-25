@@ -64,13 +64,19 @@ const DEFAULTS = {
   width: 768,
   height: 1024,
   background: "transparent",
-  body_color: "#282828",
+  // Option C from the palette showcase: dark muscles on a light body silhouette.
+  // Keeping muscle fill (#3f3f3f) distinct from the contour fill (#e5e7eb) is
+  // what gives un-highlighted muscles visible definition — the previous
+  // body_color=#282828 + contour filled with body_color merged into one blob.
+  body_color: "#3f3f3f",
   border_color: "#dfdfdf",
-  border_width: 1.5,
+  border_width: 2,
   contour: "on",
-  contour_color: undefined as string | undefined,
-  contour_stroke: undefined as string | undefined,
-  contour_width: undefined as number | undefined,
+  // Dedicated contour defaults (previously undefined → silently fell back to
+  // body_color/border_color, so the contour had no independent default).
+  contour_color: "#e5e7eb",
+  contour_stroke: "#dfdfdf",
+  contour_width: 2,
 };
 
 function esc(s: unknown): string {
@@ -144,10 +150,12 @@ function renderSide(
   const out: string[] = [];
 
   // Body contour: the silhouette drawn behind the muscles.
-  //   contour="on"     -> fill=contour_color (default body_color) + stroke (POC look)
+  //   contour="on"     -> fill=contour_color + stroke (default; dark muscles on
+  //                       a light body silhouette — Option C of the showcase)
   //   contour="stroke" -> fill=none + stroke (upstream react-native-body-highlighter look)
   //   contour="off"    -> skip entirely (muscles float on the background)
-  // contour_color/stroke/width default to body_color / border_color / border_width.
+  // contour_color/stroke/width have their own defaults (#e5e7eb / #dfdfdf / 2);
+  // the || fallbacks only kick in if a caller explicitly passes an empty value.
   if (outline && contour !== "off") {
     const cFill = contour === "stroke" ? "none" : (contour_color || body_color);
     const cStroke = contour_stroke || border_color;

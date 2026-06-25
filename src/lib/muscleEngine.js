@@ -10,13 +10,16 @@ const DEFAULTS = {
   width: 768,
   height: 1024,
   background: "transparent",
+  // Option C from the palette showcase: dark muscles on a light body silhouette.
+  // Muscle fill (#3f3f3f) distinct from contour fill (#e5e7eb) gives un-highlighted
+  // muscles visible definition.
   body_color: "#3f3f3f",
   border_color: "#dfdfdf",
-  border_width: 1,
+  border_width: 2,
   contour: "on",
-  contour_color: undefined,
-  contour_stroke: undefined,
-  contour_width: undefined,
+  contour_color: "#e5e7eb",
+  contour_stroke: "#dfdfdf",
+  contour_width: 2,
 };
 
 function esc(s) {
@@ -81,9 +84,12 @@ function renderSide(parts, res, opts, sideFilter, transform, outline) {
   const out = [];
 
   // Body contour: silhouette behind the muscles.
-  //   contour="on"     -> fill=contour_color (default body_color) + stroke (POC look)
+  //   contour="on"     -> fill=contour_color + stroke (default; dark muscles on
+  //                       a light body silhouette — Option C of the showcase)
   //   contour="stroke" -> fill=none + stroke (upstream look)
   //   contour="off"    -> skip (muscles float on the background)
+  // contour_color/stroke/width have their own defaults (#e5e7eb / #dfdfdf / 2);
+  // the || fallbacks only kick in if a caller explicitly passes an empty value.
   if (outline && contour !== "off") {
     const cFill = contour === "stroke" ? "none" : (contour_color || body_color);
     const cStroke = contour_stroke || border_color;

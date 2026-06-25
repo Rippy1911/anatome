@@ -15,8 +15,9 @@ import { DEMO_LAYERS } from "@/data/muscleCatalog";
 
 const DEFAULT_SETTINGS = {
   gender: "male", view: "dual", bodyColor: "#3f3f3f", borderColor: "#dfdfdf",
-  borderWidth: 1, background: "transparent", width: 768, height: 1024,
-  contour: "on", contourColor: "", contourStroke: "", contourWidth: 1,
+  borderWidth: 2, background: "transparent", width: 768, height: 1024,
+  // Option C: dark muscles on a light body silhouette (dedicated contour defaults).
+  contour: "on", contourColor: "#e5e7eb", contourStroke: "#dfdfdf", contourWidth: 2,
 };
 
 function Section({ icon: Icon, title, children, className = "" }) {
