@@ -114,16 +114,29 @@ function defsBlock(defs: any[]): string {
 }
 
 // Render the muscle paths for a single side (front/back) of one gender.
+// The body outline (contour) is drawn first, behind the muscles, stroked with
+// the border color and fill none — this is the silhouette that fills the gaps
+// between muscle shapes. Without it the muscles float on the raw background
+// (the contour-vs-border regression). Ported from the original library's
+// SvgMaleWrapper/SvgFemaleWrapper which render the outline path before children.
 function renderSide(
   parts: BodyPart[],
   res: Record<string, ResolvedStyle>,
   opts: typeof DEFAULTS,
   sideFilter: Record<string, "left" | "right"> | null,
   transform: string | null,
+  outline: string,
 ): { svg: string; rendered: string[] } {
   const { body_color, border_color, border_width } = opts;
   const rendered = new Set<string>();
   const out: string[] = [];
+
+  // Body contour: stroked silhouette behind the muscles (fill none).
+  if (outline) {
+    out.push(
+      `<path d="${outline}" fill="none" stroke="${esc(border_color)}" stroke-width="${border_width}" stroke-linecap="butt" data-contour="body"/>`
+    );
+  }
 
   (parts || []).forEach((part) => {
     const slug = part.slug;
@@ -186,18 +199,18 @@ export function renderMuscleSvg(
   const collect = (r: { rendered: string[] }) => r.rendered.forEach((s) => renderedSet.add(s));
 
   if (view === "front") {
-    const r = renderSide(data.front, res, p, sideFilter, null);
+    const r = renderSide(data.front, res, p, sideFilter, null, wf.outline);
     inner = r.svg; collect(r);
     viewBox = wf.viewBox;
   } else if (view === "back") {
-    const r = renderSide(data.back, res, p, sideFilter, null);
+    const r = renderSide(data.back, res, p, sideFilter, null, wb.outline);
     inner = r.svg; collect(r);
     viewBox = wb.viewBox;
   } else {
     // dual: front on left, back on right, side by side.
-    const rf = renderSide(data.front, res, p, sideFilter, null);
+    const rf = renderSide(data.front, res, p, sideFilter, null, wf.outline);
     const backShift = 724; // front width in user units
-    const rb = renderSide(data.back, res, p, sideFilter, `translate(${backShift - 724}, 0)`);
+    const rb = renderSide(data.back, res, p, sideFilter, `translate(${backShift - 724}, 0)`, wb.outline);
     collect(rf); collect(rb);
     inner = `${rf.svg}${rb.svg}`;
     viewBox = `0 0 1448 1448`;
