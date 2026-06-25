@@ -18,7 +18,7 @@ import {
 import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
-import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, type Env } from "./lib/rateLimit.ts";
+import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, clientIp, isPrivateIp, type Env } from "./lib/rateLimit.ts";
 import { serviceAttribution, imageAttribution, exerciseDataAttribution } from "./lib/attribution.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, TOOLS } from "./routes/mcp.ts";
@@ -33,6 +33,18 @@ const GIF_CACHE_CONTROL = "public, max-age=86400, s-maxage=86400";
 const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", cors({ origin: "*", allowMethods: ["GET", "POST", "OPTIONS"], allowHeaders: ["*"] }));
+
+// Security headers (launch-readiness §2: missing X-Frame-Options / Permissions-Policy
+// were a flagged finding on the Base44 side; bake the same hardening into the Worker).
+// Applied to every response, including errors, via `await next()`.
+app.use("*", async (c, next) => {
+  await next();
+  c.header("X-Frame-Options", "DENY");
+  c.header("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  c.header("X-Content-Type-Options", "nosniff");
+  c.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  c.header("Referrer-Policy", "strict-origin-when-cross-origin");
+});
 
 function baseUrl(c: { env: Env }): string {
   return c.env.PUBLIC_BASE_URL || "https://api.anatome.dev";
@@ -162,6 +174,9 @@ app.get("/benchmark/rapidapiSearch", async (c) => {
 app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, async () => {
   const id = c.req.query("id");
   if (!id) return c.json({ ok: false, error: "id required (exercise ext_id)" }, 400);
+  // ext_id is derived from exercise names (alnum + _ -). Reject anything else to
+  // make the asset path explicit and block `/gifs/../`-style probing.
+  if (!/^[A-Za-z0-9_-]+$/.test(id)) return c.json({ ok: false, error: "invalid id" }, 400);
   const assets = c.env.ASSETS;
   if (!assets) return c.json({ ok: false, error: "assets not configured" }, 503);
   const assetUrl = new URL(c.req.url);
@@ -217,7 +232,10 @@ app.get("/getExercise", (c) => {
 });
 
 // ---- resolveExercise (GET + POST) ----
-async function resolveRoute(c: { req: { raw: Request; query: () => Record<string, string> }; env: Env }): Promise<Response> {
+// GET is cache-first (deterministic exercise -> muscle mapping): a cache HIT
+// serves the cached body and skips the KV rate-limit counter, mirroring
+// searchExercises/getExercise. POST is never cached (body not in URL).
+async function resolveRouteInner(c: { req: { raw: Request; query: () => Record<string, string> }; env: Env }): Promise<Response> {
   const req = c.req.raw;
   const rl = await checkRateLimit(req, c.env);
   if (!rl.allowed) return new Response(JSON.stringify(rateLimitBody(rl)), { status: 429, headers: { "Content-Type": "application/json", ...rateHeaders(rl), "Retry-After": String(rl.retry_after) } });
@@ -230,8 +248,11 @@ async function resolveRoute(c: { req: { raw: Request; query: () => Record<string
     ...exerciseDataAttribution(),
   }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
 }
-app.get("/resolveExercise", (c) => resolveRoute(c));
-app.post("/resolveExercise", (c) => resolveRoute(c));
+app.get("/resolveExercise", (c) => {
+  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
+  return withEdgeCache(c.req.raw, c.executionCtx, () => resolveRouteInner(c), hitHeaders);
+});
+app.post("/resolveExercise", (c) => resolveRouteInner(c));
 
 // ---- workoutImage (POST JSON) ----
 app.post("/workoutImage", async (c) => {
@@ -298,7 +319,17 @@ app.get("/openapi", (c) => withEdgeCache(c.req.raw, c.executionCtx, () =>
 ));
 
 // ---- selfTest ----
+// Diagnostic endpoint: gate to private IPs (dev/testing) or a valid
+// ADMIN_TOKEN bearer (launch-readiness §2: "gated selfTest"). Returns 404 to
+// avoid advertising the endpoint to unauthorized callers. Set ADMIN_TOKEN via
+// `wrangler secret put ADMIN_TOKEN`.
 app.get("/selfTest", async (c) => {
+  const ip = clientIp(c.req.raw);
+  const privateCaller = isPrivateIp(ip);
+  const auth = c.req.header("authorization") || "";
+  const tokenMatch = auth.match(/^Bearer\s+(.+)$/i);
+  const tokenOk = !!(tokenMatch && c.env.ADMIN_TOKEN && tokenMatch[1] === c.env.ADMIN_TOKEN);
+  if (!privateCaller && !tokenOk) return c.json({ ok: false, error: "not found" }, 404);
   const result = await runSelfTest(getBodyData());
   return c.json(result, result.ok ? 200 : 500);
 });
