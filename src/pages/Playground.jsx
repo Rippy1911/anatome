@@ -14,7 +14,7 @@ import { Layers, SlidersHorizontal, Dumbbell, Code2 } from "lucide-react";
 import { DEMO_LAYERS } from "@/data/muscleCatalog";
 
 const DEFAULT_SETTINGS = {
-  gender: "male", view: "dual", bodyColor: "#777777", borderColor: "#c8c8c8",
+  gender: "male", view: "dual", bodyColor: "#575757", borderColor: "#c8c8c8",
   borderWidth: 2, background: "transparent", width: 768, height: 1024,
   // Option C (tuned): dark-ish muscles on a light body silhouette (dedicated contour defaults).
   contour: "on", contourColor: "#e5e7eb", contourStroke: "#dadada", contourWidth: 2,
