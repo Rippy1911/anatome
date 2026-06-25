@@ -2,9 +2,10 @@
 // SHARED engine/exercise modules and the bundled data (no Base44 entities).
 //
 // Two deliberate changes vs the original, both noted for review (see AGENTS.md §7/§8):
-//   1. The original tested a divergent inlined engine whose DEFAULTS were stale
-//      (#3f3f3f / 1.0). This port tests the single shared engine, so the two color
-//      assertions now expect the documented default #282828.
+//   1. The original tested a divergent inlined engine whose DEFAULTS were stale.
+//      This port tests the single shared engine, so the color assertions expect
+//      the documented Option C defaults: muscle fill #3f3f3f + contour fill
+//      #e5e7eb (distinct values so un-highlighted muscles keep definition).
 //   2. Rate-limit classification is tested against the PORTED day-model
 //      (ip_day=1000/day, host_day=100/day) — the original selfTest asserted a
 //      divergent host_month model. Flagged for reconciliation.
@@ -23,7 +24,8 @@ import { handleMcp, TOOLS } from "./mcp.ts";
 import { ATTRIBUTION } from "../lib/attribution.ts";
 import { IP_DAY_LIMIT, HOST_DAY_LIMIT, isPrivateIp, isLocalHost } from "../lib/rateLimit.ts";
 
-const BODY_DEFAULT_COLOR = "#282828";
+const BODY_DEFAULT_COLOR = "#3f3f3f";
+const CONTOUR_DEFAULT_COLOR = "#e5e7eb";
 
 interface TestResult { name: string; passed: boolean; detail?: string }
 
@@ -42,7 +44,10 @@ export async function runSelfTest(bodyData: BodyData) {
   T("catalog_has_23_muscles", () => MUSCLES.length === 23 || `got ${MUSCLES.length}`);
 
   // ---- rendering ----
-  T("render_male_front_blank", () => renderMuscleSvg({ gender: "male", view: "front", layers: [] }, bodyData).svg.includes(BODY_DEFAULT_COLOR));
+  T("render_male_front_blank", () => {
+    const svg = renderMuscleSvg({ gender: "male", view: "front", layers: [] }, bodyData).svg;
+    return (svg.includes(BODY_DEFAULT_COLOR) && svg.includes(CONTOUR_DEFAULT_COLOR)) || `missing default colors (muscle ${BODY_DEFAULT_COLOR} / contour ${CONTOUR_DEFAULT_COLOR})`;
+  });
   T("render_male_back_blank", () => renderMuscleSvg({ gender: "male", view: "back", layers: [] }, bodyData).svg.includes("<path") || "no path");
   T("render_male_dual_blank", () => renderMuscleSvg({ gender: "male", view: "dual", layers: [] }, bodyData).svg.includes('viewBox="0 0 1448 1448"'));
   T("render_female_front_blank", () => renderMuscleSvg({ gender: "female", view: "front", layers: [] }, bodyData).svg.includes("<path") || "no path");
