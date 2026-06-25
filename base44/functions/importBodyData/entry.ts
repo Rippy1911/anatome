@@ -3,6 +3,44 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // One-time importer: fetches anatomical SVG path data from HichamELBSI/react-native-body-highlighter
 // (MIT, © Hicham El Boussarghini), converts the TS data files to plain JS objects, and stores them
 // in the BodyData entity. Frontend + engine read from the entity afterwards.
+//
+// SECURITY: admin/import endpoint — must NOT be public. Gated behind a Bearer ADMIN_TOKEN env var
+// (constant-time-ish compare via SHA-256 digests; Deno has no crypto.timingSafeEqual). Returns 503
+// if ADMIN_TOKEN is unset (before touching any data) and 401 on a missing/wrong token.
+
+// Constant-time-ish token compare for Deno (no crypto.timingSafeEqual available).
+// Hash both sides to SHA-256 and compare the hex digests; the digest comparison
+// itself reveals no timing information about the secret token.
+async function tokenEquals(supplied: string, stored: string): Promise<boolean> {
+  if (!stored) return false;                       // unset config → never accept
+  if (typeof supplied !== 'string' || supplied.length === 0) return false;
+  const enc = new TextEncoder();
+  const [a, b] = await Promise.all([
+    crypto.subtle.digest('SHA-256', enc.encode(supplied)),
+    crypto.subtle.digest('SHA-256', enc.encode(stored)),
+  ]);
+  const hex = (buf: ArrayBuffer): string => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
+  return hex(a) === hex(b);
+}
+
+// Returns a Response ONLY if the request is unauthorized; null if it passed.
+// ADMIN_TOKEN unset → 503. Missing/wrong Bearer → 401. Correct Bearer → null (proceed).
+async function enforceAdminAuth(req: Request): Promise<Response | null> {
+  const stored = Deno.env.get('ADMIN_TOKEN');
+  if (!stored) {
+    return Response.json({ ok: false, error: 'Admin token not configured' }, { status: 503 });
+  }
+  const authHeader = req.headers.get('authorization') || req.headers.get('Authorization') || '';
+  const m = /^Bearer\s+(.+)$/i.exec(authHeader.trim());
+  if (!m) {
+    return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  const ok = await tokenEquals(m[1], stored);
+  if (!ok) {
+    return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  return null;
+}
 
 const SOURCES = [
   { key: 'bodyFrontMale', gender: 'male', side: 'front', export: 'bodyFront', url: 'https://raw.githubusercontent.com/HichamELBSI/react-native-body-highlighter/main/assets/bodyFront.ts' },
@@ -51,6 +89,10 @@ function parseBodyFile(src) {
 
 Deno.serve(async (req) => {
   try {
+    // Auth gate — MUST run before any fetch or entity read/write.
+    const authFail = await enforceAdminAuth(req);
+    if (authFail) return authFail;
+
     const base44 = createClientFromRequest(req);
 
     const results = [];

@@ -3,6 +3,45 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 // One-time importer: fetches the free-exercise-db (CC0-1.0, public domain) dataset,
 // maps each exercise's source muscle names to Anatome's 23 canonical slugs,
 // pre-computes the compact GET image URL, and stores everything in the Exercise entity.
+//
+// SECURITY: admin/import endpoint — must NOT be public. Previously had a broken half-check
+// (auth.me() only blocked logged-in non-admins; anonymous callers bypassed it and could wipe +
+// rewrite the entire Exercise table via a single curl). Now gated behind a Bearer ADMIN_TOKEN
+// env var (constant-time-ish compare via SHA-256 digests). Returns 503 if ADMIN_TOKEN is unset
+// (before touching any data — the Exercise.list + delete loop NEVER runs) and 401 on a
+// missing/wrong token.
+
+// Constant-time-ish token compare for Deno (no crypto.timingSafeEqual available).
+async function tokenEquals(supplied: string, stored: string): Promise<boolean> {
+  if (!stored) return false;                       // unset config → never accept
+  if (typeof supplied !== 'string' || supplied.length === 0) return false;
+  const enc = new TextEncoder();
+  const [a, b] = await Promise.all([
+    crypto.subtle.digest('SHA-256', enc.encode(supplied)),
+    crypto.subtle.digest('SHA-256', enc.encode(stored)),
+  ]);
+  const hex = (buf: ArrayBuffer): string => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
+  return hex(a) === hex(b);
+}
+
+// Returns a Response ONLY if the request is unauthorized; null if it passed.
+// ADMIN_TOKEN unset → 503. Missing/wrong Bearer → 401. Correct Bearer → null (proceed).
+async function enforceAdminAuth(req: Request): Promise<Response | null> {
+  const stored = Deno.env.get('ADMIN_TOKEN');
+  if (!stored) {
+    return Response.json({ ok: false, error: 'Admin token not configured' }, { status: 503 });
+  }
+  const authHeader = req.headers.get('authorization') || req.headers.get('Authorization') || '';
+  const m = /^Bearer\s+(.+)$/i.exec(authHeader.trim());
+  if (!m) {
+    return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  const ok = await tokenEquals(m[1], stored);
+  if (!ok) {
+    return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  return null;
+}
 
 const SOURCE_URL = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
 
@@ -49,9 +88,12 @@ function compactLayers(primarySlugs, secondarySlugs){
 
 Deno.serve(async (req)=>{
   try {
+    // Auth gate — MUST run before fetch(SOURCE_URL) and before the Exercise.list + delete loop.
+    // This replaces the old broken auth.me() half-check that anonymous callers could bypass.
+    const authFail = await enforceAdminAuth(req);
+    if (authFail) return authFail;
+
     const base44=createClientFromRequest(req);
-    const user=await base44.auth.me().catch(()=>null);
-    if(user && user.role!=="admin"){ return Response.json({ ok:false, error:"Forbidden: admin only" }, { status:403 }); }
 
     const resp=await fetch(SOURCE_URL);
     if(!resp.ok) return Response.json({ ok:false, error:`fetch ${resp.status}` }, { status:502 });
