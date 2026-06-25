@@ -216,7 +216,7 @@ Deno.serve(async (req)=>{
       available_muscles_count:MUSCLES.length,
       ...(png_status?{png_status}:{}),
       rate_limit:{ source:rl.source, limit_type:rl.key_type, remaining:rl.remaining!=null?rl.remaining:null, limit:rl.limit, reset_at:rl.reset_at },
-      attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE, license:"MIT", duration_ms,
+      attribution:ATTRIBUTION, attribution_source:ATTRIBUTION_SOURCE, license:"Apache-2.0", duration_ms,
       built_by:BUILT_BY, try_also:TRY_ALSO,
     }), { headers:{ ...cors, "Content-Type":"application/json", "Cache-Control":CACHE_CONTROL, "ETag":etag, ...rateHeaders(rl) } });
   } catch(error){
