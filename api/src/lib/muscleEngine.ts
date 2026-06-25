@@ -131,10 +131,15 @@ function renderSide(
   const rendered = new Set<string>();
   const out: string[] = [];
 
-  // Body contour: stroked silhouette behind the muscles (fill none).
+  // Body contour: the silhouette drawn behind the muscles. Filled with the
+  // body color (so the gaps between muscles and the head/hands/feet show the
+  // body base, not the raw canvas background) and stroked with the border color
+  // for the outer silhouette edge. This is what the POC/base44 customization
+  // renders; the upstream library uses fill="none" but Anatome fills it so the
+  // body reads as a solid form rather than floating muscle shapes.
   if (outline) {
     out.push(
-      `<path d="${outline}" fill="none" stroke="${esc(border_color)}" stroke-width="${border_width}" stroke-linecap="butt" data-contour="body"/>`
+      `<path d="${outline}" fill="${esc(body_color)}" stroke="${esc(border_color)}" stroke-width="${border_width}" stroke-linecap="butt" data-contour="body"/>`
     );
   }
 
