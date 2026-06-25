@@ -26,16 +26,17 @@ async function tokenEquals(supplied, stored) {
   return hex(a) === hex(b);
 }
 
-// Loopback detection: trust the socket peer if Base44 reports a loopback host. Base44 functions
-// receive req.url as the full URL; we treat an explicit loopback host as internal. We also honor
-// x-forwarded-for only when its FIRST hop is loopback (a direct local proxy), NOT a public chain.
+// Loopback detection: trust ONLY the request URL's hostname, which reflects how the function was
+// actually invoked (Base44 functions receive req.url as the full URL). We deliberately do NOT trust
+// the client-supplied X-Forwarded-For header — a public client can spoof `X-Forwarded-For: 127.0.0.1`
+// to bypass the auth gate and leak diagnostics without an ADMIN_TOKEN (An-M3). Legitimate local
+// health checks still resolve via the loopback hostname. Aligns with the stricter Worker /selfTest
+// (cf-connecting-ip private range or Bearer ADMIN_TOKEN, no XFF).
 function isLoopback(req) {
   try {
     const host = new URL(req.url).hostname.toLowerCase();
     if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]') return true;
   } catch { /* ignore */ }
-  const xff = (req.headers.get('x-forwarded-for') || '').split(',')[0]?.trim().toLowerCase();
-  if (xff === 'localhost' || xff === '127.0.0.1' || xff === '::1') return true;
   return false;
 }
 
