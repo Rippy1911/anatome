@@ -10,15 +10,15 @@ const DEFAULTS = {
   width: 768,
   height: 1024,
   background: "transparent",
-  // Option C from the palette showcase: dark muscles on a light body silhouette.
-  // Muscle fill (#3f3f3f) distinct from contour fill (#e5e7eb) gives un-highlighted
-  // muscles visible definition.
-  body_color: "#3f3f3f",
-  border_color: "#dfdfdf",
+  // Option C from the palette showcase, tuned: dark-ish muscles (#777777) on a
+  // light body silhouette (#e5e7eb contour fill). Muscle fill distinct from
+  // contour fill gives un-highlighted muscles visible definition.
+  body_color: "#777777",
+  border_color: "#c8c8c8",
   border_width: 2,
   contour: "on",
   contour_color: "#e5e7eb",
-  contour_stroke: "#dfdfdf",
+  contour_stroke: "#dadada",
   contour_width: 2,
 };
 

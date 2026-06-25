@@ -14,10 +14,10 @@ import { Layers, SlidersHorizontal, Dumbbell, Code2 } from "lucide-react";
 import { DEMO_LAYERS } from "@/data/muscleCatalog";
 
 const DEFAULT_SETTINGS = {
-  gender: "male", view: "dual", bodyColor: "#3f3f3f", borderColor: "#dfdfdf",
+  gender: "male", view: "dual", bodyColor: "#777777", borderColor: "#c8c8c8",
   borderWidth: 2, background: "transparent", width: 768, height: 1024,
-  // Option C: dark muscles on a light body silhouette (dedicated contour defaults).
-  contour: "on", contourColor: "#e5e7eb", contourStroke: "#dfdfdf", contourWidth: 2,
+  // Option C (tuned): dark-ish muscles on a light body silhouette (dedicated contour defaults).
+  contour: "on", contourColor: "#e5e7eb", contourStroke: "#dadada", contourWidth: 2,
 };
 
 function Section({ icon: Icon, title, children, className = "" }) {
