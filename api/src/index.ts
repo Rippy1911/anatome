@@ -25,6 +25,7 @@ import { serviceAttribution, imageAttribution, exerciseDataAttribution } from ".
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, computeMcpResult, TOOLS, type McpBody } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
+import { fetchCiStatus } from "./routes/ciStatus.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
@@ -73,7 +74,7 @@ app.get("/", (c) => c.json({
   ok: true, service: "anatome-api", version: "2.0.0",
   endpoints: [
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
-    "/exerciseGif", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/selfTest",
+    "/exerciseGif", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/ciStatus", "/selfTest",
   ],
   ...serviceAttribution(),
 }));
@@ -385,6 +386,25 @@ app.get("/selfTest", async (c) => {
   if (!privateCaller && !tokenOk) return c.json({ ok: false, error: "not found" }, 404);
   const result = await runSelfTest(getBodyData());
   return c.json(result, result.ok ? 200 : 500);
+});
+
+// ---- ciStatus ----
+// Public CI health for the private anatome GitHub repo (server-side token
+// keeps the browser off GitHub's API; see routes/ciStatus.ts). Edge-cached for
+// 60s so it's cheap and well under GitHub rate limits. Degrades to a static
+// "CI on GitHub" pointer when GITHUB_TOKEN is unset — never errors out.
+app.get("/ciStatus", async (c) => {
+  const cache = caches.default;
+  const key = new Request("https://cache.anatome.dev/ciStatus");
+  const hit = await cache.match(key);
+  if (hit) {
+    const body = await hit.json() as { ok: boolean; state: string; label: string; url: string; run_number: number | null; updated_at: string | null };
+    return c.json({ ...body, cached: true }, 200, { "Cache-Control": "public, max-age=30, s-maxage=60", "X-Cache": "HIT" });
+  }
+  const status = await fetchCiStatus(c.env);
+  const stored = new Response(JSON.stringify(status), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=30, s-maxage=60", "X-Cache": "MISS" } });
+  c.executionCtx.waitUntil(cache.put(key, stored));
+  return c.json(status, 200, { "Cache-Control": "public, max-age=30, s-maxage=60", "X-Cache": "MISS" });
 });
 
 export default app;

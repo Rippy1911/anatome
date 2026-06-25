@@ -64,7 +64,7 @@ X-RapidAPI-Host: anatome.p.rapidapi.com`}</Code>
       <P><span className="font-mono text-foreground">GET /searchExercises</span> · <span className="font-mono text-foreground">GET /getExercise</span> · <span className="font-mono text-foreground">GET/POST /resolveExercise</span> — free-exercise-db + muscle layers.</P>
       <P><span className="font-mono text-foreground">GET /exerciseGif</span> — hosted 2-frame demo GIF per exercise (<span className="font-mono text-foreground">?id=&lt;ext_id&gt;</span>).</P>
       <P><span className="font-mono text-foreground">GET /listMuscles</span> · <span className="font-mono text-foreground">GET /muscleInfo</span> · <span className="font-mono text-foreground">GET /listEquipment</span> — discovery.</P>
-      <P><span className="font-mono text-foreground">POST /mcp</span> — MCP JSON-RPC 2.0. <span className="font-mono text-foreground">GET /openapi</span> · <span className="font-mono text-foreground">GET /selfTest</span>.</P>
+      <P><span className="font-mono text-foreground">POST /mcp</span> — MCP JSON-RPC 2.0. <span className="font-mono text-foreground">GET /openapi</span> for the full spec.</P>
       <P className="text-xs text-muted-foreground">Legacy Base44 paths: <span className="font-mono">https://anatome.dev/functions/&lt;name&gt;</span> (same handlers during migration).</P>
       <P>Response (output=json): <span className="font-mono text-foreground">{`{ ok, svg, format, gender, view, muscles_rendered, attribution, license, duration_ms }`}</span>. With <span className="font-mono text-foreground">output=raw</span> the SVG is returned directly with <span className="font-mono text-foreground">Content-Type: image/svg+xml</span>.</P>
 

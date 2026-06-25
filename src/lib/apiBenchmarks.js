@@ -21,7 +21,7 @@ export const API_BENCHMARKS = [
   { metric: "Exercise GIF", value: "~330 ms", note: "~218 KB edge asset" },
   { metric: "SVG payload (raw)", value: "~54 KB", note: "Single-layer chest highlight" },
   { metric: "Edge network", value: "300+ POPs", note: "Cloudflare global CDN" },
-  { metric: "Production gate", value: "47/47", note: "GET /selfTest" },
+  { metric: "CI health", value: "GitHub Actions", note: "Frontend + API checks on main" },
 ];
 
 export const HERO_PERF_TAGLINE = "Sub-5ms server render · ~280ms cold RTT · edge-cached SVGs";

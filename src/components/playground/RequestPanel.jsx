@@ -18,6 +18,10 @@ function buildPayload(settings, layers) {
     body_color: settings.bodyColor,
     border_color: settings.borderColor,
     border_width: settings.borderWidth,
+    contour: settings.contour,
+    ...(settings.contourColor ? { contour_color: settings.contourColor } : {}),
+    ...(settings.contourStroke ? { contour_stroke: settings.contourStroke } : {}),
+    ...(settings.contourWidth != null && settings.contourWidth !== "" ? { contour_width: Number(settings.contourWidth) } : {}),
     background: settings.background,
     width: settings.width,
     height: settings.height,
@@ -83,6 +87,10 @@ export default function RequestPanel({ settings, layers, baseUrl }) {
     width: String(settings.width), height: String(settings.height), output: "raw",
   });
   if (settings.background && settings.background !== "transparent") getParams.set("background", settings.background);
+  if (settings.contour) getParams.set("contour", settings.contour);
+  if (settings.contourColor) getParams.set("contour_color", settings.contourColor);
+  if (settings.contourStroke) getParams.set("contour_stroke", settings.contourStroke);
+  if (settings.contourWidth != null && settings.contourWidth !== "") getParams.set("contour_width", String(settings.contourWidth));
   const getUrl = `${url}?${getParams.toString()}`;
 
   const curlGet = `# Drop into a browser, or pipe to imgcat:\ncurl '${getUrl}' | imgcat`;

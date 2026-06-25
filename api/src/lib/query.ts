@@ -39,6 +39,10 @@ export function payloadFromQuery(url: URL): QueryPayload {
   if (q.get("body_color")) p.body_color = q.get("body_color") as string;
   if (q.get("border_color")) p.border_color = q.get("border_color") as string;
   if (q.get("border_width")) p.border_width = Number(q.get("border_width"));
+  if (q.get("contour")) p.contour = q.get("contour") as string;
+  if (q.get("contour_color")) p.contour_color = q.get("contour_color") as string;
+  if (q.get("contour_stroke")) p.contour_stroke = q.get("contour_stroke") as string;
+  if (q.get("contour_width")) p.contour_width = Number(q.get("contour_width"));
   if (q.get("format")) p.format = q.get("format") as string;
   if (q.get("output")) p.output = q.get("output") as string;
   if (q.get("defs")) { const d = decodeB64Json(q.get("defs") as string); if (d) p.defs = d as unknown[]; }

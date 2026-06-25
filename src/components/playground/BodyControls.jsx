@@ -71,6 +71,31 @@ export default function BodyControls({ settings, onChange }) {
         <Slider min={0} max={6} step={0.5} value={[settings.borderWidth]} onValueChange={([v]) => set({ borderWidth: v })} />
       </div>
 
+      <div className="pt-1 border-t border-border/60" />
+
+      <div className="space-y-1.5">
+        <Label className="text-xs text-muted-foreground">Body contour</Label>
+        <Segmented
+          value={settings.contour}
+          onChange={(v) => set({ contour: v })}
+          options={[{ value: "on", label: "Filled" }, { value: "stroke", label: "Outline" }, { value: "off", label: "Off" }]}
+        />
+        <p className="text-[11px] text-muted-foreground">Silhouette drawn behind the muscles. Filled = solid body base (POC look), Outline = stroke only, Off = muscles float on the background.</p>
+      </div>
+
+      {settings.contour !== "off" && (
+        <>
+          <div className="grid grid-cols-2 gap-3">
+            <ColorField label="Contour fill" value={settings.contourColor} onChange={(v) => set({ contourColor: v })} />
+            <ColorField label="Contour stroke" value={settings.contourStroke} onChange={(v) => set({ contourStroke: v })} />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-muted-foreground">Contour width — {settings.contourWidth}</Label>
+            <Slider min={0} max={6} step={0.5} value={[settings.contourWidth]} onValueChange={([v]) => set({ contourWidth: v })} />
+          </div>
+        </>
+      )}
+
       <div className="space-y-1.5">
         <Label className="text-xs text-muted-foreground">Background</Label>
         <Segmented

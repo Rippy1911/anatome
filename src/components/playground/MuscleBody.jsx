@@ -4,6 +4,7 @@ import { renderMuscleSvg, getAnatomicalName } from "@/lib/muscleEngine";
 export default function MuscleBody({
   gender, view, layers, defs, perMuscle, sideFilter,
   bodyColor, borderColor, borderWidth, background,
+  contour, contourColor, contourStroke, contourWidth,
   bodyData, onMuscleClick,
 }) {
   const containerRef = useRef(null);
@@ -11,12 +12,17 @@ export default function MuscleBody({
 
   const { svg } = useMemo(() => {
     if (!bodyData) return { svg: "" };
-    return renderMuscleSvg({
+    const payload = {
       gender, view, layers, defs, per_muscle: perMuscle, side_filter: sideFilter,
       body_color: bodyColor, border_color: borderColor, border_width: borderWidth,
       background,
-    }, bodyData);
-  }, [gender, view, layers, defs, perMuscle, sideFilter, bodyColor, borderColor, borderWidth, background, bodyData]);
+      contour,
+      contour_color: contourColor || undefined,
+      contour_stroke: contourStroke || undefined,
+      contour_width: contourWidth != null && contourWidth !== "" ? Number(contourWidth) : undefined,
+    };
+    return renderMuscleSvg(payload, bodyData);
+  }, [gender, view, layers, defs, perMuscle, sideFilter, bodyColor, borderColor, borderWidth, background, contour, contourColor, contourStroke, contourWidth, bodyData]);
 
   const handleClick = (e) => {
     const m = e.target?.dataset?.muscle;

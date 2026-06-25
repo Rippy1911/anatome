@@ -13,6 +13,7 @@ const PUBLIC_ENDPOINTS = [
   "/listEquipment",
   "/mcp",
   "/openapi",
+  "/ciStatus",
   "/selfTest",
 ];
 
@@ -23,7 +24,7 @@ describe("public API surface (no AI exposure)", () => {
     expect(paths).not.toContain("/aiDemo");
     expect(paths.some((p) => /ai|llm/i.test(p))).toBe(false);
     for (const p of PUBLIC_ENDPOINTS) {
-      if (p !== "/mcp" && p !== "/openapi" && p !== "/selfTest") {
+      if (p !== "/mcp" && p !== "/openapi" && p !== "/ciStatus" && p !== "/selfTest") {
         expect(paths).toContain(p);
       }
     }

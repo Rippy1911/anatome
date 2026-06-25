@@ -13,6 +13,10 @@ const DEFAULTS = {
   body_color: "#3f3f3f",
   border_color: "#dfdfdf",
   border_width: 1,
+  contour: "on",
+  contour_color: undefined,
+  contour_stroke: undefined,
+  contour_width: undefined,
 };
 
 function esc(s) {
@@ -66,11 +70,28 @@ function defsBlock(defs) {
 }
 
 // Render the muscle paths for a single side (front/back) of one gender.
-// `offsetX` shifts the group for dual layout.
-function renderSide(parts, res, opts, sideFilter, transform) {
-  const { body_color, border_color, border_width } = opts;
+// `offsetX` shifts the group for dual layout. The body outline (contour) is
+// drawn first, behind the muscles — without it the muscles float on the raw
+// background (the contour-vs-border regression). Ported from the original
+// library's SvgMaleWrapper/SvgFemaleWrapper which render the outline path
+// before children.
+function renderSide(parts, res, opts, sideFilter, transform, outline) {
+  const { body_color, border_color, border_width, contour, contour_color, contour_stroke, contour_width } = opts;
   const rendered = new Set();
   const out = [];
+
+  // Body contour: silhouette behind the muscles.
+  //   contour="on"     -> fill=contour_color (default body_color) + stroke (POC look)
+  //   contour="stroke" -> fill=none + stroke (upstream look)
+  //   contour="off"    -> skip (muscles float on the background)
+  if (outline && contour !== "off") {
+    const cFill = contour === "stroke" ? "none" : (contour_color || body_color);
+    const cStroke = contour_stroke || border_color;
+    const cWidth = contour_width != null ? contour_width : border_width;
+    out.push(
+      `<path d="${outline}" fill="${esc(cFill)}" stroke="${esc(cStroke)}" stroke-width="${cWidth}" stroke-linecap="butt" data-contour="body"/>`
+    );
+  }
 
   parts.forEach((part) => {
     const slug = part.slug;
@@ -115,6 +136,8 @@ export function renderMuscleSvg(payload = {}, bodyData) {
   const p = { ...DEFAULTS, ...payload };
   const gender = p.gender === "female" ? "female" : "male";
   const view = ["front", "back", "dual"].includes(p.view) ? p.view : "dual";
+  const contour = ["on", "off", "stroke"].includes(p.contour) ? p.contour : "on";
+  p.contour = contour;
   const data = (bodyData && bodyData[gender]) || { front: [], back: [] };
 
   const res = buildResolution(p);
@@ -130,19 +153,19 @@ export function renderMuscleSvg(payload = {}, bodyData) {
   const collect = (r) => r.rendered.forEach((s) => renderedSet.add(s));
 
   if (view === "front") {
-    const r = renderSide(data.front, res, p, sideFilter, null);
+    const r = renderSide(data.front, res, p, sideFilter, null, wf.outline);
     inner = r.svg; collect(r);
     viewBox = wf.viewBox;
   } else if (view === "back") {
-    const r = renderSide(data.back, res, p, sideFilter, null);
+    const r = renderSide(data.back, res, p, sideFilter, null, wb.outline);
     inner = r.svg; collect(r);
     viewBox = wb.viewBox;
   } else {
     // dual: front on left, back on right, side by side.
-    const rf = renderSide(data.front, res, p, sideFilter, null);
+    const rf = renderSide(data.front, res, p, sideFilter, null, wf.outline);
     // back's viewBox starts at its own x-offset; place it next to front.
     const backShift = 724; // front width in user units
-    const rb = renderSide(data.back, res, p, sideFilter, `translate(${backShift - 724}, 0)`);
+    const rb = renderSide(data.back, res, p, sideFilter, `translate(${backShift - 724}, 0)`, wb.outline);
     collect(rf); collect(rb);
     inner = `${rf.svg}${rb.svg}`;
     viewBox = `0 0 1448 1448`;
