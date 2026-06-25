@@ -18,8 +18,8 @@ import {
 import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
-import { checkRateLimit, rateHeaders, rateLimitBody, type Env } from "./lib/rateLimit.ts";
-import { baseAttribution, exerciseAttribution, ATTRIBUTION, LICENSE, BUILT_BY, TRY_ALSO } from "./lib/attribution.ts";
+import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, type Env } from "./lib/rateLimit.ts";
+import { serviceAttribution, imageAttribution, exerciseDataAttribution } from "./lib/attribution.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, TOOLS } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
@@ -44,7 +44,7 @@ app.get("/", (c) => c.json({
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
     "/exerciseGif", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/selfTest",
   ],
-  ...baseAttribution(),
+  ...serviceAttribution(),
 }));
 
 // ---- generateImage (GET query + POST JSON) ----
@@ -80,7 +80,7 @@ async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Re
     ok: true, svg, format: "svg", gender, view, muscles_rendered,
     available_muscles_count: MUSCLES.length,
     rate_limit: { source: rl.source, limit_type: rl.key_type, remaining: rl.remaining != null ? rl.remaining : null, limit: rl.limit, reset_at: rl.reset_at },
-    ...baseAttribution(), duration_ms,
+    ...imageAttribution(), duration_ms,
   }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl), ...timing } });
 }
 app.get("/generateImage", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => generateImage(c)));
@@ -95,30 +95,36 @@ app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
     body_region: BODY_REGION[slug] || null,
     antagonists: ANTAGONISTS[slug] || [],
   }));
-  return c.json({ ok: true, count: MUSCLES.length, muscles, ...baseAttribution() });
+  return c.json({ ok: true, count: MUSCLES.length, muscles });
 }));
 
 // ---- muscleInfo ----
 app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const slug = c.req.query("slug");
-  if (!slug) return c.json({ ok: false, error: "provide slug query param", ...baseAttribution() }, 400);
+  if (!slug) return c.json({ ok: false, error: "provide slug query param", ...imageAttribution() }, 400);
   const info = getMuscleInfo(slug, baseUrl(c));
-  if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...baseAttribution() }, 404);
-  return c.json({ ok: true, ...info, ...baseAttribution() });
+  if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...imageAttribution() }, 404);
+  return c.json({ ok: true, ...info, ...imageAttribution() });
 }));
 
 // ---- listEquipment ----
 app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const equipment = listEquipment();
-  return c.json({ ok: true, count: equipment.length, equipment, ...exerciseAttribution() });
+  return c.json({ ok: true, count: equipment.length, equipment, ...exerciseDataAttribution() });
 }));
 
 // ---- searchExercises ----
-app.get("/searchExercises", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  const extra = rateHeaders(rl);
-  return withEdgeCache(c.req.raw, c.executionCtx, () => {
+// Cache-first: a cache HIT serves the cached body and skips the KV rate-limit
+// counter entirely (enforcement already ran when the cache entry was created).
+// Bypass callers (RapidAPI / MCP trusted / localhost) still get correct
+// "unlimited" headers on HITs via bypassCheck, which touches no KV. The real
+// per-day counter runs only on MISS, inside the handler.
+app.get("/searchExercises", (c) => {
+  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
+  return withEdgeCache(c.req.raw, c.executionCtx, async () => {
+    const rl = await checkRateLimit(c.req.raw, c.env);
+    if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
+    const extra = rateHeaders(rl);
     const q = c.req.query();
     const base = baseUrl(c);
     const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
@@ -138,9 +144,9 @@ app.get("/searchExercises", async (c) => {
       limit,
       next_cursor,
       results: results.map((e) => formatExercise(e, base, "search", fields)),
-      ...exerciseAttribution(),
+      ...exerciseDataAttribution(),
     }, 200, extra);
-  }, extra);
+  }, hitHeaders);
 });
 
 // ---- RapidAPI benchmark proxy (marketing site latency comparison; not in OpenAPI) ----
@@ -187,14 +193,15 @@ function fullExercise(
   delete (row as { name_lower?: string }).name_lower;
   return formatExercise(row, base, "full", fields);
 }
-app.get("/getExercise", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  const extra = rateHeaders(rl);
+app.get("/getExercise", (c) => {
+  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
   return withEdgeCache(c.req.raw, c.executionCtx, async () => {
+    const rl = await checkRateLimit(c.req.raw, c.env);
+    if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
+    const extra = rateHeaders(rl);
     const q = c.req.query();
     const base = baseUrl(c);
-    const meta = exerciseAttribution();
+    const meta = exerciseDataAttribution();
     const limit = Math.min(Number(q.limit || 10), 50);
     const fields = parseFieldsParam(q.fields, null);
 
@@ -206,7 +213,7 @@ app.get("/getExercise", async (c) => {
     if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, match: rec ? "random" : "none", exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, extra); }
     if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base, fields), ...meta }, m.exercise ? 200 : 404, extra); }
     return c.json({ ok: false, error: "provide one of: id, name, random=1, muscle", ...meta }, 400, extra);
-  }, extra);
+  }, hitHeaders);
 });
 
 // ---- resolveExercise (GET + POST) ----
@@ -220,7 +227,7 @@ async function resolveRoute(c: { req: { raw: Request; query: () => Record<string
   const r = resolveEx(exercise, baseUrl(c));
   return new Response(JSON.stringify({
     ok: true, ...r,
-    ...exerciseAttribution(),
+    ...exerciseDataAttribution(),
   }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
 }
 app.get("/resolveExercise", (c) => resolveRoute(c));
@@ -236,7 +243,7 @@ app.post("/workoutImage", async (c) => {
   try { body = await c.req.json(); } catch { body = {}; }
   const exercises = Array.isArray(body.exercises) ? body.exercises.map(String) : [];
   if (!exercises.length) {
-    return c.json({ ok: false, error: "provide exercises array with at least one name", ...baseAttribution() }, 400, rateHeaders(rl));
+    return c.json({ ok: false, error: "provide exercises array with at least one name", ...imageAttribution() }, 400, rateHeaders(rl));
   }
   const base = baseUrl(c);
   const result = workoutImageLogic({
@@ -266,7 +273,7 @@ app.post("/workoutImage", async (c) => {
   }
   return c.json({
     ok: true, ...result, anatome_imageSrc,
-    ...baseAttribution(),
+    ...imageAttribution(),
   }, 200, rateHeaders(rl));
 });
 

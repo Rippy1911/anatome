@@ -1,7 +1,6 @@
 // Marketing-site benchmark: proxy searchExercises through RapidAPI (true subscriber path).
 // Requires wrangler secret RAPIDAPI_KEY — never expose in the browser.
 
-import { exerciseAttribution } from "../lib/attribution.ts";
 import { absoluteImageSrc } from "../lib/exercises.ts";
 
 export const RAPIDAPI_HOST = "anatome.p.rapidapi.com";
@@ -22,7 +21,6 @@ export async function rapidapiSearchBenchmark(
         ok: false,
         error: "rapidapi_benchmark_unconfigured",
         message: "Set RAPIDAPI_KEY via wrangler secret put RAPIDAPI_KEY",
-        ...exerciseAttribution(),
       },
       { status: 503 },
     );
@@ -51,7 +49,6 @@ export async function rapidapiSearchBenchmark(
         ok: false,
         error: "rapidapi_fetch_failed",
         message: (e as Error).message,
-        ...exerciseAttribution(),
       },
       { status: 502 },
     );
@@ -68,7 +65,6 @@ export async function rapidapiSearchBenchmark(
         error: "rapidapi_invalid_json",
         rapidapi_status: res.status,
         upstream_ms: upstreamMs,
-        ...exerciseAttribution(),
       },
       { status: 502 },
     );
@@ -105,7 +101,6 @@ export async function rapidapiSearchBenchmark(
         upstream_ms: upstreamMs,
         rapidapi_status: res.status,
       },
-      ...exerciseAttribution(),
     },
     { status: res.ok ? 200 : (res.status === 403 ? 403 : 502) },
   );
