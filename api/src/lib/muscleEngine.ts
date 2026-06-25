@@ -83,6 +83,24 @@ function esc(s: unknown): string {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+// Coerce an arbitrary client-supplied value to a safe integer in [min, max],
+// falling back to `fallback` when the value is missing/NaN/out of range.
+// Used for every numeric attribute interpolated into the SVG markup without
+// esc() (width, height, stroke-width, opacity, etc.) — strings like
+// `100" onload="alert(1)` are rejected, closing the attribute-breakout vector.
+function clampInt(v: unknown, min: number, max: number, fallback: number): number {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.max(min, Math.min(max, Math.round(n))) : fallback;
+}
+
+// Coerce an arbitrary client-supplied value to a finite number in [min, max],
+// falling back to `fallback` when missing/NaN/out of range. Used for fractional
+// SVG attributes (opacity) that must not be rounded.
+function clampNum(v: unknown, min: number, max: number, fallback: number): number {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : fallback;
+}
+
 // Build a resolution map: slug -> { fill, opacity, stroke, strokeWidth }
 function buildResolution(payload: RenderPayload): Record<string, ResolvedStyle> {
   const res: Record<string, ResolvedStyle> = {};
@@ -209,6 +227,47 @@ export function renderMuscleSvg(
   bodyData: BodyData,
 ): { svg: string; muscles_rendered: string[] } {
   const p = { ...DEFAULTS, ...payload } as typeof DEFAULTS & RenderPayload;
+  // Sanitize every numeric attribute that is interpolated into the SVG markup
+  // without esc() (width/height/stroke-width/opacity/contour_width). The POST
+  // path passes the raw JSON body straight through, so these can be arbitrary
+  // strings — coerce to safe bounded numbers to prevent attribute breakout.
+  // (An-M1: width/height were live-confirmed; the rest are the same class.)
+  p.width = clampInt(p.width, 1, 4096, DEFAULTS.width);
+  p.height = clampInt(p.height, 1, 4096, DEFAULTS.height);
+  p.border_width = clampNum(p.border_width, 0, 100, DEFAULTS.border_width);
+  if (p.contour_width != null) p.contour_width = clampNum(p.contour_width, 0, 100, DEFAULTS.border_width);
+  if (Array.isArray(p.layers)) {
+    p.layers = p.layers.map((layer) => ({
+      ...layer,
+      strokeWidth: layer.strokeWidth != null ? clampNum(layer.strokeWidth, 0, 100, 1) : layer.strokeWidth,
+      opacity: layer.opacity != null ? clampNum(layer.opacity, 0, 1, 1) : layer.opacity,
+    }));
+  }
+  if (p.per_muscle) {
+    p.per_muscle = Object.fromEntries(
+      Object.entries(p.per_muscle).map(([k, o]) => [k, {
+        ...(o as Record<string, unknown>),
+        strokeWidth: o && (o as { strokeWidth?: unknown }).strokeWidth != null
+          ? clampNum((o as { strokeWidth?: unknown }).strokeWidth, 0, 100, 1)
+          : (o as { strokeWidth?: unknown }).strokeWidth,
+        opacity: o && (o as { opacity?: unknown }).opacity != null
+          ? clampNum((o as { opacity?: unknown }).opacity, 0, 1, 1)
+          : (o as { opacity?: unknown }).opacity,
+      }]),
+    );
+  }
+  if (Array.isArray(p.defs)) {
+    p.defs = p.defs.map((d) => {
+      const def = d as { stops?: { opacity?: unknown }[] };
+      if (Array.isArray(def.stops)) {
+        def.stops = def.stops.map((s) => ({
+          ...s,
+          opacity: s.opacity != null ? clampNum(s.opacity, 0, 1, 1) : s.opacity,
+        }));
+      }
+      return def;
+    });
+  }
   const gender: "male" | "female" = p.gender === "female" ? "female" : "male";
   const view = ["front", "back", "dual"].includes(p.view as string) ? (p.view as string) : "dual";
   const contour = ["on", "off", "stroke"].includes(p.contour as string) ? (p.contour as string) : "on";

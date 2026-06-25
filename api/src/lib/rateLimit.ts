@@ -93,9 +93,14 @@ export function bypassCheck(req: Request, env: Env): RateResult | null {
   if (mcpKey && env.MCP_TRUSTED_KEY && mcpKey === env.MCP_TRUSTED_KEY) {
     return { allowed: true, source: "mcp_trusted", bypass: true };
   }
+  // Localhost bypass is keyed ONLY on the edge IP (cf-connecting-ip). The
+  // Origin/Referer header is client-controlled, so trusting it for identity
+  // (isLocalHost(host)) let any public client spoof `Origin: http://localhost`
+  // to get unlimited rate limit (An-M2, live-confirmed). Keep the private-IP
+  // check so the Worker calling itself / dev from a private network still
+  // bypasses; drop the spoofable host check entirely.
   const ip = clientIp(req);
-  const host = referrerHost(req);
-  if (isPrivateIp(ip) || isLocalHost(host)) return { allowed: true, source: "localhost", bypass: true };
+  if (isPrivateIp(ip)) return { allowed: true, source: "localhost", bypass: true };
   return null;
 }
 
@@ -105,7 +110,10 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
 
   const ip = clientIp(req);
   const host = referrerHost(req);
-  if (isPrivateIp(ip) || isLocalHost(host)) return { allowed: true, source: "localhost", bypass: true };
+  // Defense-in-depth: bypassCheck already covers the private-IP localhost case,
+  // but keep the guard here too. Do NOT consult isLocalHost(host) — Origin/Referer
+  // is client-controlled and was spoofable to bypass the limit (An-M2).
+  if (isPrivateIp(ip)) return { allowed: true, source: "localhost", bypass: true };
 
   const reset = nextUtcMidnightUnix();
   const reset_at = new Date(reset * 1000).toISOString();

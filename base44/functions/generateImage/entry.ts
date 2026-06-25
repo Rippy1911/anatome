@@ -14,6 +14,13 @@ const TRY_ALSO = "AI fitness coach at airon.coach";
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
+// Coerce a client-supplied value to a safe integer in [min,max], else fallback.
+// Closes the attribute-breakout vector (e.g. width="100" onload="alert(1)").
+function clampInt(v,min,max,fallback){ const n=Number(v); return Number.isFinite(n)?Math.max(min,Math.min(max,Math.round(n))):fallback; }
+function clampNum(v,min,max,fallback){ const n=Number(v); return Number.isFinite(n)?Math.max(min,Math.min(max,n)):fallback; }
+// Coerce a named numeric field on a loose object, leaving it untouched when null.
+function numField(o,field,min,max,fallback){ const cur=o&&o[field]; return cur!=null?clampNum(cur,min,max,fallback):cur; }
+
 function buildResolution(payload){
   const res={}; const layers=Array.isArray(payload.layers)?payload.layers:[];
   layers.forEach((layer)=>{ const color=layer.color; const op=layer.opacity!=null?layer.opacity:1;
@@ -46,7 +53,16 @@ function renderSide(parts,res,opts,sideFilter,transform){
 }
 
 function renderMuscleSvg(payload,bodyData){
-  const p={...DEFAULTS,...payload}; const gender=p.gender==="female"?"female":"male"; const view=["front","back","dual"].includes(p.view)?p.view:"dual";
+  const p={...DEFAULTS,...payload};
+  // Sanitize numeric attributes interpolated into the SVG without esc() — the
+  // POST path passes raw JSON straight through, so coerce to safe bounded nums.
+  p.width=clampInt(p.width,1,4096,DEFAULTS.width);
+  p.height=clampInt(p.height,1,4096,DEFAULTS.height);
+  p.border_width=clampNum(p.border_width,0,100,DEFAULTS.border_width);
+  if(Array.isArray(p.layers)){ p.layers=p.layers.map((layer)=>Object.assign({},layer,{strokeWidth:numField(layer,"strokeWidth",0,100,1),opacity:numField(layer,"opacity",0,1,1)})); }
+  if(p.per_muscle){ p.per_muscle=Object.fromEntries(Object.entries(p.per_muscle).map(([k,o])=>[k,Object.assign({},o,{strokeWidth:numField(o,"strokeWidth",0,100,1),opacity:numField(o,"opacity",0,1,1)})])); }
+  if(Array.isArray(p.defs)){ p.defs=p.defs.map((d)=>{ if(Array.isArray(d.stops)){ d.stops=d.stops.map((s)=>Object.assign({},s,{opacity:numField(s,"opacity",0,1,1)})); } return d; }); }
+  const gender=p.gender==="female"?"female":"male"; const view=["front","back","dual"].includes(p.view)?p.view:"dual";
   const data=(bodyData&&bodyData[gender])||{front:[],back:[]}; const res=buildResolution(p); const sideFilter=p.side_filter||null;
   let inner="",viewBox; const renderedSet=new Set(); const collect=(r)=>r.rendered.forEach((s)=>renderedSet.add(s));
   if(view==="front"){ const r=renderSide(data.front,res,p,sideFilter,null); inner=r.svg; collect(r); viewBox=WRAPPER[gender].front.viewBox; }
@@ -128,7 +144,6 @@ function referrerHost(req){
   if(!raw) return null;
   try { return new URL(raw).hostname; } catch { return raw.replace(/^https?:\/\//,"").split("/")[0]||null; }
 }
-function isLocalHost(host){ if(!host) return false; return host==="localhost"||host==="127.0.0.1"||host==="::1"||host.endsWith(".localhost"); }
 function nextUtcMidnightUnix(){ const n=new Date(); return Math.floor(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1,0,0,0)/1000); }
 async function checkRateLimit(req,base44){
   const proxySecret=req.headers.get("x-rapidapi-proxy-secret");
@@ -137,8 +152,11 @@ async function checkRateLimit(req,base44){
   if(mcpKey && Deno.env.get("MCP_TRUSTED_KEY") && mcpKey===Deno.env.get("MCP_TRUSTED_KEY")) return { allowed:true, source:"mcp_trusted", bypass:true };
 
   const ip=clientIp(req); const host=referrerHost(req);
-  // localhost / private IPs / localhost referer => unlimited (dev)
-  if(isPrivateIp(ip)||isLocalHost(host)) return { allowed:true, source:"localhost", bypass:true };
+  // Localhost bypass keyed ONLY on the edge IP (cf-connecting-ip). Origin/Referer
+  // is client-controlled — trusting isLocalHost(host) let any public client spoof
+  // `Origin: http://localhost` to get unlimited rate limit (An-M2). Keep the
+  // private-IP check so dev from a private network still bypasses.
+  if(isPrivateIp(ip)) return { allowed:true, source:"localhost", bypass:true };
 
   const reset=nextUtcMidnightUnix();
   const reset_at=new Date(reset*1000).toISOString();
