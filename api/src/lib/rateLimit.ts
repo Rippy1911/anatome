@@ -72,8 +72,15 @@ function nextUtcMidnightUnix(): number {
   const n = new Date();
   return Math.floor(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate() + 1, 0, 0, 0) / 1000);
 }
+export { nextUtcMidnightUnix };
 
-export async function checkRateLimit(req: Request, env: Env): Promise<RateResult> {
+/**
+ * Cheap bypass check — returns the RateResult for callers that skip the KV
+ * counter (RapidAPI proxy / MCP trusted key / localhost), or null when the
+ * request must go through the KV-backed per-day counter. Touches no KV, so it
+ * is safe to run on every request including edge-cache HITs.
+ */
+export function bypassCheck(req: Request, env: Env): RateResult | null {
   const proxy = req.headers.get("x-rapidapi-proxy-secret");
   if (proxy && env.PROXY_SECRET && proxy === env.PROXY_SECRET) {
     return { allowed: true, source: "rapidapi", bypass: true };
@@ -82,6 +89,15 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
   if (mcpKey && env.MCP_TRUSTED_KEY && mcpKey === env.MCP_TRUSTED_KEY) {
     return { allowed: true, source: "mcp_trusted", bypass: true };
   }
+  const ip = clientIp(req);
+  const host = referrerHost(req);
+  if (isPrivateIp(ip) || isLocalHost(host)) return { allowed: true, source: "localhost", bypass: true };
+  return null;
+}
+
+export async function checkRateLimit(req: Request, env: Env): Promise<RateResult> {
+  const bypass = bypassCheck(req, env);
+  if (bypass) return bypass;
 
   const ip = clientIp(req);
   const host = referrerHost(req);

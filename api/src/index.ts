@@ -18,7 +18,7 @@ import {
 import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
-import { checkRateLimit, rateHeaders, rateLimitBody, type Env } from "./lib/rateLimit.ts";
+import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, type Env } from "./lib/rateLimit.ts";
 import { baseAttribution, exerciseAttribution, ATTRIBUTION, LICENSE, BUILT_BY, TRY_ALSO } from "./lib/attribution.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, TOOLS } from "./routes/mcp.ts";
@@ -114,11 +114,17 @@ app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => 
 }));
 
 // ---- searchExercises ----
-app.get("/searchExercises", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  const extra = rateHeaders(rl);
-  return withEdgeCache(c.req.raw, c.executionCtx, () => {
+// Cache-first: a cache HIT serves the cached body and skips the KV rate-limit
+// counter entirely (enforcement already ran when the cache entry was created).
+// Bypass callers (RapidAPI / MCP trusted / localhost) still get correct
+// "unlimited" headers on HITs via bypassCheck, which touches no KV. The real
+// per-day counter runs only on MISS, inside the handler.
+app.get("/searchExercises", (c) => {
+  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
+  return withEdgeCache(c.req.raw, c.executionCtx, async () => {
+    const rl = await checkRateLimit(c.req.raw, c.env);
+    if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
+    const extra = rateHeaders(rl);
     const q = c.req.query();
     const base = baseUrl(c);
     const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
@@ -140,7 +146,7 @@ app.get("/searchExercises", async (c) => {
       results: results.map((e) => formatExercise(e, base, "search", fields)),
       ...exerciseAttribution(),
     }, 200, extra);
-  }, extra);
+  }, hitHeaders);
 });
 
 // ---- RapidAPI benchmark proxy (marketing site latency comparison; not in OpenAPI) ----
@@ -187,11 +193,12 @@ function fullExercise(
   delete (row as { name_lower?: string }).name_lower;
   return formatExercise(row, base, "full", fields);
 }
-app.get("/getExercise", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  const extra = rateHeaders(rl);
+app.get("/getExercise", (c) => {
+  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
   return withEdgeCache(c.req.raw, c.executionCtx, async () => {
+    const rl = await checkRateLimit(c.req.raw, c.env);
+    if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
+    const extra = rateHeaders(rl);
     const q = c.req.query();
     const base = baseUrl(c);
     const meta = exerciseAttribution();
@@ -206,7 +213,7 @@ app.get("/getExercise", async (c) => {
     if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, match: rec ? "random" : "none", exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, extra); }
     if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base, fields), ...meta }, m.exercise ? 200 : 404, extra); }
     return c.json({ ok: false, error: "provide one of: id, name, random=1, muscle", ...meta }, 400, extra);
-  }, extra);
+  }, hitHeaders);
 });
 
 // ---- resolveExercise (GET + POST) ----
