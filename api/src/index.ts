@@ -7,8 +7,7 @@ import { cors } from "hono/cors";
 import { renderMuscleSvg } from "./lib/muscleEngine.ts";
 import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION, ANTAGONISTS } from "./data/muscleCatalog.ts";
 import { getBodyData } from "./lib/bodyData.ts";
-import { payloadFromQuery, sha256 } from "./lib/query.ts";
-import {
+import { payloadFromQuery, sha256 } from "./lib/query.ts";import {
   searchExercisesLogic, formatExercise, lookupExerciseById, getByMuscle, getRandom, getByName,
   cleanExercise,
   resolveExercise as resolveEx,
@@ -19,12 +18,16 @@ import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
 import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, clientIp, isPrivateIp, type Env } from "./lib/rateLimit.ts";
+import { RateLimiterDO } from "./lib/rateLimiterDO.ts";
+// Re-export the Durable Object class so wrangler can bind it as the DO entrypoint.
+export { RateLimiterDO };
 import { serviceAttribution, imageAttribution, exerciseDataAttribution } from "./lib/attribution.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
-import { handleMcp, TOOLS } from "./routes/mcp.ts";
+import { handleMcp, computeMcpResult, TOOLS, type McpBody } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
+import { logRequest } from "./lib/observability.ts";
 
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
 /** GIFs are regenerated in-place; avoid immutable so timing fixes can roll out. */
@@ -44,6 +47,22 @@ app.use("*", async (c, next) => {
   c.header("X-Content-Type-Options", "nosniff");
   c.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   c.header("Referrer-Policy", "strict-origin-when-cross-origin");
+});
+
+// Structured request logging (Workers Observability). One JSON line per request:
+// method, path, status, duration, and edge-cache HIT/MISS. Skips OPTIONS.
+app.use("*", async (c, next) => {
+  if (c.req.method === "OPTIONS") return next();
+  const start = performance.now();
+  await next();
+  const cacheHeader = c.res.headers.get("X-Cache");
+  logRequest({
+    method: c.req.method,
+    path: new URL(c.req.url).pathname,
+    status: c.res.status,
+    duration_ms: elapsedMs(start),
+    cache: cacheHeader === "HIT" ? "HIT" : cacheHeader === "MISS" ? "MISS" : undefined,
+  });
 });
 
 function baseUrl(c: { env: Env }): string {
@@ -310,7 +329,41 @@ app.post("/mcp", async (c) => {
   }
   let body: unknown;
   try { body = await c.req.json(); } catch { return c.json({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } }); }
-  return c.json(handleMcp(body as Parameters<typeof handleMcp>[0], baseUrl(c)));
+  const parsed = body as McpBody;
+  const base = baseUrl(c);
+
+  // Cache deterministic tools/call results in the edge cache, keyed by
+  // method+params (NOT the JSON-RPC id, which varies per request). The cached
+  // inner result is re-wrapped with the live id. Skip non-deterministic calls
+  // (get_exercise with random=true) and non-tools/call methods.
+  const isCacheableCall =
+    parsed.method === "tools/call" &&
+    !(parsed.params?.name === "get_exercise" && parsed.params?.arguments?.random);
+
+  if (isCacheableCall) {
+    const keyStr = `mcp:${parsed.method}:${JSON.stringify(parsed.params || {})}`;
+    const cacheKey = new Request(`https://cache.anatome.dev/mcp/${await sha256(keyStr)}`);
+    const cache = caches.default;
+    const hit = await cache.match(cacheKey);
+    if (hit) {
+      const inner = (await hit.json()) as { ok: boolean; result?: unknown; error?: { code: number; message: string } };
+      const out = inner.ok
+        ? { jsonrpc: "2.0", id: parsed.id ?? null, result: inner.result }
+        : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
+      return c.json(out);
+    }
+    const inner = computeMcpResult(parsed.method, parsed.params || {}, base);
+    if (inner.ok) {
+      const stored = new Response(JSON.stringify(inner), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=86400, s-maxage=604800" } });
+      c.executionCtx.waitUntil(cache.put(cacheKey, stored));
+    }
+    const out = inner.ok
+      ? { jsonrpc: "2.0", id: parsed.id ?? null, result: inner.result }
+      : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
+    return c.json(out);
+  }
+
+  return c.json(handleMcp(parsed, base));
 });
 
 // ---- openapi ----

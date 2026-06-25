@@ -49,11 +49,6 @@ export const TOOLS = [
       fields: { type: "string", description: "Comma-separated fields, or all/*" } } } },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function rpcResult(id: any, result: unknown) { return { jsonrpc: "2.0", id, result }; }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function rpcError(id: any, code: number, message: string) { return { jsonrpc: "2.0", id, error: { code, message } }; }
-
 function fullExercise(e: ExerciseRow | null, base: string, fieldsRaw?: string) {
   if (!e) return null;
   const cleaned = cleanExercise(e) as ExerciseRow;
@@ -71,21 +66,39 @@ export interface McpBody {
   params?: { name?: string; arguments?: any };
 }
 
-/** Handle a parsed JSON-RPC body. `base` is the public base URL for image links. */
-export function handleMcp(body: McpBody, base: string): object {
-  const { id = null, method, params = {} } = body || {};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rpcResult(id: any, result: unknown) { return { jsonrpc: "2.0", id, result }; }
+// eslint-disable-next-line @typescript-eslint-eslint/no-explicit-any
+function rpcError(id: any, code: number, message: string) { return { jsonrpc: "2.0", id, error: { code, message } }; }
+
+/** Cacheable inner result (no JSON-RPC envelope / id, so the same result can be
+ *  re-wrapped for different request ids). `ok` distinguishes result vs error. */
+export interface McpInnerResult {
+  ok: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  result?: any;
+  error?: { code: number; message: string };
+}
+
+/** Pure result computation for a parsed method+params — no JSON-RPC envelope, so
+ *  it is cacheable by method+params and re-wrapped with the live request id. */
+export function computeMcpResult(
+  method: string | undefined,
+  params: { name?: string; arguments?: Record<string, unknown> },
+  base: string,
+): McpInnerResult {
+  const args = (params && params.arguments) || {};
   if (method === "initialize") {
-    return rpcResult(id, { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "anatome", version: "2.0.0" } });
+    return { ok: true, result: { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "anatome", version: "2.0.0" } } };
   }
   if (method === "tools/list") {
-    return rpcResult(id, { tools: TOOLS });
+    return { ok: true, result: { tools: TOOLS } };
   }
   if (method === "tools/call") {
-    const name = params.name;
-    const args = params.arguments || {};
+    const name = params && params.name;
     if (name === "generate_muscle_image") {
       const { svg, muscles_rendered } = renderMuscleSvg(args, getBodyData());
-      return rpcResult(id, { content: [{ type: "text", text: svg }], structuredContent: { muscles_rendered, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE } });
+      return { ok: true, result: { content: [{ type: "text", text: svg }], structuredContent: { muscles_rendered, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE } } };
     }
     if (name === "list_muscles") {
       const muscles = MUSCLES.map((slug) => ({
@@ -95,14 +108,14 @@ export function handleMcp(body: McpBody, base: string): object {
         body_region: BODY_REGION[slug] || null,
         antagonists: ANTAGONISTS[slug] || [],
       }));
-      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles } });
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles } } };
     }
     if (name === "resolve_exercise") {
-      const r = resolveEx(args.exercise, base);
-      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(r) }], structuredContent: { ...r, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, license: LICENSE } });
+      const r = resolveEx(args.exercise as string, base);
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(r) }], structuredContent: { ...r, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, license: LICENSE } } };
     }
     if (name === "search_exercises") {
-      const fields = parseFieldsParam(args.fields, SEARCH_DEFAULT_FIELDS);
+      const fields = parseFieldsParam(args.fields as string | undefined, SEARCH_DEFAULT_FIELDS);
       const { total, offset, limit, next_cursor, results } = searchExercisesLogic(args);
       const payload = {
         total_matched: total, offset, limit, next_cursor,
@@ -110,21 +123,28 @@ export function handleMcp(body: McpBody, base: string): object {
         exercise_db_attribution: EXERCISE_DB_ATTRIBUTION,
         license: LICENSE,
       };
-      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload });
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     if (name === "get_exercise") {
       let r: { match: string; exercise: unknown };
       if (args.id) {
-        const { exercise, match } = lookupExerciseById(args.id);
-        r = exercise ? { match, exercise: fullExercise(exercise, base, args.fields) } : { match: "none", exercise: null };
+        const { exercise, match } = lookupExerciseById(args.id as string);
+        r = exercise ? { match, exercise: fullExercise(exercise, base, args.fields as string | undefined) } : { match: "none", exercise: null };
       }
-      else if (args.random) { const rec = getRandom(); r = rec ? { match: "random", exercise: fullExercise(rec, base, args.fields) } : { match: "none", exercise: null }; }
-      else if (args.name) { const m = getByName(args.name); r = { match: m.match, exercise: fullExercise(m.exercise, base, args.fields) }; }
+      else if (args.random) { const rec = getRandom(); r = rec ? { match: "random", exercise: fullExercise(rec, base, args.fields as string | undefined) } : { match: "none", exercise: null }; }
+      else if (args.name) { const m = getByName(args.name as string); r = { match: m.match, exercise: fullExercise(m.exercise, base, args.fields as string | undefined) }; }
       else { r = { match: "none", exercise: null }; }
       const payload = { ...r, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, license: LICENSE };
-      return rpcResult(id, { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload });
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
-    return rpcError(id, -32602, `Unknown tool: ${name}`);
+    return { ok: false, error: { code: -32602, message: `Unknown tool: ${name}` } };
   }
-  return rpcError(id, -32601, `Method not found: ${method}`);
+  return { ok: false, error: { code: -32601, message: `Method not found: ${method}` } };
+}
+
+/** Handle a parsed JSON-RPC body. `base` is the public base URL for image links. */
+export function handleMcp(body: McpBody, base: string): object {
+  const { id = null, method, params = {} } = body || {};
+  const inner = computeMcpResult(method, params, base);
+  return inner.ok ? rpcResult(id, inner.result) : rpcError(id, inner.error!.code, inner.error!.message);
 }
