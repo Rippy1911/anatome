@@ -12,6 +12,9 @@ import Docs from '@/pages/Docs';
 import AiGuide from '@/pages/AiGuide';
 import Api from '@/pages/Api';
 import Tos from '@/pages/Tos';
+import About from '@/pages/About';
+import Contact from '@/pages/Contact';
+import UseCases from '@/pages/UseCases';
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
               <Route path="/ai-guide" element={<AiGuide />} />
               <Route path="/api" element={<Api />} />
               <Route path="/tos" element={<Tos />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/use-cases" element={<UseCases />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>

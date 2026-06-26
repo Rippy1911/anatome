@@ -13,7 +13,13 @@ export default function SiteFooter() {
         >
           Built with ♥ by NextSolutions
         </a>
-        <span className="flex items-center gap-2">
+        <span className="flex flex-wrap items-center justify-center gap-2">
+          <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+          <span aria-hidden="true">·</span>
+          <Link to="/use-cases" className="hover:text-foreground transition-colors">Use Cases</Link>
+          <span aria-hidden="true">·</span>
+          <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+          <span aria-hidden="true">·</span>
           <Link to="/tos" className="hover:text-foreground transition-colors">Terms</Link>
           <span aria-hidden="true">·</span>
           <span>© 2026 NextSolutions</span>
