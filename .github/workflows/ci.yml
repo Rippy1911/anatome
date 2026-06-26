@@ -15,7 +15,7 @@ jobs:
     name: Frontend (lint + typecheck)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -35,7 +35,7 @@ jobs:
       run:
         working-directory: api
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # The api/ package lands in Phase 3. Until then, skip gracefully.
       - name: Detect api package
         id: detect
@@ -83,7 +83,7 @@ jobs:
     # waits for approval.
     environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Skip if API not ready
         id: detect
         working-directory: .
