@@ -74,6 +74,67 @@ export function absoluteImageSrc(src: string | undefined | null, base: string): 
   return normalized;
 }
 
+/**
+ * free-exercise-db stores image paths as relative strings like
+ * "Barbell_Bench_Press_-_Medium_Grip/0.jpg". The canonical upstream location is
+ * the `exercises/` directory (NOT `dist/images/` — see yuhonas/free-exercise-db#16),
+ * i.e. https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/<path>
+ * To avoid third-party hotlinking and to work behind RapidAPI auth, Anatome proxies
+ * these through its own `/exerciseImage?path=<rel>` route; that route is the default.
+ */
+export const FREE_EXERCISE_DB_RAW_BASE =
+  "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+
+/** Build the Anatome-hosted URL for a free-exercise-db relative image path. */
+export function freeExerciseDbImageUrl(relPath: string | undefined | null, base: string): string | null {
+  if (!relPath || typeof relPath !== "string") return null;
+  const safe = sanitizeFreeExerciseDbPath(relPath);
+  if (!safe) return null;
+  const b = base.replace(/\/$/, "");
+  return `${b}/exerciseImage?path=${encodeURIComponent(safe)}`;
+}
+
+/** Build the raw upstream GitHub URL for a free-exercise-db relative image path. */
+export function freeExerciseDbRawUrl(relPath: string | undefined | null): string | null {
+  if (!relPath || typeof relPath !== "string") return null;
+  const safe = sanitizeFreeExerciseDbPath(relPath);
+  if (!safe) return null;
+  return `${FREE_EXERCISE_DB_RAW_BASE}${safe.split("/").map(encodeURIComponent).join("/")}`;
+}
+
+/**
+ * Validate a free-exercise-db relative image path. Allows alphanumerics, `-`, `_`,
+ * `.`, spaces, and single `/` separators; rejects empty, leading slash, `..`
+ * traversal, backslashes, and anything that escapes the exercises/ directory.
+ * Returns the sanitized path or null.
+ */
+export function sanitizeFreeExerciseDbPath(relPath: string): string | null {
+  const s = String(relPath || "").trim();
+  if (!s) return null;
+  if (s.startsWith("/") || s.includes("\\")) return null;
+  if (s.includes("..")) return null;
+  if (s.includes("//")) return null;
+  // Only allow: alnum, - _ . space /
+  if (!/^[A-Za-z0-9\-_. /]+$/.test(s)) return null;
+  const segs = s.split("/");
+  if (segs.length < 2 || segs.length > 4) return null;
+  for (const seg of segs) {
+    if (!seg || seg.endsWith(".") || seg.startsWith(".")) return null;
+  }
+  return s;
+}
+
+/** Resolve all image paths for an exercise to Anatome-hosted absolute URLs. */
+export function freeExerciseDbImageUrls(images: string[] | undefined | null, base: string): string[] {
+  if (!Array.isArray(images)) return [];
+  const out: string[] = [];
+  for (const p of images) {
+    const u = freeExerciseDbImageUrl(p, base);
+    if (u) out.push(u);
+  }
+  return out;
+}
+
 /** Bump when GIF frame timing changes — busts CDN/browser cache on gif_url. */
 export const GIF_PLAYBACK_VERSION = "4";
 
@@ -118,6 +179,7 @@ export function buildExerciseRecord(
     keywords: deriveKeywords(e),
     instructions: e.instructions || [],
     images: e.images || [],
+    source_images: freeExerciseDbImageUrls(e.images, base),
     image_url: exerciseImageUrl(e.ext_id, base),
     gif_url: exerciseGifUrl(e.ext_id, base),
     anatome_imageSrc: absoluteImageSrc(e.anatome_imageSrc, base),

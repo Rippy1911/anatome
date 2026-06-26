@@ -60,6 +60,7 @@ Each full row should contain (see `base44/entities/Exercise.jsonc`):
   "primaryMuscles": ["chest"], "secondaryMuscles": ["triceps", "shoulders"],
   "instructions": ["..."],
   "images": ["Bench_Press/0.jpg", "Bench_Press/1.jpg"],
+  "source_images": ["https://api.anatome.dev/exerciseImage?path=Bench_Press%2F0.jpg", "https://api.anatome.dev/exerciseImage?path=Bench_Press%2F1.jpg"],
   "gif_url": "https://api.anatome.dev/exerciseGif?id=Bench_Press",
   "anatome_primary_slugs": ["chest"],
   "anatome_secondary_slugs": ["triceps", "deltoids"],
@@ -101,5 +102,12 @@ listed in `fields=`.
   When the API moves to `api.anatome.dev`, the Worker rewrites these to absolute
   URLs at response time (preserving backwards compatibility). Do not hardcode a
   host into the bundled data.
+- `images` are the **raw relative** free-exercise-db paths (e.g.
+  `Barbell_Bench_Press_-_Medium_Grip/0.jpg`). The canonical upstream base is
+  `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/`
+  (NOT `dist/images/` — see yuhonas/free-exercise-db#16). At response time the
+  Worker also emits `source_images`: Anatome-hosted absolute URLs that proxy the
+  CC0 photos via `GET /exerciseImage?path=<rel>` (no third-party hotlinking,
+  works behind RapidAPI auth). Prefer `source_images` for `<img src>`.
 - After dropping the files in, verify counts: `jq 'length' api/data/exercises.json`
   should be **873**; `bodyPaths.json` should have 4 populated `gender.side` arrays.
