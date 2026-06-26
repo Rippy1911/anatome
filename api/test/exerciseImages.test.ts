@@ -45,6 +45,17 @@ describe("sanitizeFreeExerciseDbPath", () => {
     expect(sanitizeFreeExerciseDbPath("foo/../../bar")).toBeNull();
   });
 
+  it("rejects URL-encoded traversal after a single decode (%2e%2e)", () => {
+    // Hono/URLSearchParams decodes %2e%2e -> .. before the sanitizer sees it.
+    expect(sanitizeFreeExerciseDbPath("foo/%2e%2e/bar")).toBeNull();
+    expect(sanitizeFreeExerciseDbPath("%2e%2e/etc/passwd")).toBeNull();
+  });
+
+  it("rejects a bare percent / percent-encoded slashes", () => {
+    expect(sanitizeFreeExerciseDbPath("foo%bar/0.jpg")).toBeNull();
+    expect(sanitizeFreeExerciseDbPath("foo%2Fbar")).toBeNull();
+  });
+
   it("rejects leading slash and backslashes", () => {
     expect(sanitizeFreeExerciseDbPath("/etc/passwd")).toBeNull();
     expect(sanitizeFreeExerciseDbPath("foo\\bar")).toBeNull();
