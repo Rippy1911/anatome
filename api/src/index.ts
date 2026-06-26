@@ -12,6 +12,7 @@ import { payloadFromQuery, sha256 } from "./lib/query.ts";import {
   cleanExercise,
   resolveExercise as resolveEx,
   listEquipment, getMuscleInfo,
+  sanitizeFreeExerciseDbPath, freeExerciseDbRawUrl,
   type ExerciseRow,
 } from "./lib/exercises.ts";
 import { withEdgeCache } from "./lib/edgeCache.ts";
@@ -74,7 +75,7 @@ app.get("/", (c) => c.json({
   ok: true, service: "anatome-api", version: "2.0.0",
   endpoints: [
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
-    "/exerciseGif", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/ciStatus", "/selfTest",
+    "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/ciStatus", "/selfTest",
   ],
   ...serviceAttribution(),
 }));
@@ -214,6 +215,28 @@ app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, as
     hint: "python3 scripts/generate-exercise-gifs.py",
     ext_id: id,
   }, 404);
+}));
+
+// ---- exercise reference photo (free-exercise-db, CC0) ----
+// Proxies the source JPEGs through Anatome's host so consumers (incl. RapidAPI)
+// don't hotlink raw.githubusercontent.com. `path` is the relative image path
+// stored on each exercise (e.g. "Barbell_Bench_Press_-_Medium_Grip/0.jpg").
+app.get("/exerciseImage", async (c) => withEdgeCache(c.req.raw, c.executionCtx, async () => {
+  const path = c.req.query("path");
+  if (!path) return c.json({ ok: false, error: "path required (exercise images[] entry)" }, 400);
+  const safe = sanitizeFreeExerciseDbPath(path);
+  if (!safe) return c.json({ ok: false, error: "invalid path" }, 400);
+  const upstream = freeExerciseDbRawUrl(safe);
+  if (!upstream) return c.json({ ok: false, error: "invalid path" }, 400);
+  const res = await fetch(upstream, { headers: { Accept: "image/jpeg" } });
+  if (!res.ok || !res.body) {
+    return c.json({ ok: false, error: "image not found", status: res.status, path: safe }, 404);
+  }
+  const headers: Record<string, string> = {
+    "Content-Type": res.headers.get("Content-Type") || "image/jpeg",
+    "Cache-Control": CACHE_CONTROL,
+  };
+  return new Response(res.body, { status: 200, headers });
 }));
 
 // ---- getExercise (4 modes) ----

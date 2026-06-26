@@ -44,6 +44,10 @@ const SCHEMA = `{
     "Wide-Grip_Barbell_Bench_Press/0.jpg",
     "Wide-Grip_Barbell_Bench_Press/1.jpg"
   ],
+  "source_images": [
+    "https://api.anatome.dev/exerciseImage?path=Wide-Grip_Barbell_Bench_Press%2F0.jpg",
+    "https://api.anatome.dev/exerciseImage?path=Wide-Grip_Barbell_Bench_Press%2F1.jpg"
+  ],
   "image_url": "https://api.anatome.dev/exerciseGif?id=Wide-Grip_Barbell_Bench_Press",
   "gif_url": "https://api.anatome.dev/exerciseGif?id=Wide-Grip_Barbell_Bench_Press",
   "anatome_primary_slugs": ["chest"],

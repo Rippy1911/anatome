@@ -55,16 +55,37 @@ async function resolveFromDb(base44, exerciseRaw){
   const layers=[];
   if((rec.anatome_primary_slugs||[]).length) layers.push({ color:PALETTE.primary, muscles:rec.anatome_primary_slugs });
   if((rec.anatome_secondary_slugs||[]).length) layers.push({ color:PALETTE.secondary, muscles:rec.anatome_secondary_slugs });
-  return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers, image_src:rec.anatome_imageSrc, exercise_image_url:dbImageUrl(rec) };
+  return { exercise:rec.name, matched:layers.length>0, source:"exercise_db", layers, image_src:rec.anatome_imageSrc, exercise_image_url:dbImageUrl(rec), gif_url:dbGifUrl(rec) };
 }
 
 // Build the Anatome-hosted demo GIF URL for a matched exercise record.
 const API_PUBLIC = Deno.env.get("PUBLIC_BASE_URL") || "https://api.anatome.dev";
 const GIF_PLAYBACK_VERSION = "4";
-function dbImageUrl(rec){
+function dbGifUrl(rec){
   if(!rec?.ext_id) return null;
   const base = API_PUBLIC.replace(/\/$/, "");
   return `${base}/exerciseGif?id=${encodeURIComponent(rec.ext_id)}&v=${GIF_PLAYBACK_VERSION}`;
+}
+
+// Build the Anatome-hosted reference-photo URL for a matched exercise record.
+// Uses the first free-exercise-db image (CC0), proxied through /exerciseImage so
+// the frontend can render the real exercise photo (not just the 2-frame GIF).
+function sanitizeFreeExerciseDbPath(p){
+  const s=String(p||"").trim();
+  if(!s||s.startsWith("/")||s.includes("\\")||s.includes("..")||s.includes("//")) return null;
+  if(!/^[A-Za-z0-9\-_. /]+$/.test(s)) return null;
+  const segs=s.split("/");
+  if(segs.length<2||segs.length>4) return null;
+  for(const seg of segs){ if(!seg||seg.endsWith(".")||seg.startsWith(".")) return null; }
+  return s;
+}
+function dbImageUrl(rec){
+  const first=Array.isArray(rec?.images)&&rec.images[0];
+  if(!first) return null;
+  const safe=sanitizeFreeExerciseDbPath(first);
+  if(!safe) return null;
+  const base=API_PUBLIC.replace(/\/$/,"");
+  return `${base}/exerciseImage?path=${encodeURIComponent(safe)}`;
 }
 
 // Find the matching DB record for an exercise name (to attach its real photo).
@@ -162,8 +183,9 @@ Deno.serve(async (req)=>{
 
     // 3b) Attach the real exercise photo from the database when available.
     let exerciseImageUrl=resolved.exercise_image_url || null;
-    if(!exerciseImageUrl){
-      try { const rec=await findDbExercise(base44, resolved.exercise || exerciseName); if(rec) exerciseImageUrl=dbImageUrl(rec); }
+    let gifUrl=resolved.gif_url || null;
+    if(!exerciseImageUrl || !gifUrl){
+      try { const rec=await findDbExercise(base44, resolved.exercise || exerciseName); if(rec){ if(!exerciseImageUrl) exerciseImageUrl=dbImageUrl(rec); if(!gifUrl) gifUrl=dbGifUrl(rec); } }
       catch(e){ console.warn("db image lookup failed:", e.message); }
     }
 
@@ -177,6 +199,7 @@ Deno.serve(async (req)=>{
       source: resolved.source,
       anatome_imageSrc: imageSrc,
       exercise_image_url: exerciseImageUrl,
+      gif_url: gifUrl,
       remaining: limit.remaining,
       attribution: ATTRIBUTION,
       license: "Apache-2.0",
