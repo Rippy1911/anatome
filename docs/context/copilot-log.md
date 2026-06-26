@@ -1,6 +1,6 @@
 # anatome — Copilot context log
 
-*Auto-distilled from IdeaForge conversations (last 30 days). Source: .ideaforge-context/raw/slices/anatome.json. anatome is an open-source muscle-group image API + ExerciseDB, sibling to aironcoach.*
+*Auto-distilled from IdeaForge conversations (last 30 days). Source: .ideaforge-context/raw/slices/anatome.json. anatome is an open-source muscle-group image API + free-exercise-db, sibling to aironcoach.*
 
 ## Summary (3-5 bullets)
 

@@ -56,6 +56,13 @@ export default function Docs() {
 X-RapidAPI-Host: anatome.p.rapidapi.com`}</Code>
       <P>Base URL for subscribed calls: <span className="font-mono text-foreground">https://anatome.p.rapidapi.com</span> (same paths as the Worker). Never expose your key in browser-visible <span className="font-mono text-foreground">&lt;img src&gt;</span> URLs — browsers cannot attach auth headers to image requests. Use fetch + blob URL, a server-side proxy, or self-host for embeddable SVGs.</P>
       <P>Direct <span className="font-mono text-foreground">https://api.anatome.dev</span> works without headers for development and low-traffic embeds (fair-use: 100 req/day per public host, 1000/day per IP). Localhost is unlimited.</P>
+      <div className="rounded-lg border border-border bg-secondary/40 px-4 py-3 text-sm mt-3 mb-3">
+        <strong>Need food search, workout logging, AI tools, or per-user data?</strong>{" "}
+        The full platform at <a className="text-primary hover:underline" href="https://anatome.nextsolutions.studio" target="_blank" rel="noopener noreferrer">anatome.nextsolutions.studio</a> adds
+        100 endpoints (food, calculators, per-user workouts/meals/cardio, progression analytics, MCP with 41 tools) with self-service keys
+        via <span className="font-mono text-xs">Authorization: Bearer anp_…</span>.
+        <a className="text-primary hover:underline ml-1" href="https://anatome-body-api.base44.app/onboarding" target="_blank" rel="noopener noreferrer">Get a free key →</a>
+      </div>
 
       <H2 id="endpoints">Endpoints</H2>
       <P>Worker base URL: <span className="font-mono text-foreground">https://api.anatome.dev</span> · RapidAPI: <span className="font-mono text-foreground">https://anatome.p.rapidapi.com</span> (marketing site: <span className="font-mono text-foreground">https://anatome.dev</span>).</P>

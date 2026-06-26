@@ -138,6 +138,14 @@ export const MUSCLE_SLUG_ALIASES: Record<string, string> = {
   "upper back": "upper-back",
   lowerback: "lower-back",
   upperback: "upper-back",
+  // free-exercise-db uses "abductors" (hip abductors); the closest SVG slug is
+  // gluteal (the react-native-body-highlighter paths don't have a separate
+  // abductor shape). Mapping to adductors would be anatomically WRONG — they are
+  // antagonists. gluteal is the best available proxy.
+  abductors: "gluteal",
+  "hip abductors": "gluteal",
+  "hip abductor": "gluteal",
+  abductor: "gluteal",
 };
 
 export function normalizeSlug(input: string): string {

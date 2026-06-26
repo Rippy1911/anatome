@@ -51,7 +51,7 @@ Add a scope when helpful, e.g. `feat(api): add muscle catalog endpoint`.
   pre-existing baseline of failures from the Base44 export and is currently
   non-blocking — don't add new ones.)
 - **API:** `pnpm test && pnpm run worker:test` must pass, and the `selfTest`
-  endpoint must report **≥ 39/39** (never fewer than before your change).
+  endpoint must report **≥ 46/46** (never fewer than before your change).
 
 PRs with failing checks will not be merged.
 

@@ -62,7 +62,12 @@ export default function LiveDemo() {
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-xs text-foreground">
           <AlertTriangle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
-          <span>{error}</span>
+          <span>
+            {error}
+            {(error.toLowerCase().includes("limit") || error.toLowerCase().includes("rate") || error.toLowerCase().includes("quota")) && (
+              <> — <a href="https://anatome-body-api.base44.app/onboarding" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">Get a free key</a> or <a href="https://rapidapi.com/slaczka.sebastian/api/anatome" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">subscribe on RapidAPI</a> for production traffic.</>
+            )}
+          </span>
         </div>
       )}
 

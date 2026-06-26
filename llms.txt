@@ -1,0 +1,99 @@
+# Anatome
+
+> Muscle group image generator API + ExerciseDB — Apache-2.0, hosted on Cloudflare Workers.
+
+## What is Anatome?
+
+Anatome renders colorable anatomical SVG diagrams of the human body over a simple
+HTTP API. It also bundles an exercise database (873 CC0 exercises pre-mapped to
+23 muscle slugs) and implements the Model Context Protocol (MCP) so AI agents can
+call it as a tool with zero additional integration work.
+
+**Use it if you need to:**
+
+- Embed a muscle-group diagram in a fitness app (`<img src="https://api.anatome.dev/generateImage?...">`)
+- Show which muscles a workout session hit (session heatmap)
+- Let an AI agent search or look up exercises with muscle-activation context
+- Proxy exercise reference photos (CC0) without hitting GitHub raw URLs
+
+## Live API
+
+Base URL: `https://api.anatome.dev`
+
+All endpoints are free to use within the fair-use rate limit (1 000 requests/IP/day).
+For higher volume use the [RapidAPI plan](https://rapidapi.com/anatome/api/anatome)
+(300 req/mo included, then $0.001/req).
+
+## Key endpoints
+
+```
+GET  /generateImage   Render a colorable SVG muscle diagram
+POST /generateImage   Same, via JSON body
+GET  /workoutImage    Session heatmap SVG (stacked muscle activation across exercises)
+GET  /searchExercises Search 873 exercises (name/muscle/equipment/level filters)
+GET  /getExercise     Fetch a single exercise by name, ext_id, or random
+GET  /resolveExercise Map an exercise name → muscle layers
+GET  /exerciseGif     2-frame demo GIF for an exercise
+GET  /exerciseImage   CC0 reference photo from free-exercise-db, proxied
+GET  /listMuscles     List all 23 muscle slugs with anatomical names
+GET  /muscleInfo      Stats for a single muscle slug
+GET  /listEquipment   List all equipment types in the database
+POST /mcp             MCP JSON-RPC endpoint (7 tools)
+GET  /openapi         OpenAPI 3.1 spec
+```
+
+## MCP tools (for AI agents)
+
+| Tool | What it does |
+|------|-------------|
+| `generate_muscle_image` | Render a highlighted muscle SVG |
+| `list_muscles` | List all 23 muscle slugs |
+| `resolve_exercise` | Map an exercise name → muscle layers |
+| `search_exercises` | Search the 873-exercise database |
+| `get_exercise` | Fetch a full exercise record |
+| `get_exercise_gif` | Get the demo GIF URL for an exercise |
+| `workout_image` | Session heatmap SVG from a list of exercises |
+
+MCP config (add to `claude_desktop_config.json` or equivalent):
+
+```json
+{
+  "mcpServers": {
+    "anatome": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://api.anatome.dev/mcp"]
+    }
+  }
+}
+```
+
+## Quick example
+
+```bash
+# Highlight chest + triceps on a male dual-view diagram
+curl "https://api.anatome.dev/generateImage?layers=DC2626:chest|F59E0B:triceps&output=raw" -o diagram.svg
+
+# Session heatmap for a push day
+curl -X POST https://api.anatome.dev/workoutImage \
+  -H "Content-Type: application/json" \
+  -d '{"exercises":["bench press","overhead press","tricep pushdown"],"view":"front"}'
+
+# Search exercises that target the chest
+curl "https://api.anatome.dev/searchExercises?muscle=chest&limit=5"
+```
+
+## Repository layout
+
+```
+api/          Cloudflare Workers API (Hono) — deploys via wrangler
+src/          React/Vite marketing + playground (Base44)
+base44/       Base44 configuration + functions
+```
+
+## License
+
+Apache-2.0. Third-party data:
+- Anatomical SVG paths: react-native-body-highlighter (MIT, © Hicham El Boussarghini)
+- Exercise data: free-exercise-db (CC0)
+
+See [NOTICE](NOTICE) for full attribution.

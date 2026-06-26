@@ -15,9 +15,11 @@ import {
 } from "../lib/exercises.ts";
 import { parseFieldsParam, SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
 import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, EXERCISE_DB_ATTRIBUTION } from "../lib/attribution.ts";
+import { workoutImageLogic } from "../lib/workoutImage.ts";
 
 export const TOOLS = [
   { name: "generate_muscle_image", description: "Render an SVG diagram of the human body with arbitrary muscles highlighted in arbitrary colors. Returns an SVG string.",
+    annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {
       gender: { type: "string", enum: ["male", "female"], default: "male" },
       view: { type: "string", enum: ["front", "back", "dual"], default: "dual" },
@@ -27,10 +29,13 @@ export const TOOLS = [
       per_muscle: { type: "object" }, side_filter: { type: "object" }, defs: { type: "array" } },
       required: ["layers"] } },
   { name: "list_muscles", description: "List all 23 supported muscle slugs with anatomical names and which views they appear on.",
+    annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {} } },
   { name: "resolve_exercise", description: "Resolve an exercise name against the 873-exercise database into primary/secondary muscle layers. Use generate_muscle_image with custom layers for additional tiers (e.g. accessory stabilizers).",
+    annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: { exercise: { type: "string" } }, required: ["exercise"] } },
   { name: "search_exercises", description: "Search the 873-exercise database (free-exercise-db) by name with optional muscle/equipment/level filters. Returns enriched results with ready-to-embed anatome_imageSrc URLs.",
+    annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {
       q: { type: "string", description: "Name search query, e.g. 'bench'" },
       muscle: { type: "string", description: "Filter by Anatome muscle slug, e.g. 'chest'" },
@@ -42,11 +47,26 @@ export const TOOLS = [
       fields: { type: "string", description: "Comma-separated fields, or all/* (default: lean search set)" } },
       required: ["q"] } },
   { name: "get_exercise", description: "Fetch exercise(s). Full record by default; use fields to trim (e.g. name,instructions,gif_url). One of: name, id, random.",
+    annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {
       name: { type: "string", description: "Exercise name (fuzzy match), e.g. 'bench press'" },
       id: { type: "string", description: "Exercise ext_id" },
       random: { type: "boolean", description: "Return a random exercise" },
       fields: { type: "string", description: "Comma-separated fields, or all/*" } } } },
+  { name: "get_exercise_gif", description: "Return the Anatome-hosted demo GIF URL for an exercise by name or ext_id. Embed in markdown: ![bench press](<url>).",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {
+      name: { type: "string", description: "Exercise name (fuzzy match), e.g. 'bench press'" },
+      id: { type: "string", description: "Exercise ext_id" } } } },
+  { name: "workout_image", description: "Stack muscle activation across a list of exercises into a single session-heatmap SVG. Muscles hit once appear at 40% opacity; twice 65%; three or more times 100%.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {
+      exercises: { type: "array", items: { type: "string" }, description: "Exercise names (fuzzy matched), e.g. ['bench press', 'squat', 'overhead press']" },
+      gender: { type: "string", enum: ["male", "female"], default: "male" },
+      view: { type: "string", enum: ["front", "back", "dual"], default: "dual" },
+      width: { type: "number", default: 768 },
+      height: { type: "number", default: 1024 } },
+      required: ["exercises"] } },
 ];
 
 function fullExercise(e: ExerciseRow | null, base: string, fieldsRaw?: string) {
@@ -89,7 +109,7 @@ export function computeMcpResult(
 ): McpInnerResult {
   const args = (params && params.arguments) || {};
   if (method === "initialize") {
-    return { ok: true, result: { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "anatome", version: "2.0.0" } } };
+    return { ok: true, result: { protocolVersion: "2025-03-26", capabilities: { tools: {} }, serverInfo: { name: "anatome", version: "2.0.0" } } };
   }
   if (method === "tools/list") {
     return { ok: true, result: { tools: TOOLS } };
@@ -136,6 +156,20 @@ export function computeMcpResult(
       else { r = { match: "none", exercise: null }; }
       const payload = { ...r, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, license: LICENSE };
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
+    }
+    if (name === "get_exercise_gif") {
+      let ex: ExerciseRow | null = null;
+      if (args.id) { const { exercise } = lookupExerciseById(args.id as string); ex = exercise; }
+      else if (args.name) { const m = getByName(args.name as string); ex = m.exercise; }
+      if (!ex) return { ok: false, error: { code: -32602, message: "Exercise not found. Provide name or id." } };
+      const gifUrl = `${base}/exerciseGif?id=${encodeURIComponent(ex.ext_id as string)}`;
+      return { ok: true, result: { content: [{ type: "text", text: gifUrl }], structuredContent: { ext_id: ex.ext_id, name: ex.name, gif_url: gifUrl, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION } } };
+    }
+    if (name === "workout_image") {
+      const exercises = args.exercises as string[] | undefined;
+      if (!exercises || !exercises.length) return { ok: false, error: { code: -32602, message: "exercises array required" } };
+      const result = workoutImageLogic({ exercises, gender: args.gender as string | undefined, view: args.view as string | undefined, width: args.width as number | undefined, height: args.height as number | undefined }, getBodyData());
+      return { ok: true, result: { content: [{ type: "text", text: result.svg }], structuredContent: { muscles_hit: result.muscles_hit, per_muscle_count: result.per_muscle_count, exercises_resolved: result.exercises_resolved, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE } } };
     }
     return { ok: false, error: { code: -32602, message: `Unknown tool: ${name}` } };
   }

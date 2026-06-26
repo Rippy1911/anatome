@@ -15,8 +15,10 @@ const first = results[0];
 const PATTERN_B = `const { exercise } = await fetch("https://anatome.p.rapidapi.com/getExercise?name=bench+press", {
   headers: ${RAPIDAPI_HEADERS},
 }).then(r => r.json());
+// NOTE: getExercise wraps the data under an "exercise" key:
 console.log(exercise.instructions);    // array of step-by-step strings
-console.log(exercise.anatome_imageSrc); // render via authenticated fetch, not bare <img src>`;
+console.log(exercise.anatome_imageSrc); // render via authenticated fetch, not bare <img src>
+console.log(exercise.source_images);   // CC0 photo URLs via /exerciseImage proxy`;
 
 const PATTERN_C = `const { exercise } = await fetch("https://anatome.p.rapidapi.com/getExercise?muscle=chest&limit=10", {
   headers: ${RAPIDAPI_HEADERS},
@@ -84,6 +86,7 @@ export default function ExerciseDbSection() {
 
       <h3 className="font-display font-semibold mt-8 mb-1">Exercise schema</h3>
       <p className="text-sm text-muted-foreground">Example: <span className="font-mono text-foreground">GET https://api.anatome.dev/getExercise?name=bench+press</span></p>
+      <p className="text-xs text-muted-foreground mt-1 mb-1">⚠️ <span className="font-mono text-foreground">getExercise</span> returns data nested under an <span className="font-mono text-foreground">exercise</span> key: use <span className="font-mono text-foreground">response.exercise.name</span>, not <span className="font-mono text-foreground">response.name</span>. <span className="font-mono text-foreground">searchExercises</span> returns <span className="font-mono text-foreground">results[]</span> flat.</p>
       <Code>{SCHEMA}</Code>
 
       <p className="text-sm text-muted-foreground leading-relaxed mt-3">

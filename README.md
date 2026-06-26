@@ -2,7 +2,7 @@
 
 # Anatome
 
-**Muscle group image generator API + ExerciseDB.**
+**Muscle group image generator API + free-exercise-db.**
 Multi-color anatomical SVGs, MCP-compatible, 873 exercises pre-mapped. By [NextSolutions](https://nextsolutions.studio).
 
 <img src="https://api.anatome.dev/generateImage?gender=male&view=dual&width=420&layers=DC2626:chest,abs,biceps|F59E0B:triceps,deltoids,quadriceps&output=raw" alt="Anatome muscle diagram example" width="320" />
@@ -22,7 +22,7 @@ pre-mapped to 23 muscle slugs) and speaks the [Model Context Protocol](https://m
 
 - 🎨 Multi-color layered muscle rendering (`<img src>`-friendly, `?output=raw`)
 - 💪 873 exercises searchable + resolvable to muscle layers + hosted demo GIFs
-- 🤖 MCP server (5 tools) + OpenAPI 3.1 spec
+- 🤖 MCP server (7 tools) + OpenAPI 3.1 spec
 - 🆓 Basic plan: 300 requests/month free on RapidAPI, then $0.001/request; unlimited localhost for dev
 
 ## Repository layout

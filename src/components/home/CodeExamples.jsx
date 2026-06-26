@@ -22,6 +22,23 @@ const blob = await res.blob();
 img.src = URL.createObjectURL(blob);`,
   },
   {
+    key: "bearer",
+    label: "Bearer key (platform)",
+    code: `// Full platform API — get a free key at anatome-body-api.base44.app/onboarding
+// 41 MCP tools · food · per-user workouts · progression analytics · AI
+const res = await fetch(
+  "https://anatome.nextsolutions.studio/v1/exercise/search?q=bench&limit=5",
+  {
+    headers: {
+      "Authorization": "Bearer anp_YOUR_KEY",
+      "X-App-User-Id": "user-123", // your user's identifier
+    },
+  }
+);
+const { data } = await res.json();
+const exercises = data.results; // [{ name, primaryMuscles, source_images, gif_url, ... }]`,
+  },
+  {
     key: "rapidapi-curl",
     label: "RapidAPI (curl)",
     code: `curl "${RAPIDAPI_BASE}/generateImage?layers=DC2626:chest,abs&view=front&output=raw" \\
@@ -67,11 +84,11 @@ export default function CodeExamples() {
     <div className="rounded-2xl border border-border bg-card p-6">
       <div className="flex items-center gap-2 mb-1">
         <Code2 className="w-4 h-4 text-primary" />
-        <h3 className="font-display font-semibold">Three ways to integrate</h3>
+        <h3 className="font-display font-semibold">Four ways to integrate</h3>
       </div>
       <p className="text-xs text-muted-foreground mb-4">
-        Production integrations authenticate via RapidAPI headers. The{" "}
-        <span className="font-mono text-foreground">&lt;img&gt;</span> tab is for self-host or dev only.
+        Production integrations authenticate via RapidAPI headers or a Bearer key.
+        The <span className="font-mono text-foreground">&lt;img&gt;</span> tab is for self-host or dev only.
       </p>
       <div className="flex gap-1 mb-3 flex-wrap">
         {TABS.map((t) => (

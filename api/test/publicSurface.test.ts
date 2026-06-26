@@ -41,6 +41,8 @@ describe("public API surface (no AI exposure)", () => {
       "resolve_exercise",
       "search_exercises",
       "get_exercise",
+      "get_exercise_gif",
+      "workout_image",
     ]);
   });
 });
