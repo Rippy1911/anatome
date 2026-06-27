@@ -197,7 +197,7 @@ export function formatExercise(
   e: ExerciseRow,
   base: string,
   variant: ExerciseRecordVariant,
-  fields: ReadonlySet<ExerciseFieldKey> | null | undefined,
+  fields?: ReadonlySet<ExerciseFieldKey> | null,
 ): Record<string, unknown> {
   const withRelations = needsComputedRelations(fields === undefined ? null : fields);
   const record = buildExerciseRecord(e, base, { withRelations });
@@ -235,7 +235,10 @@ export function searchExercisesLogic(params: SearchParams): {
   let matches = ALL;
   if (key) matches = matches.filter((e) => (e.name_lower || e.name || "").toLowerCase().includes(key));
   if (resolved.muscle && resolved.muscle !== "any") {
-    const m = String(resolved.muscle).toLowerCase();
+    // Normalize the slug via aliases so e.g. ?muscle=abductors -> gluteal
+    // (free-exercise-db tags exercises as 'abductors' which maps to 'gluteal' in
+    // the SVG catalog; MUSCLE_SLUG_ALIASES handles this mapping).
+    const m = normalizeSlug(String(resolved.muscle).toLowerCase());
     matches = matches.filter((e) =>
       (e.anatome_primary_slugs || []).includes(m) || (e.anatome_secondary_slugs || []).includes(m));
   }
@@ -330,7 +333,8 @@ export function lookupExerciseById(id: string): {
   return { exercise: null, match: "none" };
 }
 export function getByMuscle(slug: string, limit: number): ExerciseRow[] {
-  const m = slug.trim().toLowerCase();
+  // Normalize slug via aliases (e.g. abductors -> gluteal) before filtering.
+  const m = normalizeSlug(slug.trim().toLowerCase());
   const primary = ALL.filter((e) => (e.anatome_primary_slugs || []).includes(m));
   let list = primary.slice(0, limit);
   if (list.length < limit) {
@@ -426,15 +430,18 @@ export interface Resolved {
   category?: string;
 }
 
-function resolveFromDb(exerciseRaw: string): Resolved | null {
+function resolveFromDb(exerciseRaw: string, base = ""): Resolved | null {
   const rec = findBestExerciseMatch(exerciseRaw);
   if (!rec) return null;
   const layers: ResolvedLayer[] = [];
   if ((rec.anatome_primary_slugs || []).length) layers.push({ color: PALETTE.primary, muscles: rec.anatome_primary_slugs as string[] });
   if ((rec.anatome_secondary_slugs || []).length) layers.push({ color: PALETTE.secondary, muscles: rec.anatome_secondary_slugs as string[] });
+  // image_src is always the absolute Anatome URL (ready-to-embed) when a base is provided;
+  // fall back to the raw relative path from the exercise record for base-less calls.
+  const absImgSrc = base && rec.anatome_imageSrc ? absoluteImageSrc(rec.anatome_imageSrc, base) : rec.anatome_imageSrc;
   return {
     exercise: rec.name as string, matched: layers.length > 0, source: "exercise_db", layers,
-    image_src: rec.anatome_imageSrc,
+    image_src: absImgSrc ?? undefined,
     ext_id: rec.ext_id, equipment: rec.equipment, level: rec.level, category: rec.category,
     explanation: `From free-exercise-db: "${rec.name}" — primary: ${(rec.anatome_primary_slugs || []).join(", ") || "none"}; secondary: ${(rec.anatome_secondary_slugs || []).join(", ") || "none"}.`,
   };
@@ -452,12 +459,15 @@ function keywordFallback(exerciseRaw: string): Resolved {
 }
 
 export function resolveExercise(exerciseRaw: string, base = ""): Resolved {
-  const r = resolveFromDb(exerciseRaw) || keywordFallback(exerciseRaw);
+  const r = resolveFromDb(exerciseRaw, base) || keywordFallback(exerciseRaw);
   if (!base) return r;
   const enriched: Resolved = { ...r };
   if (r.ext_id) enriched.gif_url = exerciseGifUrl(r.ext_id, base) ?? undefined;
   const src = resolveExerciseImageSrc(r, base);
   if (src) enriched.anatome_imageSrc = src;
+  // Ensure image_src is also absolute (it may already be from resolveFromDb, but
+  // keyword_fallback and base-less calls won't have it set).
+  if (!enriched.image_src && src) enriched.image_src = src;
   return enriched;
 }
 

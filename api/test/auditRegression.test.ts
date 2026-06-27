@@ -16,9 +16,9 @@ const BASE = "https://api.anatome.dev";
 // `response.exercise.name`) get undefined. This test locks the envelope shape.
 describe("getExercise response envelope", () => {
   it("formatExercise (used by getExercise handler) returns flat fields, NOT nested under 'exercise'", () => {
-    const ex = lookupExerciseById("Barbell_Bench_Press_-_Medium_Grip");
+    const { exercise: ex } = lookupExerciseById("Barbell_Bench_Press_-_Medium_Grip");
     expect(ex).not.toBeNull();
-    const formatted = formatExercise(ex!, BASE, "get");
+    const formatted = formatExercise(ex!, BASE, "full");
     // Fields are flat — callers access formatted.name, not formatted.exercise.name
     expect(formatted.name).toBe("Barbell Bench Press - Medium Grip");
     expect(formatted).not.toHaveProperty("exercise");
@@ -33,13 +33,13 @@ describe("getExercise response envelope", () => {
   });
 
   it("getExercise result has source_images array when images are present", () => {
-    const ex = lookupExerciseById("Barbell_Bench_Press_-_Medium_Grip");
+    const { exercise: ex } = lookupExerciseById("Barbell_Bench_Press_-_Medium_Grip");
     expect(ex).not.toBeNull();
-    const formatted = formatExercise(ex!, BASE, "get");
+    const formatted = formatExercise(ex!, BASE, "full");
     // source_images must be present and be absolute URLs via the /exerciseImage proxy
     expect(Array.isArray(formatted.source_images)).toBe(true);
-    expect(formatted.source_images!.length).toBeGreaterThan(0);
-    expect(formatted.source_images![0]).toMatch(/^https:\/\/.*\/exerciseImage\?path=/);
+    expect((formatted.source_images as string[]).length).toBeGreaterThan(0);
+    expect((formatted.source_images as string[])[0]).toMatch(/^https:\/\/.*\/exerciseImage\?path=/);
   });
 });
 

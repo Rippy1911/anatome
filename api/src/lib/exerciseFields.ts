@@ -95,5 +95,10 @@ export function projectRecord(
   for (const k of fields) {
     if (k in record) out[k] = record[k];
   }
+  // ext_id and name are always included — they are the primary identifier and
+  // display name. Without ext_id a caller cannot make follow-up getExercise
+  // calls, turning field-narrowed search results into dead ends.
+  if ("ext_id" in record && !("ext_id" in out)) out["ext_id"] = record["ext_id"];
+  if ("name" in record && !("name" in out)) out["name"] = record["name"];
   return out;
 }
