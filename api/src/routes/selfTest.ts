@@ -76,8 +76,8 @@ export async function runSelfTest(bodyData: BodyData) {
   T("exercise_resolve_unmatched", () => resolveExercise("zzzzz nonsense").matched === false);
 
   // ---- MCP ----
-  T("mcp_initialize", () => { const r = handleMcp({ method: "initialize" }, "https://api.anatome.dev") as { result: { serverInfo: { name: string }; protocolVersion: string } }; return r.result.serverInfo.name === "anatome" && r.result.protocolVersion === "2024-11-05"; });
-  T("mcp_tools_list_returns_five", () => TOOLS.length === 5 || `got ${TOOLS.length}`);
+  T("mcp_initialize", () => { const r = handleMcp({ method: "initialize" }, "https://api.anatome.dev") as { result: { serverInfo: { name: string }; protocolVersion: string } }; return r.result.serverInfo.name === "anatome" && r.result.protocolVersion === "2025-03-26"; });
+  T("mcp_tools_list_count", () => TOOLS.length === 7 || `got ${TOOLS.length}`);
   T("mcp_tools_call_generate", () => { const r = handleMcp({ method: "tools/call", params: { name: "generate_muscle_image", arguments: { view: "front", layers: [{ color: "#abcdef", muscles: ["abs"] }] } } }, "https://api.anatome.dev") as { result: { content: { text: string }[] } }; const text = r.result.content[0].text; return text.includes("<svg") && text.includes("#abcdef"); });
 
   // ---- raw output ----

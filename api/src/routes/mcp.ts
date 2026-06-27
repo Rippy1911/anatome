@@ -169,7 +169,20 @@ export function computeMcpResult(
       const exercises = args.exercises as string[] | undefined;
       if (!exercises || !exercises.length) return { ok: false, error: { code: -32602, message: "exercises array required" } };
       const result = workoutImageLogic({ exercises, gender: args.gender as string | undefined, view: args.view as string | undefined, width: args.width as number | undefined, height: args.height as number | undefined }, getBodyData());
-      return { ok: true, result: { content: [{ type: "text", text: result.svg }], structuredContent: { muscles_hit: result.muscles_hit, per_muscle_count: result.per_muscle_count, exercises_resolved: result.exercises_resolved, attribution: ATTRIBUTION, attribution_source: ATTRIBUTION_SOURCE, license: LICENSE } } };
+      // Return structured JSON in content[0].text so AI clients can parse muscles_hit
+      // without having to parse raw SVG. The SVG is included for direct embedding.
+      const payload = {
+        muscles_hit: result.muscles_hit,
+        per_muscle_count: result.per_muscle_count,
+        exercises_resolved: result.exercises_resolved,
+        svg: result.svg,
+        gender: result.gender,
+        view: result.view,
+        attribution: ATTRIBUTION,
+        attribution_source: ATTRIBUTION_SOURCE,
+        license: LICENSE,
+      };
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     return { ok: false, error: { code: -32602, message: `Unknown tool: ${name}` } };
   }
