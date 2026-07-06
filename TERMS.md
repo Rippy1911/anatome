@@ -22,7 +22,7 @@ The Service is provided "as is" and is intended for use in fitness applications,
 
 ## 2. Open Source
 
-The Anatome codebase is licensed under the Apache License 2.0 and is publicly available at https://github.com/Rippy1911/anatome. You are free to self-host the Service under the terms of that license, with no obligation to use our hosted endpoint.
+The Anatome codebase is licensed under the Apache License 2.0 and is publicly available at https://github.com/NextSolutionsStudio/anatome. You are free to self-host the Service under the terms of that license, with no obligation to use our hosted endpoint.
 
 Third-party assets bundled into the Service retain their original licenses:
 
@@ -145,7 +145,7 @@ Continued use of the Service after changes constitutes acceptance of the updated
 NextSolutions
 Email: contact@nextsolutions.studio
 Website: https://nextsolutions.studio
-GitHub: https://github.com/Rippy1911/anatome
+GitHub: https://github.com/NextSolutionsStudio/anatome
 
 For security disclosures: security@nextsolutions.studio (or use GitHub Security Advisories).
 

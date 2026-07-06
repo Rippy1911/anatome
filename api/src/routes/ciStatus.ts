@@ -3,7 +3,7 @@
 // The anatome repo is PRIVATE, so a browser-side fetch to the GitHub Actions
 // API always 404s (unauthenticated clients cannot read private-repo runs).
 // This endpoint runs server-side with a stored GITHUB_TOKEN (fine-grained PAT,
-// `actions:read` + `metadata:read` on Rippy1911/anatome) and returns a tiny
+// `actions:read` + `metadata:read` on NextSolutionsStudio/anatome) and returns a tiny
 // status object the public UI can render as a "GitHub tile".
 //
 // Graceful degradation: with no GITHUB_TOKEN secret set, it returns a static
@@ -11,7 +11,7 @@
 // shows "undefined/undefined" again. Responses are edge-cached ~60s to stay
 // well under GitHub's rate limits.
 
-const REPO = "Rippy1911/anatome";
+const REPO = "NextSolutionsStudio/anatome";
 const ACTIONS_TAB = `https://github.com/${REPO}/actions`;
 const RUNS_URL = `https://api.github.com/repos/${REPO}/actions/runs?branch=main&per_page=1`;
 

@@ -6,7 +6,7 @@ import SiteFooter from "@/components/SiteFooter";
 import Logo from "@/components/Logo";
 import { useTheme } from "@/hooks/useTheme";
 
-const REPO_URL = "https://github.com/Rippy1911/anatome";
+const REPO_URL = "https://github.com/NextSolutionsStudio/anatome";
 
 function NavLink({ to, children, onClick }) {
   const { pathname } = useLocation();
