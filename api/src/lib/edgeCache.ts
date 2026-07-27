@@ -11,9 +11,18 @@ export function cacheableResponseHeaders(extra?: Record<string, string>): Header
   return h;
 }
 
-/** Build a cache key from the incoming request (method + URL). */
+// Entries are stored `immutable` for a week, so a deploy that changes a cached
+// body cannot reach clients on its own — the edge keeps serving the old one and
+// the zone token used by CI has no cache-purge scope. Bump this whenever a
+// deploy changes what a cacheable endpoint returns: it moves every entry to a
+// fresh key, which strands the stale ones instead of waiting out their TTL.
+const CACHE_VERSION = "2026-07-27.1";
+
+/** Build a cache key from the incoming request (method + URL + cache version). */
 export function cacheKeyForRequest(request: Request): Request {
-  return new Request(request.url, { method: request.method, headers: request.headers });
+  const url = new URL(request.url);
+  url.searchParams.set("__cv", CACHE_VERSION);
+  return new Request(url.toString(), { method: request.method, headers: request.headers });
 }
 
 /**
