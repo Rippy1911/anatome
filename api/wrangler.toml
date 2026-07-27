@@ -31,6 +31,8 @@ new_sqlite_classes = ["RateLimiterDO"]
 # Non-secret config only. Secrets are set with `wrangler secret put`:
 #   wrangler secret put PROXY_SECRET
 #   wrangler secret put MCP_TRUSTED_KEY
+#   wrangler secret put ADMIN_TOKEN
+#   wrangler secret put STRIPE_SECRET_KEY   # optional; enables overage meter events
 PUBLIC_BASE_URL = "https://api.anatome.dev"
 
 # ---- Production environment ----
