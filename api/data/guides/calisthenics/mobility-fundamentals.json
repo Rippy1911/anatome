@@ -390,23 +390,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/german-hang.gif",
-          "title": "Demo GIF · german hang (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "german-hang.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/german-hang.gif",
-          "attribution": "AI-generated demonstration (german-hang.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {

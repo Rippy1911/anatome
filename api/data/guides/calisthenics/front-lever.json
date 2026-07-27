@@ -148,23 +148,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-tuck.gif",
-          "title": "Demo GIF · front lever tuck (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-tuck.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-tuck.gif",
-          "attribution": "AI-generated demonstration (front-lever-tuck.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -224,23 +207,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-raises.gif",
-          "title": "Demo GIF · front lever raises (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-raises.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
-          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -302,23 +268,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-advanced-tuck.gif",
-          "title": "Demo GIF · front lever advanced tuck (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-advanced-tuck.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-advanced-tuck.gif",
-          "attribution": "AI-generated demonstration (front-lever-advanced-tuck.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -377,23 +326,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-raises.gif",
-          "title": "Demo GIF · front lever raises (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-raises.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
-          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -456,23 +388,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-straddle.gif",
-          "title": "Demo GIF · front lever one leg (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-straddle.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-straddle.gif",
-          "attribution": "AI-generated demonstration (front-lever-straddle.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -545,23 +460,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-straddle.gif",
-          "title": "Demo GIF · front lever straddle (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-straddle.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-straddle.gif",
-          "attribution": "AI-generated demonstration (front-lever-straddle.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -621,23 +519,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-raises.gif",
-          "title": "Demo GIF · front lever raises (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-raises.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
-          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -700,23 +581,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/full-front-lever.gif",
-          "title": "Demo GIF · full front lever (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "full-front-lever.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/full-front-lever.gif",
-          "attribution": "AI-generated demonstration (full-front-lever.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -778,23 +642,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/front-lever-raises.gif",
-          "title": "Demo GIF · front lever raises (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "front-lever-raises.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
-          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {

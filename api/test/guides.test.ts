@@ -414,6 +414,23 @@ describe("media provenance", () => {
     expect(checked).toBeGreaterThan(0);
   });
 
+  it("only offers media a client can actually fetch", () => {
+    let checked = 0;
+    for (const slug of ALL_TREE_SLUGS) {
+      for (const m of mediaOf(slug)) {
+        checked++;
+        // A relative path is meaningless to an API consumer: it resolves against
+        // the caller's own origin, not ours. Every entry must be absolute.
+        expect(String(m.url), `${slug} serves a non-fetchable media url`).toMatch(/^https:\/\//);
+        // The FLUX-generated demo GIFs were reviewed and rejected — several
+        // depicted the wrong movement entirely — and were never published, so a
+        // `cali-gif` entry can only be a dangling reference to a missing asset.
+        expect(m.provider, `${slug} still offers a withdrawn AI demo GIF`).not.toBe("cali-gif");
+      }
+    }
+    expect(checked).toBeGreaterThan(0);
+  });
+
   it("passes every other provenance field through unmodified", () => {
     for (const slug of ALL_TREE_SLUGS) {
       const raw = GUIDES.calisthenics.trees[slug].steps.flatMap(
@@ -446,8 +463,11 @@ describe("media provenance", () => {
   });
 
   it("keeps AI-generated media flagged with its model provenance", () => {
+    // The catalog currently ships none: the FLUX demo GIFs were withdrawn after
+    // review. Should any synthetic asset return, EU AI Act Art. 50(2) still
+    // requires it to be labelled at the point of delivery, so the contract is
+    // asserted for whatever is present rather than dropped with the assets.
     const ai = ALL_TREE_SLUGS.flatMap(mediaOf).filter((m) => m.ai_generated === true);
-    expect(ai.length).toBeGreaterThan(0);
     for (const m of ai) {
       expect(m.redistributable).toBe(true);
       expect(m.generator).toBeTruthy();

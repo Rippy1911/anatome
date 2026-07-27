@@ -287,23 +287,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/tuck-planche.gif",
-          "title": "Demo GIF · tuck planche (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "tuck-planche.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/tuck-planche.gif",
-          "attribution": "AI-generated demonstration (tuck-planche.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -363,23 +346,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/advanced-tuck-planche.gif",
-          "title": "Demo GIF · advanced tuck planche (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "advanced-tuck-planche.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/advanced-tuck-planche.gif",
-          "attribution": "AI-generated demonstration (advanced-tuck-planche.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -440,23 +406,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/straddle-planche.gif",
-          "title": "Demo GIF · straddle planche (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "straddle-planche.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/straddle-planche.gif",
-          "attribution": "AI-generated demonstration (straddle-planche.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -516,23 +465,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/straddle-planche.gif",
-          "title": "Demo GIF · straddle planche (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "straddle-planche.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/straddle-planche.gif",
-          "attribution": "AI-generated demonstration (straddle-planche.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -594,23 +526,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/full-planche.gif",
-          "title": "Demo GIF · full planche (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "full-planche.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/full-planche.gif",
-          "attribution": "AI-generated demonstration (full-planche.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
@@ -672,23 +587,6 @@
           "ai_generated": false,
           "redistributable": false,
           "tier": "embed"
-        },
-        {
-          "provider": "cali-gif",
-          "url": "assets/gifs/full-planche.gif",
-          "title": "Demo GIF · full planche (AI)",
-          "channel": "anatome.dev · AI demo",
-          "file": "full-planche.gif",
-          "role": "demo",
-          "license": "Apache-2.0",
-          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
-          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/full-planche.gif",
-          "attribution": "AI-generated demonstration (full-planche.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
-          "ai_generated": true,
-          "redistributable": true,
-          "tier": "ai-generated",
-          "generator": "fal-ai/flux/schnell",
-          "model": "FLUX.1 [schnell]"
         }
       ],
       "timeline": {
