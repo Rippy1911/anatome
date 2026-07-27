@@ -250,7 +250,7 @@ app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, as
   }, 404);
 }));
 
-// ---- exercise reference photo (free-exercise-db, CC0) ----
+// ---- exercise reference photo (free-exercise-db, licence unverified — see issue #21) ----
 // Proxies the source JPEGs through Anatome's host so consumers (incl. RapidAPI)
 // don't hotlink raw.githubusercontent.com. `path` is the relative image path
 // stored on each exercise (e.g. "Barbell_Bench_Press_-_Medium_Grip/0.jpg").

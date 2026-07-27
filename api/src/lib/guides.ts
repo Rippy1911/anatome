@@ -21,12 +21,12 @@ const DEFECTIVE_LICENCE_CLAIM = /^(cc0|public[-\s]?domain|unlicense)/i;
  * never held the rights, so it is not ours to pass on. The exercise *metadata*
  * is genuinely offered under the Unlicense and is unaffected.
  *
- * The catalog still labels these entries CC0-1.0. Rather than restating a claim
- * the project cannot grant, guide responses downgrade exactly those entries to
- * an unverified, non-redistributable state. Every other field — and every other
+ * The catalog now records these entries as unverified itself, so this is a no-op
+ * for them and stays only as a guard: any entry that reaches us still asserting a
+ * dedication the project cannot grant is downgraded to an unverified,
+ * non-redistributable state on the way out. Every other field — and every other
  * media entry — passes through untouched, so honest provenance from the catalog
- * reaches consumers verbatim. Once upstream records the unverified state itself
- * this becomes a no-op. See MEDIA_PROVENANCE_ISSUE.
+ * reaches consumers verbatim. See MEDIA_PROVENANCE_ISSUE.
  */
 function fromFreeExerciseDb(m: Record<string, unknown>): boolean {
   const provider = String(m.provider || "");

@@ -138,7 +138,7 @@ export function freeExerciseDbImageUrls(images: string[] | undefined | null, bas
 /** Bump when GIF frame timing changes — busts CDN/browser cache on gif_url. */
 export const GIF_PLAYBACK_VERSION = "4";
 
-/** Anatome-hosted exercise demo GIF (2-frame, CC0 source). */
+/** Anatome-hosted exercise demo GIF (2-frame; source licence unverified, see issue #21). */
 export function exerciseGifUrl(extId: string | undefined | null, base: string): string | null {
   if (!extId) return null;
   const b = base.replace(/\/$/, "");

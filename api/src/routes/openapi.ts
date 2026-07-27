@@ -74,7 +74,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
     info: {
       title: "Anatome — Muscle Group Image Generator API",
       version: "2.0.0",
-      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercises from free-exercise-db (CC0). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
+      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercise records from free-exercise-db (Unlicense; the dataset's photography is of unverified origin and is not cleared for redistribution). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
       termsOfService: "https://anatome.dev/tos",
       contact: { name: "NextSolutions", url: "https://nextsolutions.studio", email: "contact@nextsolutions.studio" },
       license: { name: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
