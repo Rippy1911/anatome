@@ -1,0 +1,641 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "skin-the-cat",
+  "name": "Skin the Cat / German Hang",
+  "family": "pull",
+  "difficulty": "intermediate",
+  "summary": "Shoulder mobility + back-lever feeder. Cheap to learn, high safety ROI.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Pull-ups",
+      "target": "8"
+    },
+    {
+      "name": "Shoulder extension ROM",
+      "target": "pain-free"
+    }
+  ],
+  "equipment": [
+    "rings",
+    "bar"
+  ],
+  "primary_muscles": [
+    "chest",
+    "biceps",
+    "upper-back"
+  ],
+  "secondary_muscles": [
+    "forearm",
+    "abs"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "chest",
+        "biceps",
+        "upper-back"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "forearm",
+        "abs"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "custom",
+    "value": 1,
+    "notes": "8 skin-the-cats + 45s German hang"
+  },
+  "programming": {
+    "skill_frequency_per_week": "3–5 light"
+  },
+  "safety": {
+    "injury_risk": "high",
+    "contraindications": [
+      "Biceps tendinopathy",
+      "Shoulder instability"
+    ],
+    "notes": "Rings preferred. Never bounce into German hang."
+  },
+  "sources": [
+    "OG2",
+    "GMB",
+    "FF"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Depress scapulae"
+      ],
+      "common_faults": [
+        "Dead passive hang only"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "stc-hang",
+      "order": 1,
+      "name": "Active hang",
+      "level": "beginner",
+      "intent": "Warm shoulders and grip.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30s",
+        "rest_seconds": 45,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Active hang. title names [back-lever] but step covers [skin-the-cat, german-hang].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "can hang from a bar",
+        "conditioning_hours_per_week": 2,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Slow",
+        "Keep rings close"
+      ],
+      "common_faults": [
+        "Kipping hard"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "stc-tuck",
+      "order": 2,
+      "name": "Tuck skin the cat",
+      "level": "intermediate",
+      "intent": "Tuck through to German hang and back.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Tuck skin the cat. title names [back-lever] but step covers [skin-the-cat, german-hang].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "30s active hang",
+        "conditioning_hours_per_week": 2,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Control both directions"
+      ],
+      "common_faults": [
+        "Incomplete ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "stc-straight",
+      "order": 3,
+      "name": "Straight-leg skin the cat",
+      "level": "intermediate",
+      "intent": "Full ROM with straighter legs.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–8",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Straight-leg skin the cat. title names [back-lever] but step covers [skin-the-cat, german-hang].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "5 controlled tuck skin the cats",
+        "conditioning_hours_per_week": 2,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Open gradually",
+        "Breathe"
+      ],
+      "common_faults": [
+        "Bouncing"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "stc-german",
+      "order": 4,
+      "name": "German hang hold",
+      "level": "intermediate",
+      "intent": "Tissue conditioning bottom position.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30–45s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3–5"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 45,
+        "sets": 3
+      },
+      "safety_notes": "Gate for back-lever tree.",
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of German hang hold. title names [back-lever] but step covers [german-hang, skin-the-cat].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "5 straight-leg skin the cats",
+        "conditioning_hours_per_week": 2,
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading"
+        ],
+        "scope": "step",
+        "notes": "Cumulative loaded exposure from stc-tuck onward crosses the 8-week tendon-adaptation window here. Do not shorten this step to hit a program deadline."
+      }
+    },
+    {
+      "cues": [
+        "Smooth arc"
+      ],
+      "common_faults": [
+        "Rushing"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "stc-ice-cream",
+      "order": 5,
+      "name": "Ice cream makers",
+      "level": "advanced",
+      "intent": "Dynamic FL/BL transition pattern.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Ice cream makers. title names [front-lever] but step covers [skin-the-cat, german-hang].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "45s pain-free German hang",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 15,
+      "max": 32
+    },
+    "from_level": "8 strict pull-ups, 30s active hang, no shoulder pain in extension",
+    "conditioning_hours_per_week": 2,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "bohm-2015-tendon"
+    ],
+    "human_label": "4–8 months to a comfortable German hang and controlled ice cream makers",
+    "notes": "This tree exists to buy shoulder-extension tolerance before the back lever loads it. The German hang step is deliberately held at the tendon-adaptation floor — rushing it is the single most common cause of biceps-tendon problems downstream.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Active hang",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "stc-hang",
+        "rationale": "Grip and scapular control before inverting.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Strict pull-ups",
+        "target": "8 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "pull-pronated",
+        "rationale": "Enough pulling strength to exit the bottom position under control.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Pain-free shoulder extension",
+        "target": "hands behind back, no pinching",
+        "metric": "custom",
+        "related_step_id": "mob-shoulder-extension",
+        "rationale": "The German hang is an end-range extension position; entering it without the range is the classic injury pattern.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "range-guarded",
+        "at_step_ids": [
+          "stc-straight",
+          "stc-german"
+        ],
+        "signal": "Rotation stops at the same point every session and the athlete describes it as tightness rather than weakness",
+        "typical_causes": [
+          "Shoulder-extension range genuinely insufficient",
+          "Protective guarding after a previous tweak",
+          "Rushing the rotation instead of moving slowly"
+        ],
+        "resolution": [
+          "Park the dynamic work and spend 4–8 weeks on mob-shoulder-extension",
+          "Use a wider grip or rings turned out to reduce the extension demand",
+          "Slow the tempo — speed here is a guarding response"
+        ],
+        "expected_stall_weeks": {
+          "min": 4,
+          "max": 12
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "biceps-tendon",
+        "peaks_at_step_ids": [
+          "stc-german",
+          "stc-ice-cream"
+        ],
+        "mechanism": "Long-head biceps tendon loaded at end-range shoulder extension with a straight elbow — the position of maximal tensile stress in the whole library",
+        "onset_weeks_from_entry": {
+          "min": 4,
+          "max": 14
+        },
+        "prophylaxis": [
+          "Accumulate at least 8 weeks of progressive German hang exposure before adding dynamic reps",
+          "Add light supine bar hangs as dedicated biceps-tendon conditioning",
+          "Never bounce at the bottom"
+        ],
+        "red_flags": [
+          "Sharp pain at the front of the shoulder or in the biceps groove",
+          "Pain on resisted elbow flexion the day after"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading"
+        ]
+      },
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "stc-straight"
+        ],
+        "mechanism": "Passive end-range loading of the anterior capsule when the athlete drops rather than lowers",
+        "onset_weeks_from_entry": {
+          "min": 3,
+          "max": 10
+        },
+        "prophylaxis": [
+          "Keep the movement slow and reversible at every point",
+          "Use rings so the shoulders can rotate freely"
+        ],
+        "red_flags": [
+          "A feeling of the shoulder wanting to slip forward"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

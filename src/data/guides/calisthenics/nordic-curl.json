@@ -1,0 +1,618 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "nordic-curl",
+  "name": "Nordic Curl",
+  "family": "legs",
+  "difficulty": "advanced",
+  "summary": "Best bodyweight hamstring eccentric. Protects knees for pistol/running.",
+  "prerequisites": [],
+  "entry_assessment": [
+    {
+      "name": "Hinge pattern",
+      "target": "pain-free"
+    },
+    {
+      "name": "Reverse plank or GHR-ish",
+      "target": "30s / 10 reps"
+    }
+  ],
+  "equipment": [
+    "partner-or-strap",
+    "band",
+    "floor"
+  ],
+  "primary_muscles": [
+    "hamstring"
+  ],
+  "secondary_muscles": [
+    "gluteal",
+    "calves"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "hamstring"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "gluteal",
+        "calves"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps",
+    "value": 5,
+    "sets": 3,
+    "notes": "full Nordic, controlled descent"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2"
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute hamstring strain",
+      "Unstable knees"
+    ],
+    "notes": "Eccentrics cause DOMS — start with assisted/partials."
+  },
+  "sources": [
+    "CM",
+    "community"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Hips extended",
+        "Lower with hamstrings"
+      ],
+      "common_faults": [
+        "Piking at hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-assisted",
+      "order": 1,
+      "name": "Band-assisted Nordic",
+      "level": "beginner",
+      "intent": "Learn the pattern with assistance.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": {
+            "required": true,
+            "text": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Squat University",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Natural_Glute_Ham_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 6
+        },
+        "from_level": "no structured eccentric hamstring work",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ],
+        "notes": "Weeks 1–4 of the published protocol: 1 session/week of 2×5 ramping to 3 sessions/week of 3×6–8."
+      }
+    },
+    {
+      "cues": [
+        "3–5s eccentric"
+      ],
+      "common_faults": [
+        "Falling uncontrolled"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-eccentric",
+      "order": 2,
+      "name": "Eccentric Nordic (catch with hands)",
+      "level": "intermediate",
+      "intent": "Slow lower, catch at bottom.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "4–6",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": {
+            "required": true,
+            "text": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Squat University",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Natural_Glute_Ham_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 10
+        },
+        "from_level": "3×8 band-assisted Nordics without hamstring cramping",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ],
+        "notes": "Weeks 5–10 of the published protocol: 3 sessions/week of 3×12, 10 and 8. This is where the measured 11% eccentric torque gain occurs."
+      }
+    },
+    {
+      "cues": [
+        "Stop before collapse"
+      ],
+      "common_faults": [
+        "Going too deep too soon"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-partial",
+      "order": 3,
+      "name": "Partial Nordic",
+      "level": "advanced",
+      "intent": "Lower as far as you can, pull back.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "4",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 4,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": {
+            "required": true,
+            "text": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Squat University",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Natural_Glute_Ham_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "3×8 full-range eccentric Nordics caught with the hands",
+        "confidence": "estimated",
+        "notes": "Beyond the published trials. Interpolated."
+      }
+    },
+    {
+      "cues": [
+        "Slow descent",
+        "Pull back if able"
+      ],
+      "common_faults": [
+        "Using arms early"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-full",
+      "order": 4,
+      "name": "Full Nordic curl",
+      "level": "elite",
+      "intent": "Controlled full ROM Nordic.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": {
+            "required": true,
+            "text": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Squat University",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Natural_Glute_Ham_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 32
+        },
+        "from_level": "5 partial Nordics with a controlled concentric out of the bottom third",
+        "confidence": "estimated",
+        "notes": "Beyond the published trials. A genuinely unassisted concentric Nordic is rare and many athletes plateau at partial range indefinitely."
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 30,
+      "max": 64
+    },
+    "from_level": "Pain-free knee flexion under load, 10 glute-ham bridges, no acute hamstring injury in the last 6 weeks",
+    "conditioning_hours_per_week": 1,
+    "confidence": "published-standard",
+    "source_ids": [
+      "mjolsnes-2004-nordic",
+      "petersen-2011-nordic"
+    ],
+    "human_label": "7–15 months to a full unassisted Nordic; the published 10-week protocol gets most athletes through the assisted and eccentric stages",
+    "notes": "This is the best-sourced tree in the library. The first two steps map directly onto the Mjølsnes 10-week / Petersen 27-session protocol (week 1 at 2×5, building to 3 sessions per week of 3×12, 10 and 8 by weeks 5–10), which produced an 11% increase in eccentric hamstring torque. The partial and full steps are extrapolations beyond where the trials stop."
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Glute-ham bridge",
+        "target": "10 reps",
+        "metric": "reps",
+        "value": 10,
+        "rationale": "Baseline posterior-chain capacity before high-force eccentrics.",
+        "source_ids": [
+          "mjolsnes-2004-nordic"
+        ]
+      },
+      {
+        "name": "No acute hamstring injury",
+        "target": "at least 6 weeks symptom-free",
+        "metric": "custom",
+        "rationale": "The Nordic is a rehabilitation and prevention tool but is contraindicated during an acute strain.",
+        "source_ids": [
+          "petersen-2011-nordic"
+        ]
+      },
+      {
+        "name": "Pain-free loaded knee flexion",
+        "target": "pain-free",
+        "metric": "custom",
+        "rationale": "Knee and rear-knee contact tolerance.",
+        "source_ids": [
+          "mjolsnes-2004-nordic"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "no-concentric-ever",
+        "at_step_ids": [
+          "nordic-partial",
+          "nordic-full"
+        ],
+        "signal": "Eccentric control keeps improving but no concentric out of the bottom ever appears",
+        "typical_causes": [
+          "Training eccentrics only — the published protocols are eccentric-only by design and stop there",
+          "Expecting a concentric Nordic to emerge from eccentric work alone"
+        ],
+        "resolution": [
+          "Add assisted concentric work from the bottom third specifically",
+          "Accept the partial as a legitimate endpoint — the measured injury-prevention benefit comes from the eccentric, not from the full rep"
+        ],
+        "expected_stall_weeks": {
+          "min": 8,
+          "max": 40
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ]
+      },
+      {
+        "id": "doms-driven-stall",
+        "at_step_ids": [
+          "nordic-assisted",
+          "nordic-eccentric"
+        ],
+        "signal": "Severe soreness for 4–6 days after every session, blocking the next one",
+        "typical_causes": [
+          "Starting at full protocol volume rather than at 2×5",
+          "Adding sessions faster than the published 10-week ramp"
+        ],
+        "resolution": [
+          "Follow the published ramp exactly: 1 session/week of 2×5 in week 1, reaching 3 sessions/week of 3×12, 10 and 8 only by weeks 5–10",
+          "Reduce range before reducing frequency"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "petersen-2011-nordic",
+          "mjolsnes-2004-nordic"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "hamstring",
+        "peaks_at_step_ids": [
+          "nordic-eccentric",
+          "nordic-partial"
+        ],
+        "mechanism": "Very high eccentric force at long muscle length — the exact stimulus that confers the protective effect, and also the one that strains an unprepared muscle",
+        "onset_weeks_from_entry": {
+          "min": 1,
+          "max": 8
+        },
+        "prophylaxis": [
+          "Follow the 10-week ramp rather than jumping to full volume",
+          "Always perform after a proper warm-up, never cold",
+          "Reduce range rather than reps when soreness accumulates"
+        ],
+        "red_flags": [
+          "Sharp localised pain rather than diffuse soreness",
+          "Soreness still severe at 72 hours"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 1,
+          "max": 3
+        },
+        "hard_sets_per_session": {
+          "min": 2,
+          "max": 3
+        },
+        "notes": "Directly from the published protocol: week 1 is a single session of 2×5, ramping to 3 sessions per week of 3×12, 10 and 8 by weeks 5–10, for 27 sessions across 10 weeks. Do not exceed this — the trial that demonstrated the protective effect used exactly this dose.",
+        "source_ids": [
+          "petersen-2011-nordic",
+          "mjolsnes-2004-nordic"
+        ]
+      },
+      "too_much_signals": [
+        "Soreness lasting beyond 72 hours",
+        "Reduced sprint or jump performance in the days after a session",
+        "Range of the controlled descent shortening week over week"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 10,
+          "max": 12
+        },
+        "protocol": "Drop to one maintenance session per week of 3×12, 10 and 8 after completing the 10-week block.",
+        "trigger": "End of the 10-week block, or soreness blocking other training.",
+        "source_ids": [
+          "petersen-2011-nordic"
+        ]
+      }
+    }
+  }
+}

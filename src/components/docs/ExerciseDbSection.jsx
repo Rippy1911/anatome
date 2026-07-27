@@ -18,7 +18,7 @@ const PATTERN_B = `const { exercise } = await fetch("https://anatome.p.rapidapi.
 // NOTE: getExercise wraps the data under an "exercise" key:
 console.log(exercise.instructions);    // array of step-by-step strings
 console.log(exercise.anatome_imageSrc); // render via authenticated fetch, not bare <img src>
-console.log(exercise.source_images);   // CC0 photo URLs via /exerciseImage proxy`;
+console.log(exercise.source_images);   // photo URLs via /exerciseImage proxy (licence unverified)`;
 
 const PATTERN_C = `const { exercise } = await fetch("https://anatome.p.rapidapi.com/getExercise?muscle=chest&limit=10", {
   headers: ${RAPIDAPI_HEADERS},

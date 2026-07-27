@@ -14,7 +14,7 @@ By accessing or using the Service, you agree to these Terms. If you do not agree
 Anatome is an open-source API that:
 
 - Renders SVG diagrams of human muscle groups
-- Provides metadata for 873 strength and stretching exercises (sourced from the public-domain free-exercise-db dataset)
+- Provides metadata for 873 strength and stretching exercises (sourced from the free-exercise-db dataset, Unlicense)
 - Exposes a Model Context Protocol (MCP) server for AI agent integrations
 - Ships an OpenAPI 3.1 specification and a web playground at anatome.dev
 
@@ -27,7 +27,8 @@ The Anatome codebase is licensed under the Apache License 2.0 and is publicly av
 Third-party assets bundled into the Service retain their original licenses:
 
 - **Anatomical SVG paths**: MIT license, © Hicham El Boussarghini, originally from react-native-body-highlighter
-- **Exercise metadata, JPGs, and derived GIFs**: CC0-1.0 public domain, originally from yuhonas/free-exercise-db
+- **Exercise metadata**: Unlicense (public-domain dedication by its compiler), originally from yuhonas/free-exercise-db
+- **The JPGs and the GIFs derived from them**: **licence unverified — treat as third-party copyright of unknown ownership.** The dedication above covers the compiler's own work, the metadata. It does not reach the photography: that was scraped, and the upstream compiler states he does not hold the copyright in it. We serve these images for reference; we cannot and do not license them onward. Do not redistribute them or ship them in a commercial product. Tracking: [issue #21](https://github.com/Rippy1911/anatome/issues/48)
 
 These attributions must be preserved in any redistribution per the respective licenses.
 
@@ -85,20 +86,20 @@ You are explicitly permitted to:
 - Pre-render and bundle muscle SVGs into your client applications
 - Use the bundled exercise JSON data as a one-time export
 
-This is intentional. The underlying exercise data is CC0 public domain, and our rendering URLs are deterministic by design. You do not need to make a live API call for every page load.
+This is intentional. The underlying exercise metadata is public domain, and our rendering URLs are deterministic by design. You do not need to make a live API call for every page load.
 
 ## 8. Attribution
 
 When using the Service in a public-facing context, attribution is **appreciated but not required**. A link to https://anatome.dev or a mention of "Powered by Anatome" helps the project grow and is encouraged.
 
-The MIT and CC0 licenses governing third-party assets do require their respective attributions be preserved in source code or product documentation when redistributing the assets themselves.
+The MIT and Unlicense terms governing third-party assets do require their respective attributions be preserved in source code or product documentation when redistributing the assets themselves. The exercise photography is not redistributable at all — see the licence table above.
 
 ## 9. User-Submitted Content
 
 If you submit a GitHub issue, pull request, or community-contributed exercise:
 
 - You confirm you have the right to submit it
-- You grant us a non-exclusive, royalty-free, worldwide license to use, modify, and redistribute it under the Apache 2.0 license (for code) or CC0 (for exercise data)
+- You grant us a non-exclusive, royalty-free, worldwide license to use, modify, and redistribute it under the Apache 2.0 license (for code) or the Unlicense (for exercise metadata)
 - We may decline, modify, or remove submissions at our discretion
 
 ## 10. Disclaimers and Limitation of Liability
@@ -151,4 +152,4 @@ For security disclosures: security@nextsolutions.studio (or use GitHub Security 
 
 ---
 
-**TL;DR (not legally binding):** Use Anatome for any lawful purpose. Don't abuse the rate limits. We make no medical claims. Code is Apache-2.0, exercise data is CC0, anatomical paths are MIT. We aim for no profit. Self-host whenever you want.
+**TL;DR (not legally binding):** Use Anatome for any lawful purpose. Don't abuse the rate limits. We make no medical claims. Code is Apache-2.0, exercise metadata is Unlicense, anatomical paths are MIT, and the exercise photography is of unverified origin — don't redistribute it. We aim for no profit. Self-host whenever you want.

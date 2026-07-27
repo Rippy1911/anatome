@@ -1,0 +1,972 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "one-arm-push-up",
+  "name": "One-Arm Push-up",
+  "family": "push",
+  "difficulty": "advanced",
+  "summary": "Unilateral horizontal push pinnacle. Archer → typewriter → assisted → negative → full OAPU.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Standard push-ups",
+      "target": "3×15"
+    },
+    {
+      "name": "Archer push-ups",
+      "target": "5/side"
+    },
+    {
+      "name": "Pseudo planche push-ups",
+      "target": "8 with lean"
+    },
+    {
+      "name": "Side plank (each side)",
+      "target": "30s"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "box",
+    "band",
+    "parallettes"
+  ],
+  "primary_muscles": [
+    "chest",
+    "triceps"
+  ],
+  "secondary_muscles": [
+    "deltoids",
+    "abs",
+    "obliques"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "chest",
+        "triceps"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "deltoids",
+        "abs",
+        "obliques"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps_per_side",
+    "value": 1,
+    "sets": 1,
+    "notes": "1 clean full-ROM OAPU each side"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–3",
+    "notes": "Keep non-working arm straight on the floor. Alternate sides each set."
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute wrist pain",
+      "Shoulder instability under load"
+    ],
+    "notes": "Use a box or band assist for volume. Stop if elbow/wrist pain spikes."
+  },
+  "divergence_notes": "CC uses very high two-arm volume first; this tree follows archer/typewriter bridges common in FF/SW.",
+  "sources": [
+    "OG2",
+    "FF",
+    "CC",
+    "SW"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Shift over working arm",
+        "Other arm locked straight",
+        "Hollow body"
+      ],
+      "common_faults": [
+        "Twisting hips",
+        "Both arms bending equally"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-archer",
+      "order": 1,
+      "name": "Archer push-up",
+      "level": "intermediate",
+      "intent": "Shift load to one arm while the other stays straight for assist.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6/side",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 6,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "20 strict push-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Stay low",
+        "Shift smoothly side to side"
+      ],
+      "common_faults": [
+        "Popping up between shifts",
+        "Hips rotating"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-typewriter",
+      "order": 2,
+      "name": "Typewriter push-up",
+      "level": "advanced",
+      "intent": "Slide horizontally at the bottom — builds one-arm strength under tension.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "4/side",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 4,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "8 archer push-ups per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Same archer shift",
+        "Feet on box 15–30 cm"
+      ],
+      "common_faults": [
+        "Feet too high too soon"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-elevated-archer",
+      "order": 3,
+      "name": "Elevated archer push-up",
+      "level": "advanced",
+      "intent": "Feet elevated increases load on the working arm.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5/side",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "6 typewriter push-ups per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Stack shoulders",
+        "Press from side plank bottom"
+      ],
+      "common_faults": [
+        "Hips sagging",
+        "Rotating to both-arm push-up"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-side-plank-push",
+      "order": 4,
+      "name": "Side plank + push-up hybrid",
+      "level": "advanced",
+      "intent": "Anti-rotation strength and single-arm pressing pattern.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5/side",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "8 elevated archer push-ups per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Minimize assist over weeks",
+        "Full ROM"
+      ],
+      "common_faults": [
+        "Using too much assist forever"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-assisted",
+      "order": 5,
+      "name": "Band / box-assisted one-arm push-up",
+      "level": "advanced",
+      "intent": "Near one-arm pattern with minimal assist.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5/side",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "8 side-plank push hybrids per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "5–8s lower",
+        "Stay square",
+        "Other arm behind back or on floor"
+      ],
+      "common_faults": [
+        "Twisting hard",
+        "Dropping through bottom"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-negative",
+      "order": 6,
+      "name": "One-arm push-up negative",
+      "level": "elite",
+      "intent": "Slow eccentric on one arm — groove the line.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "2–3/side",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 3,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 18
+        },
+        "from_level": "8 band-assisted one-arm push-ups per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Controlled depth",
+        "Add range weekly"
+      ],
+      "common_faults": [
+        "Bouncing at sticky point"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-partial",
+      "order": 7,
+      "name": "Partial-ROM one-arm push-up",
+      "level": "elite",
+      "intent": "Short ROM reps building to full depth.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5/side",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3,
+        "notes": "≥¾ ROM"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 18
+        },
+        "from_level": "5 controlled one-arm negatives per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Feet wide for balance",
+        "Chest to floor",
+        "Drive through working hand"
+      ],
+      "common_faults": [
+        "Incomplete depth",
+        "Huge hip twist"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "oapu-full",
+      "order": 8,
+      "name": "Full one-arm push-up",
+      "level": "elite",
+      "intent": "Unassisted full ROM — the skill.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "attempts",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 1,
+        "sets": 1
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 30
+        },
+        "from_level": "5 partial-ROM one-arm push-ups per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 56,
+      "max": 126
+    },
+    "from_level": "20+ strict push-ups, 30s side plank per side, pain-free loaded wrist extension",
+    "conditioning_hours_per_week": 3,
+    "confidence": "estimated",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation",
+      "acsm-progression-2009"
+    ],
+    "human_label": "1–2.5 years from 20 strict push-ups",
+    "notes": "Interpolated from OG2 chart placement rather than a published timeline. Anti-rotation capacity and shoulder stability, not pressing strength, are what most people stall on — which is why the tree spends four steps on unilateral loading before any true one-arm work.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Strict push-ups",
+        "target": "20+ reps",
+        "metric": "reps",
+        "value": 20,
+        "related_step_id": "push-standard",
+        "rationale": "Two-arm base before halving the support.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Side plank",
+        "target": "45s per side",
+        "metric": "hold_seconds",
+        "value": 45,
+        "rationale": "Anti-rotation capacity is the real limiter, not pressing strength.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Archer push-ups",
+        "target": "8 reps per side",
+        "metric": "reps_per_side",
+        "value": 8,
+        "related_step_id": "oapu-archer",
+        "rationale": "First genuinely unilateral loading.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "rotation-leak",
+        "at_step_ids": [
+          "oapu-negative",
+          "oapu-partial",
+          "oapu-full"
+        ],
+        "signal": "The hips and shoulders twist open on the descent, and widening the feet stops helping",
+        "typical_causes": [
+          "Anti-rotation capacity below the pressing capacity",
+          "Feet already at maximum width, so no more stability is available to borrow"
+        ],
+        "resolution": [
+          "Add heavy anti-rotation work: side planks with reach, Pallof-style holds",
+          "Spend a block on elevated one-arm work where the lever is shorter"
+        ],
+        "expected_stall_weeks": {
+          "min": 6,
+          "max": 20
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "oapu-negative",
+          "oapu-full"
+        ],
+        "mechanism": "Full bodyweight through one shoulder with a rotational moment the athlete is actively resisting",
+        "onset_weeks_from_entry": {
+          "min": 20,
+          "max": 60
+        },
+        "prophylaxis": [
+          "Do not skip the elevated and assisted steps",
+          "Keep the elbow tucked rather than flared",
+          "Train both sides equally"
+        ],
+        "red_flags": [
+          "Front-of-shoulder pain at the bottom",
+          "Asymmetric range loss"
+        ],
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "oapu-partial",
+          "oapu-full"
+        ],
+        "mechanism": "Full bodyweight through a single extended wrist with a rotational component",
+        "onset_weeks_from_entry": {
+          "min": 24,
+          "max": 70
+        },
+        "prophylaxis": [
+          "Turn the hand slightly outward to reduce the rotational stress",
+          "Build volume gradually per the tendon timeline"
+        ],
+        "red_flags": [
+          "Ulnar-side wrist pain"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

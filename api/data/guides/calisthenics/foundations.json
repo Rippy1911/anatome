@@ -1,0 +1,3128 @@
+{
+  "schema_version": 2,
+  "kind": "foundations",
+  "slug": "foundations",
+  "name": "Foundations",
+  "family": "foundation",
+  "difficulty": "beginner",
+  "summary": "Shared prerequisite mini-trees: push-up, dip, pull-up, hollow body, scapular control, L-sit. Feed every elite skill.",
+  "prerequisites": [],
+  "entry_assessment": [
+    {
+      "name": "Plank",
+      "target": "30–60s"
+    },
+    {
+      "name": "Dead hang",
+      "target": "20–30s"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "bar",
+    "rings",
+    "parallettes",
+    "bench",
+    "blocks"
+  ],
+  "primary_muscles": [
+    "chest",
+    "upper-back",
+    "abs"
+  ],
+  "secondary_muscles": [
+    "triceps",
+    "biceps",
+    "deltoids"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "chest",
+        "upper-back",
+        "abs"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "triceps",
+        "biceps",
+        "deltoids"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "custom",
+    "value": 1,
+    "notes": "Pass all mini-tree unlocks for RR-level readiness"
+  },
+  "programming": {
+    "strength_frequency_per_week": "3 (RR-style)",
+    "notes": "Foundations can run as a standalone beginner program."
+  },
+  "safety": {
+    "injury_risk": "low",
+    "contraindications": [],
+    "notes": "Master these before long static holds on elite trees."
+  },
+  "sources": [
+    "RR",
+    "OG2",
+    "GMB",
+    "FF"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "steps": [
+    {
+      "cues": [
+        "Body straight",
+        "Chest to surface"
+      ],
+      "common_faults": [
+        "Hips sagging",
+        "Elbows flaring wide"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "push-incline",
+      "order": 1,
+      "name": "Incline push-up",
+      "level": "beginner",
+      "track": "push-up",
+      "intent": "Horizontal push with reduced load.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–12",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "no structured pushing work",
+        "conditioning_hours_per_week": 3,
+        "confidence": "published-standard",
+        "source_ids": [
+          "acsm-progression-2009"
+        ],
+        "scope": "step",
+        "notes": "Sits inside the 4–8 week window in which ACSM reports the majority of novice strength gain."
+      }
+    },
+    {
+      "cues": [
+        "Straight line knees to head"
+      ],
+      "common_faults": [
+        "Hinging at hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "push-knee",
+      "order": 2,
+      "name": "Knee push-up",
+      "level": "beginner",
+      "track": "push-up",
+      "intent": "Floor pattern with lighter load.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "12 incline push-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "published-standard",
+        "source_ids": [
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Elbows ~45°",
+        "Chest to floor",
+        "Hollow"
+      ],
+      "common_faults": [
+        "Half ROM",
+        "Sagging hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "push-standard",
+      "order": 3,
+      "name": "Standard push-up",
+      "level": "beginner",
+      "track": "push-up",
+      "intent": "Full ROM push-up, body straight.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–12",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "value_max": 12,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "12 knee push-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Hands close",
+        "Elbows close to body"
+      ],
+      "common_faults": [
+        "Flaring elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "push-diamond",
+      "order": 4,
+      "name": "Diamond push-up",
+      "level": "intermediate",
+      "track": "push-up",
+      "intent": "Triceps emphasis.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8",
+        "rest_seconds": 90,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "15 strict push-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Shift over working arm"
+      ],
+      "common_faults": [
+        "Twisting hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "push-archer",
+      "order": 5,
+      "name": "Archer push-up",
+      "level": "advanced",
+      "track": "push-up",
+      "intent": "Unilateral push bridge toward OAPU.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5/side",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "title": "Push-up progression — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=H0k47Ghb0GY",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "12 diamond push-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Hands by hips",
+        "Lean forward",
+        "Protract"
+      ],
+      "common_faults": [
+        "No lean"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "push-pppu",
+      "order": 6,
+      "name": "Pseudo planche push-up",
+      "level": "advanced",
+      "track": "push-up",
+      "intent": "Lean push that feeds the planche tree.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3,
+        "notes": "with lean"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "title": "Pseudo Planche Done RIGHT — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 45,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "8 archer push-ups per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Shoulders down",
+        "Full lockout"
+      ],
+      "common_faults": [
+        "Shrugging"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "dip-bench",
+      "order": 7,
+      "name": "Bench / box dip",
+      "level": "beginner",
+      "track": "dip",
+      "intent": "Supported dipping pattern.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "no structured dip work",
+        "conditioning_hours_per_week": 3,
+        "confidence": "published-standard",
+        "source_ids": [
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Arms locked",
+        "Depress scapulae"
+      ],
+      "common_faults": [
+        "Soft elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "dip-support",
+      "order": 8,
+      "name": "Bar support hold",
+      "level": "beginner",
+      "track": "dip",
+      "intent": "Locked support strength.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 3
+        },
+        "from_level": "12 bench dips",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "3–5s descent"
+      ],
+      "common_faults": [
+        "Dropping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "dip-negative",
+      "order": 9,
+      "name": "Negative dip",
+      "level": "intermediate",
+      "track": "dip",
+      "intent": "Eccentric strength for first dips.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5 slow",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s bar support hold",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Shoulders below elbows at bottom",
+        "Lockout top"
+      ],
+      "common_faults": [
+        "Partial depth"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "dip-bar",
+      "order": 10,
+      "name": "Parallel-bar dip",
+      "level": "intermediate",
+      "track": "dip",
+      "intent": "Full ROM bar dip.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "5 controlled negative dips",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Rings out at top"
+      ],
+      "common_faults": [
+        "Collapsing rings"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "dip-ring",
+      "order": 11,
+      "name": "Ring dip",
+      "level": "advanced",
+      "track": "dip",
+      "intent": "Unstable dip — rings for MU readiness.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "10 strict parallel-bar dips",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Solid lockout under load"
+      ],
+      "common_faults": [
+        "Ego loading"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "dip-weighted",
+      "order": 12,
+      "name": "Weighted / L-sit dip",
+      "level": "advanced",
+      "track": "dip",
+      "intent": "Overload or compression dip.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3,
+        "notes": "+10% BW or L-sit dips"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "8 ring dips",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Depress scapulae",
+        "Arms straight"
+      ],
+      "common_faults": [
+        "Bending elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pull-hang-scap",
+      "order": 13,
+      "name": "Dead hang + scapular pull-up",
+      "level": "beginner",
+      "track": "pull-up",
+      "intent": "Grip + scapular initiation.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30s + 5 scap",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "custom",
+        "value": 1,
+        "notes": "30s hang + 5 scap pulls"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "title": "Scapular pull-ups — demo clip",
+          "channel": "Zack Henderson",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "attribution": "Zack Henderson — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Scapular_Pull-Up",
+          "title": "Form GIF · Scapular Pull-Up",
+          "channel": "anatome.dev",
+          "ext_id": "Scapular_Pull-Up",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "no structured hanging work",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Body straight",
+        "Pull chest to bar"
+      ],
+      "common_faults": [
+        "Hips sagging"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pull-row",
+      "order": 14,
+      "name": "Australian / inverted row",
+      "level": "beginner",
+      "track": "pull-up",
+      "intent": "Horizontal pull strength.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "title": "Pull-up form — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Australian / inverted row. title names [pull-up] but step covers [row].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pullups",
+          "title": "Form GIF · Pullups",
+          "channel": "anatome.dev",
+          "ext_id": "Pullups",
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Australian / inverted row. title names [pull-up] but step covers [row].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s dead hang, 8 scapular pull-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "3–5s descent",
+        "Full hang finish"
+      ],
+      "common_faults": [
+        "Dropping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pull-negative",
+      "order": 15,
+      "name": "Negative pull-up",
+      "level": "beginner",
+      "track": "pull-up",
+      "intent": "Eccentric path to first pull-up.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 120,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "title": "Pull-up form — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pullups",
+          "title": "Form GIF · Pullups",
+          "channel": "anatome.dev",
+          "ext_id": "Pullups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "12 horizontal rows",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Chin over bar",
+        "Controlled lower"
+      ],
+      "common_faults": [
+        "Kipping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pull-chin",
+      "order": 16,
+      "name": "Chin-up (supinated)",
+      "level": "intermediate",
+      "track": "pull-up",
+      "intent": "Often easier first vertical pull.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "title": "Pull-up form — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pullups",
+          "title": "Form GIF · Pullups",
+          "channel": "anatome.dev",
+          "ext_id": "Pullups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "5 slow negative pull-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Full hang",
+        "Chin over",
+        "Hollow"
+      ],
+      "common_faults": [
+        "Half ROM",
+        "Kipping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pull-pronated",
+      "order": 17,
+      "name": "Pull-up (pronated)",
+      "level": "intermediate",
+      "track": "pull-up",
+      "intent": "Standard strict pull-up.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–8",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "value_max": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "title": "Pull-up form — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pullups",
+          "title": "Form GIF · Pullups",
+          "channel": "anatome.dev",
+          "ext_id": "Pullups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "8 chin-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Pull higher than chin"
+      ],
+      "common_faults": [
+        "Short ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pull-advanced",
+      "order": 18,
+      "name": "Chest-to-bar / L-sit / wide pull-up",
+      "level": "advanced",
+      "track": "pull-up",
+      "intent": "Higher pull variants for MU and skills.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "title": "Pull-up form — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pullups",
+          "title": "Form GIF · Pullups",
+          "channel": "anatome.dev",
+          "ext_id": "Pullups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "8 strict pronated pull-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Low back glued to floor",
+        "Slow opposite limbs"
+      ],
+      "common_faults": [
+        "Arching low back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hollow-dead-bug",
+      "order": 19,
+      "name": "Dead bug",
+      "level": "beginner",
+      "track": "hollow-body",
+      "intent": "Learn low-back pressed anti-extension.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8/side",
+        "rest_seconds": 45,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 1,
+          "max": 3
+        },
+        "from_level": "no structured core work",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Press low back down",
+        "Reach arms"
+      ],
+      "common_faults": [
+        "Neck straining"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hollow-tuck",
+      "order": 20,
+      "name": "Hollow hold (tuck)",
+      "level": "beginner",
+      "track": "hollow-body",
+      "intent": "Static hollow with knees bent.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 45,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "clean dead bug, no lumbar gap",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Legs long",
+        "Arms overhead if able"
+      ],
+      "common_faults": [
+        "Low back lifting — tuck more"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hollow-extended",
+      "order": 21,
+      "name": "Hollow hold (legs extended)",
+      "level": "intermediate",
+      "track": "hollow-body",
+      "intent": "Full hollow shape.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30–60s",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "value_max": 60,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s tuck hollow",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Rock as a unit",
+        "No low-back gap"
+      ],
+      "common_faults": [
+        "Using momentum only"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hollow-rock",
+      "order": 22,
+      "name": "Hollow rock",
+      "level": "intermediate",
+      "track": "hollow-body",
+      "intent": "Dynamic hollow control.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30 rocks",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s extended hollow",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Control every rep"
+      ],
+      "common_faults": [
+        "Yank with momentum"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hollow-loaded",
+      "order": 23,
+      "name": "Loaded hollow / V-up",
+      "level": "advanced",
+      "track": "hollow-body",
+      "intent": "Harder core for skills.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 90,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LlDNef_Ztsc",
+          "title": "Hollow body progression — demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "start_seconds": 20,
+          "end_seconds": 50,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LlDNef_Ztsc",
+          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30 clean hollow rocks",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Arms stay straight",
+        "Depress blades"
+      ],
+      "common_faults": [
+        "Bending elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "scap-pull",
+      "order": 24,
+      "name": "Scapular pull-up",
+      "level": "beginner",
+      "track": "scapular-control",
+      "intent": "Straight-arm scapular depression from hang.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8",
+        "rest_seconds": 60,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "title": "Scapular pull-ups — demo clip",
+          "channel": "Zack Henderson",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "attribution": "Zack Henderson — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Scapular_Pull-Up",
+          "title": "Form GIF · Scapular Pull-Up",
+          "channel": "anatome.dev",
+          "ext_id": "Scapular_Pull-Up",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 3
+        },
+        "from_level": "30s dead hang",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Locked elbows",
+        "Push floor away"
+      ],
+      "common_faults": [
+        "Bending elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "scap-push",
+      "order": 25,
+      "name": "Scapular push-up",
+      "level": "beginner",
+      "track": "scapular-control",
+      "intent": "Protraction/retraction in plank.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 45,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "title": "Scapular pull-ups — demo clip",
+          "channel": "Zack Henderson",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "attribution": "Zack Henderson — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Scapular_Pull-Up",
+          "title": "Form GIF · Scapular Pull-Up",
+          "channel": "anatome.dev",
+          "ext_id": "Scapular_Pull-Up",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 3
+        },
+        "from_level": "10 strict push-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Locked elbows"
+      ],
+      "common_faults": [
+        "Arm bending"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "scap-dip",
+      "order": 26,
+      "name": "Scapular dip / shrug (support)",
+      "level": "intermediate",
+      "track": "scapular-control",
+      "intent": "Depress/elevate in support.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "30s bar support hold",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Squeeze blades"
+      ],
+      "common_faults": [
+        "Pulling with arms"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "scap-row",
+      "order": 27,
+      "name": "Scapular row",
+      "level": "intermediate",
+      "track": "scapular-control",
+      "intent": "Retract/depress in hang or row setup.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "title": "Scapular pull-ups — demo clip",
+          "channel": "Zack Henderson",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=-ZIpSoTRsuE",
+          "attribution": "Zack Henderson — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Scapular_Pull-Up",
+          "title": "Form GIF · Scapular Pull-Up",
+          "channel": "anatome.dev",
+          "ext_id": "Scapular_Pull-Up",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "10 scapular pull-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Elevate/depress scapulae against wall"
+      ],
+      "common_faults": [
+        "Banana back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "scap-hs-shrug",
+      "order": 28,
+      "name": "Wall handstand shrug",
+      "level": "advanced",
+      "track": "scapular-control",
+      "intent": "Overhead SASS for handstand/press.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–5"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30s chest-to-wall handstand",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Push down hard",
+        "Depress scapulae"
+      ],
+      "common_faults": [
+        "Hips sagging"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "lsit-tuck",
+      "order": 29,
+      "name": "Tuck L-sit",
+      "level": "beginner",
+      "track": "l-sit",
+      "intent": "Support body with knees tucked.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s extended hollow hold",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Alternate sides"
+      ],
+      "common_faults": [
+        "Leaning back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "lsit-one-leg",
+      "order": 30,
+      "name": "One-leg L-sit",
+      "level": "intermediate",
+      "track": "l-sit",
+      "intent": "Extend one leg at a time.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15s/side",
+        "rest_seconds": 60,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "sets": 3,
+        "notes": "each side"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s tuck L-sit",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Point toes",
+        "Stay vertical torso"
+      ],
+      "common_faults": [
+        "Bent knees",
+        "Hips behind hands"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "lsit-full",
+      "order": 31,
+      "name": "L-sit",
+      "level": "intermediate",
+      "track": "l-sit",
+      "intent": "Legs straight, hips at shoulder height.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "2–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "value_max": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "20s one-leg L-sit each side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Turn rings out"
+      ],
+      "common_faults": [
+        "Wobbling out of position"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "lsit-rings",
+      "order": 32,
+      "name": "L-sit on rings",
+      "level": "advanced",
+      "track": "l-sit",
+      "intent": "Unstable L-sit.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–20s",
+        "rest_seconds": 90,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "20s floor L-sit",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Compression",
+        "Push down"
+      ],
+      "common_faults": [
+        "Rounding excessively without height"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "lsit-v",
+      "order": 33,
+      "name": "V-sit",
+      "level": "elite",
+      "track": "l-sit",
+      "intent": "Legs raised past L — feeds V-sit/manna tree.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–15s",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of V-sit. title names [l-sit] but step covers [v-sit].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 20,
+          "max": 40
+        },
+        "from_level": "20s ring L-sit plus a pike fold past 90°",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ],
+        "scope": "step",
+        "notes": "Hip-flexor strength is rarely the limiter here — hamstring and lower-back compression is. Athletes without a deep pike fold can spend the whole upper band without moving."
+      }
+    }
+  ],
+  "mini_trees": [
+    {
+      "slug": "push-up",
+      "name": "Push-up",
+      "family": "push",
+      "difficulty": "beginner",
+      "primary_muscles": [
+        "chest",
+        "triceps"
+      ],
+      "secondary_muscles": [
+        "deltoids",
+        "abs"
+      ],
+      "anatome_layers_payload": [
+        {
+          "color": "#DC2626",
+          "muscles": [
+            "chest",
+            "triceps"
+          ]
+        },
+        {
+          "color": "#F59E0B",
+          "muscles": [
+            "deltoids",
+            "abs"
+          ]
+        }
+      ],
+      "steps": [
+        "push-incline",
+        "push-knee",
+        "push-standard",
+        "push-diamond",
+        "push-archer",
+        "push-pppu"
+      ]
+    },
+    {
+      "slug": "dip",
+      "name": "Dip",
+      "family": "push",
+      "difficulty": "intermediate",
+      "primary_muscles": [
+        "chest",
+        "triceps"
+      ],
+      "secondary_muscles": [
+        "deltoids",
+        "abs"
+      ],
+      "anatome_layers_payload": [
+        {
+          "color": "#DC2626",
+          "muscles": [
+            "chest",
+            "triceps"
+          ]
+        },
+        {
+          "color": "#F59E0B",
+          "muscles": [
+            "deltoids",
+            "abs"
+          ]
+        }
+      ],
+      "steps": [
+        "dip-bench",
+        "dip-support",
+        "dip-negative",
+        "dip-bar",
+        "dip-ring",
+        "dip-weighted"
+      ]
+    },
+    {
+      "slug": "pull-up",
+      "name": "Pull-up",
+      "family": "pull",
+      "difficulty": "intermediate",
+      "primary_muscles": [
+        "upper-back",
+        "biceps"
+      ],
+      "secondary_muscles": [
+        "forearm",
+        "abs"
+      ],
+      "anatome_layers_payload": [
+        {
+          "color": "#DC2626",
+          "muscles": [
+            "upper-back",
+            "biceps"
+          ]
+        },
+        {
+          "color": "#F59E0B",
+          "muscles": [
+            "forearm",
+            "abs"
+          ]
+        }
+      ],
+      "steps": [
+        "pull-hang-scap",
+        "pull-row",
+        "pull-negative",
+        "pull-chin",
+        "pull-pronated",
+        "pull-advanced"
+      ]
+    },
+    {
+      "slug": "hollow-body",
+      "name": "Hollow body",
+      "family": "core",
+      "difficulty": "beginner",
+      "primary_muscles": [
+        "abs"
+      ],
+      "secondary_muscles": [
+        "adductors",
+        "lower-back"
+      ],
+      "anatome_layers_payload": [
+        {
+          "color": "#DC2626",
+          "muscles": [
+            "abs"
+          ]
+        },
+        {
+          "color": "#F59E0B",
+          "muscles": [
+            "adductors",
+            "lower-back"
+          ]
+        }
+      ],
+      "steps": [
+        "hollow-dead-bug",
+        "hollow-tuck",
+        "hollow-extended",
+        "hollow-rock",
+        "hollow-loaded"
+      ]
+    },
+    {
+      "slug": "scapular-control",
+      "name": "Scapular control",
+      "family": "hybrid",
+      "difficulty": "beginner",
+      "primary_muscles": [
+        "upper-back",
+        "trapezius"
+      ],
+      "secondary_muscles": [
+        "deltoids",
+        "chest"
+      ],
+      "anatome_layers_payload": [
+        {
+          "color": "#DC2626",
+          "muscles": [
+            "upper-back",
+            "trapezius"
+          ]
+        },
+        {
+          "color": "#F59E0B",
+          "muscles": [
+            "deltoids",
+            "chest"
+          ]
+        }
+      ],
+      "steps": [
+        "scap-pull",
+        "scap-push",
+        "scap-dip",
+        "scap-row",
+        "scap-hs-shrug"
+      ]
+    },
+    {
+      "slug": "l-sit",
+      "name": "L-sit",
+      "family": "core",
+      "difficulty": "intermediate",
+      "primary_muscles": [
+        "abs",
+        "triceps"
+      ],
+      "secondary_muscles": [
+        "adductors",
+        "deltoids"
+      ],
+      "anatome_layers_payload": [
+        {
+          "color": "#DC2626",
+          "muscles": [
+            "abs",
+            "triceps"
+          ]
+        },
+        {
+          "color": "#F59E0B",
+          "muscles": [
+            "adductors",
+            "deltoids"
+          ]
+        }
+      ],
+      "steps": [
+        "lsit-tuck",
+        "lsit-one-leg",
+        "lsit-full",
+        "lsit-rings",
+        "lsit-v"
+      ]
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 36,
+      "max": 72
+    },
+    "from_level": "Untrained but healthy: can perform an incline push-up and hang from a bar for a few seconds",
+    "conditioning_hours_per_week": 3,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "rbwf-recommended-routine",
+      "acsm-progression-2009"
+    ],
+    "human_label": "9–18 months to top out all six foundation tracks; a solid working base (standard push-up, pull-up, dip, hollow hold, L-sit) lands at roughly 4–8 months",
+    "notes": "The six tracks are trained in parallel, so the tree total is the longest single track (L-sit), not the sum of all steps. ACSM's position stand puts most early strength gain in the first 4–8 weeks, which is why the first two steps of every track are short and the advanced caps are long.",
+    "parallel_tracks": true,
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Pain-free full-range shoulder and elbow movement",
+        "target": "no joint pain through overhead reach and full elbow extension",
+        "metric": "custom",
+        "rationale": "Everything downstream loads these joints at long levers.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Passive bar hang",
+        "target": "15s",
+        "metric": "hold_seconds",
+        "value": 15,
+        "related_step_id": "pull-hang-scap",
+        "rationale": "Grip is the entry gate for every pulling track.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Bodyweight squat to depth",
+        "target": "20 reps",
+        "metric": "reps",
+        "value": 20,
+        "rationale": "Baseline lower-body capacity before the single-leg trees.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "rep-range-stuck",
+        "at_step_ids": [
+          "push-standard",
+          "pull-pronated",
+          "dip-bar"
+        ],
+        "signal": "Stuck at the same rep count for 3+ weeks while form is already clean",
+        "typical_causes": [
+          "Training too far from failure",
+          "Insufficient weekly volume",
+          "Progressing on reps alone rather than moving to the next variation"
+        ],
+        "resolution": [
+          "Add one set per session for two weeks",
+          "Move to the next progression for the first set, then finish at the current one",
+          "Check sleep and protein before adding more volume"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine",
+          "acsm-progression-2009"
+        ]
+      },
+      {
+        "id": "novice-window-closing",
+        "at_step_ids": [
+          "push-diamond",
+          "pull-chin"
+        ],
+        "signal": "Progress that was weekly becomes monthly around month 3–6",
+        "typical_causes": [
+          "The novice adaptation window has closed — this is expected, not a programming error"
+        ],
+        "resolution": [
+          "Switch from session-to-session progression to weekly or block progression",
+          "Introduce a planned deload every 4–8 weeks"
+        ],
+        "expected_stall_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "acsm-progression-2009",
+          "stevenlow-rate-adaptation"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "dip-bar",
+          "dip-ring"
+        ],
+        "mechanism": "Dipping below 90° of shoulder extension before the joint tolerates the range",
+        "onset_weeks_from_entry": {
+          "min": 8,
+          "max": 20
+        },
+        "prophylaxis": [
+          "Earn a 30s bar support hold before any dip reps",
+          "Add depth gradually rather than all at once",
+          "Keep scapulae depressed throughout"
+        ],
+        "red_flags": [
+          "Front-of-shoulder pinching at the bottom",
+          "Pain that persists after the set"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "elbow",
+        "peaks_at_step_ids": [
+          "pull-advanced",
+          "dip-weighted"
+        ],
+        "mechanism": "Rapid volume increases on loaded pulling and pressing outpace tendon adaptation, which needs 8–12 weeks",
+        "onset_weeks_from_entry": {
+          "min": 12,
+          "max": 30
+        },
+        "prophylaxis": [
+          "Increase weekly pulling volume by no more than ~10% per week",
+          "Keep some volume at lower intensity rather than every set near-maximal"
+        ],
+        "red_flags": [
+          "Medial or lateral elbow ache during the first rep of a set",
+          "Grip weakness the day after pulling"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "acsm-progression-2009"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

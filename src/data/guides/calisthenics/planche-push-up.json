@@ -1,0 +1,850 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "planche-push-up",
+  "name": "Planche Push-up",
+  "family": "push",
+  "difficulty": "elite",
+  "summary": "Bent-arm planche strength: PPPUs → tuck planche push-ups → straddle/full. Parallel to planche hold tree.",
+  "prerequisites": [
+    "foundations",
+    "planche"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Pseudo planche push-ups",
+      "target": "8–12 with lean"
+    },
+    {
+      "name": "Tuck planche hold",
+      "target": "20–30s"
+    },
+    {
+      "name": "Planche lean",
+      "target": "45s ≥45°"
+    },
+    {
+      "name": "Dips",
+      "target": "8"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "parallettes",
+    "band",
+    "blocks"
+  ],
+  "primary_muscles": [
+    "deltoids",
+    "chest",
+    "triceps"
+  ],
+  "secondary_muscles": [
+    "abs",
+    "forearm",
+    "upper-back"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "deltoids",
+        "chest",
+        "triceps"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "abs",
+        "forearm",
+        "upper-back"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps",
+    "value": 3,
+    "sets": 3,
+    "notes": "Full planche push-up, full ROM, clean form"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–3",
+    "notes": "Never to failure. Long rest (3–5 min). Pair with planche holds on alternate days."
+  },
+  "safety": {
+    "injury_risk": "high",
+    "contraindications": [
+      "Biceps tendinopathy",
+      "Acute wrist pain",
+      "Insufficient tuck planche hold"
+    ],
+    "notes": "Do not rush to full planche push-ups before 20s+ tuck planche hold."
+  },
+  "divergence_notes": "Some athletes build PPPUs before any tuck hold; this tree gates push-ups on tuck hold stability.",
+  "sources": [
+    "OG2",
+    "FF",
+    "CM",
+    "SW"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Hands by hips",
+        "Lean forward",
+        "Full lockout"
+      ],
+      "common_faults": [
+        "No lean",
+        "Partial ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pppu-elevated",
+      "order": 1,
+      "name": "Elevated pseudo planche push-up",
+      "level": "intermediate",
+      "intent": "Feet elevated PPPUs — more load, more lean.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–10",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3,
+        "notes": "feet elevated"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "title": "Pseudo Planche Done RIGHT — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 45,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Pushups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "15 floor pseudo planche push-ups",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Lean past wrists",
+        "Chest forward of hands at bottom"
+      ],
+      "common_faults": [
+        "Elbows flaring",
+        "Insufficient lean"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pppu-deep",
+      "order": 2,
+      "name": "Deep pseudo planche push-up",
+      "level": "advanced",
+      "intent": "Maximum lean PPPUs on floor or parallettes.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "title": "Pseudo Planche Done RIGHT — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 45,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Pushups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Pushups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "12 elevated pseudo planche push-ups",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Hips at shoulder height",
+        "Protract hard",
+        "Short ROM ok early"
+      ],
+      "common_faults": [
+        "Hips dropping",
+        "Feet touching floor"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "tuck-planche-push-up",
+      "order": 3,
+      "name": "Tuck planche push-up",
+      "level": "advanced",
+      "intent": "Push-up with feet off floor in tuck planche shape.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–6",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 6,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YHkHgJOAe9A",
+          "title": "Tuck planche — demo clip",
+          "channel": "Vitaly Pavlenko",
+          "kind": "embed",
+          "start_seconds": 20,
+          "end_seconds": 45,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=YHkHgJOAe9A",
+          "attribution": {
+            "required": true,
+            "text": "Vitaly Pavlenko — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Vitaly Pavlenko",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 10,
+          "max": 24
+        },
+        "from_level": "30s tuck planche and 12 deep PPPU",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Flatten back",
+        "Open hips in tuck"
+      ],
+      "common_faults": [
+        "Still rounded tuck"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "adv-tuck-planche-push-up",
+      "order": 4,
+      "name": "Advanced tuck planche push-up",
+      "level": "advanced",
+      "intent": "Flat back tuck — harder lever for each rep.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "kind": "embed",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": {
+            "required": true,
+            "text": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Andry Strong",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 16,
+          "max": 40
+        },
+        "from_level": "5 tuck planche push-ups",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle",
+        "Hollow brace"
+      ],
+      "common_faults": [
+        "Piking",
+        "Bent elbows at top"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "straddle-planche-push-up",
+      "order": 5,
+      "name": "Straddle planche push-up",
+      "level": "elite",
+      "intent": "Push-ups in straddle planche shape.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "2–4",
+        "rest_seconds": 240,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 4,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "kind": "embed",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": {
+            "required": true,
+            "text": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Andry Strong",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 24,
+          "max": 60
+        },
+        "from_level": "5 advanced tuck planche push-ups and a 15s straddle planche",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "One leg tucked",
+        "Equal sides"
+      ],
+      "common_faults": [
+        "Twisting torso"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "one-leg-planche-push-up",
+      "order": 6,
+      "name": "One-leg planche push-up",
+      "level": "elite",
+      "intent": "Bridge shape when straddle mobility limits full.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "2–3/side",
+        "rest_seconds": 240,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 3,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "kind": "embed",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": {
+            "required": true,
+            "text": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Andry Strong",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 16,
+          "max": 40
+        },
+        "from_level": "3 straddle planche push-ups",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Squeeze legs",
+        "Add depth weekly"
+      ],
+      "common_faults": [
+        "Feet on floor",
+        "Banana back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "full-planche-push-up-partial",
+      "order": 7,
+      "name": "Full planche push-up (partial ROM)",
+      "level": "elite",
+      "intent": "Legs together, partial depth — build to full ROM.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "2–4",
+        "rest_seconds": 240,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 4,
+        "sets": 3,
+        "notes": "≥½ ROM"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "kind": "embed",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": {
+            "required": true,
+            "text": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Andry Strong",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 20,
+          "max": 52
+        },
+        "from_level": "3 one-leg planche push-ups and a 10s full planche",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Full lockout",
+        "Body horizontal at top",
+        "Control eccentric"
+      ],
+      "common_faults": [
+        "Partial lockout",
+        "Hips low"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "full-planche-push-up",
+      "order": 8,
+      "name": "Full planche push-up",
+      "level": "elite",
+      "intent": "Legs together, full ROM — bent-arm planche pinnacle.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "1–3",
+        "rest_seconds": 300,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 3,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "kind": "embed",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": {
+            "required": true,
+            "text": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Andry Strong",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 26,
+          "max": 78
+        },
+        "from_level": "3 partial-ROM full planche push-ups",
+        "confidence": "estimated"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 122,
+      "max": 314
+    },
+    "from_level": "30s tuck planche, 15 deep pseudo planche push-ups, pain-free loaded wrist extension at ≥90°",
+    "conditioning_hours_per_week": 5,
+    "confidence": "estimated",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation"
+    ],
+    "human_label": "roughly 2.5–6 years beyond a tuck planche — for most athletes 5–10 years of training in total",
+    "notes": "The least well-sourced tree in the library and deliberately marked `estimated` throughout. Almost nobody publishes timelines for full planche push-ups because very few people reach them; the numbers here are extrapolated from the planche tree using the logarithmic rate-of-adaptation model, treating each dynamic variant as materially harder than the static hold of the same shape. Read these as orders of magnitude, not as targets."
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Tuck planche",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "tuck-planche",
+        "rationale": "You cannot press a shape you cannot hold.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Deep pseudo planche push-ups",
+        "target": "15 reps",
+        "metric": "reps",
+        "value": 15,
+        "related_step_id": "pppu-deep",
+        "rationale": "The dynamic pattern at a manageable lever.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Loaded wrist extension",
+        "target": "pain-free at ≥90° under high volume",
+        "metric": "custom",
+        "related_step_id": "mob-wrist-load",
+        "rationale": "Dynamic straight-arm pressing multiplies the wrist load of the static hold.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "static-ahead-of-dynamic",
+        "at_step_ids": [
+          "tuck-planche-push-up",
+          "adv-tuck-planche-push-up"
+        ],
+        "signal": "Static hold at a given shape is comfortable but no press is available in that shape",
+        "typical_causes": [
+          "The dynamic version is materially harder than the static — this is expected, not a gap in programming",
+          "No partial-range work bridging the two"
+        ],
+        "resolution": [
+          "Own the static hold for roughly double the time before expecting a press",
+          "Add partial-ROM presses and slow negatives in the target shape"
+        ],
+        "expected_stall_weeks": {
+          "min": 8,
+          "max": 30
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "stevenlow-rate-adaptation",
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "tuck-planche-push-up",
+          "straddle-planche-push-up"
+        ],
+        "mechanism": "Dynamic loading at maximal lean multiplies peak wrist force compared with the equivalent static hold",
+        "onset_weeks_from_entry": {
+          "min": 4,
+          "max": 20
+        },
+        "prophylaxis": [
+          "Parallettes for all dynamic work",
+          "Keep total dynamic reps low and stop on form"
+        ],
+        "red_flags": [
+          "Wrist pain on the eccentric"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "tissue": "biceps-tendon",
+        "peaks_at_step_ids": [
+          "straddle-planche-push-up",
+          "full-planche-push-up"
+        ],
+        "mechanism": "Peak tensile load at the bottom of the press at maximal lever length",
+        "onset_weeks_from_entry": {
+          "min": 50,
+          "max": 160
+        },
+        "prophylaxis": [
+          "Permanent tendon-conditioning work in the programme",
+          "Very gradual range extension"
+        ],
+        "red_flags": [
+          "Biceps-groove pain at the bottom position"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 2,
+          "max": 3
+        },
+        "hard_sets_per_session": {
+          "min": 3,
+          "max": 5
+        },
+        "notes": "Lower frequency than the planche tree. Dynamic straight-arm work at these levers is the highest tissue-stress training in the library and recovery, not motivation, sets the ceiling.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ]
+      },
+      "too_much_signals": [
+        "Any wrist or biceps symptom between sessions",
+        "Rep quality collapsing after the first set",
+        "Static hold times regressing while press work continues"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 6
+        },
+        "protocol": "One week of static holds only at half volume.",
+        "trigger": "Four weeks without progress, or any tendon symptom.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ]
+      }
+    }
+  }
+}

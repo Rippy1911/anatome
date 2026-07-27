@@ -1,0 +1,898 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "slug": "back-lever",
+  "name": "Back Lever",
+  "family": "pull",
+  "difficulty": "advanced",
+  "summary": "Face-down horizontal lever from German hang. Rings preferred. Do not skip tissue conditioning.",
+  "prerequisites": [
+    "foundations",
+    "skin-the-cat"
+  ],
+  "entry_assessment": [
+    {
+      "name": "German hang",
+      "target": "30s pain-free"
+    },
+    {
+      "name": "Skin the cat",
+      "target": "5–8 controlled"
+    },
+    {
+      "name": "Strict pull-ups",
+      "target": "8"
+    },
+    {
+      "name": "Tuck front lever",
+      "target": "30s (recommended)"
+    }
+  ],
+  "equipment": [
+    "rings",
+    "bar",
+    "band"
+  ],
+  "primary_muscles": [
+    "biceps",
+    "chest",
+    "upper-back"
+  ],
+  "secondary_muscles": [
+    "forearm",
+    "abs",
+    "deltoids"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "biceps",
+        "chest",
+        "upper-back"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "forearm",
+        "abs",
+        "deltoids"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 10,
+    "value_max": 15,
+    "sets": 3,
+    "notes": "Full back lever"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–3",
+    "skill_frequency_per_week": "German hang daily-light ok",
+    "notes": "Lower frequency than FL due to biceps/shoulder tissue risk."
+  },
+  "safety": {
+    "injury_risk": "high",
+    "contraindications": [
+      "Biceps tendinopathy",
+      "Shoulder instability",
+      "Pain in German hang"
+    ],
+    "notes": "Rings strongly preferred. Stop immediately on biceps/shoulder pain. Earn German hang 30–45s before any lever work."
+  },
+  "divergence_notes": "Some coaches teach BL before FL (easier for many); this tree follows tissue-readiness (German hang first).",
+  "sources": [
+    "OG2",
+    "FF",
+    "GMB",
+    "SW"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "steps": [
+    {
+      "cues": [
+        "Open shoulders gradually",
+        "Arms straight",
+        "Breathe; do not bounce"
+      ],
+      "common_faults": [
+        "Rushing into deep hang",
+        "Bouncing"
+      ],
+      "drills": [
+        {
+          "slug": "supine-bar-hang",
+          "name": "Supine bar hang / biceps conditioning",
+          "role": "conditioning",
+          "instructions": [
+            "Light biceps loading under control; stop if tendon pain"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "german-hang",
+      "order": 1,
+      "name": "German hang hold",
+      "level": "intermediate",
+      "intent": "Non-negotiable tissue + mobility base at skin-the-cat bottom.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–45s",
+        "rest_seconds": 120,
+        "frequency_per_week": "3–5 light"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "value_max": 45,
+        "sets": 3
+      },
+      "safety_notes": "Primary injury-prevention step. Never skip.",
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30s active hang and pain-free shoulder extension",
+        "conditioning_hours_per_week": 3,
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ],
+        "scope": "step",
+        "notes": "Held at the tendon-adaptation floor on purpose (≥8 weeks of loaded exposure before meaningful stiffness change)."
+      }
+    },
+    {
+      "cues": [
+        "Slow tempo",
+        "Keep rings/bar close"
+      ],
+      "common_faults": [
+        "Kipping hard",
+        "Incomplete ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "skin-the-cat-dynamic",
+      "order": 2,
+      "name": "Skin the cat (dynamic)",
+      "level": "intermediate",
+      "intent": "Full controlled ROM through German hang and back.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5 reps",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "45s German hang",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Stop at horizontal",
+        "Do not dump past parallel"
+      ],
+      "common_faults": [
+        "Over-extending past horizontal",
+        "Bent arms"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "back-lever-tuck",
+      "order": 3,
+      "name": "Tuck back lever",
+      "level": "intermediate",
+      "intent": "From German hang, raise hips to horizontal with knees tucked.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "5 controlled skin the cats",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Long line",
+        "Glutes squeezed"
+      ],
+      "common_faults": [
+        "Hips piking",
+        "Shoulder dumping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "back-lever-advanced-tuck",
+      "order": 4,
+      "name": "Advanced tuck back lever",
+      "level": "advanced",
+      "intent": "Flatten back, open hips, knees tucked.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "30s tuck back lever",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Equal sides",
+        "Keep horizontal"
+      ],
+      "common_faults": [
+        "Twisting"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "back-lever-one-leg",
+      "order": 5,
+      "name": "One-leg back lever",
+      "level": "advanced",
+      "intent": "One leg extended bridge toward straddle/full.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "12–15s/side",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "sets": 3,
+        "notes": "each side"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "30s advanced tuck back lever",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle",
+        "Toes pointed"
+      ],
+      "common_faults": [
+        "Hips too high or low"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "back-lever-straddle",
+      "order": 6,
+      "name": "Straddle back lever",
+      "level": "advanced",
+      "intent": "Legs split, body horizontal, face down.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–20s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "value_max": 20,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "15s one-leg back lever per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Squeeze legs",
+        "Stop at horizontal"
+      ],
+      "common_faults": [
+        "Dumping past parallel",
+        "Bent arms"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "full-back-lever",
+      "order": 7,
+      "name": "Full back lever",
+      "level": "elite",
+      "intent": "Legs together, horizontal — skill goal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–15s",
+        "rest_seconds": 240,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 20
+        },
+        "from_level": "20s straddle back lever",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Controlled",
+        "No bounce"
+      ],
+      "common_faults": [
+        "Momentum",
+        "Pain pushing through"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "back-lever-raises",
+      "order": 8,
+      "name": "Back lever pull / raise",
+      "level": "elite",
+      "intent": "Pull from hang through to back lever — elite dynamic.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "1–3 reps",
+        "rest_seconds": 240,
+        "frequency_per_week": "1–2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 3,
+        "sets": 3,
+        "notes": "elite+"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 10,
+          "max": 26
+        },
+        "from_level": "15s full back lever",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 45,
+      "max": 104
+    },
+    "from_level": "30s pain-free German hang, 5 controlled skin the cats, 8 strict pull-ups",
+    "conditioning_hours_per_week": 3,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "straighttalking-cali-timelines",
+      "overcoming-gravity-2e",
+      "bohm-2015-tendon"
+    ],
+    "human_label": "10 months – 2 years from a comfortable German hang; the full back lever itself typically lands at 8–18 months",
+    "notes": "Consistently reported as arriving earlier than the front lever, with biceps-tendon tolerance and shoulder-extension mobility — not pulling strength — as the rate limiters. The tissue steps at the start of this tree are deliberately slow; every week skipped there tends to reappear as a forced layoff later.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "German hang",
+        "target": "30s pain-free",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "german-hang",
+        "rationale": "Non-negotiable. Every back-lever injury story starts with skipping this.",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "straighttalking-cali-timelines"
+        ]
+      },
+      {
+        "name": "Skin the cat",
+        "target": "5 controlled reps",
+        "metric": "reps",
+        "value": 5,
+        "related_step_id": "stc-straight",
+        "rationale": "Controlled entry and exit from the bottom position.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Strict pull-ups",
+        "target": "8 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "pull-pronated",
+        "rationale": "General pulling base.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Tuck front lever",
+        "target": "30s (recommended, not required)",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "front-lever-tuck",
+        "rationale": "Balances the straight-arm pull in both directions and reduces the shoulder-load asymmetry.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "tendon-limited",
+        "at_step_ids": [
+          "back-lever-tuck",
+          "back-lever-advanced-tuck"
+        ],
+        "signal": "Strength feels available but the biceps or front of the shoulder complains before the set ends",
+        "typical_causes": [
+          "Insufficient accumulated German hang exposure",
+          "Progressing on lever length faster than tissue can adapt"
+        ],
+        "resolution": [
+          "Return to German hang volume for 4–8 weeks",
+          "Add light supine bar hangs as dedicated tendon conditioning",
+          "Hold the current lever longer rather than lengthening it"
+        ],
+        "expected_stall_weeks": {
+          "min": 4,
+          "max": 14
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "straighttalking-cali-timelines"
+        ]
+      },
+      {
+        "id": "dumping-past-horizontal",
+        "at_step_ids": [
+          "back-lever-straddle",
+          "full-back-lever"
+        ],
+        "signal": "The hold looks long but the body settles below parallel",
+        "typical_causes": [
+          "Chasing hold time instead of position",
+          "Using the passive end-range as a rest position, which loads the tendon rather than the muscle"
+        ],
+        "resolution": [
+          "Film every attempt and score only the time spent at or above horizontal",
+          "Shorten the target and rebuild strictly"
+        ],
+        "expected_stall_weeks": {
+          "min": 3,
+          "max": 10
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "biceps-tendon",
+        "peaks_at_step_ids": [
+          "back-lever-tuck",
+          "back-lever-straddle",
+          "full-back-lever"
+        ],
+        "mechanism": "Peak long-head biceps tension: straight elbow, extended shoulder, and a lengthening lever. Risk climbs with every shape change because the moment arm grows faster than tissue adapts.",
+        "onset_weeks_from_entry": {
+          "min": 6,
+          "max": 24
+        },
+        "prophylaxis": [
+          "Accumulate 8+ weeks of German hang before any lever shape",
+          "Add one shape change at a time and hold it for at least 4 weeks",
+          "Keep light supine hangs in the programme permanently",
+          "Use rings so the forearms can rotate"
+        ],
+        "red_flags": [
+          "Pain in the biceps groove",
+          "Pain on resisted elbow flexion the day after",
+          "A sensation of 'giving way' at the front of the shoulder"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading",
+          "straighttalking-cali-timelines"
+        ]
+      },
+      {
+        "tissue": "elbow",
+        "peaks_at_step_ids": [
+          "full-back-lever",
+          "back-lever-raises"
+        ],
+        "mechanism": "Straight-arm loading at the longest lever, with dynamic entry adding a velocity spike",
+        "onset_weeks_from_entry": {
+          "min": 20,
+          "max": 52
+        },
+        "prophylaxis": [
+          "Never enter the lever by dropping into it",
+          "Keep dynamic raises to low reps and high quality"
+        ],
+        "red_flags": [
+          "Anterior elbow pain on straightening"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 2,
+          "max": 3
+        },
+        "hard_sets_per_session": {
+          "min": 3,
+          "max": 5
+        },
+        "notes": "Deliberately lower than the portfolio default. This tree is limited by connective-tissue tolerance rather than by muscular recovery, and tissue does not care how motivated you are.",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading"
+        ]
+      },
+      "too_much_signals": [
+        "Any biceps-groove discomfort between sessions",
+        "Needing a longer German hang warm-up each week to feel ready",
+        "Hold times falling while perceived effort rises"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 6
+        },
+        "protocol": "One week of German hang and tuck holds only, at half the usual sets.",
+        "trigger": "Any tendon symptom, or four weeks without progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ]
+      }
+    }
+  }
+}
