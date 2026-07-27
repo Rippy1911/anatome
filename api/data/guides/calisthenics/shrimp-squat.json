@@ -122,13 +122,14 @@
           "ext_id": "Kettlebell_Pistol_Squat",
           "role": "reference",
           "match_note": "Related clip from the same movement family, not a demonstration of Assisted shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
-          "attribution": "free-exercise-db (Kettlebell_Pistol_Squat), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -197,13 +198,14 @@
           "ext_id": "Kettlebell_Pistol_Squat",
           "role": "reference",
           "match_note": "Related clip from the same movement family, not a demonstration of Box shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
-          "attribution": "free-exercise-db (Kettlebell_Pistol_Squat), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -272,13 +274,14 @@
           "ext_id": "Kettlebell_Pistol_Squat",
           "role": "reference",
           "match_note": "Related clip from the same movement family, not a demonstration of Negative shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
-          "attribution": "free-exercise-db (Kettlebell_Pistol_Squat), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -348,13 +351,14 @@
           "ext_id": "Kettlebell_Pistol_Squat",
           "role": "reference",
           "match_note": "Related clip from the same movement family, not a demonstration of Full shrimp squat. title names [pistol-squat] but step covers [shrimp-squat].",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
-          "attribution": "free-exercise-db (Kettlebell_Pistol_Squat), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {

@@ -1,13 +1,22 @@
 // Canonical attribution constants. Include in API responses only where the payload
-// carries third-party data (MIT body paths or CC0 exercise records). Full legal
+// carries third-party data (MIT body paths or free-exercise-db records). Full legal
 // metadata lives on GET / and in the OpenAPI info block.
+//
+// The free-exercise-db split matters and is easy to get wrong: the *metadata* is a
+// compilation its author genuinely offers under the Unlicense, but the *photography*
+// was scraped and the upstream compiler says so ("I do not own the copy right for
+// these images"). A dedication cannot be granted by someone who never held the
+// right, so we describe the imagery as unverified rather than repeating the claim.
+// See https://github.com/NextSolutionsStudio/anatome/issues/21.
 
 export const ATTRIBUTION =
   "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
 export const ATTRIBUTION_SOURCE =
   "https://github.com/HichamELBSI/react-native-body-highlighter";
 export const EXERCISE_DB_ATTRIBUTION =
-  "Exercise data from free-exercise-db (CC0-1.0, public domain) by yuhonas.";
+  "Exercise metadata from free-exercise-db by yuhonas, offered under the Unlicense. "
+  + "The bundled photography is NOT covered: its origin is unverified and it is not "
+  + "cleared for redistribution.";
 export const LICENSE = "Apache-2.0";
 export const GUIDE_CATALOG_ATTRIBUTION =
   "Skill progressions from the Anatome calisthenics catalog by NextSolutions (CC-BY-4.0).";
@@ -67,7 +76,7 @@ export function imageAttribution(): {
   };
 }
 
-/** CC0 exercise-db attribution — responses that include exercise records.
+/** free-exercise-db attribution — responses that include exercise records.
  *  Keeps `license` for legal compliance (AGENTS.md §7); `built_by`/`try_also`
  *  are dropped as redundant. */
 export function exerciseDataAttribution(): {

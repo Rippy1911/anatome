@@ -54,7 +54,7 @@ const exerciseResultSchema = {
     anatome_layers_payload: { type: "array", items: { type: "object" } },
     instructions: { type: "array", items: { type: "string" } },
     images: { type: "array", items: { type: "string" }, description: "Relative free-exercise-db image paths (e.g. Barbell_Bench_Press_-_Medium_Grip/0.jpg). Prefix with the exercises/ base or use source_images for ready-to-embed URLs." },
-    source_images: { type: "array", items: { type: "string" }, description: "Anatome-hosted absolute URLs for each free-exercise-db reference photo (CC0), served via /exerciseImage. Ready for <img src>." },
+    source_images: { type: "array", items: { type: "string" }, description: "Anatome-hosted absolute URLs for each free-exercise-db reference photo, served via /exerciseImage. Ready for <img src>. Licence unverified — the photography is not covered by the dataset's Unlicense and is not cleared for redistribution." },
     movementType: { type: "string", nullable: true, description: "Alias of mechanic (compound / isolation)" },
     keywords: { type: "array", items: { type: "string" } },
     variations: {
@@ -298,7 +298,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/exerciseGif": {
         get: {
           tags: ["Exercise Database"],
-          summary: "Exercise demonstration GIF (2-frame, CC0 source)",
+          summary: "Exercise demonstration GIF (2-frame, unverified-licence source)",
           parameters: [{ name: "id", in: "query", required: true, schema: { type: "string" }, example: "Barbell_Bench_Press_-_Medium_Grip", description: "Exercise ext_id" }],
           responses: {
             "200": { description: "Animated GIF", content: { "image/gif": { schema: { type: "string", format: "binary" } } } },
@@ -309,7 +309,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/exerciseImage": {
         get: {
           tags: ["Exercise Database"],
-          summary: "Exercise reference photo (free-exercise-db, CC0)",
+          summary: "Exercise reference photo (free-exercise-db, licence unverified)",
           description: "Proxies a free-exercise-db source JPEG through Anatome's host so consumers (incl. RapidAPI) don't hotlink raw.githubusercontent.com. Pass the relative path from an exercise's images[] field.",
           parameters: [{ name: "path", in: "query", required: true, schema: { type: "string" }, example: "Barbell_Bench_Press_-_Medium_Grip/0.jpg", description: "Relative image path from exercise.images[]" }],
           responses: {

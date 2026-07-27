@@ -128,13 +128,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pushups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
-          "attribution": "free-exercise-db (Pushups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -202,13 +203,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pushups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
-          "attribution": "free-exercise-db (Pushups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -279,13 +281,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pushups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
-          "attribution": "free-exercise-db (Pushups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -355,13 +358,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pushups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
-          "attribution": "free-exercise-db (Pushups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -430,13 +434,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pushups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
-          "attribution": "free-exercise-db (Pushups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -508,13 +513,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pushups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
-          "attribution": "free-exercise-db (Pushups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -584,13 +590,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -658,13 +665,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -733,13 +741,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -809,13 +818,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -884,13 +894,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -960,13 +971,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1036,13 +1048,14 @@
           "channel": "anatome.dev",
           "ext_id": "Scapular_Pull-Up",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
-          "attribution": "free-exercise-db (Scapular_Pull-Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1114,13 +1127,14 @@
           "ext_id": "Pullups",
           "role": "reference",
           "match_note": "Related clip from the same movement family, not a demonstration of Australian / inverted row. title names [pull-up] but step covers [row].",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
-          "attribution": "free-exercise-db (Pullups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1188,13 +1202,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pullups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
-          "attribution": "free-exercise-db (Pullups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1262,13 +1277,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pullups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
-          "attribution": "free-exercise-db (Pullups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1341,13 +1357,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pullups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
-          "attribution": "free-exercise-db (Pullups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1416,13 +1433,14 @@
           "channel": "anatome.dev",
           "ext_id": "Pullups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
-          "attribution": "free-exercise-db (Pullups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1492,13 +1510,14 @@
           "channel": "anatome.dev",
           "ext_id": "Plank",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
-          "attribution": "free-exercise-db (Plank), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1568,13 +1587,14 @@
           "channel": "anatome.dev",
           "ext_id": "Plank",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
-          "attribution": "free-exercise-db (Plank), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1643,13 +1663,14 @@
           "channel": "anatome.dev",
           "ext_id": "Plank",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
-          "attribution": "free-exercise-db (Plank), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1717,13 +1738,14 @@
           "channel": "anatome.dev",
           "ext_id": "Plank",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
-          "attribution": "free-exercise-db (Plank), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1792,13 +1814,14 @@
           "channel": "anatome.dev",
           "ext_id": "Plank",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
-          "attribution": "free-exercise-db (Plank), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1868,13 +1891,14 @@
           "channel": "anatome.dev",
           "ext_id": "Scapular_Pull-Up",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
-          "attribution": "free-exercise-db (Scapular_Pull-Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -1944,13 +1968,14 @@
           "channel": "anatome.dev",
           "ext_id": "Scapular_Pull-Up",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
-          "attribution": "free-exercise-db (Scapular_Pull-Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2019,13 +2044,14 @@
           "channel": "anatome.dev",
           "ext_id": "Dips_-_Triceps_Version",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
-          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2094,13 +2120,14 @@
           "channel": "anatome.dev",
           "ext_id": "Scapular_Pull-Up",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Scapular_Pull-Up.json",
-          "attribution": "free-exercise-db (Scapular_Pull-Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2169,13 +2196,14 @@
           "channel": "anatome.dev",
           "ext_id": "Handstand_Push-Ups",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
-          "attribution": "free-exercise-db (Handstand_Push-Ups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2245,13 +2273,14 @@
           "channel": "anatome.dev",
           "ext_id": "Hanging_Pike",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
-          "attribution": "free-exercise-db (Hanging_Pike), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2319,13 +2348,14 @@
           "channel": "anatome.dev",
           "ext_id": "Hanging_Pike",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
-          "attribution": "free-exercise-db (Hanging_Pike), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2395,13 +2425,14 @@
           "channel": "anatome.dev",
           "ext_id": "Hanging_Pike",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
-          "attribution": "free-exercise-db (Hanging_Pike), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2470,13 +2501,14 @@
           "channel": "anatome.dev",
           "ext_id": "Hanging_Pike",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
-          "attribution": "free-exercise-db (Hanging_Pike), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {
@@ -2548,13 +2580,14 @@
           "channel": "anatome.dev",
           "ext_id": "Hanging_Pike",
           "role": "demo",
-          "license": "CC0-1.0",
-          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "license": "unverified",
+          "license_url": null,
           "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
-          "attribution": "free-exercise-db (Hanging_Pike), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
           "ai_generated": false,
-          "redistributable": true,
-          "tier": "cc0-db"
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
         }
       ],
       "timeline": {

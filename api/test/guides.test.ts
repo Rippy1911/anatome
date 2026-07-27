@@ -414,6 +414,22 @@ describe("media provenance", () => {
     expect(checked).toBeGreaterThan(0);
   });
 
+  it("does not restate the claim in the catalog on disk either", () => {
+    // The sanitizer keeps the claim out of responses, but the catalog is public
+    // in this repo — a reader who opens the JSON must not find CC0 asserted over
+    // imagery we cannot license. Guards the source, not just the serving path.
+    for (const slug of ALL_TREE_SLUGS) {
+      for (const m of GUIDES.calisthenics.trees[slug].steps.flatMap(
+        (s) => (s.media || []) as Record<string, unknown>[],
+      )) {
+        if (m.provider !== "anatome-gif") continue;
+        expect(String(m.license), `${slug} asserts a licence we cannot grant`)
+          .not.toMatch(/^(cc0|public[-\s]?domain|unlicense)/i);
+        expect(m.redistributable, `${slug} marks unverified imagery redistributable`).toBe(false);
+      }
+    }
+  });
+
   it("only offers media a client can actually fetch", () => {
     let checked = 0;
     for (const slug of ALL_TREE_SLUGS) {

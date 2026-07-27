@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-Build 2-frame animated GIFs from yuhonas/free-exercise-db (CC0) JPEG pairs.
+Build 2-frame animated GIFs from yuhonas/free-exercise-db JPEG pairs.
+
+The dataset's Unlicense covers its metadata, not this photography — the upstream
+compiler scraped the images and disclaims copyright in them. Treat the output as
+unverified provenance, not public domain. See issue #21.
 
 Output: api/public/gifs/<ext_id>.gif (served at GET /exerciseGif?id=<ext_id>)
 
