@@ -1,6 +1,7 @@
 // Rate limiting — ported from the Base44 functions, with the RateLimit entity
 // replaced by Cloudflare KV. Model (see ../../AGENTS.md §8):
-//   - localhost / private IP / no-referer  -> unlimited (free for testing)
+//   - Bearer ana_live_/ana_test_          -> per-key monthly quota (exact DO)
+//   - localhost / private IP              -> unlimited (free for testing)
 //   - public IP (no referer)               -> 1000/day
 //   - public host (Referer/Origin-keyed)   -> 100/day
 //   - bypass on X-RapidAPI-Proxy-Secret (== PROXY_SECRET)
@@ -9,17 +10,27 @@
 // The Basic plan on RapidAPI: 300 requests/month included, $0.001/request overage
 // (enforced at the RapidAPI layer; PROXY_SECRET bypasses Worker day limits).
 // Direct public access to the Worker still uses per-day fair-use limits below.
+// First-party keys are the system of record for paid direct access.
 
+import {
+  currentMonthUtc,
+  nextMonthStartUnix,
+  OVERAGE_HARD_CEILING,
+  resolveBearerKey,
+  type KeyRecord,
+} from "./apiKeys.ts";
 export interface Env {
   RATE_LIMIT_KV: KVNamespace;
   RATE_LIMIT_DO?: DurableObjectNamespace;
   ASSETS?: Fetcher;
+  ANALYTICS?: AnalyticsEngineDataset;
   PROXY_SECRET?: string;
   MCP_TRUSTED_KEY?: string;
   RAPIDAPI_KEY?: string;
   PUBLIC_BASE_URL?: string;
   ADMIN_TOKEN?: string;
   GITHUB_TOKEN?: string;
+  STRIPE_SECRET_KEY?: string;
 }
 
 export const IP_DAY_LIMIT = 1000;
@@ -32,6 +43,9 @@ export interface RateResult {
   source?: string;
   bypass?: boolean;
   key_type?: string;
+  key_id?: string;
+  key_record?: KeyRecord;
+  overage?: boolean;
   limit?: number;
   used?: number;
   remaining?: number;
@@ -105,6 +119,11 @@ export function bypassCheck(req: Request, env: Env): RateResult | null {
 }
 
 export async function checkRateLimit(req: Request, env: Env): Promise<RateResult> {
+  // First-party keys take precedence over RapidAPI/MCP/IP fair-use so a
+  // paying customer presenting a Bearer token is never bucketed as anonymous.
+  const keyResult = await checkApiKeyLimit(req, env);
+  if (keyResult) return keyResult;
+
   const bypass = bypassCheck(req, env);
   if (bypass) return bypass;
 
@@ -144,6 +163,88 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
   return checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
 }
 
+/**
+ * Resolve + enforce a first-party API key. Returns null when no Bearer ana_*
+ * token is present (caller falls through to fair-use / bypass). Returns a
+ * denied RateResult for unknown / revoked / suspended / exhausted keys.
+ */
+async function checkApiKeyLimit(req: Request, env: Env): Promise<RateResult | null> {
+  const record = await resolveBearerKey(req, env);
+  if (!record) {
+    // Present but unrecognised Bearer ana_* → hard deny (do not fall through
+    // to anonymous fair-use — that would let a revoked key keep working).
+    const tokenAttempt = req.headers.get("authorization") || "";
+    if (/^Bearer\s+ana_(?:live|test)_/i.test(tokenAttempt)) {
+      return {
+        allowed: false,
+        source: "api_key",
+        key_type: "key_month",
+        limit: 0,
+        used: 0,
+        remaining: 0,
+        reset: nextMonthStartUnix(),
+        reset_at: new Date(nextMonthStartUnix() * 1000).toISOString(),
+        retry_after: nextMonthStartUnix() - Math.floor(Date.now() / 1000),
+      };
+    }
+    return null;
+  }
+
+  if (record.status !== "active") {
+    return {
+      allowed: false,
+      source: "api_key",
+      key_type: "key_month",
+      key_id: record.key_id,
+      key_record: record,
+      limit: 0,
+      used: 0,
+      remaining: 0,
+      reset: nextMonthStartUnix(),
+      reset_at: new Date(nextMonthStartUnix() * 1000).toISOString(),
+      retry_after: 3600,
+    };
+  }
+
+  const month = currentMonthUtc();
+  const reset = nextMonthStartUnix();
+  const reset_at = new Date(reset * 1000).toISOString();
+  const included = Math.max(0, Number(record.included_requests) || 0);
+  const limit = record.allow_overage ? OVERAGE_HARD_CEILING : included;
+  const key = `key_month:${record.key_id}:${month}`;
+  const key_type = "key_month";
+
+  let result: RateResult;
+  if (env.RATE_LIMIT_DO) {
+    const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
+    const doUrl = new URL("https://do/check");
+    doUrl.searchParams.set("limit", String(limit));
+    doUrl.searchParams.set("key_type", key_type);
+    doUrl.searchParams.set("date", month);
+    doUrl.searchParams.set("reset", String(reset));
+    const res = await stub.fetch(doUrl.toString());
+    result = (await res.json()) as RateResult;
+  } else {
+    result = await checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
+  }
+
+  result.source = "api_key";
+  result.key_type = key_type;
+  result.key_id = record.key_id;
+  result.key_record = record;
+  result.reset_at = reset_at;
+  // Surface the soft (included) quota in headers when overage is on.
+  if (record.allow_overage && result.allowed) {
+    const used = result.used ?? 0;
+    result.overage = used > included;
+    result.limit = included;
+    result.remaining = Math.max(0, included - used);
+    // Stripe meter events are fired by gateMetered via waitUntil — not here —
+    // so unit tests of checkRateLimit do not hit the network.
+  }
+  return result;
+}
+
 /** Legacy KV-backed counter — used when no Durable Object binding is configured. */
 async function checkRateLimitKv(
   env: Env,
@@ -180,6 +281,24 @@ export function rateHeaders(rl: RateResult): Record<string, string> {
 }
 
 export function rateLimitBody(rl: RateResult) {
+  if (rl.key_type === "key_month") {
+    const suspended = rl.key_record && rl.key_record.status !== "active";
+    return {
+      ok: false,
+      error: suspended ? "key_inactive" : "quota_exceeded",
+      limit_type: rl.key_type,
+      key_id: rl.key_id,
+      status: rl.key_record?.status,
+      limit: rl.limit,
+      used: rl.used,
+      reset_at: rl.reset_at,
+      retry_after_seconds: rl.retry_after,
+      upgrade_url: "https://anatome.dev/pricing",
+      message: suspended
+        ? `API key is ${rl.key_record?.status || "inactive"}.`
+        : `Monthly included quota (${rl.limit}) exhausted. Enable overage or upgrade at anatome.dev.`,
+    };
+  }
   return {
     ok: false,
     error: "rate_limit_exceeded",

@@ -18,7 +18,7 @@ import { payloadFromQuery, sha256 } from "./lib/query.ts";import {
 import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
-import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnightUnix, IP_DAY_LIMIT, clientIp, isPrivateIp, type Env } from "./lib/rateLimit.ts";
+import { clientIp, isPrivateIp, type Env } from "./lib/rateLimit.ts";
 import { RateLimiterDO } from "./lib/rateLimiterDO.ts";
 // Re-export the Durable Object class so wrangler can bind it as the DO entrypoint.
 export { RateLimiterDO };
@@ -30,8 +30,12 @@ import { handleMcp, computeMcpResult, TOOLS, type McpBody } from "./routes/mcp.t
 import { runSelfTest } from "./routes/selfTest.ts";
 import { fetchCiStatus } from "./routes/ciStatus.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
+import {
+  putAdminKey, deleteAdminKey, getAdminUsage, getAdminStats,
+} from "./routes/admin.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
+import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
 
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
 /** GIFs are regenerated in-place; avoid immutable so timing fixes can roll out. */
@@ -39,7 +43,11 @@ const GIF_CACHE_CONTROL = "public, max-age=86400, s-maxage=86400";
 
 const app = new Hono<{ Bindings: Env }>();
 
-app.use("*", cors({ origin: "*", allowMethods: ["GET", "POST", "OPTIONS"], allowHeaders: ["*"] }));
+app.use("*", cors({
+  origin: "*",
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowHeaders: ["*"],
+}));
 
 // Security headers (launch-readiness §2: missing X-Frame-Options / Permissions-Policy
 // were a flagged finding on the Base44 side; bake the same hardening into the Worker).
@@ -74,23 +82,28 @@ function baseUrl(c: { env: Env }): string {
 }
 
 app.get("/", (c) => c.json({
-  ok: true, service: "anatome-api", version: "2.0.0",
+  ok: true, service: "anatome-api", version: "2.1.0",
   endpoints: [
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
     "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment",
     "/listGuides", "/getGuide", "/getGuideTree",
     "/mcp", "/openapi", "/ciStatus", "/selfTest",
+    "/admin/keys/{key_id}", "/admin/usage", "/admin/stats",
   ],
+  auth: {
+    anonymous: "IP/host fair-use day buckets",
+    api_key: "Authorization: Bearer ana_live_… or ana_test_…",
+    rapidapi: "X-RapidAPI-Proxy-Secret",
+  },
   ...serviceAttribution(),
 }));
 
 // ---- generateImage (GET query + POST JSON) ----
-async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Response> {
+async function generateImageInner(
+  c: { req: { raw: Request }; env: Env },
+  extraHeaders: Record<string, string> = {},
+): Promise<Response> {
   const req = c.req.raw;
-  const rl = await checkRateLimit(req, c.env);
-  if (!rl.allowed) {
-    return new Response(JSON.stringify(rateLimitBody(rl)), { status: 429, headers: { "Content-Type": "application/json", ...rateHeaders(rl), "Retry-After": String(rl.retry_after) } });
-  }
   const url = new URL(req.url);
   let payload: Record<string, unknown> = {};
   if (req.method === "POST") { try { payload = await req.json(); } catch { payload = {}; } }
@@ -104,27 +117,38 @@ async function generateImage(c: { req: { raw: Request }; env: Env }): Promise<Re
   const etag = `"a-${await sha256(svg)}"`;
   const ifNoneMatch = req.headers.get("if-none-match");
   if (ifNoneMatch && ifNoneMatch === etag) {
-    return new Response(null, { status: 304, headers: { ETag: etag, "Cache-Control": CACHE_CONTROL, ...rateHeaders(rl) } });
+    return new Response(null, { status: 304, headers: { ETag: etag, "Cache-Control": CACHE_CONTROL, ...extraHeaders } });
   }
   const output = (payload as { output?: string }).output === "raw" ? "raw" : "json";
   const gender = (payload as { gender?: string }).gender === "female" ? "female" : "male";
   const view = ["front", "back", "dual"].includes((payload as { view?: string }).view as string) ? (payload as { view?: string }).view : "dual";
 
   if (output === "raw") {
-    return new Response(svg, { status: 200, headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl), ...timing } });
+    return new Response(svg, { status: 200, headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ETag: etag, ...extraHeaders, ...timing } });
   }
   return new Response(JSON.stringify({
     ok: true, svg, format: "svg", gender, view, muscles_rendered,
     available_muscles_count: MUSCLES.length,
-    rate_limit: { source: rl.source, limit_type: rl.key_type, remaining: rl.remaining != null ? rl.remaining : null, limit: rl.limit, reset_at: rl.reset_at },
     ...imageAttribution(), duration_ms,
-  }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...rateHeaders(rl), ...timing } });
+  }), { headers: { "Content-Type": "application/json", "Cache-Control": CACHE_CONTROL, ETag: etag, ...extraHeaders, ...timing } });
 }
-app.get("/generateImage", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => generateImage(c)));
-app.post("/generateImage", (c) => generateImage(c));
+app.get("/generateImage", async (c) => {
+  const gate = await gateMetered(c, "/generateImage");
+  if (!gate.ok) return gate.response;
+  const res = await withEdgeCache(c.req.raw, execCtx(c), () => generateImageInner(c, gate.headers), gate.headers);
+  noteUsage(c, gate.rl, res, "/generateImage");
+  return res;
+});
+app.post("/generateImage", async (c) => {
+  const gate = await gateMetered(c, "/generateImage");
+  if (!gate.ok) return gate.response;
+  const res = await generateImageInner(c, gate.headers);
+  noteUsage(c, gate.rl, res, "/generateImage");
+  return res;
+});
 
 // ---- listMuscles ----
-app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   const muscles = MUSCLES.map((slug) => ({
     slug,
     name: ANATOMICAL_NAMES[slug],
@@ -136,7 +160,7 @@ app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
 }));
 
 // ---- muscleInfo ----
-app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   const slug = c.req.query("slug");
   if (!slug) return c.json({ ok: false, error: "provide slug query param", ...imageAttribution() }, 400);
   const info = getMuscleInfo(slug, baseUrl(c));
@@ -145,7 +169,7 @@ app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
 }));
 
 // ---- listEquipment ----
-app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   const equipment = listEquipment();
   return c.json({ ok: true, count: equipment.length, equipment, ...exerciseDataAttribution() });
 }));
@@ -154,11 +178,11 @@ app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => 
 // Static catalog reads, so they get the same treatment as listMuscles /
 // listEquipment: edge-cached and unmetered. The metered endpoints are the ones
 // that search or render (searchExercises, getExercise, generateImage).
-app.get("/listGuides", (c) => withEdgeCache(c.req.raw, c.executionCtx, () =>
+app.get("/listGuides", (c) => withEdgeCache(c.req.raw, execCtx(c), () =>
   c.json({ ok: true, ...listGuidesLogic(baseUrl(c)), ...guideCatalogAttribution() }),
 ));
 
-app.get("/getGuide", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+app.get("/getGuide", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   const slug = c.req.query("slug");
   if (!slug) return c.json({ ok: false, error: "provide slug query param", ...guideCatalogAttribution() }, 400);
   if (!safeGuideSlug(slug)) return c.json({ ok: false, error: "invalid slug", ...guideCatalogAttribution() }, 400);
@@ -167,7 +191,7 @@ app.get("/getGuide", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   return c.json({ ok: true, ...guide, ...guideCatalogAttribution() });
 }));
 
-app.get("/getGuideTree", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+app.get("/getGuideTree", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   const guideSlug = c.req.query("guide") ?? DEFAULT_GUIDE_SLUG;
   const treeSlug = c.req.query("tree");
   if (!treeSlug) return c.json({ ok: false, error: "provide tree query param", ...guideCatalogAttribution() }, 400);
@@ -180,17 +204,12 @@ app.get("/getGuideTree", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
 }));
 
 // ---- searchExercises ----
-// Cache-first: a cache HIT serves the cached body and skips the KV rate-limit
-// counter entirely (enforcement already ran when the cache entry was created).
-// Bypass callers (RapidAPI / MCP trusted / localhost) still get correct
-// "unlimited" headers on HITs via bypassCheck, which touches no KV. The real
-// per-day counter runs only on MISS, inside the handler.
-app.get("/searchExercises", (c) => {
-  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
-  return withEdgeCache(c.req.raw, c.executionCtx, async () => {
-    const rl = await checkRateLimit(c.req.raw, c.env);
-    if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-    const extra = rateHeaders(rl);
+// Quota runs BEFORE withEdgeCache so a warm cache cannot be scraped for free.
+// Edge cache still avoids the search work on HIT; only the counter always runs.
+app.get("/searchExercises", async (c) => {
+  const gate = await gateMetered(c, "/searchExercises");
+  if (!gate.ok) return gate.response;
+  const res = await withEdgeCache(c.req.raw, execCtx(c), async () => {
     const q = c.req.query();
     const base = baseUrl(c);
     const fields = parseFieldsParam(q.fields, SEARCH_DEFAULT_FIELDS);
@@ -211,21 +230,23 @@ app.get("/searchExercises", (c) => {
       next_cursor,
       results: results.map((e) => formatExercise(e, base, "search", fields)),
       ...exerciseDataAttribution(),
-    }, 200, extra);
-  }, hitHeaders);
+    }, 200, gate.headers);
+  }, gate.headers);
+  noteUsage(c, gate.rl, res, "/searchExercises");
+  return res;
 });
 
 // ---- RapidAPI benchmark proxy (marketing site latency comparison; not in OpenAPI) ----
 app.get("/benchmark/rapidapiSearch", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) {
-    return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  }
-  return rapidapiSearchBenchmark(c.req.query(), c.env);
+  const gate = await gateMetered(c, "/benchmark/rapidapiSearch");
+  if (!gate.ok) return gate.response;
+  const res = await rapidapiSearchBenchmark(c.req.query(), c.env);
+  noteUsage(c, gate.rl, res, "/benchmark/rapidapiSearch");
+  return res;
 });
 
 // ---- exercise GIF (static assets: api/public/gifs/<ext_id>.gif) ----
-app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, async () => {
+app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, execCtx(c), async () => {
   const id = c.req.query("id");
   if (!id) return c.json({ ok: false, error: "id required (exercise ext_id)" }, 400);
   // ext_id is derived from exercise names (alnum + _ -). Reject anything else to
@@ -254,7 +275,7 @@ app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, as
 // Proxies the source JPEGs through Anatome's host so consumers (incl. RapidAPI)
 // don't hotlink raw.githubusercontent.com. `path` is the relative image path
 // stored on each exercise (e.g. "Barbell_Bench_Press_-_Medium_Grip/0.jpg").
-app.get("/exerciseImage", async (c) => withEdgeCache(c.req.raw, c.executionCtx, async () => {
+app.get("/exerciseImage", async (c) => withEdgeCache(c.req.raw, execCtx(c), async () => {
   const path = c.req.query("path");
   if (!path) return c.json({ ok: false, error: "path required (exercise images[] entry)" }, 400);
   const safe = sanitizeFreeExerciseDbPath(path);
@@ -284,12 +305,11 @@ function fullExercise(
   delete (row as { name_lower?: string }).name_lower;
   return formatExercise(row, base, "full", fields);
 }
-app.get("/getExercise", (c) => {
-  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
-  return withEdgeCache(c.req.raw, c.executionCtx, async () => {
-    const rl = await checkRateLimit(c.req.raw, c.env);
-    if (!rl.allowed) return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-    const extra = rateHeaders(rl);
+app.get("/getExercise", async (c) => {
+  const gate = await gateMetered(c, "/getExercise");
+  if (!gate.ok) return gate.response;
+  const res = await withEdgeCache(c.req.raw, execCtx(c), async () => {
+    const extra = gate.headers;
     const q = c.req.query();
     const base = baseUrl(c);
     const meta = exerciseDataAttribution();
@@ -304,43 +324,58 @@ app.get("/getExercise", (c) => {
     if (q.random) { const rec = getRandom(); return c.json({ ok: !!rec, match: rec ? "random" : "none", exercise: fullExercise(rec, base, fields), ...meta }, rec ? 200 : 404, extra); }
     if (q.name) { const m = getByName(q.name); return c.json({ ok: !!m.exercise, match: m.match, exercise: fullExercise(m.exercise, base, fields), ...meta }, m.exercise ? 200 : 404, extra); }
     return c.json({ ok: false, error: "provide one of: id, name, random=1, muscle", ...meta }, 400, extra);
-  }, hitHeaders);
+  }, gate.headers);
+  noteUsage(c, gate.rl, res, "/getExercise");
+  return res;
 });
 
 // ---- resolveExercise (GET + POST) ----
-// GET is cache-first (deterministic exercise -> muscle mapping): a cache HIT
-// serves the cached body and skips the KV rate-limit counter, mirroring
-// searchExercises/getExercise. POST is never cached (body not in URL).
-async function resolveRouteInner(c: { req: { raw: Request; query: () => Record<string, string> }; env: Env }): Promise<Response> {
+// Quota before cache on GET — same metering contract as searchExercises.
+async function resolveRouteInner(
+  c: { req: { raw: Request; query: () => Record<string, string> }; env: Env },
+  extraHeaders: Record<string, string>,
+): Promise<Response> {
   const req = c.req.raw;
-  const rl = await checkRateLimit(req, c.env);
-  if (!rl.allowed) return new Response(JSON.stringify(rateLimitBody(rl)), { status: 429, headers: { "Content-Type": "application/json", ...rateHeaders(rl), "Retry-After": String(rl.retry_after) } });
   let exercise = "";
   if (req.method === "POST") { try { const b = await req.json() as { exercise?: string }; exercise = b.exercise || ""; } catch { exercise = ""; } }
   else { exercise = c.req.query().exercise || ""; }
-  const r = resolveEx(exercise, baseUrl(c));
+  const r = resolveEx(exercise, c.env.PUBLIC_BASE_URL || "https://api.anatome.dev");
   return new Response(JSON.stringify({
     ok: true, ...r,
     ...exerciseDataAttribution(),
-  }), { headers: { "Content-Type": "application/json", ...rateHeaders(rl) } });
+  }), { headers: { "Content-Type": "application/json", ...extraHeaders } });
 }
-app.get("/resolveExercise", (c) => {
-  const hitHeaders = rateHeaders(bypassCheck(c.req.raw, c.env) ?? { allowed: true, limit: IP_DAY_LIMIT, remaining: 0, reset: nextUtcMidnightUnix() });
-  return withEdgeCache(c.req.raw, c.executionCtx, () => resolveRouteInner(c), hitHeaders);
+app.get("/resolveExercise", async (c) => {
+  const gate = await gateMetered(c, "/resolveExercise");
+  if (!gate.ok) return gate.response;
+  const res = await withEdgeCache(
+    c.req.raw,
+    execCtx(c),
+    () => resolveRouteInner(c, gate.headers),
+    gate.headers,
+  );
+  noteUsage(c, gate.rl, res, "/resolveExercise");
+  return res;
 });
-app.post("/resolveExercise", (c) => resolveRouteInner(c));
+app.post("/resolveExercise", async (c) => {
+  const gate = await gateMetered(c, "/resolveExercise");
+  if (!gate.ok) return gate.response;
+  const res = await resolveRouteInner(c, gate.headers);
+  noteUsage(c, gate.rl, res, "/resolveExercise");
+  return res;
+});
 
 // ---- workoutImage (POST JSON) ----
 app.post("/workoutImage", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) {
-    return c.json(rateLimitBody(rl), 429, { ...rateHeaders(rl), "Retry-After": String(rl.retry_after) });
-  }
+  const gate = await gateMetered(c, "/workoutImage");
+  if (!gate.ok) return gate.response;
   let body: Record<string, unknown> = {};
   try { body = await c.req.json(); } catch { body = {}; }
   const exercises = Array.isArray(body.exercises) ? body.exercises.map(String) : [];
   if (!exercises.length) {
-    return c.json({ ok: false, error: "provide exercises array with at least one name", ...imageAttribution() }, 400, rateHeaders(rl));
+    const res = c.json({ ok: false, error: "provide exercises array with at least one name", ...imageAttribution() }, 400, gate.headers);
+    noteUsage(c, gate.rl, res, "/workoutImage");
+    return res;
   }
   const base = baseUrl(c);
   const result = workoutImageLogic({
@@ -363,26 +398,32 @@ app.post("/workoutImage", async (c) => {
   }, base);
   const output = body.output === "raw" ? "raw" : "json";
   if (output === "raw") {
-    return new Response(result.svg, {
+    const res = new Response(result.svg, {
       status: 200,
-      headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ...rateHeaders(rl) },
+      headers: { "Content-Type": "image/svg+xml; charset=utf-8", "Cache-Control": CACHE_CONTROL, ...gate.headers },
     });
+    noteUsage(c, gate.rl, res, "/workoutImage");
+    return res;
   }
-  return c.json({
+  const res = c.json({
     ok: true, ...result, anatome_imageSrc,
     ...imageAttribution(),
-  }, 200, rateHeaders(rl));
+  }, 200, gate.headers);
+  noteUsage(c, gate.rl, res, "/workoutImage");
+  return res;
 });
 
 // ---- mcp (JSON-RPC) ----
-app.get("/mcp", (c) => c.json({ ok: true, server: "anatome", version: "2.0.0", protocol: "mcp/2024-11-05", tools: TOOLS.map((t) => t.name) }));
+app.get("/mcp", (c) => c.json({ ok: true, server: "anatome", version: "2.1.0", protocol: "mcp/2024-11-05", tools: TOOLS.map((t) => t.name) }));
 app.post("/mcp", async (c) => {
-  const rl = await checkRateLimit(c.req.raw, c.env);
-  if (!rl.allowed) {
-    const msg = rl.key_type === "host_day"
-      ? `Rate limit exceeded (${rl.limit}/day per host). Basic on RapidAPI: 300/month included, $0.001/request overage.`
-      : `Rate limit exceeded (${rl.limit}/day per IP). Basic on RapidAPI: 300/month included, $0.001/request overage.`;
-    return c.json({ jsonrpc: "2.0", id: null, error: { code: -32000, message: msg } }, 429, { "Retry-After": String(rl.retry_after) });
+  const gate = await gateMetered(c, "/mcp");
+  if (!gate.ok) {
+    const denied = await gate.response.clone().json().catch(() => ({})) as { message?: string };
+    return c.json({
+      jsonrpc: "2.0",
+      id: null,
+      error: { code: -32000, message: denied.message || "Rate limit exceeded" },
+    }, 429, { "Retry-After": gate.response.headers.get("Retry-After") || "60" });
   }
   let body: unknown;
   try { body = await c.req.json(); } catch { return c.json({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } }); }
@@ -393,6 +434,7 @@ app.post("/mcp", async (c) => {
   // method+params (NOT the JSON-RPC id, which varies per request). The cached
   // inner result is re-wrapped with the live id. Skip non-deterministic calls
   // (get_exercise with random=true) and non-tools/call methods.
+  // Metering already ran above — MCP cache HITs still burn quota.
   const isCacheableCall =
     parsed.method === "tools/call" &&
     !(parsed.params?.name === "get_exercise" && parsed.params?.arguments?.random);
@@ -407,26 +449,38 @@ app.post("/mcp", async (c) => {
       const out = inner.ok
         ? { jsonrpc: "2.0", id: parsed.id ?? null, result: inner.result }
         : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
-      return c.json(out);
+      const res = c.json(out);
+      noteUsage(c, gate.rl, res, "/mcp");
+      return res;
     }
     const inner = computeMcpResult(parsed.method, parsed.params || {}, base);
     if (inner.ok) {
       const stored = new Response(JSON.stringify(inner), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=86400, s-maxage=604800" } });
-      c.executionCtx.waitUntil(cache.put(cacheKey, stored));
+      execCtx(c)?.waitUntil(cache.put(cacheKey, stored));
     }
     const out = inner.ok
       ? { jsonrpc: "2.0", id: parsed.id ?? null, result: inner.result }
       : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
-    return c.json(out);
+    const res = c.json(out);
+    noteUsage(c, gate.rl, res, "/mcp");
+    return res;
   }
 
-  return c.json(handleMcp(parsed, base));
+  const res = c.json(handleMcp(parsed, base));
+  noteUsage(c, gate.rl, res, "/mcp");
+  return res;
 });
 
 // ---- openapi ----
-app.get("/openapi", (c) => withEdgeCache(c.req.raw, c.executionCtx, () =>
+app.get("/openapi", (c) => withEdgeCache(c.req.raw, execCtx(c), () =>
   c.json(buildOpenApiSpec(baseUrl(c))),
 ));
+
+// ---- admin (Base44 BFF only — Bearer ADMIN_TOKEN) ----
+app.put("/admin/keys/:key_id", (c) => putAdminKey(c));
+app.delete("/admin/keys/:key_id", (c) => deleteAdminKey(c));
+app.get("/admin/usage", (c) => getAdminUsage(c));
+app.get("/admin/stats", (c) => getAdminStats(c));
 
 // ---- selfTest ----
 // Diagnostic endpoint: gate to private IPs (dev/testing) or a valid
@@ -459,7 +513,7 @@ app.get("/ciStatus", async (c) => {
   }
   const status = await fetchCiStatus(c.env);
   const stored = new Response(JSON.stringify(status), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=30, s-maxage=60", "X-Cache": "MISS" } });
-  c.executionCtx.waitUntil(cache.put(key, stored));
+  execCtx(c)?.waitUntil(cache.put(key, stored));
   return c.json(status, 200, { "Cache-Control": "public, max-age=30, s-maxage=60", "X-Cache": "MISS" });
 });
 
