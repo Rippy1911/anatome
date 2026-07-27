@@ -1,0 +1,931 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "slug": "human-flag",
+  "name": "Human Flag",
+  "family": "core",
+  "difficulty": "elite",
+  "summary": "Side-lever on a vertical pole: top arm pulls, bottom arm pushes, obliques hold the line.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Side plank each side",
+      "target": "30s"
+    },
+    {
+      "name": "Pull-ups",
+      "target": "8"
+    },
+    {
+      "name": "Dips",
+      "target": "8"
+    },
+    {
+      "name": "One-arm hang",
+      "target": "15s"
+    }
+  ],
+  "equipment": [
+    "pole",
+    "chalk",
+    "bar"
+  ],
+  "primary_muscles": [
+    "obliques",
+    "upper-back",
+    "deltoids"
+  ],
+  "secondary_muscles": [
+    "abs",
+    "triceps",
+    "forearm",
+    "gluteal"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "obliques",
+        "upper-back",
+        "deltoids"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "abs",
+        "triceps",
+        "forearm",
+        "gluteal"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 5,
+    "value_max": 10,
+    "sets": 3,
+    "notes": "Full horizontal flag"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–3",
+    "notes": "High lat/oblique fatigue — avoid stacking with heavy pull days."
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute oblique strain",
+      "Shoulder impingement on bottom arm"
+    ],
+    "notes": "Use chalk. Mixed grip common (top over, bottom under)."
+  },
+  "divergence_notes": "Fewer formal textbook standards than planche/FL; hold targets are community + FitnessFAQs norms.",
+  "sources": [
+    "OG2",
+    "FF",
+    "SW",
+    "CM"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "steps": [
+    {
+      "cues": [
+        "Top arm pulls down hard",
+        "Bottom arm pushes away"
+      ],
+      "common_faults": [
+        "Only pushing with bottom arm"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vertical-flag-support",
+      "order": 1,
+      "name": "Vertical flag support",
+      "level": "intermediate",
+      "intent": "Learn top-pull / bottom-push with feet still on ground.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30s side plank per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Knees tucked to pole",
+        "Stack hips"
+      ],
+      "common_faults": [
+        "Body twisting out of plane"
+      ],
+      "drills": [
+        {
+          "slug": "side-plank-raises",
+          "name": "Side plank raises",
+          "role": "accessory",
+          "instructions": [
+            "Build oblique/QL strength — rate-limiting for many"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "tuck-flag",
+      "order": 2,
+      "name": "Tuck flag",
+      "level": "advanced",
+      "intent": "Kick or press into tuck; hold body off the pole.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–15s",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "20s vertical flag support",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle",
+        "Hips stacked"
+      ],
+      "common_faults": [
+        "Hips sagging"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "straddle-flag",
+      "order": 3,
+      "name": "Straddle flag",
+      "level": "advanced",
+      "intent": "Legs split to shorten lever.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–12s",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 10,
+          "max": 24
+        },
+        "from_level": "15s tuck flag per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Equal sides"
+      ],
+      "common_faults": [
+        "Twisting"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "one-leg-flag",
+      "order": 4,
+      "name": "One-leg flag",
+      "level": "advanced",
+      "intent": "One leg extended bridge to full.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–10s/side",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 8,
+        "sets": 3,
+        "notes": "each side"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 20
+        },
+        "from_level": "10s straddle flag per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Pull hard with top arm",
+        "Push with bottom",
+        "Squeeze legs"
+      ],
+      "common_faults": [
+        "Grip slipping",
+        "Hips not stacked"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "full-flag",
+      "order": 5,
+      "name": "Full human flag",
+      "level": "elite",
+      "intent": "Legs together, body horizontal to the pole.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–10s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 5,
+        "value_max": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 32
+        },
+        "from_level": "10s one-leg flag per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Slow eccentric",
+        "Stay in plane"
+      ],
+      "common_faults": [
+        "Dropping through"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "flag-negatives",
+      "order": 6,
+      "name": "Flag negatives",
+      "level": "elite",
+      "intent": "From vertical, lower slowly to horizontal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "from_level": "5s full flag per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Compression + strength"
+      ],
+      "common_faults": [
+        "Kicking instead of pressing"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "press-flag",
+      "order": 7,
+      "name": "Press flag",
+      "level": "elite",
+      "intent": "Press from floor to full flag without kick — elite+",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "attempts",
+        "rest_seconds": 180,
+        "frequency_per_week": "1–2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 1,
+        "sets": 1
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "title": "Human flag — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 25,
+          "end_seconds": 55,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=TF9XhvYh_m8",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Side_Bridge",
+          "title": "Form GIF · Side Bridge",
+          "channel": "anatome.dev",
+          "ext_id": "Side_Bridge",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Side_Bridge.json",
+          "attribution": "free-exercise-db (Side_Bridge), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 16,
+          "max": 40
+        },
+        "from_level": "5 controlled flag negatives per side",
+        "conditioning_hours_per_week": 3,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 62,
+      "max": 154
+    },
+    "from_level": "30s side plank per side, 8 strict pull-ups, 8 dips, 15s one-arm hang",
+    "conditioning_hours_per_week": 3,
+    "confidence": "estimated",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation",
+      "straighttalking-cali-timelines"
+    ],
+    "human_label": "1.5–3 years through the whole tree; the full flag itself typically lands at 9–22 months",
+    "notes": "No peer-reviewed or named-coach timeline exists for the human flag. Interpolated from OG2 chart placement — the full flag sits close to the straddle front lever — and sanity-checked against the widely repeated community figure of 1–2 years. Grip and the bottom-arm press, not the obliques, are the usual limiters.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Side plank",
+        "target": "30s per side",
+        "metric": "hold_seconds",
+        "value": 30,
+        "rationale": "Baseline lateral trunk capacity.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Strict pull-ups",
+        "target": "8 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "pull-pronated",
+        "rationale": "The top arm pulls throughout.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Strict dips",
+        "target": "8 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "dip-bar",
+        "rationale": "The bottom arm presses throughout and is the more common limiter.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "One-arm hang",
+        "target": "15s per side",
+        "metric": "hold_seconds",
+        "value": 15,
+        "rationale": "Grip on a vertical pole is a genuine gate that surprises most athletes.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "bottom-arm-press",
+        "at_step_ids": [
+          "straddle-flag",
+          "full-flag"
+        ],
+        "signal": "Hips rise but the shoulders sink toward the pole and the body rotates",
+        "typical_causes": [
+          "Bottom-arm pressing strength insufficient — the usual limiter, mistakenly blamed on obliques",
+          "Hands too close together, shortening the lever available to push against"
+        ],
+        "resolution": [
+          "Widen the grip",
+          "Add unilateral overhead and lateral pressing volume",
+          "Train the vertical flag support for longer before opening the shape"
+        ],
+        "expected_stall_weeks": {
+          "min": 6,
+          "max": 20
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "grip-and-surface",
+        "at_step_ids": [
+          "vertical-flag-support",
+          "tuck-flag"
+        ],
+        "signal": "Hands slip or the pole is too thick, ending sets before anything is trained",
+        "typical_causes": [
+          "Pole diameter unsuited to hand size",
+          "No chalk"
+        ],
+        "resolution": [
+          "Find a narrower pole or use wall bars",
+          "Chalk, and train grip separately"
+        ],
+        "expected_stall_weeks": {
+          "min": 1,
+          "max": 6
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "straddle-flag",
+          "full-flag",
+          "press-flag"
+        ],
+        "mechanism": "Very high asymmetric load: the bottom shoulder presses near end range while the top shoulder pulls, with the trunk resisting lateral flexion throughout",
+        "onset_weeks_from_entry": {
+          "min": 12,
+          "max": 40
+        },
+        "prophylaxis": [
+          "Train both sides equally even though one will always feel better",
+          "Build the vertical support hold to 30s before opening the shape",
+          "Keep general pressing and pulling volume balanced"
+        ],
+        "red_flags": [
+          "Bottom-shoulder pain during the press",
+          "Asymmetric loss of overhead range"
+        ],
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "obliques",
+        "peaks_at_step_ids": [
+          "full-flag",
+          "flag-negatives"
+        ],
+        "mechanism": "Maximal lateral-flexion resistance under a long lever, often entered dynamically",
+        "onset_weeks_from_entry": {
+          "min": 20,
+          "max": 50
+        },
+        "prophylaxis": [
+          "Enter statically rather than by kicking up",
+          "Build negatives only after owning a static hold"
+        ],
+        "red_flags": [
+          "Sharp lateral trunk pain during entry"
+        ],
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

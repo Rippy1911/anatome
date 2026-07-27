@@ -1,0 +1,1144 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "slug": "front-lever",
+  "name": "Front Lever",
+  "family": "pull",
+  "difficulty": "elite",
+  "summary": "Straight-arm horizontal pull hold. Progress tuck → advanced tuck → one-leg/straddle → full, with raises for strength.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Strict dead-hang pull-ups",
+      "target": "8–10"
+    },
+    {
+      "name": "Hollow body hold",
+      "target": "30s"
+    },
+    {
+      "name": "Hanging leg raises to bar",
+      "target": "10"
+    },
+    {
+      "name": "Horizontal rows",
+      "target": "10–15"
+    },
+    {
+      "name": "Active hang",
+      "target": "30s"
+    }
+  ],
+  "equipment": [
+    "bar",
+    "rings",
+    "band"
+  ],
+  "primary_muscles": [
+    "upper-back",
+    "abs",
+    "lower-back"
+  ],
+  "secondary_muscles": [
+    "biceps",
+    "forearm",
+    "deltoids"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "upper-back",
+        "abs",
+        "lower-back"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "biceps",
+        "forearm",
+        "deltoids"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 10,
+    "value_max": 15,
+    "sets": 3,
+    "notes": "Full front lever, legs together"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–4",
+    "notes": "Alternate hold-focused and raise-focused sessions. Pair with planche."
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute elbow tendinopathy",
+      "Uncontrolled lower-back pain"
+    ],
+    "notes": "Straight arms required — bent-arm “muscle” FL is a different skill."
+  },
+  "divergence_notes": "Some street-workout athletes allow slight bent arms; this tree requires straight arms (OG/FF).",
+  "sources": [
+    "OG2",
+    "FF",
+    "CM",
+    "SW"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "steps": [
+    {
+      "cues": [
+        "Depress + retract scapulae",
+        "Hips at shoulder height",
+        "Pull the bar toward the hips"
+      ],
+      "common_faults": [
+        "Piking hips",
+        "Bent arms",
+        "Swinging into position"
+      ],
+      "drills": [
+        {
+          "slug": "scapular-pull-up",
+          "name": "Scapular pull-up",
+          "role": "accessory",
+          "instructions": [
+            "Dead hang → depress scapulae, arms stay straight"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "front-lever-tuck",
+      "order": 1,
+      "name": "Tuck front lever hold",
+      "level": "intermediate",
+      "intent": "Hold horizontal line with knees tucked from a hang.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–45s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "value_max": 45,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-tuck.gif",
+          "title": "Demo GIF · front lever tuck (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-tuck.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-tuck.gif",
+          "attribution": "AI-generated demonstration (front-lever-tuck.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "10 strict pull-ups and a 30s hollow hold",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Control the lower",
+        "No kip"
+      ],
+      "common_faults": [
+        "Using momentum",
+        "Stopping short of horizontal"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "front-lever-tuck-raises",
+      "order": 2,
+      "name": "Tuck front lever raises",
+      "level": "intermediate",
+      "intent": "Pull strength through the tuck FL range (inverted → tuck → inverted).",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-raises.gif",
+          "title": "Demo GIF · front lever raises (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-raises.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
+          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30s tuck front lever",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Flatten the back",
+        "Open hips without dropping"
+      ],
+      "common_faults": [
+        "Still rounded (regular tuck)",
+        "Arched low back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "front-lever-advanced-tuck",
+      "order": 3,
+      "name": "Advanced tuck front lever",
+      "level": "advanced",
+      "intent": "Open hips, flatten back, knees still tucked.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-advanced-tuck.gif",
+          "title": "Demo GIF · front lever advanced tuck (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-advanced-tuck.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-advanced-tuck.gif",
+          "attribution": "AI-generated demonstration (front-lever-advanced-tuck.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "45s tuck front lever plus 8 tuck raises",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Same line as the hold"
+      ],
+      "common_faults": [
+        "Losing flat back mid-rep"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "front-lever-advanced-tuck-raises",
+      "order": 4,
+      "name": "Advanced tuck front lever raises",
+      "level": "advanced",
+      "intent": "Dynamic strength at advanced-tuck lever.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 6,
+        "value_max": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-raises.gif",
+          "title": "Demo GIF · front lever raises (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-raises.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
+          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "30s advanced tuck front lever",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Keep hips square",
+        "Both sides equal"
+      ],
+      "common_faults": [
+        "Twisting",
+        "Bent arms"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "front-lever-one-leg",
+      "order": 5,
+      "name": "One-leg front lever",
+      "level": "advanced",
+      "intent": "Extend one leg; switch sides for balanced strength.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "12–15s/side",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "sets": 3,
+        "notes": "each side"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-straddle.gif",
+          "title": "Demo GIF · front lever one leg (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-straddle.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-straddle.gif",
+          "attribution": "AI-generated demonstration (front-lever-straddle.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 12
+        },
+        "from_level": "30s advanced tuck plus 6 advanced tuck raises",
+        "conditioning_hours_per_week": 4,
+        "confidence": "estimated",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle",
+        "Toes pointed",
+        "Hollow brace"
+      ],
+      "common_faults": [
+        "Piked hips",
+        "Soft elbows"
+      ],
+      "drills": [
+        {
+          "slug": "dragon-flag",
+          "name": "Dragon flag",
+          "role": "accessory",
+          "instructions": [
+            "Anti-extension core carryover — see dragon-flag tree"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "front-lever-straddle",
+      "order": 6,
+      "name": "Straddle front lever",
+      "level": "advanced",
+      "intent": "Legs split, body horizontal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–30s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "value_max": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-straddle.gif",
+          "title": "Demo GIF · front lever straddle (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-straddle.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-straddle.gif",
+          "attribution": "AI-generated demonstration (front-lever-straddle.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 10,
+          "max": 20
+        },
+        "from_level": "15s one-leg front lever per side",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Smooth tempo",
+        "No kip"
+      ],
+      "common_faults": [
+        "Kipping",
+        "Incomplete ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "front-lever-straddle-raises",
+      "order": 7,
+      "name": "Straddle front lever raises",
+      "level": "elite",
+      "intent": "Pull through straddle FL from inverted hang.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5 reps",
+        "rest_seconds": 240,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-raises.gif",
+          "title": "Demo GIF · front lever raises (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-raises.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
+          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "20s straddle front lever",
+        "conditioning_hours_per_week": 4,
+        "confidence": "estimated",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Squeeze legs",
+        "Long line shoulders to heels"
+      ],
+      "common_faults": [
+        "Bent arms",
+        "Piked hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "full-front-lever",
+      "order": 8,
+      "name": "Full front lever",
+      "level": "elite",
+      "intent": "Legs together, body horizontal — the skill goal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–15s",
+        "rest_seconds": 240,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/full-front-lever.gif",
+          "title": "Demo GIF · full front lever (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "full-front-lever.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/full-front-lever.gif",
+          "attribution": "AI-generated demonstration (full-front-lever.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 28
+        },
+        "from_level": "30s straddle front lever",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Strict hollow",
+        "Full ROM"
+      ],
+      "common_faults": [
+        "Partial ROM",
+        "Bent arms"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "front-lever-full-raises",
+      "order": 9,
+      "name": "Full front lever raises",
+      "level": "elite",
+      "intent": "Pull from dead hang through full FL to inverted — elite strength.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "1–3 reps",
+        "rest_seconds": 240,
+        "frequency_per_week": "1–2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 3,
+        "sets": 3,
+        "notes": "elite+"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "cali-gif",
+          "url": "assets/gifs/front-lever-raises.gif",
+          "title": "Demo GIF · front lever raises (AI)",
+          "channel": "anatome.dev · AI demo",
+          "file": "front-lever-raises.gif",
+          "role": "demo",
+          "license": "Apache-2.0",
+          "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+          "source_url": "https://github.com/Rippy1911/base44/blob/main/_content/calisthenics/site/assets/gifs/front-lever-raises.gif",
+          "attribution": "AI-generated demonstration (front-lever-raises.gif) produced with fal-ai/flux/schnell. The FLUX.1 [schnell] model is released under Apache-2.0. Generated for NextSolutions; illustrative of the shape, not a recording of a real athlete.",
+          "ai_generated": true,
+          "redistributable": true,
+          "tier": "ai-generated",
+          "generator": "fal-ai/flux/schnell",
+          "model": "FLUX.1 [schnell]"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 32
+        },
+        "from_level": "15s full front lever",
+        "conditioning_hours_per_week": 4,
+        "confidence": "estimated",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines",
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 68,
+      "max": 152
+    },
+    "from_level": "8–10 strict pull-ups, 30s hollow hold, 10 hanging leg raises to bar, 30s active hang",
+    "conditioning_hours_per_week": 4,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "movement-athlete-front-lever",
+      "straighttalking-cali-timelines",
+      "overcoming-gravity-2e"
+    ],
+    "human_label": "1.5–3 years through the whole tree; the full front lever itself typically lands 13–28 months after the entry assessment",
+    "notes": "The best cross-validated tree in the library after nordic-curl. Per-stage figures published by The Movement Athlete (tuck 2–3 months, advanced tuck 2–3 months, straddle 3–4 months, full 3–6 months) land inside every band below, and their by-entry-level totals (12–18 months from 10+ pull-ups) match the cumulative figure. Pure pulling strength, not core work, is the usual limiter.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Strict dead-hang pull-ups",
+        "target": "8–10 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "pull-pronated",
+        "rationale": "The most reliable predictor. The Movement Athlete's timeline table splits entirely on whether an athlete has 10+ pull-ups.",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "straighttalking-cali-timelines"
+        ]
+      },
+      {
+        "name": "Hollow body hold",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "hollow-extended",
+        "rationale": "The front lever is a hanging hollow; without it the hips sag first.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Hanging leg raises to bar",
+        "target": "10 reps",
+        "metric": "reps",
+        "value": 10,
+        "related_step_id": "hlr-toes-to-bar",
+        "rationale": "Compression strength to get into position without kipping.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Scapular pull-ups",
+        "target": "10 strict reps",
+        "metric": "reps",
+        "value": 10,
+        "related_step_id": "scap-pull",
+        "rationale": "Straight-arm scapular depression is the actual working position; weak scapular control is the most misdiagnosed limiter on this tree.",
+        "source_ids": [
+          "straighttalking-cali-timelines"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "core-blamed-pull-limited",
+        "at_step_ids": [
+          "front-lever-advanced-tuck",
+          "front-lever-straddle"
+        ],
+        "signal": "Hips drop within a few seconds and the athlete responds by adding core work, with no effect over months",
+        "typical_causes": [
+          "The limiter is straight-arm pulling strength in the lats and scapular depressors, not the abdominals"
+        ],
+        "resolution": [
+          "Add weighted pull-ups and straight-arm pulldowns",
+          "Add front lever raises at a lever you already own",
+          "Stop adding abdominal volume — it is not the constraint"
+        ],
+        "expected_stall_weeks": {
+          "min": 6,
+          "max": 20
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "straighttalking-cali-timelines",
+          "movement-athlete-front-lever"
+        ]
+      },
+      {
+        "id": "tuck-to-advanced-tuck-wall",
+        "at_step_ids": [
+          "front-lever-advanced-tuck"
+        ],
+        "signal": "Comfortable 45s tuck hold but the advanced tuck collapses in under 10s",
+        "typical_causes": [
+          "Opening the hips lengthens the lever sharply — this is a genuine step change, not a failure",
+          "Rounding the back and calling it an advanced tuck"
+        ],
+        "resolution": [
+          "Use a band under the hips to accumulate time in the true shape",
+          "Film from the side and check the back is actually flat",
+          "Expect 2–3 months here; the published stage timings allow for it"
+        ],
+        "expected_stall_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "movement-athlete-front-lever",
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "front-lever-straddle",
+          "full-front-lever"
+        ],
+        "mechanism": "Sustained straight-arm loading with the shoulder in flexion under a long lever, demanding high scapular-depressor output",
+        "onset_weeks_from_entry": {
+          "min": 20,
+          "max": 60
+        },
+        "prophylaxis": [
+          "Keep pushing volume balanced against pulling — pair this tree with planche work",
+          "Never train the lever with already-fatigued scapular stabilisers",
+          "Progress one shape at a time"
+        ],
+        "red_flags": [
+          "Top-of-shoulder ache during holds",
+          "Loss of overhead range between sessions"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "elbow",
+        "peaks_at_step_ids": [
+          "front-lever-tuck-raises",
+          "front-lever-straddle-raises",
+          "front-lever-full-raises"
+        ],
+        "mechanism": "Straight-arm dynamic loading spikes elbow tension, especially on the raises where velocity adds to an already long lever",
+        "onset_weeks_from_entry": {
+          "min": 12,
+          "max": 40
+        },
+        "prophylaxis": [
+          "Introduce raises only at a lever whose static hold you already own",
+          "Keep raise reps low and stop when tempo degrades",
+          "Respect a 48h gap between heavy straight-arm sessions"
+        ],
+        "red_flags": [
+          "Anterior elbow pain on the pull",
+          "Ache when straightening the arm the next day"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading"
+        ]
+      },
+      {
+        "tissue": "lower-back",
+        "peaks_at_step_ids": [
+          "full-front-lever"
+        ],
+        "mechanism": "Losing the hollow turns the hold into a loaded lumbar extension",
+        "onset_weeks_from_entry": {
+          "min": 30,
+          "max": 70
+        },
+        "prophylaxis": [
+          "End the set when the hollow goes, not when the arms give out"
+        ],
+        "red_flags": [
+          "Lumbar ache after hold sessions"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,1367 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "slug": "muscle-up",
+  "name": "Muscle-up",
+  "family": "hybrid",
+  "difficulty": "advanced",
+  "summary": "Pull + transition + dip. Parallel bar (false-grip) and rings tracks. Strict-first with optional kip branch.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Strict pull-ups (chest-to-bar+)",
+      "target": "8–10"
+    },
+    {
+      "name": "Strict dips",
+      "target": "8–10"
+    },
+    {
+      "name": "Ring support hold (rings track)",
+      "target": "30s"
+    },
+    {
+      "name": "False-grip hang (bar track)",
+      "target": "30s"
+    }
+  ],
+  "equipment": [
+    "bar",
+    "rings",
+    "band",
+    "chalk"
+  ],
+  "primary_muscles": [
+    "upper-back",
+    "chest",
+    "triceps"
+  ],
+  "secondary_muscles": [
+    "biceps",
+    "forearm",
+    "deltoids",
+    "abs"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "upper-back",
+        "chest",
+        "triceps"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "biceps",
+        "forearm",
+        "deltoids",
+        "abs"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps",
+    "value": 3,
+    "sets": 1,
+    "notes": "3 strict muscle-ups (bar or rings)"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–3",
+    "notes": "Watch elbows — transition is a common tendinopathy site. Low-intensity transition drills more often."
+  },
+  "safety": {
+    "injury_risk": "high",
+    "contraindications": [
+      "Medial/lateral elbow pain",
+      "Acute wrist issues with false grip"
+    ],
+    "notes": "Build pull height and slow negatives before hard kipping volume."
+  },
+  "divergence_notes": "Street-workout often teaches kip-first; FF/OG prefer strict-first. Both orders appear as steps; unlock strict for the goal.",
+  "sources": [
+    "OG2",
+    "FF",
+    "RR",
+    "SW",
+    "CM"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "tracks": [
+    {
+      "id": "bar",
+      "name": "Bar muscle-up",
+      "step_ids": [
+        "false-grip-hang",
+        "chest-to-bar-pull",
+        "straight-bar-dip",
+        "mu-negatives",
+        "kipping-bar-mu",
+        "strict-bar-mu"
+      ]
+    },
+    {
+      "id": "rings",
+      "name": "Ring muscle-up",
+      "step_ids": [
+        "ring-support-hold",
+        "deep-ring-pull",
+        "ring-dip",
+        "low-ring-transition",
+        "ring-mu-negatives",
+        "strict-ring-mu"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Wrists over bar before you pull",
+        "Short sets"
+      ],
+      "common_faults": [
+        "Losing false grip mid-rep"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "false-grip-hang",
+      "order": 1,
+      "name": "False-grip hang",
+      "level": "intermediate",
+      "track": "bar",
+      "intent": "Lock wrists over the bar for bar MU transition.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "title": "Bar muscle-up — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "8 strict pull-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Pull to waist, not chin",
+        "Hollow body"
+      ],
+      "common_faults": [
+        "Stopping at chin height"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "chest-to-bar-pull",
+      "order": 2,
+      "name": "Chest-to-bar → waist pull-up",
+      "level": "intermediate",
+      "track": "bar",
+      "intent": "Pull high enough to clear the transition.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–8 reps",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3,
+        "notes": "to lower chest; also 3×3 to waist"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "title": "Pull-up form — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MhokcbRLP5w",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pullups",
+          "title": "Form GIF · Pullups",
+          "channel": "anatome.dev",
+          "ext_id": "Pullups",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pullups.json",
+          "attribution": "free-exercise-db (Pullups), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "10 strict pull-ups",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Full ROM",
+        "Lean slightly forward"
+      ],
+      "common_faults": [
+        "Partial lockout",
+        "Shrugging"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "straight-bar-dip",
+      "order": 3,
+      "name": "Straight-bar dip",
+      "level": "intermediate",
+      "track": "bar",
+      "intent": "Lockout strength above the bar.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8 reps",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "10 parallel-bar dips",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Elbows back then up",
+        "Slow 3–5s"
+      ],
+      "common_faults": [
+        "Dropping through transition"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mu-negatives",
+      "order": 4,
+      "name": "Muscle-up negatives (transition)",
+      "level": "advanced",
+      "track": "bar",
+      "intent": "Groove the transition by slowly lowering through it.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5 slow reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "title": "Bar muscle-up — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "chest-to-bar pull-ups to sternum",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Timing of hip kick",
+        "Pull then sit"
+      ],
+      "common_faults": [
+        "Early sit",
+        "No pull height"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "kipping-bar-mu",
+      "order": 5,
+      "name": "Kipping bar muscle-up",
+      "level": "advanced",
+      "track": "bar",
+      "intent": "Optional accessible path — hip drive + transition.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "attempts",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 1,
+        "sets": 1
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "title": "Bar muscle-up — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "5 controlled muscle-up negatives",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Hollow",
+        "High pull",
+        "Clean transition"
+      ],
+      "common_faults": [
+        "Hidden kip",
+        "Losing false grip"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "strict-bar-mu",
+      "order": 6,
+      "name": "Strict bar muscle-up",
+      "level": "elite",
+      "track": "bar",
+      "intent": "No kip, false grip — primary bar goal.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "1–3 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 3,
+        "sets": 1
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "title": "Bar muscle-up — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 20
+        },
+        "from_level": "3 kipping bar muscle-ups plus pull-to-waist strength",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Turn rings out",
+        "Lock elbows",
+        "Depress scapulae"
+      ],
+      "common_faults": [
+        "Rings collapsing inward"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "ring-support-hold",
+      "order": 7,
+      "name": "Ring support hold",
+      "level": "intermediate",
+      "track": "rings",
+      "intent": "Stable support with rings turned out.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "title": "Ring/bar muscle-up — demo clip",
+          "channel": "Sondre Berg (Berg Movement)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "attribution": "Sondre Berg (Berg Movement) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "30s bar support hold",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Full hang",
+        "Pull deep"
+      ],
+      "common_faults": [
+        "Short ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "deep-ring-pull",
+      "order": 8,
+      "name": "Deep ring pull-up",
+      "level": "intermediate",
+      "track": "rings",
+      "intent": "Pull rings to chest/hips for transition height.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8 reps",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "title": "Ring/bar muscle-up — demo clip",
+          "channel": "Sondre Berg (Berg Movement)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "attribution": "Sondre Berg (Berg Movement) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30s ring support with turned-out rings",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Rings out at top",
+        "Controlled descent"
+      ],
+      "common_faults": [
+        "Wobble",
+        "Partial depth"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "ring-dip",
+      "order": 9,
+      "name": "Ring dip",
+      "level": "intermediate",
+      "track": "rings",
+      "intent": "Stable full-ROM dip on rings.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8 reps",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "title": "Dip tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=l41SoWZiowI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Dips_-_Triceps_Version",
+          "title": "Form GIF · Dips - Triceps Version",
+          "channel": "anatome.dev",
+          "ext_id": "Dips_-_Triceps_Version",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Dips_-_Triceps_Version.json",
+          "attribution": "free-exercise-db (Dips_-_Triceps_Version), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "10 parallel-bar dips plus a 30s ring support",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Elbows back",
+        "Then sit to support"
+      ],
+      "common_faults": [
+        "Diving head first"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "low-ring-transition",
+      "order": 10,
+      "name": "Low-ring transition drill",
+      "level": "advanced",
+      "track": "rings",
+      "intent": "Feet-supported turnover pattern.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–10 reps",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "title": "Bar muscle-up — demo clip",
+          "channel": "CHRIS HERIA",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=_iYvlSMgUGE",
+          "attribution": "CHRIS HERIA — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "8 ring dips",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "3–5s through sticky point"
+      ],
+      "common_faults": [
+        "Dropping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "ring-mu-negatives",
+      "order": 11,
+      "name": "Negative ring muscle-up",
+      "level": "advanced",
+      "track": "rings",
+      "intent": "Slow descent through transition.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "title": "Ring/bar muscle-up — demo clip",
+          "channel": "Sondre Berg (Berg Movement)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "attribution": "Sondre Berg (Berg Movement) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "10 low-ring transitions per session without shoulder pain",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines",
+          "rbwf-recommended-routine"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Pull high before rotating",
+        "Turn rings out at support"
+      ],
+      "common_faults": [
+        "Throwing head over early"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "strict-ring-mu",
+      "order": 12,
+      "name": "Strict ring muscle-up",
+      "level": "elite",
+      "track": "rings",
+      "intent": "No kip — primary rings goal.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "1–3 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 3,
+        "sets": 1
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "title": "Ring/bar muscle-up — demo clip",
+          "channel": "Sondre Berg (Berg Movement)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=YSe03rIY-xQ",
+          "attribution": "Sondre Berg (Berg Movement) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Muscle_Up",
+          "title": "Form GIF · Muscle Up",
+          "channel": "anatome.dev",
+          "ext_id": "Muscle_Up",
+          "role": "demo",
+          "license": "CC0-1.0",
+          "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Muscle_Up.json",
+          "attribution": "free-exercise-db (Muscle_Up), dedicated to the public domain under CC0 1.0. Served through api.anatome.dev.",
+          "ai_generated": false,
+          "redistributable": true,
+          "tier": "cc0-db"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 10,
+          "max": 24
+        },
+        "from_level": "5 controlled ring muscle-up negatives",
+        "conditioning_hours_per_week": 3,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 27,
+      "max": 60
+    },
+    "from_level": "8–10 strict pull-ups, 8–10 strict dips, 30s false-grip hang tolerance",
+    "conditioning_hours_per_week": 3,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "straighttalking-cali-timelines",
+      "rbwf-recommended-routine"
+    ],
+    "human_label": "7–15 months from a solid 8 pull-ups and 8 dips to a strict muscle-up",
+    "notes": "Bar and ring tracks run in parallel; the tree total follows the ring track, which is the longer of the two. The transition, not the pull, is what people actually stall on.",
+    "parallel_tracks": true,
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Strict pull-ups",
+        "target": "8–10 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "pull-pronated",
+        "rationale": "Below this the pull cannot reach the height the transition needs.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Strict dips",
+        "target": "8–10 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "dip-bar",
+        "rationale": "The second half of the movement is a dip from a dead-stop bottom.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Chest-to-bar pull-up",
+        "target": "3 reps to sternum",
+        "metric": "reps",
+        "value": 3,
+        "related_step_id": "chest-to-bar-pull",
+        "rationale": "The single best predictor that the transition is reachable.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "False-grip hang",
+        "target": "20s",
+        "metric": "hold_seconds",
+        "value": 20,
+        "related_step_id": "false-grip-hang",
+        "rationale": "Ring muscle-ups are gated by false-grip wrist tolerance, not by pulling strength.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "transition-not-pull",
+        "at_step_ids": [
+          "mu-negatives",
+          "strict-bar-mu",
+          "strict-ring-mu"
+        ],
+        "signal": "Pull reaches the sternum easily but the athlete cannot get over the bar or rings",
+        "typical_causes": [
+          "Training the pull and the dip but never the transition itself",
+          "Leaning back too late",
+          "Insufficient straight-bar dip strength from a dead-stop bottom"
+        ],
+        "resolution": [
+          "Add dedicated low-ring transition volume — the transition is its own skill",
+          "Practise slow negatives through the transition specifically",
+          "Build the straight-bar dip from a dead stop, not just from support"
+        ],
+        "expected_stall_weeks": {
+          "min": 4,
+          "max": 16
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "straighttalking-cali-timelines"
+        ]
+      },
+      {
+        "id": "kip-dependency",
+        "at_step_ids": [
+          "kipping-bar-mu",
+          "strict-bar-mu"
+        ],
+        "signal": "Reliable kipping muscle-up for months with no movement toward a strict one",
+        "typical_causes": [
+          "All volume going to the kipping version, which is a different skill",
+          "Momentum masking a genuine strength gap"
+        ],
+        "resolution": [
+          "Move volume to weighted pull-ups to sternum and slow negatives",
+          "Set a strict-only block and accept lower rep totals for 6–8 weeks"
+        ],
+        "expected_stall_weeks": {
+          "min": 6,
+          "max": 20
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "low-ring-transition",
+          "ring-mu-negatives",
+          "strict-ring-mu"
+        ],
+        "mechanism": "The ring transition passes through internal rotation under load at a deep, unstable bottom position",
+        "onset_weeks_from_entry": {
+          "min": 10,
+          "max": 30
+        },
+        "prophylaxis": [
+          "Earn a 30s ring support with rings turned out before transition volume",
+          "Build ring dips before ring transitions",
+          "Keep transition reps low and fresh"
+        ],
+        "red_flags": [
+          "Front-of-shoulder pain during the turnover",
+          "Clicking that is accompanied by pain rather than being silent"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "elbow",
+        "peaks_at_step_ids": [
+          "mu-negatives",
+          "kipping-bar-mu"
+        ],
+        "mechanism": "High-velocity loading at the transition, often with a sudden jump in weekly volume",
+        "onset_weeks_from_entry": {
+          "min": 8,
+          "max": 24
+        },
+        "prophylaxis": [
+          "Cap muscle-up attempts per session while learning",
+          "Keep at least 48h between high-intensity attempts to respect the tendon recovery window"
+        ],
+        "red_flags": [
+          "Medial elbow pain on the pull",
+          "Ache during everyday gripping"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading"
+        ]
+      },
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "false-grip-hang",
+          "deep-ring-pull"
+        ],
+        "mechanism": "False grip compresses the wrist against the ring at end-range flexion",
+        "onset_weeks_from_entry": {
+          "min": 2,
+          "max": 10
+        },
+        "prophylaxis": [
+          "Build false-grip hang time gradually across 4–8 weeks",
+          "Use tape or a thicker strap early on"
+        ],
+        "red_flags": [
+          "Wrist bruising or persistent tenderness at the contact point"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

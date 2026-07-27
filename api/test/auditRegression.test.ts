@@ -54,7 +54,7 @@ describe("MCP tool names", () => {
     }
   });
 
-  it("includes the 7 expected tools", () => {
+  it("includes the 10 expected tools", () => {
     const names = TOOLS.map((t) => t.name);
     const EXPECTED = [
       "generate_muscle_image",
@@ -64,9 +64,12 @@ describe("MCP tool names", () => {
       "get_exercise",
       "get_exercise_gif",
       "workout_image",
+      "list_guides",
+      "get_guide",
+      "get_guide_tree",
     ];
     for (const n of EXPECTED) expect(names).toContain(n);
-    expect(names).toHaveLength(7);
+    expect(names).toHaveLength(10);
   });
 
   it("does NOT include camelCase aliases that would confuse developers", () => {

@@ -88,6 +88,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       { name: "Exercise Database", description: "873 exercises with muscle mappings" },
       { name: "MCP", description: "Model Context Protocol JSON-RPC" },
       { name: "Discovery", description: "Catalog and capability endpoints" },
+      { name: "Skill Guides", description: "Curated calisthenics skill progressions (CC-BY-4.0)" },
     ],
     paths: {
       "/generateImage": {
@@ -146,6 +147,83 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
           tags: ["Discovery"],
           summary: "List distinct equipment values from the exercise bundle",
           responses: { "200": { description: "Equipment list" } },
+        },
+      },
+      "/listGuides": {
+        get: {
+          tags: ["Skill Guides"],
+          summary: "List the bundled skill-progression guides",
+          description: "Curated calisthenics skill catalog (CC-BY-4.0 content, served by this Apache-2.0 API). Returns one row per guide with tree and step counts.",
+          responses: {
+            "200": { description: "Guide list", content: { "application/json": { schema: { type: "object", properties: {
+              ok: { type: "boolean" }, count: { type: "integer" },
+              guides: { type: "array", items: { type: "object", properties: {
+                slug: { type: "string" }, name: { type: "string" }, summary: { type: "string" },
+                tree_count: { type: "integer" }, step_count: { type: "integer" },
+                difficulty_order: { type: "array", items: { type: "string" } },
+                guide_url: { type: "string" },
+              } } },
+              guide_catalog_attribution: { type: "string" }, guide_catalog_license: { type: "string" }, license: { type: "string" },
+            } } } } },
+          },
+        },
+      },
+      "/getGuide": {
+        get: {
+          tags: ["Skill Guides"],
+          summary: "Get one guide plus a summary of each skill tree",
+          parameters: [{ name: "slug", in: "query", required: true, schema: { type: "string" }, example: "calisthenics" }],
+          responses: {
+            "200": { description: "Guide with tree summaries", content: { "application/json": { schema: { type: "object", properties: {
+              ok: { type: "boolean" }, slug: { type: "string" }, name: { type: "string" }, summary: { type: "string" },
+              tree_count: { type: "integer" }, step_count: { type: "integer" },
+              difficulty_order: { type: "array", items: { type: "string" } },
+              trees: { type: "array", items: { type: "object", properties: {
+                slug: { type: "string" }, name: { type: "string" }, family: { type: "string" }, difficulty: { type: "string" },
+                summary: { type: "string" }, step_count: { type: "integer" },
+                prerequisites: { type: "array", items: { type: "string" } },
+                primary_muscles: { type: "array", items: { type: "string" } },
+                anatome_imageSrc: { type: "string", nullable: true, description: "Ready-to-embed muscle diagram for the skill" },
+                tree_url: { type: "string" },
+              } } },
+            } } } } },
+            "400": { description: "Missing or malformed slug" },
+            "404": { description: "Unknown guide" },
+          },
+        },
+      },
+      "/getGuideTree": {
+        get: {
+          tags: ["Skill Guides"],
+          summary: "Get one full skill tree with every progression step",
+          description: "Each step carries intent, cues, common faults, drills, programming, unlock criteria and demo media references.",
+          parameters: [
+            { name: "tree", in: "query", required: true, schema: { type: "string" }, example: "planche" },
+            { name: "guide", in: "query", schema: { type: "string", default: "calisthenics" }, example: "calisthenics" },
+          ],
+          responses: {
+            "200": { description: "Full skill tree", content: { "application/json": { schema: { type: "object", properties: {
+              ok: { type: "boolean" }, guide_slug: { type: "string" }, slug: { type: "string" }, name: { type: "string" },
+              family: { type: "string" }, difficulty: { type: "string" }, summary: { type: "string" },
+              prerequisites: { type: "array", items: { type: "string" } },
+              primary_muscles: { type: "array", items: { type: "string" } },
+              secondary_muscles: { type: "array", items: { type: "string" } },
+              anatome_layers_payload: { type: "array", items: layerSchema },
+              anatome_imageSrc: { type: "string", nullable: true },
+              steps: { type: "array", items: { type: "object", properties: {
+                id: { type: "string" }, order: { type: "integer" }, name: { type: "string" }, level: { type: "string" },
+                intent: { type: "string" },
+                cues: { type: "array", items: { type: "string" } },
+                common_faults: { type: "array", items: { type: "string" } },
+                drills: { type: "array", items: { type: "object" } },
+                programming: { type: "object" },
+                unlock: { type: "object" },
+                media: { type: "array", items: { type: "object" } },
+              } } },
+            } } } } },
+            "400": { description: "Missing or malformed slug" },
+            "404": { description: "Unknown guide or tree" },
+          },
         },
       },
       "/workoutImage": {

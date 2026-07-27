@@ -9,18 +9,45 @@ export const ATTRIBUTION_SOURCE =
 export const EXERCISE_DB_ATTRIBUTION =
   "Exercise data from free-exercise-db (CC0-1.0, public domain) by yuhonas.";
 export const LICENSE = "Apache-2.0";
+export const GUIDE_CATALOG_ATTRIBUTION =
+  "Skill progressions from the Anatome calisthenics catalog by NextSolutions (CC-BY-4.0).";
+export const GUIDE_CATALOG_SOURCE =
+  "https://github.com/NextSolutionsStudio/anatome/tree/main/api/data/guides";
+/** The catalog content is CC-BY-4.0 even though the API code is Apache-2.0. */
+export const GUIDE_CATALOG_LICENSE = "CC-BY-4.0";
 
 /** Service index — consolidated legal metadata for discovery (GET / only). */
 export function serviceAttribution(): {
   attribution: string;
   attribution_source: string;
   exercise_db_attribution: string;
+  guide_catalog_attribution: string;
+  guide_catalog_license: string;
   license: string;
 } {
   return {
     attribution: ATTRIBUTION,
     attribution_source: ATTRIBUTION_SOURCE,
     exercise_db_attribution: EXERCISE_DB_ATTRIBUTION,
+    guide_catalog_attribution: GUIDE_CATALOG_ATTRIBUTION,
+    guide_catalog_license: GUIDE_CATALOG_LICENSE,
+    license: LICENSE,
+  };
+}
+
+/** CC-BY-4.0 skill-catalog attribution — responses that include guide content.
+ *  `license` stays Apache-2.0 (the API code); `guide_catalog_license` carries
+ *  the content licence, which CC-BY requires us to name explicitly. */
+export function guideCatalogAttribution(): {
+  guide_catalog_attribution: string;
+  guide_catalog_attribution_source: string;
+  guide_catalog_license: string;
+  license: string;
+} {
+  return {
+    guide_catalog_attribution: GUIDE_CATALOG_ATTRIBUTION,
+    guide_catalog_attribution_source: GUIDE_CATALOG_SOURCE,
+    guide_catalog_license: GUIDE_CATALOG_LICENSE,
     license: LICENSE,
   };
 }
