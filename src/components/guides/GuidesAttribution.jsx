@@ -36,7 +36,7 @@ export default function GuidesAttribution({ sources = [], generatedAt }) {
         third-party text is reproduced.
       </Row>
       <Row label="Site code.">
-        <A href="https://github.com/NextSolutionsStudio/anatome">anatome</A> is licensed{" "}
+        <A href="https://github.com/Rippy1911/anatome">anatome</A> is licensed{" "}
         <A href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0</A>. Muscle diagrams
         are rendered by api.anatome.dev from anatomical paths in{" "}
         <A href="https://github.com/HichamELBSI/react-native-body-highlighter">

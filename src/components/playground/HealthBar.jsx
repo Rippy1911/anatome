@@ -33,7 +33,7 @@ export default function HealthBar() {
 
   const state = failed ? "unknown" : status?.state || "unknown";
   const label = failed ? "CI: unavailable" : status?.label || "CI: checking main…";
-  const url = status?.url || "https://github.com/NextSolutionsStudio/anatome/actions";
+  const url = status?.url || "https://github.com/Rippy1911/anatome/actions";
 
   return (
     <div className="flex items-center justify-between gap-4 flex-wrap text-xs text-muted-foreground border-t border-border px-4 py-3">

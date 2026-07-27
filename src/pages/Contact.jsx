@@ -23,7 +23,7 @@ export default function Contact() {
         </a>
 
         <a
-          href="https://github.com/NextSolutionsStudio/anatome"
+          href="https://github.com/Rippy1911/anatome"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 hover:border-primary transition-colors"
