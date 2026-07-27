@@ -1,0 +1,551 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "elbow-lever",
+  "name": "Elbow Lever",
+  "family": "balance",
+  "difficulty": "intermediate",
+  "summary": "Straight-arm elbow-supported balance — accessible planche-family skill.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Frog stand",
+      "target": "30s"
+    },
+    {
+      "name": "Wrist mobility",
+      "target": "pain-free"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "parallettes"
+  ],
+  "primary_muscles": [
+    "abs",
+    "deltoids",
+    "triceps"
+  ],
+  "secondary_muscles": [
+    "chest",
+    "forearm"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "abs",
+        "deltoids",
+        "triceps"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "chest",
+        "forearm"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 30,
+    "sets": 3
+  },
+  "programming": {
+    "skill_frequency_per_week": "3–5"
+  },
+  "safety": {
+    "injury_risk": "low",
+    "contraindications": [
+      "Elbow pain when loading into abdomen"
+    ],
+    "notes": "Elbows dig into abdomen/obliques — find bony shelf, not soft belly."
+  },
+  "sources": [
+    "OG2",
+    "CM"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Look forward",
+        "Light fingers"
+      ],
+      "common_faults": [
+        "Collapsing elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-frog",
+      "order": 1,
+      "name": "Frog stand (entry)",
+      "level": "beginner",
+      "intent": "Balance on hands with knees on arms.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 60,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "from_level": "15 strict push-ups",
+        "conditioning_hours_per_week": 2,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Elbows on hip bones/obliques",
+        "Lean forward"
+      ],
+      "common_faults": [
+        "Elbows slipping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-tuck",
+      "order": 2,
+      "name": "Tucked elbow lever",
+      "level": "intermediate",
+      "intent": "Elbows on abdomen, knees tucked, body horizontal-ish.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–20s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s frog stand",
+        "conditioning_hours_per_week": 2,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle for balance"
+      ],
+      "common_faults": [
+        "Piking hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-straddle",
+      "order": 3,
+      "name": "Straddle elbow lever",
+      "level": "intermediate",
+      "intent": "Extend legs into straddle.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–25s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "from_level": "20s tucked elbow lever",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Squeeze glutes",
+        "Point toes"
+      ],
+      "common_faults": [
+        "Hips too high"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-full",
+      "order": 4,
+      "name": "Full elbow lever",
+      "level": "advanced",
+      "intent": "Legs together, body horizontal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 12
+        },
+        "from_level": "20s straddle elbow lever",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 12,
+      "max": 32
+    },
+    "from_level": "15 strict push-ups, 30s plank, pain-free loaded wrist extension",
+    "conditioning_hours_per_week": 2,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation"
+    ],
+    "human_label": "3–8 months from a solid push-up base",
+    "notes": "OG2 places the elbow lever low in the straight-arm chart — it is a balance and wrist-tolerance skill far more than a strength skill, which is why the bands are narrow compared with the planche tree it feeds.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Strict push-ups",
+        "target": "15 reps",
+        "metric": "reps",
+        "value": 15,
+        "related_step_id": "push-standard",
+        "rationale": "Baseline pressing capacity to support bodyweight on bent arms.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Loaded wrist extension",
+        "target": "pain-free at 90°, 30s bearing weight",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "mob-wrist-load",
+        "rationale": "The whole tree is wrist-loaded; this is the actual gate.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "name": "Plank",
+        "target": "45s",
+        "metric": "hold_seconds",
+        "value": 45,
+        "rationale": "Trunk rigidity to hold a straight line off the elbows.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "balance-not-strength",
+        "at_step_ids": [
+          "elbow-tuck",
+          "elbow-straddle"
+        ],
+        "signal": "Can hold for 3–5 seconds then tip, session after session, without ever feeling muscularly limited",
+        "typical_causes": [
+          "Treating a balance skill as a strength skill",
+          "Practising fatigued at the end of a session",
+          "Not using fingers actively to steer"
+        ],
+        "resolution": [
+          "Move the practice to the start of the session while fresh",
+          "Do more short sets rather than fewer long ones",
+          "Practise controlled tipping to learn the correction rather than avoiding it"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "elbow-tuck",
+          "elbow-full"
+        ],
+        "mechanism": "Full bodyweight through an extended wrist with the elbow acting as a fulcrum",
+        "onset_weeks_from_entry": {
+          "min": 2,
+          "max": 10
+        },
+        "prophylaxis": [
+          "Complete mob-wrist-load first",
+          "Use parallettes to reduce the extension angle when volume rises",
+          "Cap total wrist-loaded time per session rather than per set"
+        ],
+        "red_flags": [
+          "Dorsal wrist pinching",
+          "Wrist ache persisting the next morning"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

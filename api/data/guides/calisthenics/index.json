@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "kind": "index",
+  "slug": "index",
+  "name": "Calisthenics Skill Library",
+  "summary": "Open-source calisthenics skill progressions: Core 6 + foundations + high-ROI extras. JSON catalog + portable HTML guide with anatome.dev muscle maps and YouTube demos.",
+  "trees": [
+    {
+      "slug": "foundations",
+      "name": "Foundations",
+      "difficulty": "beginner",
+      "family": "foundation",
+      "group": "core"
+    },
+    {
+      "slug": "elbow-lever",
+      "name": "Elbow Lever",
+      "difficulty": "intermediate",
+      "family": "balance",
+      "group": "extra"
+    },
+    {
+      "slug": "skin-the-cat",
+      "name": "Skin the Cat",
+      "difficulty": "intermediate",
+      "family": "pull",
+      "group": "extra"
+    },
+    {
+      "slug": "handstand",
+      "name": "Handstand",
+      "difficulty": "advanced",
+      "family": "balance",
+      "group": "core"
+    },
+    {
+      "slug": "muscle-up",
+      "name": "Muscle-up",
+      "difficulty": "advanced",
+      "family": "hybrid",
+      "group": "core"
+    },
+    {
+      "slug": "pistol-squat",
+      "name": "Pistol Squat",
+      "difficulty": "advanced",
+      "family": "legs",
+      "group": "extra"
+    },
+    {
+      "slug": "dragon-flag",
+      "name": "Dragon Flag",
+      "difficulty": "advanced",
+      "family": "core",
+      "group": "extra"
+    },
+    {
+      "slug": "nordic-curl",
+      "name": "Nordic Curl",
+      "difficulty": "advanced",
+      "family": "legs",
+      "group": "extra"
+    },
+    {
+      "slug": "shrimp-squat",
+      "name": "Shrimp Squat",
+      "difficulty": "advanced",
+      "family": "legs",
+      "group": "extra"
+    },
+    {
+      "slug": "back-lever",
+      "name": "Back Lever",
+      "difficulty": "advanced",
+      "family": "pull",
+      "group": "core"
+    },
+    {
+      "slug": "front-lever",
+      "name": "Front Lever",
+      "difficulty": "elite",
+      "family": "pull",
+      "group": "core"
+    },
+    {
+      "slug": "planche",
+      "name": "Planche",
+      "difficulty": "elite",
+      "family": "push",
+      "group": "core"
+    },
+    {
+      "slug": "human-flag",
+      "name": "Human Flag",
+      "difficulty": "elite",
+      "family": "core",
+      "group": "core"
+    },
+    {
+      "slug": "one-arm-pull-up",
+      "name": "One-Arm Pull-up",
+      "difficulty": "elite",
+      "family": "pull",
+      "group": "extra"
+    },
+    {
+      "slug": "mobility-fundamentals",
+      "name": "Mobility Fundamentals",
+      "difficulty": "beginner",
+      "family": "foundation",
+      "group": "core"
+    },
+    {
+      "slug": "hanging-leg-raise",
+      "name": "Hanging Leg Raise",
+      "difficulty": "intermediate",
+      "family": "core",
+      "group": "core"
+    },
+    {
+      "slug": "one-arm-push-up",
+      "name": "One-Arm Push-up",
+      "difficulty": "advanced",
+      "family": "push",
+      "group": "extra"
+    },
+    {
+      "slug": "v-sit-manna",
+      "name": "V-Sit / Manna",
+      "difficulty": "elite",
+      "family": "core",
+      "group": "core"
+    },
+    {
+      "slug": "planche-push-up",
+      "name": "Planche Push-up",
+      "difficulty": "elite",
+      "family": "push",
+      "group": "core"
+    }
+  ],
+  "difficulty_order": [
+    "beginner",
+    "intermediate",
+    "advanced",
+    "elite"
+  ],
+  "anatome_api": "https://api.anatome.dev",
+  "license": "CC-BY-4.0",
+  "sources_legend": {
+    "OG2": "Overcoming Gravity, 2nd ed. (Steven Low) — cited conventions, not copied text",
+    "FF": "FitnessFAQs (Daniel Vadnal)",
+    "GMB": "Gold Medal Bodies",
+    "CM": "Calisthenic Movement",
+    "RR": "r/bodyweightfitness Recommended Routine",
+    "CC": "Convict Conditioning",
+    "GB": "Gymnastic Bodies",
+    "SW": "Street-workout / community",
+    "community": "Sports-science / community norms"
+  }
+}

@@ -6,6 +6,7 @@ here (they are intentionally git-tracked so the Worker build is reproducible):
 
 - `bodyPaths.json` — anatomical SVG path data (4 rows: front/back × male/female)
 - `exercises.json` — the full Exercise dataset (873 rows)
+- `guides/<guide>/` — curated skill-progression catalog (see below)
 
 ## How to export (run against the live Base44 app)
 
@@ -69,6 +70,28 @@ Each full row should contain (see `base44/entities/Exercise.jsonc`):
   "unmapped_source_muscle": []
 }
 ```
+
+### 3. `guides/<guide>/`
+
+Curated skill progressions, served by `GET /listGuides`, `/getGuide?slug=` and
+`/getGuideTree?guide=&tree=`. Layout mirrors the upstream content repo, one file
+per skill tree plus an `index.json` that fixes the curated ordering:
+
+```
+guides/calisthenics/
+├── index.json          # guide metadata + ordered tree list + sources legend
+├── planche.json        # one skill tree: metadata + ordered steps
+└── … (19 trees, 159 steps total)
+```
+
+Unlike the two datasets above, this content is **CC-BY-4.0**, not CC0 — guide
+responses must keep `guide_catalog_attribution` and `guide_catalog_license`
+(`src/lib/attribution.ts`). Files are imported statically by
+`src/data/guideCatalog.ts`; adding a tree means adding both the JSON file and its
+import there, so the Worker bundle stays explicit.
+
+Verify after a refresh: `jq '.trees | length' api/data/guides/calisthenics/index.json`
+should equal the number of tree files, and `pnpm test` asserts both counts.
 
 ## Exercise GIFs (optional, pre-deploy)
 

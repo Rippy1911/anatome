@@ -38,7 +38,7 @@ The following are **out of scope**:
 - Cloudflare platform vulnerabilities (report to Cloudflare)
 - Base44 platform vulnerabilities (report to Base44)
 - Denial-of-service attacks limited to a single IP (covered by rate-limiting)
-- Issues in third-party data (free-exercise-db CC0, react-native-body-highlighter MIT)
+- Issues in third-party data (free-exercise-db metadata under the Unlicense, react-native-body-highlighter MIT)
 
 ## Known mitigations
 

@@ -486,10 +486,10 @@ describe("workoutImageLogic", () => {
 // MCP tool contracts
 // ─────────────────────────────────────────────────────────────────────────────
 describe("MCP tool contracts", () => {
-  it("tools/list returns 7 tools in snake_case", () => {
+  it("tools/list returns 10 tools in snake_case", () => {
     const inner = computeMcpResult("tools/list", {}, BASE);
     const tools = (inner.result as { tools: { name: string }[] }).tools;
-    expect(tools).toHaveLength(7);
+    expect(tools).toHaveLength(10);
     for (const t of tools) {
       expect(t.name).toMatch(/^[a-z][a-z0-9_]*$/);
     }

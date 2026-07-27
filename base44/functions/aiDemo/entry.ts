@@ -68,7 +68,7 @@ function dbGifUrl(rec){
 }
 
 // Build the Anatome-hosted reference-photo URL for a matched exercise record.
-// Uses the first free-exercise-db image (CC0), proxied through /exerciseImage so
+// Uses the first free-exercise-db image (licence unverified), proxied through /exerciseImage so
 // the frontend can render the real exercise photo (not just the 2-frame GIF).
 function sanitizeFreeExerciseDbPath(p){
   const s=String(p||"").trim();
