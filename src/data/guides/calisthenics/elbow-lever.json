@@ -1,0 +1,444 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "elbow-lever",
+  "name": "Elbow Lever",
+  "family": "balance",
+  "difficulty": "intermediate",
+  "summary": "Straight-arm elbow-supported balance — accessible planche-family skill.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Frog stand",
+      "target": "30s"
+    },
+    {
+      "name": "Wrist mobility",
+      "target": "pain-free"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "parallettes"
+  ],
+  "primary_muscles": [
+    "abs",
+    "deltoids",
+    "triceps"
+  ],
+  "secondary_muscles": [
+    "chest",
+    "forearm"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "abs",
+        "deltoids",
+        "triceps"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "chest",
+        "forearm"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 30,
+    "sets": 3
+  },
+  "programming": {
+    "skill_frequency_per_week": "3–5"
+  },
+  "safety": {
+    "injury_risk": "low",
+    "contraindications": [
+      "Elbow pain when loading into abdomen"
+    ],
+    "notes": "Elbows dig into abdomen/obliques — find bony shelf, not soft belly."
+  },
+  "sources": [
+    "OG2",
+    "CM"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Look forward",
+        "Light fingers"
+      ],
+      "common_faults": [
+        "Collapsing elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-frog",
+      "order": 1,
+      "name": "Frog stand (entry)",
+      "level": "beginner",
+      "intent": "Balance on hands with knees on arms.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 60,
+        "frequency_per_week": "4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "kind": "embed",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": {
+            "required": true,
+            "text": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Simonster Strength",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "from_level": "15 strict push-ups",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Elbows on hip bones/obliques",
+        "Lean forward"
+      ],
+      "common_faults": [
+        "Elbows slipping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-tuck",
+      "order": 2,
+      "name": "Tucked elbow lever",
+      "level": "intermediate",
+      "intent": "Elbows on abdomen, knees tucked, body horizontal-ish.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–20s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "kind": "embed",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": {
+            "required": true,
+            "text": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Simonster Strength",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s frog stand",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle for balance"
+      ],
+      "common_faults": [
+        "Piking hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-straddle",
+      "order": 3,
+      "name": "Straddle elbow lever",
+      "level": "intermediate",
+      "intent": "Extend legs into straddle.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–25s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "kind": "embed",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": {
+            "required": true,
+            "text": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Simonster Strength",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "from_level": "20s tucked elbow lever",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Squeeze glutes",
+        "Point toes"
+      ],
+      "common_faults": [
+        "Hips too high"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "elbow-full",
+      "order": 4,
+      "name": "Full elbow lever",
+      "level": "advanced",
+      "intent": "Legs together, body horizontal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "title": "Elbow lever — demo clip",
+          "channel": "Simonster Strength",
+          "kind": "embed",
+          "start_seconds": 15,
+          "end_seconds": 40,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=MJrFdfNmIEU",
+          "attribution": {
+            "required": true,
+            "text": "Simonster Strength — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Simonster Strength",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 12
+        },
+        "from_level": "20s straddle elbow lever",
+        "confidence": "estimated"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 12,
+      "max": 32
+    },
+    "from_level": "15 strict push-ups, 30s plank, pain-free loaded wrist extension",
+    "conditioning_hours_per_week": 2,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation"
+    ],
+    "human_label": "3–8 months from a solid push-up base",
+    "notes": "OG2 places the elbow lever low in the straight-arm chart — it is a balance and wrist-tolerance skill far more than a strength skill, which is why the bands are narrow compared with the planche tree it feeds."
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Strict push-ups",
+        "target": "15 reps",
+        "metric": "reps",
+        "value": 15,
+        "related_step_id": "push-standard",
+        "rationale": "Baseline pressing capacity to support bodyweight on bent arms.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Loaded wrist extension",
+        "target": "pain-free at 90°, 30s bearing weight",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "mob-wrist-load",
+        "rationale": "The whole tree is wrist-loaded; this is the actual gate.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "name": "Plank",
+        "target": "45s",
+        "metric": "hold_seconds",
+        "value": 45,
+        "rationale": "Trunk rigidity to hold a straight line off the elbows.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "balance-not-strength",
+        "at_step_ids": [
+          "elbow-tuck",
+          "elbow-straddle"
+        ],
+        "signal": "Can hold for 3–5 seconds then tip, session after session, without ever feeling muscularly limited",
+        "typical_causes": [
+          "Treating a balance skill as a strength skill",
+          "Practising fatigued at the end of a session",
+          "Not using fingers actively to steer"
+        ],
+        "resolution": [
+          "Move the practice to the start of the session while fresh",
+          "Do more short sets rather than fewer long ones",
+          "Practise controlled tipping to learn the correction rather than avoiding it"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "elbow-tuck",
+          "elbow-full"
+        ],
+        "mechanism": "Full bodyweight through an extended wrist with the elbow acting as a fulcrum",
+        "onset_weeks_from_entry": {
+          "min": 2,
+          "max": 10
+        },
+        "prophylaxis": [
+          "Complete mob-wrist-load first",
+          "Use parallettes to reduce the extension angle when volume rises",
+          "Cap total wrist-loaded time per session rather than per set"
+        ],
+        "red_flags": [
+          "Dorsal wrist pinching",
+          "Wrist ache persisting the next morning"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ]
+  }
+}
