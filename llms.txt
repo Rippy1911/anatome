@@ -5,7 +5,7 @@
 ## What is Anatome?
 
 Anatome renders colorable anatomical SVG diagrams of the human body over a simple
-HTTP API. It also bundles an exercise database (873 CC0 exercises pre-mapped to
+HTTP API. It also bundles an exercise database (873 Unlicense exercise records pre-mapped to
 23 muscle slugs) and implements the Model Context Protocol (MCP) so AI agents can
 call it as a tool with zero additional integration work.
 
@@ -14,7 +14,7 @@ call it as a tool with zero additional integration work.
 - Embed a muscle-group diagram in a fitness app (`<img src="https://api.anatome.dev/generateImage?...">`)
 - Show which muscles a workout session hit (session heatmap)
 - Let an AI agent search or look up exercises with muscle-activation context
-- Proxy exercise reference photos (CC0) without hitting GitHub raw URLs
+- Proxy exercise reference photos (licence unverified) without hitting GitHub raw URLs
 
 ## Live API
 
@@ -34,7 +34,7 @@ GET  /searchExercises Search 873 exercises (name/muscle/equipment/level filters)
 GET  /getExercise     Fetch a single exercise by name, ext_id, or random
 GET  /resolveExercise Map an exercise name → muscle layers
 GET  /exerciseGif     2-frame demo GIF for an exercise
-GET  /exerciseImage   CC0 reference photo from free-exercise-db, proxied
+GET  /exerciseImage   reference photo from free-exercise-db (licence unverified), proxied
 GET  /listMuscles     List all 23 muscle slugs with anatomical names
 GET  /muscleInfo      Stats for a single muscle slug
 GET  /listEquipment   List all equipment types in the database
@@ -94,6 +94,6 @@ base44/       Base44 configuration + functions
 
 Apache-2.0. Third-party data:
 - Anatomical SVG paths: react-native-body-highlighter (MIT, © Hicham El Boussarghini)
-- Exercise data: free-exercise-db (CC0)
+- Exercise metadata: free-exercise-db (Unlicense). Its photography: licence unverified, not redistributable.
 
 See [NOTICE](NOTICE) for full attribution.

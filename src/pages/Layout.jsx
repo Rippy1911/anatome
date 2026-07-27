@@ -8,9 +8,9 @@ import { useTheme } from "@/hooks/useTheme";
 
 const REPO_URL = "https://github.com/Rippy1911/anatome";
 
-function NavLink({ to, children, onClick }) {
+function NavLink({ to, children, onClick = undefined }) {
   const { pathname } = useLocation();
-  const active = pathname === to;
+  const active = pathname === to || (to !== "/" && pathname.startsWith(`${to}/`));
   return (
     <Link
       to={to}
@@ -55,6 +55,7 @@ export default function Layout() {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/playground">Playground</NavLink>
             <NavLink to="/docs">Docs</NavLink>
+            <NavLink to="/guides">Guides</NavLink>
             <NavLink to="/ai-guide">AI Guide</NavLink>
             <NavLink to="/api">API</NavLink>
             <div className="ml-2 pl-2 border-l border-border shrink-0 flex items-center gap-1">
@@ -72,6 +73,7 @@ export default function Layout() {
               <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink>
               <NavLink to="/playground" onClick={() => setIsMobileMenuOpen(false)}>Playground</NavLink>
               <NavLink to="/docs" onClick={() => setIsMobileMenuOpen(false)}>Docs</NavLink>
+              <NavLink to="/guides" onClick={() => setIsMobileMenuOpen(false)}>Guides</NavLink>
               <NavLink to="/ai-guide" onClick={() => setIsMobileMenuOpen(false)}>AI Guide</NavLink>
               <NavLink to="/api" onClick={() => setIsMobileMenuOpen(false)}>API</NavLink>
               <a href={REPO_URL} target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground">

@@ -11,7 +11,7 @@ export default function ExerciseGifPreview({ exercise, onClear }) {
     <div className="rounded-xl border border-primary/25 bg-primary/5 p-3 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="text-xs text-muted-foreground">Loaded from free-exercise-db (CC0)</div>
+          <div className="text-xs text-muted-foreground">Loaded from free-exercise-db — licence unverified, not cleared for reuse</div>
           <div className="text-sm font-semibold truncate">{exercise.name}</div>
           {muscles.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1.5">

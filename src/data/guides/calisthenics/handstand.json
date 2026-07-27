@@ -1,0 +1,1366 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "slug": "handstand",
+  "name": "Handstand",
+  "family": "balance",
+  "difficulty": "advanced",
+  "summary": "Wall → freestanding balance (skill, near-daily), then HSPU and press-to-handstand strength tracks.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Wall plank (chest-to-wall)",
+      "target": "30s"
+    },
+    {
+      "name": "Pike push-ups",
+      "target": "10"
+    },
+    {
+      "name": "Hollow body hold",
+      "target": "30s"
+    },
+    {
+      "name": "Shoulder flexion overhead",
+      "target": "no rib flare"
+    },
+    {
+      "name": "Wrist dorsiflexion",
+      "target": "pain-free ≥90°"
+    }
+  ],
+  "equipment": [
+    "wall",
+    "floor",
+    "parallettes",
+    "blocks",
+    "band"
+  ],
+  "primary_muscles": [
+    "deltoids",
+    "trapezius",
+    "abs"
+  ],
+  "secondary_muscles": [
+    "triceps",
+    "forearm",
+    "upper-back"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "deltoids",
+        "trapezius",
+        "abs"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "triceps",
+        "forearm",
+        "upper-back"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 60,
+    "sets": 1,
+    "notes": "Freestanding handstand hold; HSPU/press are parallel elite goals"
+  },
+  "programming": {
+    "skill_frequency_per_week": "5–7 (balance)",
+    "strength_frequency_per_week": "2–4 (HSPU/press)",
+    "notes": "Balance rewards frequency over intensity. HSPU/press are strength days."
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute wrist pain",
+      "Uncontrolled hypertension for inversions"
+    ],
+    "notes": "Clear kick-up space. Spot or soft landing early on."
+  },
+  "divergence_notes": "Press vs HSPU first is athlete-dependent — both tracks are valid after freestanding consolidation.",
+  "sources": [
+    "OG2",
+    "FF",
+    "GMB",
+    "CM",
+    "SW"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "tracks": [
+    {
+      "id": "balance",
+      "name": "Balance",
+      "step_ids": [
+        "wall-plank",
+        "chest-to-wall-handstand",
+        "back-to-wall-handstand",
+        "wall-shoulder-taps",
+        "freestanding-handstand",
+        "freestanding-handstand-60"
+      ]
+    },
+    {
+      "id": "hspu",
+      "name": "HSPU strength",
+      "step_ids": [
+        "pike-push-up",
+        "wall-hspu",
+        "freestanding-hspu"
+      ]
+    },
+    {
+      "id": "press",
+      "name": "Press to handstand",
+      "step_ids": [
+        "press-to-handstand"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Hands under shoulders",
+        "Body one line",
+        "Push floor away"
+      ],
+      "common_faults": [
+        "Banana back",
+        "Hands too far from wall"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "wall-plank",
+      "order": 1,
+      "name": "Wall plank (chest-to-wall)",
+      "level": "beginner",
+      "track": "balance",
+      "intent": "Build straight-body alignment against the wall.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "45–60s",
+        "rest_seconds": 60,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 60,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "comfortable inverted for a few seconds",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Look through arms",
+        "Ears between arms",
+        "Hollow body"
+      ],
+      "common_faults": [
+        "Looking forward",
+        "Soft elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "chest-to-wall-handstand",
+      "order": 2,
+      "name": "Chest-to-wall handstand",
+      "level": "beginner",
+      "track": "balance",
+      "intent": "Vertical hold with chest facing wall — best alignment teacher.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "30–60s",
+        "rest_seconds": 60,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 60,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "30s wall plank",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "kyleweiger-handstand"
+        ]
+      }
+    },
+    {
+      "cues": [
+        "Controlled kick",
+        "Catch with fingers",
+        "Minimal wall touch"
+      ],
+      "common_faults": [
+        "Kicking too hard",
+        "Banana back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "back-to-wall-handstand",
+      "order": 3,
+      "name": "Back-to-wall handstand (kick-up)",
+      "level": "intermediate",
+      "track": "balance",
+      "intent": "Learn kick-up and peel feet off the wall.",
+      "programming": {
+        "sets": 8,
+        "reps_or_hold": "attempts + 20–60s holds",
+        "rest_seconds": 45,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 60,
+        "sets": 3,
+        "notes": "minimal foot touch"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "45s chest-to-wall hold",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "kyleweiger-handstand"
+        ]
+      }
+    },
+    {
+      "cues": [
+        "Shift hips over supporting hand",
+        "Slow taps"
+      ],
+      "common_faults": [
+        "Rushing",
+        "Collapsing shoulder"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "wall-shoulder-taps",
+      "order": 4,
+      "name": "Wall shoulder taps / weight shifts",
+      "level": "intermediate",
+      "track": "balance",
+      "intent": "Build single-arm balance feel against the wall.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–20 taps/side",
+        "rest_seconds": 90,
+        "frequency_per_week": "4–6"
+      },
+      "unlock": {
+        "metric": "taps",
+        "value": 20,
+        "sets": 3,
+        "notes": "per side"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "30s back-to-wall hold with a consistent kick-up",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Fingers are the brakes",
+        "Micro-corrections",
+        "Hollow"
+      ],
+      "common_faults": [
+        "Flat hands",
+        "Overcorrecting",
+        "Looking forward"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "freestanding-handstand",
+      "order": 5,
+      "name": "Freestanding handstand",
+      "level": "advanced",
+      "track": "balance",
+      "intent": "Hold without wall — primary balance milestone.",
+      "programming": {
+        "sets": 10,
+        "reps_or_hold": "many short attempts → 30s",
+        "rest_seconds": 30,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 20
+        },
+        "from_level": "10 controlled wall shoulder taps per side",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "kyleweiger-handstand",
+          "straighttalking-cali-timelines"
+        ],
+        "notes": "Reaching this step's unlock is the widely quoted '10-second freestanding handstand' milestone: 3–6 months of cumulative practice at 3–5 sessions/week."
+      }
+    },
+    {
+      "cues": [
+        "Hips high",
+        "Elbows ~45°",
+        "Head between hands"
+      ],
+      "common_faults": [
+        "Elbows flaring wide",
+        "Short ROM"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "pike-push-up",
+      "order": 6,
+      "name": "Pike push-up → elevated pike",
+      "level": "intermediate",
+      "track": "hspu",
+      "intent": "Bent-arm pressing strength for HSPU track.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–8 reps",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–4"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3,
+        "notes": "feet elevated"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=n2LuZBT1vr8",
+          "title": "HSPU tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 50,
+          "end_seconds": 80,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=n2LuZBT1vr8",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "15 strict push-ups",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Lower to crown",
+        "Elbows ~45°",
+        "Full lockout"
+      ],
+      "common_faults": [
+        "Head poking forward",
+        "Partial lockout"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "wall-hspu",
+      "order": 7,
+      "name": "Wall handstand push-up",
+      "level": "advanced",
+      "track": "hspu",
+      "intent": "Full ROM HSPU against the wall.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–8 reps",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–4"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "value_max": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=n2LuZBT1vr8",
+          "title": "HSPU tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 50,
+          "end_seconds": 80,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=n2LuZBT1vr8",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "10 elevated pike push-ups",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    },
+    {
+      "cues": [
+        "Calm breath",
+        "Stable fingers"
+      ],
+      "common_faults": [
+        "Rushing elite skills before balance is solid"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "freestanding-handstand-60",
+      "order": 8,
+      "name": "Freestanding consolidation (60s)",
+      "level": "advanced",
+      "track": "balance",
+      "intent": "Gate before freestyle HSPU / press work.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "45–60s",
+        "rest_seconds": 60,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 60,
+        "sets": 1
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 16,
+          "max": 40
+        },
+        "from_level": "10s freestanding hold",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "kyleweiger-handstand"
+        ],
+        "notes": "Going from 10s to a reliable 60s is a longer project than reaching 10s in the first place."
+      }
+    },
+    {
+      "cues": [
+        "Balance first",
+        "Then press"
+      ],
+      "common_faults": [
+        "Losing balance mid-rep"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "freestanding-hspu",
+      "order": 9,
+      "name": "Freestanding HSPU",
+      "level": "elite",
+      "track": "hspu",
+      "intent": "Full ROM press without wall.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "1–3 reps",
+        "rest_seconds": 240,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 1,
+        "value_max": 3,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=n2LuZBT1vr8",
+          "title": "HSPU tutorial — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 50,
+          "end_seconds": 80,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=n2LuZBT1vr8",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 24,
+          "max": 52
+        },
+        "from_level": "8 wall HSPU plus a 30s freestanding handstand",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Compression first",
+        "Shoulders over wrists",
+        "Slow"
+      ],
+      "common_faults": [
+        "Jumping instead of pressing",
+        "Bent arms when aiming straight-arm"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "press-to-handstand",
+      "order": 10,
+      "name": "Press to handstand",
+      "level": "elite",
+      "track": "press",
+      "intent": "Straddle/pike press from floor or L-sit — compression + strength.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "attempts",
+        "rest_seconds": 180,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 1,
+        "sets": 1,
+        "notes": "1 clean press"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Handstand_Push-Ups), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 24,
+          "max": 60
+        },
+        "from_level": "30s freestanding handstand plus a straddle pancake fold",
+        "confidence": "estimated",
+        "notes": "Gated by compression and pancake range at least as much as by strength. Athletes without mob-pancake progress typically sit at the top of this band indefinitely."
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 36,
+      "max": 84
+    },
+    "from_level": "30s chest-to-wall plank, 10 pike push-ups, 30s hollow hold, pain-free 90° wrist extension",
+    "conditioning_hours_per_week": 3,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "kyleweiger-handstand",
+      "straighttalking-cali-timelines",
+      "gmb-training-frequency",
+      "overcoming-gravity-2e"
+    ],
+    "human_label": "9–20 months to a consistent freestanding handstand; a first reliable 10-second freestanding hold typically lands 3–6 months in",
+    "notes": "Balance and HSPU tracks run in parallel; the tree total follows the balance track. Sources disagree on the tail — see divergence_notes on the generated tree. Frequency dominates: short daily exposure beats long weekly sessions because this is a motor-learning problem, not a strength problem.",
+    "parallel_tracks": true,
+    "variance_drivers_extra": [
+      {
+        "factor": "prior_inversion_experience",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Gymnastics, dance, cheer or yoga backgrounds routinely cut the freestanding milestones to a third of the listed time. This is the strongest single predictor on this tree."
+      },
+      {
+        "factor": "wrist_tolerance",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Wrist pain, not balance or strength, is the most commonly reported reason handstand practice stalls. Athletes who skip mob-wrist-load lose more time to forced rest than the conditioning would have cost."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Chest-to-wall plank",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "wall-plank",
+        "rationale": "Baseline inverted shoulder endurance.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Pike push-ups",
+        "target": "10 reps",
+        "metric": "reps",
+        "value": 10,
+        "related_step_id": "pike-push-up",
+        "rationale": "Overhead pressing capacity so the shoulders are not the limiter while balancing.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Hollow body hold",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "hollow-extended",
+        "rationale": "Without a hollow the line banana-backs and balance corrections stop working.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Loaded wrist extension",
+        "target": "pain-free at 90°",
+        "metric": "custom",
+        "related_step_id": "mob-wrist-load",
+        "rationale": "Wrist tolerance is the most frequently reported reason handstand practice stalls.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "wall-dependency",
+        "at_step_ids": [
+          "back-to-wall-handstand",
+          "freestanding-handstand"
+        ],
+        "signal": "Comfortable for 60s at the wall but under 5s freestanding, for months",
+        "typical_causes": [
+          "All practice volume happening against the wall, which trains the shape but never the correction",
+          "No bail-out skill, so the athlete never truly commits",
+          "Practising only when fresh enough to be afraid of falling"
+        ],
+        "resolution": [
+          "Shift at least half the volume to freestanding attempts even though they are short",
+          "Drill pirouette and cartwheel exits until falling is boring",
+          "Count total freestanding attempts per week as the metric, not hold time"
+        ],
+        "expected_stall_weeks": {
+          "min": 6,
+          "max": 20
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "kyleweiger-handstand",
+          "straighttalking-cali-timelines"
+        ]
+      },
+      {
+        "id": "wrist-limited-volume",
+        "at_step_ids": [
+          "chest-to-wall-handstand",
+          "wall-shoulder-taps"
+        ],
+        "signal": "Sessions consistently end because of wrist discomfort rather than fatigue or loss of balance",
+        "typical_causes": [
+          "Wrist conditioning skipped or rushed",
+          "Too much volume added in one jump"
+        ],
+        "resolution": [
+          "Insert a dedicated 8-week mob-wrist-load block",
+          "Use parallettes for part of the volume to reduce the extension angle"
+        ],
+        "expected_stall_weeks": {
+          "min": 4,
+          "max": 12
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "id": "neural-overreach",
+        "at_step_ids": [
+          "freestanding-handstand",
+          "freestanding-handstand-60"
+        ],
+        "signal": "Balance markedly worse after long or frequent sessions, and worse again the following day",
+        "typical_causes": [
+          "Treating a motor-learning skill like a strength session",
+          "Practising deep into fatigue, which encodes the wrong corrections"
+        ],
+        "resolution": [
+          "Cap sessions at 15–20 minutes and raise frequency instead",
+          "Stop the session when hold quality drops rather than when time runs out"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 8
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "kyleweiger-handstand",
+          "gmb-training-frequency"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "chest-to-wall-handstand",
+          "wall-shoulder-taps",
+          "freestanding-handstand"
+        ],
+        "mechanism": "Full bodyweight through ~90° of wrist extension, repeated, with volume rising faster than tissue tolerance",
+        "onset_weeks_from_entry": {
+          "min": 2,
+          "max": 12
+        },
+        "prophylaxis": [
+          "Non-negotiable wrist prep every session before inverting",
+          "Build loaded wrist tolerance over at least 8 weeks before high-volume handstand work",
+          "Split volume between floor and parallettes"
+        ],
+        "red_flags": [
+          "Dorsal wrist pinching under load",
+          "Ache that outlasts the session"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "kyleweiger-handstand"
+        ]
+      },
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "wall-hspu",
+          "freestanding-hspu"
+        ],
+        "mechanism": "Repeated end-range overhead pressing at bodyweight before overhead range is fully owned",
+        "onset_weeks_from_entry": {
+          "min": 12,
+          "max": 36
+        },
+        "prophylaxis": [
+          "Earn overhead flexion without rib flare before HSPU volume",
+          "Keep HSPU and balance work on separate days when volume is high"
+        ],
+        "red_flags": [
+          "Pinching at the top of the press",
+          "Loss of overhead range between sessions"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 4,
+          "max": 6
+        },
+        "hard_sets_per_session": {
+          "min": 6,
+          "max": 12
+        },
+        "notes": "The exception to the portfolio-wide 3–4 session default. Balance is a motor-learning problem: many short exposures beat few long ones. Keep sessions to 15–25 minutes and stop on quality, not on the clock.",
+        "source_ids": [
+          "kyleweiger-handstand",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Balance clearly worse at the end of a session than at the start, repeatedly",
+        "Wrists dictating when the session ends",
+        "Kick-ups becoming less consistent week over week",
+        "Shoulders sore before the session begins"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 6
+        },
+        "protocol": "Keep frequency, halve the sets, stay at the wall for a week.",
+        "trigger": "Consistency dropping for two consecutive weeks, or any wrist ache carrying between sessions.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "kyleweiger-handstand"
+        ]
+      }
+    }
+  }
+}

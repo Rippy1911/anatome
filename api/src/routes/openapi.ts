@@ -54,7 +54,7 @@ const exerciseResultSchema = {
     anatome_layers_payload: { type: "array", items: { type: "object" } },
     instructions: { type: "array", items: { type: "string" } },
     images: { type: "array", items: { type: "string" }, description: "Relative free-exercise-db image paths (e.g. Barbell_Bench_Press_-_Medium_Grip/0.jpg). Prefix with the exercises/ base or use source_images for ready-to-embed URLs." },
-    source_images: { type: "array", items: { type: "string" }, description: "Anatome-hosted absolute URLs for each free-exercise-db reference photo (CC0), served via /exerciseImage. Ready for <img src>." },
+    source_images: { type: "array", items: { type: "string" }, description: "Anatome-hosted absolute URLs for each free-exercise-db reference photo, served via /exerciseImage. Ready for <img src>. Licence unverified — the photography is not covered by the dataset's Unlicense and is not cleared for redistribution." },
     movementType: { type: "string", nullable: true, description: "Alias of mechanic (compound / isolation)" },
     keywords: { type: "array", items: { type: "string" } },
     variations: {
@@ -74,7 +74,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
     info: {
       title: "Anatome — Muscle Group Image Generator API",
       version: "2.0.0",
-      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercises from free-exercise-db (CC0). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
+      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercise records from free-exercise-db (Unlicense; the dataset's photography is of unverified origin and is not cleared for redistribution). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
       termsOfService: "https://anatome.dev/tos",
       contact: { name: "NextSolutions", url: "https://nextsolutions.studio", email: "contact@nextsolutions.studio" },
       license: { name: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
@@ -88,6 +88,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       { name: "Exercise Database", description: "873 exercises with muscle mappings" },
       { name: "MCP", description: "Model Context Protocol JSON-RPC" },
       { name: "Discovery", description: "Catalog and capability endpoints" },
+      { name: "Skill Guides", description: "Curated calisthenics skill progressions (CC-BY-4.0)" },
     ],
     paths: {
       "/generateImage": {
@@ -146,6 +147,83 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
           tags: ["Discovery"],
           summary: "List distinct equipment values from the exercise bundle",
           responses: { "200": { description: "Equipment list" } },
+        },
+      },
+      "/listGuides": {
+        get: {
+          tags: ["Skill Guides"],
+          summary: "List the bundled skill-progression guides",
+          description: "Curated calisthenics skill catalog (CC-BY-4.0 content, served by this Apache-2.0 API). Returns one row per guide with tree and step counts.",
+          responses: {
+            "200": { description: "Guide list", content: { "application/json": { schema: { type: "object", properties: {
+              ok: { type: "boolean" }, count: { type: "integer" },
+              guides: { type: "array", items: { type: "object", properties: {
+                slug: { type: "string" }, name: { type: "string" }, summary: { type: "string" },
+                tree_count: { type: "integer" }, step_count: { type: "integer" },
+                difficulty_order: { type: "array", items: { type: "string" } },
+                guide_url: { type: "string" },
+              } } },
+              guide_catalog_attribution: { type: "string" }, guide_catalog_license: { type: "string" }, license: { type: "string" },
+            } } } } },
+          },
+        },
+      },
+      "/getGuide": {
+        get: {
+          tags: ["Skill Guides"],
+          summary: "Get one guide plus a summary of each skill tree",
+          parameters: [{ name: "slug", in: "query", required: true, schema: { type: "string" }, example: "calisthenics" }],
+          responses: {
+            "200": { description: "Guide with tree summaries", content: { "application/json": { schema: { type: "object", properties: {
+              ok: { type: "boolean" }, slug: { type: "string" }, name: { type: "string" }, summary: { type: "string" },
+              tree_count: { type: "integer" }, step_count: { type: "integer" },
+              difficulty_order: { type: "array", items: { type: "string" } },
+              trees: { type: "array", items: { type: "object", properties: {
+                slug: { type: "string" }, name: { type: "string" }, family: { type: "string" }, difficulty: { type: "string" },
+                summary: { type: "string" }, step_count: { type: "integer" },
+                prerequisites: { type: "array", items: { type: "string" } },
+                primary_muscles: { type: "array", items: { type: "string" } },
+                anatome_imageSrc: { type: "string", nullable: true, description: "Ready-to-embed muscle diagram for the skill" },
+                tree_url: { type: "string" },
+              } } },
+            } } } } },
+            "400": { description: "Missing or malformed slug" },
+            "404": { description: "Unknown guide" },
+          },
+        },
+      },
+      "/getGuideTree": {
+        get: {
+          tags: ["Skill Guides"],
+          summary: "Get one full skill tree with every progression step",
+          description: "Each step carries intent, cues, common faults, drills, programming, unlock criteria and demo media references.",
+          parameters: [
+            { name: "tree", in: "query", required: true, schema: { type: "string" }, example: "planche" },
+            { name: "guide", in: "query", schema: { type: "string", default: "calisthenics" }, example: "calisthenics" },
+          ],
+          responses: {
+            "200": { description: "Full skill tree", content: { "application/json": { schema: { type: "object", properties: {
+              ok: { type: "boolean" }, guide_slug: { type: "string" }, slug: { type: "string" }, name: { type: "string" },
+              family: { type: "string" }, difficulty: { type: "string" }, summary: { type: "string" },
+              prerequisites: { type: "array", items: { type: "string" } },
+              primary_muscles: { type: "array", items: { type: "string" } },
+              secondary_muscles: { type: "array", items: { type: "string" } },
+              anatome_layers_payload: { type: "array", items: layerSchema },
+              anatome_imageSrc: { type: "string", nullable: true },
+              steps: { type: "array", items: { type: "object", properties: {
+                id: { type: "string" }, order: { type: "integer" }, name: { type: "string" }, level: { type: "string" },
+                intent: { type: "string" },
+                cues: { type: "array", items: { type: "string" } },
+                common_faults: { type: "array", items: { type: "string" } },
+                drills: { type: "array", items: { type: "object" } },
+                programming: { type: "object" },
+                unlock: { type: "object" },
+                media: { type: "array", items: { type: "object" } },
+              } } },
+            } } } } },
+            "400": { description: "Missing or malformed slug" },
+            "404": { description: "Unknown guide or tree" },
+          },
         },
       },
       "/workoutImage": {
@@ -220,7 +298,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/exerciseGif": {
         get: {
           tags: ["Exercise Database"],
-          summary: "Exercise demonstration GIF (2-frame, CC0 source)",
+          summary: "Exercise demonstration GIF (2-frame, unverified-licence source)",
           parameters: [{ name: "id", in: "query", required: true, schema: { type: "string" }, example: "Barbell_Bench_Press_-_Medium_Grip", description: "Exercise ext_id" }],
           responses: {
             "200": { description: "Animated GIF", content: { "image/gif": { schema: { type: "string", format: "binary" } } } },
@@ -231,7 +309,7 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/exerciseImage": {
         get: {
           tags: ["Exercise Database"],
-          summary: "Exercise reference photo (free-exercise-db, CC0)",
+          summary: "Exercise reference photo (free-exercise-db, licence unverified)",
           description: "Proxies a free-exercise-db source JPEG through Anatome's host so consumers (incl. RapidAPI) don't hotlink raw.githubusercontent.com. Pass the relative path from an exercise's images[] field.",
           parameters: [{ name: "path", in: "query", required: true, schema: { type: "string" }, example: "Barbell_Bench_Press_-_Medium_Grip/0.jpg", description: "Relative image path from exercise.images[]" }],
           responses: {

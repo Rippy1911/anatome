@@ -6,9 +6,13 @@ react-native-body-highlighter (MIT licensed):
   Copyright (c) Hicham El Boussarghini
   https://github.com/HichamELBSI/react-native-body-highlighter
 
-This product includes exercise metadata from free-exercise-db (CC0-1.0):
+This product includes exercise metadata from free-exercise-db (Unlicense):
   https://github.com/yuhonas/free-exercise-db
-  CC0 Public Domain dedication
+  Public-domain dedication, metadata only
+
+The photography bundled with that dataset is NOT covered by the dedication.
+Its origin is unverified and it is not cleared for redistribution or
+commercial use. See https://github.com/Rippy1911/anatome/issues/48
 
 ATTRIBUTION
 When using Anatome publicly, attribution is appreciated but not required.

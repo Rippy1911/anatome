@@ -1,0 +1,632 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "nordic-curl",
+  "name": "Nordic Curl",
+  "family": "legs",
+  "difficulty": "advanced",
+  "summary": "Best bodyweight hamstring eccentric. Protects knees for pistol/running.",
+  "prerequisites": [],
+  "entry_assessment": [
+    {
+      "name": "Hinge pattern",
+      "target": "pain-free"
+    },
+    {
+      "name": "Reverse plank or GHR-ish",
+      "target": "30s / 10 reps"
+    }
+  ],
+  "equipment": [
+    "partner-or-strap",
+    "band",
+    "floor"
+  ],
+  "primary_muscles": [
+    "hamstring"
+  ],
+  "secondary_muscles": [
+    "gluteal",
+    "calves"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "hamstring"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "gluteal",
+        "calves"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps",
+    "value": 5,
+    "sets": 3,
+    "notes": "full Nordic, controlled descent"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2"
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute hamstring strain",
+      "Unstable knees"
+    ],
+    "notes": "Eccentrics cause DOMS — start with assisted/partials."
+  },
+  "sources": [
+    "CM",
+    "community"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Hips extended",
+        "Lower with hamstrings"
+      ],
+      "common_faults": [
+        "Piking at hips"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-assisted",
+      "order": 1,
+      "name": "Band-assisted Nordic",
+      "level": "beginner",
+      "intent": "Learn the pattern with assistance.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 6
+        },
+        "from_level": "no structured eccentric hamstring work",
+        "conditioning_hours_per_week": 1,
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ],
+        "scope": "step",
+        "notes": "Weeks 1–4 of the published protocol: 1 session/week of 2×5 ramping to 3 sessions/week of 3×6–8."
+      }
+    },
+    {
+      "cues": [
+        "3–5s eccentric"
+      ],
+      "common_faults": [
+        "Falling uncontrolled"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-eccentric",
+      "order": 2,
+      "name": "Eccentric Nordic (catch with hands)",
+      "level": "intermediate",
+      "intent": "Slow lower, catch at bottom.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "4–6",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 10
+        },
+        "from_level": "3×8 band-assisted Nordics without hamstring cramping",
+        "conditioning_hours_per_week": 1,
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ],
+        "scope": "step",
+        "notes": "Weeks 5–10 of the published protocol: 3 sessions/week of 3×12, 10 and 8. This is where the measured 11% eccentric torque gain occurs."
+      }
+    },
+    {
+      "cues": [
+        "Stop before collapse"
+      ],
+      "common_faults": [
+        "Going too deep too soon"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-partial",
+      "order": 3,
+      "name": "Partial Nordic",
+      "level": "advanced",
+      "intent": "Lower as far as you can, pull back.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "4",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 4,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "3×8 full-range eccentric Nordics caught with the hands",
+        "conditioning_hours_per_week": 1,
+        "confidence": "estimated",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ],
+        "scope": "step",
+        "notes": "Beyond the published trials. Interpolated."
+      }
+    },
+    {
+      "cues": [
+        "Slow descent",
+        "Pull back if able"
+      ],
+      "common_faults": [
+        "Using arms early"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "nordic-full",
+      "order": 4,
+      "name": "Full Nordic curl",
+      "level": "elite",
+      "intent": "Controlled full ROM Nordic.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "title": "Nordic hamstring curl — short demo (~25s clip)",
+          "channel": "Squat University",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=htyDuCI8cm8",
+          "attribution": "Squat University — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Natural_Glute_Ham_Raise",
+          "title": "Form GIF · Natural Glute Ham Raise",
+          "channel": "anatome.dev",
+          "ext_id": "Natural_Glute_Ham_Raise",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Natural_Glute_Ham_Raise.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 32
+        },
+        "from_level": "5 partial Nordics with a controlled concentric out of the bottom third",
+        "conditioning_hours_per_week": 1,
+        "confidence": "estimated",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ],
+        "scope": "step",
+        "notes": "Beyond the published trials. A genuinely unassisted concentric Nordic is rare and many athletes plateau at partial range indefinitely."
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 30,
+      "max": 64
+    },
+    "from_level": "Pain-free knee flexion under load, 10 glute-ham bridges, no acute hamstring injury in the last 6 weeks",
+    "conditioning_hours_per_week": 1,
+    "confidence": "published-standard",
+    "source_ids": [
+      "mjolsnes-2004-nordic",
+      "petersen-2011-nordic"
+    ],
+    "human_label": "7–15 months to a full unassisted Nordic; the published 10-week protocol gets most athletes through the assisted and eccentric stages",
+    "notes": "This is the best-sourced tree in the library. The first two steps map directly onto the Mjølsnes 10-week / Petersen 27-session protocol (week 1 at 2×5, building to 3 sessions per week of 3×12, 10 and 8 by weeks 5–10), which produced an 11% increase in eccentric hamstring torque. The partial and full steps are extrapolations beyond where the trials stop.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Glute-ham bridge",
+        "target": "10 reps",
+        "metric": "reps",
+        "value": 10,
+        "rationale": "Baseline posterior-chain capacity before high-force eccentrics.",
+        "source_ids": [
+          "mjolsnes-2004-nordic"
+        ]
+      },
+      {
+        "name": "No acute hamstring injury",
+        "target": "at least 6 weeks symptom-free",
+        "metric": "custom",
+        "rationale": "The Nordic is a rehabilitation and prevention tool but is contraindicated during an acute strain.",
+        "source_ids": [
+          "petersen-2011-nordic"
+        ]
+      },
+      {
+        "name": "Pain-free loaded knee flexion",
+        "target": "pain-free",
+        "metric": "custom",
+        "rationale": "Knee and rear-knee contact tolerance.",
+        "source_ids": [
+          "mjolsnes-2004-nordic"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "no-concentric-ever",
+        "at_step_ids": [
+          "nordic-partial",
+          "nordic-full"
+        ],
+        "signal": "Eccentric control keeps improving but no concentric out of the bottom ever appears",
+        "typical_causes": [
+          "Training eccentrics only — the published protocols are eccentric-only by design and stop there",
+          "Expecting a concentric Nordic to emerge from eccentric work alone"
+        ],
+        "resolution": [
+          "Add assisted concentric work from the bottom third specifically",
+          "Accept the partial as a legitimate endpoint — the measured injury-prevention benefit comes from the eccentric, not from the full rep"
+        ],
+        "expected_stall_weeks": {
+          "min": 8,
+          "max": 40
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ]
+      },
+      {
+        "id": "doms-driven-stall",
+        "at_step_ids": [
+          "nordic-assisted",
+          "nordic-eccentric"
+        ],
+        "signal": "Severe soreness for 4–6 days after every session, blocking the next one",
+        "typical_causes": [
+          "Starting at full protocol volume rather than at 2×5",
+          "Adding sessions faster than the published 10-week ramp"
+        ],
+        "resolution": [
+          "Follow the published ramp exactly: 1 session/week of 2×5 in week 1, reaching 3 sessions/week of 3×12, 10 and 8 only by weeks 5–10",
+          "Reduce range before reducing frequency"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 6
+        },
+        "confidence": "published-standard",
+        "source_ids": [
+          "petersen-2011-nordic",
+          "mjolsnes-2004-nordic"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "hamstring",
+        "peaks_at_step_ids": [
+          "nordic-eccentric",
+          "nordic-partial"
+        ],
+        "mechanism": "Very high eccentric force at long muscle length — the exact stimulus that confers the protective effect, and also the one that strains an unprepared muscle",
+        "onset_weeks_from_entry": {
+          "min": 1,
+          "max": 8
+        },
+        "prophylaxis": [
+          "Follow the 10-week ramp rather than jumping to full volume",
+          "Always perform after a proper warm-up, never cold",
+          "Reduce range rather than reps when soreness accumulates"
+        ],
+        "red_flags": [
+          "Sharp localised pain rather than diffuse soreness",
+          "Soreness still severe at 72 hours"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "mjolsnes-2004-nordic",
+          "petersen-2011-nordic"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 1,
+          "max": 3
+        },
+        "hard_sets_per_session": {
+          "min": 2,
+          "max": 3
+        },
+        "notes": "Directly from the published protocol: week 1 is a single session of 2×5, ramping to 3 sessions per week of 3×12, 10 and 8 by weeks 5–10, for 27 sessions across 10 weeks. Do not exceed this — the trial that demonstrated the protective effect used exactly this dose.",
+        "source_ids": [
+          "petersen-2011-nordic",
+          "mjolsnes-2004-nordic"
+        ]
+      },
+      "too_much_signals": [
+        "Soreness lasting beyond 72 hours",
+        "Reduced sprint or jump performance in the days after a session",
+        "Range of the controlled descent shortening week over week"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 10,
+          "max": 12
+        },
+        "protocol": "Drop to one maintenance session per week of 3×12, 10 and 8 after completing the 10-week block.",
+        "trigger": "End of the 10-week block, or soreness blocking other training.",
+        "source_ids": [
+          "petersen-2011-nordic"
+        ]
+      }
+    }
+  }
+}

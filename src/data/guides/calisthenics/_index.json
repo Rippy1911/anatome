@@ -1,0 +1,682 @@
+{
+  "_provenance": {
+    "source": "portfolio content library _content/calisthenics — progression text CC-BY-4.0",
+    "note": "Bundled snapshot, superseded at runtime by api.anatome.dev once it serves the catalog (see src/lib/guides.js). Two transforms are applied on the way in: AI-generated demo GIFs are dropped (rejected on review), and free-exercise-db imagery has its licence marked unverified because the upstream rights chain is defective.",
+    "snapshot_taken": "2026-07-27"
+  },
+  "schema_version": 2,
+  "name": "Calisthenics Skill Library",
+  "summary": "Open-source calisthenics skill progressions: Core 6 + foundations + high-ROI extras. JSON catalog + portable HTML guide with anatome.dev muscle maps and YouTube demos.",
+  "license": "CC-BY-4.0",
+  "difficulty_order": [
+    "beginner",
+    "intermediate",
+    "advanced",
+    "elite"
+  ],
+  "sources_legend": {
+    "OG2": "Overcoming Gravity, 2nd ed. (Steven Low) — cited conventions, not copied text",
+    "FF": "FitnessFAQs (Daniel Vadnal)",
+    "GMB": "Gold Medal Bodies",
+    "CM": "Calisthenic Movement",
+    "RR": "r/bodyweightfitness Recommended Routine",
+    "CC": "Convict Conditioning",
+    "GB": "Gymnastic Bodies",
+    "SW": "Street-workout / community",
+    "community": "Sports-science / community norms"
+  },
+  "confidence_levels": {
+    "published-standard": "A specific number in this row is stated by a peer-reviewed study or a published training standard (tier peer-reviewed / published-standard).",
+    "coach-consensus": "Two or more independent reputable coaches or a widely used reference book give compatible ranges; no controlled trial exists.",
+    "estimated": "No source states this number. Derived by interpolating between sourced anchor steps using the logarithmic rate-of-adaptation model. Treat as an order-of-magnitude guide only."
+  },
+  "sources": [
+    {
+      "id": "overcoming-gravity-2e",
+      "title": "Overcoming Gravity: A Systematic Approach to Gymnastics and Bodyweight Strength (2nd Edition)",
+      "author": "Steven Low",
+      "year": 2016,
+      "url": "https://stevenlow.org/overcoming-gravity/",
+      "tier": "coach-published",
+      "backs": "Progression-chart level placement (derived from the FIG Code of Points), the ~12–18 month beginner→intermediate window covering handstand / front lever / back lever / straddle planche, the 'no progress for ~4 weeks → close the cycle and deload' rule, and relative ordering of steps within each tree."
+    },
+    {
+      "id": "stevenlow-rate-adaptation",
+      "title": "Performance and rate of adaptation over time",
+      "author": "Steven Low",
+      "year": 2018,
+      "url": "https://stevenlow.org/performance-and-rate-of-adaptation-over-time/",
+      "tier": "coach-published",
+      "backs": "The logarithmic rate-of-adaptation model: each further step toward genetic potential costs disproportionately more time. Used to interpolate `estimated` rows between sourced anchor steps, and to justify why late-tree steps carry much wider min–max bands than early ones."
+    },
+    {
+      "id": "acsm-progression-2009",
+      "title": "ACSM Position Stand: Progression Models in Resistance Training for Healthy Adults",
+      "author": "American College of Sports Medicine (Ratamess et al.)",
+      "year": 2009,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19204579/",
+      "tier": "published-standard",
+      "backs": "Rate of strength gain by training status (~40% untrained, 20% moderately trained, 16% trained, 10% advanced, 2% elite, over 4 weeks–2 years); most strength gain occurs in the first 4–8 weeks; recommended frequency 2–3 d/wk novice, 3–4 d/wk intermediate, 4–5 d/wk advanced; the 2–10% load-increase rule once a target rep range is exceeded by 1–2 reps."
+    },
+    {
+      "id": "bohm-2015-tendon",
+      "title": "Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis of exercise intervention studies on healthy adults",
+      "author": "Bohm S, Mersmann F, Arampatzis A — Sports Medicine Open 1:7",
+      "year": 2015,
+      "url": "https://doi.org/10.1186/s40798-015-0009-9",
+      "tier": "peer-reviewed",
+      "backs": "Tendon stiffness responds to loading within 8 weeks, but interventions of ≥12 weeks are more effective; high loading magnitude (~90% MVC) drives adaptation more than contraction type. Basis for the connective-tissue lag in every `injury_risk_timeline` row and for the minimum conditioning windows on german-hang, wrist and biceps-tendon steps."
+    },
+    {
+      "id": "arampatzis-2024-loading",
+      "title": "Effect of the temporal coordination and volume of cyclic mechanical loading on human Achilles tendon adaptation in men",
+      "author": "Arampatzis A et al. — Scientific Reports 14",
+      "year": 2024,
+      "url": "https://www.nature.com/articles/s41598-024-56840-6",
+      "tier": "peer-reviewed",
+      "backs": "The major change in tendon stiffness occurs within the first 8 weeks, and within a 2.5–5 sessions/week range the exact frequency and total volume matter less than loading intensity. Basis for the `volume_patterns.productive.sessions_per_week` bands and for advising against high-frequency volume chasing."
+    },
+    {
+      "id": "mujika-2000-detraining-1",
+      "title": "Detraining: loss of training-induced physiological and performance adaptations. Part I: short term insufficient training stimulus",
+      "author": "Mujika I, Padilla S — Sports Medicine 30(2):79–87",
+      "year": 2000,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10966148/",
+      "tier": "peer-reviewed",
+      "backs": "Layoffs shorter than 4 weeks cause only limited strength decline in strength-trained athletes (non-significant bench/squat losses at 2 weeks), though eccentric force and EMG activity drop 8–13%. Basis for the `layoff-under-4-weeks` regression trigger."
+    },
+    {
+      "id": "mujika-2000-detraining-2",
+      "title": "Detraining: loss of training-induced physiological and performance adaptations. Part II: long term insufficient training stimulus",
+      "author": "Mujika I, Padilla S — Sports Medicine 30(3):145–154",
+      "year": 2000,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11132123/",
+      "tier": "peer-reviewed",
+      "backs": "Force production of strength-trained athletes declines by only 7–12% over 8–12 weeks of inactivity, and recently acquired strength gains are largely retained for at least 12 weeks. Basis for the `layoff-8-12-weeks` regression trigger and for the claim that returning athletes regain steps far faster than they first earned them."
+    },
+    {
+      "id": "mjolsnes-2004-nordic",
+      "title": "A 10-week randomized trial comparing eccentric vs. concentric hamstring strength training in well-trained soccer players",
+      "author": "Mjølsnes R, Arnason A, Østhagen T, Raastad T, Bahr R — Scand J Med Sci Sports 14:311–317",
+      "year": 2004,
+      "url": "https://onlinelibrary.wiley.com/doi/10.1046/j.1600-0838.2003.367.x",
+      "tier": "peer-reviewed",
+      "backs": "The original Nordic hamstring protocol: 10 weeks, progressing 2×6 to 3×8–12 over the first 4 weeks then increasing load for 6 weeks, producing an 11% increase in eccentric hamstring torque. Directly backs the nordic-curl tree's early-step week counts and set/rep ramp."
+    },
+    {
+      "id": "petersen-2011-nordic",
+      "title": "Preventive effect of eccentric training on acute hamstring injuries in men's soccer: a cluster-randomized controlled trial (Nordic Hamstring Protocol)",
+      "author": "Petersen J, Thorborg K, Nielsen MB, Budtz-Jørgensen E, Hölmich P — Am J Sports Med 39(11):2296–2303",
+      "year": 2011,
+      "url": "http://www.gluteforce.com/images/AJSM_effects_of_eccentric_training_on_hamstring.pdf",
+      "tier": "peer-reviewed",
+      "backs": "The 27-session / 10-week Nordic ramp: week 1 is 1 session of 2×5, building to 3 sessions/week of 3×12, 10, 8 by weeks 5–10. Backs the nordic-curl `volume_patterns` and the eccentric-first ordering of that tree."
+    },
+    {
+      "id": "rbwf-recommended-routine",
+      "title": "r/bodyweightfitness Recommended Routine (community wiki)",
+      "author": "r/bodyweightfitness moderators and contributors",
+      "year": 2024,
+      "url": "https://redditbwf.github.io/wiki/recommended_routine.html",
+      "tier": "community",
+      "backs": "The '3 sets of 30 seconds then advance' rule for static holds and '3×5–8 reps then advance' for dynamic ones — the unlock convention this catalog already encodes. Also backs the expected feedback cadence (form progress within 2–3 sessions, visible change at 4–6 weeks, externally visible at 12+ weeks)."
+    },
+    {
+      "id": "movement-athlete-front-lever",
+      "title": "The Most Effective Front Lever Progression (stage-by-stage timeline table)",
+      "author": "The Movement Athlete",
+      "year": 2024,
+      "url": "https://themovementathlete.com/front-lever-progression/",
+      "tier": "coach-published",
+      "backs": "Per-stage front lever timings: foundation 3–4 months, tuck 2–3 months, advanced tuck 2–3 months, straddle 3–4 months, full 3–6 months; and totals by entry level (18–24 months from <5 pull-ups, 12–18 months from 10+ pull-ups, 6–12 months from a tuck hold)."
+    },
+    {
+      "id": "straighttalking-cali-timelines",
+      "title": "How Long Does It Take To Get To A 'Good' Level In Calisthenics?",
+      "author": "Straight Talking Fitness",
+      "year": 2018,
+      "url": "https://straighttalkingfitness.com/2018/10/13/how-long-does-it-take-to-get-to-a-good-level-in-calisthenics/",
+      "tier": "coach-published",
+      "backs": "Handstand 10–30s hold in 3–9 months; front/back lever mastery 9 months–2 years; the observation that back lever arrives materially earlier than front lever and that biceps-tendon tolerance plus shoulder-extension mobility are the back lever's rate limiters."
+    },
+    {
+      "id": "kyleweiger-handstand",
+      "title": "How Long Does It Take To Learn A Handstand?",
+      "author": "Kyle Weiger",
+      "year": 2024,
+      "url": "https://kyleweiger.com/how-long-does-it-take-to-learn-a-handstand/",
+      "tier": "coach-published",
+      "backs": "A reliable 10-second freestanding handstand in 3–6 months at 3–5 sessions/week, continuing toward 30 seconds over the following 6–12 months; coached vs uncoached practice can be the difference between 6 months and 2 years to the same milestone."
+    },
+    {
+      "id": "gmb-training-frequency",
+      "title": "Advice For GMB N00bs From Our Top Clients",
+      "author": "GMB Fitness",
+      "year": 2023,
+      "url": "https://gmb.io/n00b-advice/",
+      "tier": "coach-published",
+      "backs": "Start at 3 sessions/week and only add days once that is sustained; consistent moderate frequency beats ambitious schedules that get missed. Backs the conservative end of every `volume_patterns.productive.sessions_per_week` band and the wrist-conditioning-before-volume rule."
+    }
+  ],
+  "default_variance_drivers": [
+    {
+      "factor": "bodyweight",
+      "direction": "slower",
+      "impact": "high",
+      "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+    },
+    {
+      "factor": "training_age",
+      "direction": "faster",
+      "impact": "high",
+      "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+    },
+    {
+      "factor": "chronological_age",
+      "direction": "slower",
+      "impact": "moderate",
+      "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+    },
+    {
+      "factor": "limb_length",
+      "direction": "slower",
+      "impact": "moderate",
+      "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+    },
+    {
+      "factor": "session_frequency",
+      "direction": "faster",
+      "impact": "high",
+      "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+    },
+    {
+      "factor": "coaching_and_feedback",
+      "direction": "faster",
+      "impact": "moderate",
+      "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+    }
+  ],
+  "default_regression_triggers": [
+    {
+      "id": "layoff-under-4-weeks",
+      "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+      "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+      "recovery_weeks": {
+        "min": 1,
+        "max": 2
+      },
+      "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+      "confidence": "published-standard",
+      "source_ids": [
+        "mujika-2000-detraining-1"
+      ]
+    },
+    {
+      "id": "layoff-8-12-weeks",
+      "trigger": "Complete training stoppage for 8–12 weeks",
+      "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+      "recovery_weeks": {
+        "min": 3,
+        "max": 8
+      },
+      "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+      "confidence": "published-standard",
+      "source_ids": [
+        "mujika-2000-detraining-2"
+      ]
+    },
+    {
+      "id": "deload-week",
+      "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+      "typical_dropback": "None. Hold times often improve in the week after the deload.",
+      "recovery_weeks": {
+        "min": 0,
+        "max": 1
+      },
+      "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+      "confidence": "coach-consensus",
+      "source_ids": [
+        "overcoming-gravity-2e"
+      ]
+    },
+    {
+      "id": "tendon-irritation-layoff",
+      "trigger": "Tendon pain forcing modified or stopped training",
+      "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+      "recovery_weeks": {
+        "min": 6,
+        "max": 16
+      },
+      "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+      "confidence": "published-standard",
+      "source_ids": [
+        "bohm-2015-tendon",
+        "mujika-2000-detraining-2"
+      ]
+    }
+  ],
+  "default_volume_patterns": {
+    "productive": {
+      "sessions_per_week": {
+        "min": 3,
+        "max": 4
+      },
+      "hard_sets_per_session": {
+        "min": 4,
+        "max": 8
+      },
+      "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+      "source_ids": [
+        "acsm-progression-2009",
+        "arampatzis-2024-loading",
+        "gmb-training-frequency"
+      ]
+    },
+    "too_much_signals": [
+      "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+      "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+      "Needing progressively longer warm-ups to reach the same working quality",
+      "Shape degrading within a set — reaching the time target only by bending arms or piking",
+      "Sleep or appetite disruption alongside stalled numbers"
+    ],
+    "deload": {
+      "every_weeks": {
+        "min": 4,
+        "max": 8
+      },
+      "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+      "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+      "source_ids": [
+        "overcoming-gravity-2e",
+        "acsm-progression-2009"
+      ]
+    }
+  },
+  "provenance_notes": {
+    "verified": {
+      "status": "verified",
+      "summary": "Embed-only. The YouTube Terms of Service permit playback through the embedded player; they do not permit downloading, re-hosting or redistributing the video bytes.",
+      "evidence": [
+        {
+          "claim": "The YouTube Terms of Service prohibit accessing or copying Service content other than as permitted by the Service or with permission from the rights holder.",
+          "url": "https://www.youtube.com/t/terms",
+          "quote": "You are not allowed to: access, reproduce, download, distribute, transmit, broadcast, display, sell, license, alter, modify or otherwise use any part of the Service or any Content except … as permitted by applicable law."
+        }
+      ],
+      "consequence": "Stored as a video id plus a timestamp window, never as bytes. Can supplement a step but can never be the asset that makes a step shippable."
+    },
+    "defective": {
+      "status": "defective",
+      "summary": "The Unlicense on yuhonas/free-exercise-db is a public-domain dedication made by a re-packager who never held copyright in the imagery. A licence cannot be granted by a party that does not hold the right, so the dedication is ineffective as to the images.",
+      "scope_note": "This defect is limited to the IMAGES. The exercise metadata — names, muscle mappings, equipment, instructions, the JSON records themselves — is a compilation genuinely offered by its compiler under the Unlicense and remains safe to use.",
+      "evidence": [
+        {
+          "claim": "The upstream author of the image corpus disclaims copyright ownership and advises against commercial use.",
+          "url": "https://github.com/wrkout/exercises.json/blob/master/CONTRIBUTING.md",
+          "quote": "Currently all exercises have two images, these have been scrapped off the internet, therefore l do not own the copy right for these images and would advise against using them in comercial projects."
+        },
+        {
+          "claim": "The maintainer of the fork we actually consume does not know the provenance of the images.",
+          "url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "quote": "I actually have no idea where the images are from or if they are royalty free so usage would be at your own risk."
+        }
+      ],
+      "consequence": "Treated as third-party copyrighted content of unknown ownership. It may not be re-hosted by us, bundled into offline packs, or shipped inside a commercial app such as airon.coach. scripts/validate.mjs counts every step whose only non-YouTube asset is one of these as media-provenance debt.",
+      "remediation": "Replace with first-party media (tier 3) — see _memory/anatome-media-licensing-strategy.md §4.2."
+    }
+  },
+  "trees": [
+    {
+      "slug": "foundations",
+      "name": "Foundations",
+      "family": "foundation",
+      "difficulty": "beginner",
+      "group": "core",
+      "summary": "Shared prerequisite mini-trees: push-up, dip, pull-up, hollow body, scapular control, L-sit. Feed every elite skill.",
+      "step_count": 33,
+      "primary_muscles": [
+        "chest",
+        "upper-back",
+        "abs"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 36,
+        "max": 72
+      }
+    },
+    {
+      "slug": "elbow-lever",
+      "name": "Elbow Lever",
+      "family": "balance",
+      "difficulty": "intermediate",
+      "group": "extra",
+      "summary": "Straight-arm elbow-supported balance — accessible planche-family skill.",
+      "step_count": 4,
+      "primary_muscles": [
+        "abs",
+        "deltoids",
+        "triceps"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 12,
+        "max": 32
+      }
+    },
+    {
+      "slug": "skin-the-cat",
+      "name": "Skin the Cat",
+      "family": "pull",
+      "difficulty": "intermediate",
+      "group": "extra",
+      "summary": "Shoulder mobility + back-lever feeder. Cheap to learn, high safety ROI.",
+      "step_count": 5,
+      "primary_muscles": [
+        "chest",
+        "biceps",
+        "upper-back"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 15,
+        "max": 32
+      }
+    },
+    {
+      "slug": "handstand",
+      "name": "Handstand",
+      "family": "balance",
+      "difficulty": "advanced",
+      "group": "core",
+      "summary": "Wall → freestanding balance (skill, near-daily), then HSPU and press-to-handstand strength tracks.",
+      "step_count": 10,
+      "primary_muscles": [
+        "deltoids",
+        "trapezius",
+        "abs"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 36,
+        "max": 84
+      }
+    },
+    {
+      "slug": "muscle-up",
+      "name": "Muscle-up",
+      "family": "hybrid",
+      "difficulty": "advanced",
+      "group": "core",
+      "summary": "Pull + transition + dip. Parallel bar (false-grip) and rings tracks. Strict-first with optional kip branch.",
+      "step_count": 12,
+      "primary_muscles": [
+        "upper-back",
+        "chest",
+        "triceps"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 27,
+        "max": 60
+      }
+    },
+    {
+      "slug": "pistol-squat",
+      "name": "Pistol Squat",
+      "family": "legs",
+      "difficulty": "advanced",
+      "group": "extra",
+      "summary": "Single-leg squat — highest-ROI lower-body calisthenics skill.",
+      "step_count": 5,
+      "primary_muscles": [
+        "quadriceps",
+        "gluteal"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 21,
+        "max": 48
+      }
+    },
+    {
+      "slug": "dragon-flag",
+      "name": "Dragon Flag",
+      "family": "core",
+      "difficulty": "advanced",
+      "group": "extra",
+      "summary": "Premier anti-extension core. Feeds front lever, planche line, and flag.",
+      "step_count": 5,
+      "primary_muscles": [
+        "abs",
+        "lower-back"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 24,
+        "max": 60
+      }
+    },
+    {
+      "slug": "nordic-curl",
+      "name": "Nordic Curl",
+      "family": "legs",
+      "difficulty": "advanced",
+      "group": "extra",
+      "summary": "Best bodyweight hamstring eccentric. Protects knees for pistol/running.",
+      "step_count": 4,
+      "primary_muscles": [
+        "hamstring"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 30,
+        "max": 64
+      }
+    },
+    {
+      "slug": "shrimp-squat",
+      "name": "Shrimp Squat",
+      "family": "legs",
+      "difficulty": "advanced",
+      "group": "extra",
+      "summary": "Rear-leg-held single-leg squat — complements pistol for complete unilateral coverage.",
+      "step_count": 4,
+      "primary_muscles": [
+        "quadriceps",
+        "gluteal"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 16,
+        "max": 34
+      }
+    },
+    {
+      "slug": "back-lever",
+      "name": "Back Lever",
+      "family": "pull",
+      "difficulty": "advanced",
+      "group": "core",
+      "summary": "Face-down horizontal lever from German hang. Rings preferred. Do not skip tissue conditioning.",
+      "step_count": 8,
+      "primary_muscles": [
+        "biceps",
+        "chest",
+        "upper-back"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 45,
+        "max": 104
+      }
+    },
+    {
+      "slug": "front-lever",
+      "name": "Front Lever",
+      "family": "pull",
+      "difficulty": "elite",
+      "group": "core",
+      "summary": "Straight-arm horizontal pull hold. Progress tuck → advanced tuck → one-leg/straddle → full, with raises for strength.",
+      "step_count": 9,
+      "primary_muscles": [
+        "upper-back",
+        "abs",
+        "lower-back"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 68,
+        "max": 152
+      }
+    },
+    {
+      "slug": "planche",
+      "name": "Planche",
+      "family": "push",
+      "difficulty": "elite",
+      "group": "core",
+      "summary": "Straight-arm horizontal push hold. Build lean angle, protraction, and progressive tuck → straddle → full.",
+      "step_count": 8,
+      "primary_muscles": [
+        "deltoids",
+        "chest",
+        "abs"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 91,
+        "max": 214
+      }
+    },
+    {
+      "slug": "human-flag",
+      "name": "Human Flag",
+      "family": "core",
+      "difficulty": "elite",
+      "group": "core",
+      "summary": "Side-lever on a vertical pole: top arm pulls, bottom arm pushes, obliques hold the line.",
+      "step_count": 7,
+      "primary_muscles": [
+        "obliques",
+        "upper-back",
+        "deltoids"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 62,
+        "max": 154
+      }
+    },
+    {
+      "slug": "one-arm-pull-up",
+      "name": "One-Arm Pull-up",
+      "family": "pull",
+      "difficulty": "elite",
+      "group": "extra",
+      "summary": "Pulling pinnacle. Weighted → archer → assisted → negative → full OAC/OAP.",
+      "step_count": 5,
+      "primary_muscles": [
+        "upper-back",
+        "biceps"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 84,
+        "max": 220
+      }
+    },
+    {
+      "slug": "mobility-fundamentals",
+      "name": "Mobility Fundamentals",
+      "family": "foundation",
+      "difficulty": "beginner",
+      "group": "core",
+      "summary": "Daily-ready mobility for calisthenics: wrists, shoulder flexion/extension, pike/pancake, bridge. Run before skill work.",
+      "step_count": 8,
+      "primary_muscles": [
+        "forearm",
+        "deltoids",
+        "upper-back"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 24,
+        "max": 56
+      }
+    },
+    {
+      "slug": "hanging-leg-raise",
+      "name": "Hanging Leg Raise",
+      "family": "core",
+      "difficulty": "intermediate",
+      "group": "core",
+      "summary": "Anti-extension from the bar: knee raise → strict HLR → toes-to-bar. Feeds front lever and L-work.",
+      "step_count": 8,
+      "primary_muscles": [
+        "abs",
+        "forearm"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 35,
+        "max": 80
+      }
+    },
+    {
+      "slug": "one-arm-push-up",
+      "name": "One-Arm Push-up",
+      "family": "push",
+      "difficulty": "advanced",
+      "group": "extra",
+      "summary": "Unilateral horizontal push pinnacle. Archer → typewriter → assisted → negative → full OAPU.",
+      "step_count": 8,
+      "primary_muscles": [
+        "chest",
+        "triceps"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 56,
+        "max": 126
+      }
+    },
+    {
+      "slug": "v-sit-manna",
+      "name": "V-Sit / Manna",
+      "family": "core",
+      "difficulty": "elite",
+      "group": "core",
+      "summary": "Compression pinnacle after L-sit: V-sit → straddle V → manna. Hip flexor + triceps compression strength.",
+      "step_count": 8,
+      "primary_muscles": [
+        "abs",
+        "triceps"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 196,
+        "max": 486
+      }
+    },
+    {
+      "slug": "planche-push-up",
+      "name": "Planche Push-up",
+      "family": "push",
+      "difficulty": "elite",
+      "group": "core",
+      "summary": "Bent-arm planche strength: PPPUs → tuck planche push-ups → straddle/full. Parallel to planche hold tree.",
+      "step_count": 8,
+      "primary_muscles": [
+        "deltoids",
+        "chest",
+        "triceps"
+      ],
+      "has_timeline": true,
+      "timeline_weeks": {
+        "min": 122,
+        "max": 314
+      }
+    }
+  ]
+}

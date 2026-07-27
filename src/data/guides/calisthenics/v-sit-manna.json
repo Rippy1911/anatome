@@ -1,0 +1,1120 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "v-sit-manna",
+  "name": "V-Sit / Manna",
+  "family": "core",
+  "difficulty": "elite",
+  "summary": "Compression pinnacle after L-sit: V-sit → straddle V → manna. Hip flexor + triceps compression strength.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Full L-sit",
+      "target": "20–30s"
+    },
+    {
+      "name": "Tuck L-sit",
+      "target": "30s"
+    },
+    {
+      "name": "Pike compression (hands on floor)",
+      "target": "chest near knees"
+    },
+    {
+      "name": "Hollow hold",
+      "target": "45s"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "parallettes",
+    "blocks",
+    "band"
+  ],
+  "primary_muscles": [
+    "abs",
+    "triceps"
+  ],
+  "secondary_muscles": [
+    "deltoids",
+    "adductors",
+    "upper-back"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "abs",
+        "triceps"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "deltoids",
+        "adductors",
+        "upper-back"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 10,
+    "value_max": 15,
+    "sets": 3,
+    "notes": "Straddle manna or advanced V-sit — hips above hands"
+  },
+  "programming": {
+    "strength_frequency_per_week": "3–4",
+    "skill_frequency_per_week": "daily light pike/compression ok",
+    "notes": "Pair with wrist + hip flexor mobility. Never train through sharp hip flexor pain."
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute hip flexor strain",
+      "Wrist pain in compression"
+    ],
+    "notes": "Manna demands exceptional wrist dorsiflexion — build gradually from V-sit."
+  },
+  "divergence_notes": "GB/OG use long L-sit/V-sit holds before manna; FF often cycles compression drills daily.",
+  "sources": [
+    "OG2",
+    "FF",
+    "GB",
+    "CM"
+  ],
+  "tracks": [
+    {
+      "id": "v-sit",
+      "name": "V-sit track",
+      "step_ids": [
+        "vsm-pike-compression",
+        "vsm-tuck-v",
+        "vsm-straddle-v",
+        "vsm-v-sit"
+      ]
+    },
+    {
+      "id": "manna",
+      "name": "Manna track",
+      "step_ids": [
+        "vsm-tuck-manna",
+        "vsm-straddle-manna",
+        "vsm-manna",
+        "vsm-manna-press"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Round upper back slightly",
+        "Pull knees to chest",
+        "Push floor away"
+      ],
+      "common_faults": [
+        "Only hinging at hips without spinal flexion"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-pike-compression",
+      "order": 1,
+      "name": "Pike compression sit",
+      "level": "intermediate",
+      "track": "v-sit",
+      "intent": "Seated pike — chest toward knees, hands by hips. Feeds all compression skills.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 60,
+        "frequency_per_week": "4–5"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Pike compression sit. title names [l-sit] but step covers [pike, v-sit, manna].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "30s floor L-sit and a chest-to-thigh pike fold",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Push down hard",
+        "Knees above hips",
+        "Depress scapulae"
+      ],
+      "common_faults": [
+        "Hips behind hands",
+        "Leaning back"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-tuck-v",
+      "order": 2,
+      "name": "Tuck V-sit",
+      "level": "advanced",
+      "track": "v-sit",
+      "intent": "Support hold with knees above hip line — first V shape.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–20s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Tuck V-sit. title names [l-sit] but step covers [v-sit, manna].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 20
+        },
+        "from_level": "30s pike compression sit",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle",
+        "Toes pointed",
+        "Compression"
+      ],
+      "common_faults": [
+        "Bent knees",
+        "Hips dropping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-straddle-v",
+      "order": 3,
+      "name": "Straddle V-sit",
+      "level": "advanced",
+      "track": "v-sit",
+      "intent": "Legs straddle wide, raised past L-line.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–15s",
+        "rest_seconds": 120,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Straddle V-sit. title names [l-sit] but step covers [v-sit, manna].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 28
+        },
+        "from_level": "15s tuck V-sit",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Maximum compression",
+        "Push floor",
+        "Point toes"
+      ],
+      "common_faults": [
+        "Rounding without height",
+        "Bent arms"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-v-sit",
+      "order": 4,
+      "name": "V-sit hold",
+      "level": "elite",
+      "track": "v-sit",
+      "intent": "Legs together or near together, hips at or above hand level.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–15s",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of V-sit hold. title names [l-sit] but step covers [v-sit, manna].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 20,
+          "max": 48
+        },
+        "from_level": "15s straddle V-sit",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Hips over wrists",
+        "Shoulders forward of hands",
+        "Hard protraction"
+      ],
+      "common_faults": [
+        "Still at L-sit height",
+        "Wrist collapse"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-tuck-manna",
+      "order": 5,
+      "name": "Tuck manna / elevated hips",
+      "level": "elite",
+      "track": "manna",
+      "intent": "Hips clearly above hands — tuck manna shape on parallettes or floor.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–10s",
+        "rest_seconds": 150,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 8,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Tuck manna / elevated hips. title names [l-sit] but step covers [manna, v-sit].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 24,
+          "max": 60
+        },
+        "from_level": "10s full V-sit",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle reduces compression demand",
+        "Shoulders depressed"
+      ],
+      "common_faults": [
+        "Piking without hip height"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-straddle-manna",
+      "order": 6,
+      "name": "Straddle manna",
+      "level": "elite",
+      "track": "manna",
+      "intent": "Legs wide, hips high — primary manna milestone.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–10s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Straddle manna. title names [l-sit] but step covers [manna, v-sit].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 32,
+          "max": 80
+        },
+        "from_level": "10s tuck manna",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Extreme compression",
+        "Parallettes help wrist angle"
+      ],
+      "common_faults": [
+        "Insufficient hip height",
+        "Bent elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-manna",
+      "order": 7,
+      "name": "Full manna hold",
+      "level": "elite",
+      "track": "manna",
+      "intent": "Legs together (or near), hips above hands — elite compression hold.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–10s",
+        "rest_seconds": 180,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 5,
+        "value_max": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Full manna hold. title names [l-sit] but step covers [manna, v-sit].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 52,
+          "max": 130
+        },
+        "from_level": "10s straddle manna",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Compression initiates lift",
+        "Shoulders forward"
+      ],
+      "common_faults": [
+        "Jumping feet instead of pressing"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "vsm-manna-press",
+      "order": 8,
+      "name": "Manna press / lift",
+      "level": "elite",
+      "track": "manna",
+      "intent": "Press from seated pike into manna — dynamic elite goal.",
+      "programming": {
+        "sets": 5,
+        "reps_or_hold": "attempts",
+        "rest_seconds": 180,
+        "frequency_per_week": "1–2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 1,
+        "sets": 1,
+        "notes": "1 clean press to manna"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Manna press / lift. title names [l-sit] but step covers [manna, v-sit].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Pike), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 40,
+          "max": 104
+        },
+        "from_level": "5s full manna hold",
+        "confidence": "estimated"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 196,
+      "max": 486
+    },
+    "from_level": "30s floor L-sit, pike fold with chest to thighs, 30s ring support hold",
+    "conditioning_hours_per_week": 4,
+    "confidence": "estimated",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation"
+    ],
+    "human_label": "V-sit roughly 1–2.5 years from a solid L-sit; a full manna is 4–9+ years and many athletes never achieve it",
+    "notes": "The longest tree in the library and the one where individual variation is most extreme. OG2 places the manna at the very top of the compression chart. Progress is gated by shoulder-extension range and posterior-chain flexibility at least as much as by compression strength, and passive hip and shoulder structure varies enough that some athletes plateau permanently. Treated as `estimated` throughout — no source publishes manna timelines.",
+    "parallel_tracks": true
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Floor L-sit",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "lsit-full",
+        "rationale": "The entry shape for the whole tree.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Pike fold",
+        "target": "chest to thighs, seated",
+        "metric": "custom",
+        "related_step_id": "mob-pike-fold",
+        "rationale": "Compression range gates the V-sit more often than compression strength does.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Shoulder extension range",
+        "target": "hands behind hips, able to lift the body clear",
+        "metric": "custom",
+        "related_step_id": "mob-shoulder-extension",
+        "rationale": "The manna is fundamentally a shoulder-extension problem. Without the range it is not achievable at any strength level.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Ring support hold",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "ring-support-hold",
+        "rationale": "Straight-arm support endurance.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "compression-range-limited",
+        "at_step_ids": [
+          "vsm-tuck-v",
+          "vsm-straddle-v",
+          "vsm-v-sit"
+        ],
+        "signal": "Legs will not rise above horizontal no matter how much hip-flexor work is added",
+        "typical_causes": [
+          "Hamstring and lower-back compression range, not hip-flexor strength, is the limiter",
+          "Active compression never trained — only passive folds"
+        ],
+        "resolution": [
+          "Train active compression: seated leg lifts at end range, not passive stretching",
+          "Add pike fold work in parallel with the strength work"
+        ],
+        "expected_stall_weeks": {
+          "min": 8,
+          "max": 30
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "manna-shoulder-ceiling",
+        "at_step_ids": [
+          "vsm-tuck-manna",
+          "vsm-straddle-manna",
+          "vsm-manna"
+        ],
+        "signal": "No progress over a year or more despite consistent, well-executed practice",
+        "typical_causes": [
+          "Insufficient shoulder-extension range — often a structural limit rather than a training one",
+          "Attempting the manna before owning a full V-sit"
+        ],
+        "resolution": [
+          "Spend a dedicated block on loaded shoulder extension",
+          "Reassess honestly whether this is a realistic goal; many lifelong practitioners never achieve a full manna"
+        ],
+        "expected_stall_weeks": {
+          "min": 52,
+          "max": 208
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "stevenlow-rate-adaptation",
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "vsm-tuck-manna",
+          "vsm-straddle-manna",
+          "vsm-manna"
+        ],
+        "mechanism": "Bodyweight supported at end-range shoulder extension with straight arms — a position most adults cannot passively achieve, let alone load",
+        "onset_weeks_from_entry": {
+          "min": 40,
+          "max": 140
+        },
+        "prophylaxis": [
+          "Build passive then loaded shoulder-extension range across at least 12 weeks before any manna shape",
+          "Use parallettes to reduce the extension demand",
+          "Never force the position"
+        ],
+        "red_flags": [
+          "Front-of-shoulder pain in the support position",
+          "Loss of extension range between sessions"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "tissue": "hamstring",
+        "peaks_at_step_ids": [
+          "vsm-v-sit",
+          "vsm-straddle-manna"
+        ],
+        "mechanism": "Active compression at end range with the hamstrings lengthened and the hip flexors contracting hard against them",
+        "onset_weeks_from_entry": {
+          "min": 20,
+          "max": 70
+        },
+        "prophylaxis": [
+          "Warm up compression range before loading it",
+          "Progress hold time before progressing leg height"
+        ],
+        "red_flags": [
+          "Proximal hamstring tenderness at the sit bone"
+        ],
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "lower-back",
+        "peaks_at_step_ids": [
+          "vsm-manna",
+          "vsm-manna-press"
+        ],
+        "mechanism": "Extreme lumbar and thoracic extension combined with compression load",
+        "onset_weeks_from_entry": {
+          "min": 60,
+          "max": 180
+        },
+        "prophylaxis": [
+          "Distribute extension through the thoracic spine rather than the lumbar",
+          "Stop when the position is achieved by lumbar hinging"
+        ],
+        "red_flags": [
+          "Localised lumbar pain in the manna shape"
+        ],
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 5
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "Higher frequency than the lever trees because much of the work is range-and-position rather than maximal force. Keep individual sets short.",
+        "source_ids": [
+          "gmb-training-frequency",
+          "overcoming-gravity-2e"
+        ]
+      },
+      "too_much_signals": [
+        "Compression range worse at the start of a session than the previous one",
+        "Shoulder-extension range shrinking",
+        "Proximal hamstring tenderness"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 5,
+          "max": 8
+        },
+        "protocol": "One week of unloaded range work and L-sit holds only.",
+        "trigger": "Range regression, or six weeks without progress.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    }
+  }
+}

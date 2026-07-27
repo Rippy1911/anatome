@@ -1,0 +1,639 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "shrimp-squat",
+  "name": "Shrimp Squat",
+  "family": "legs",
+  "difficulty": "advanced",
+  "summary": "Rear-leg-held single-leg squat — complements pistol for complete unilateral coverage.",
+  "prerequisites": [
+    "pistol-squat"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Pistol or deep single-leg squat",
+      "target": "3×5/side or equivalent"
+    },
+    {
+      "name": "Deep knee flexion mobility",
+      "target": "pain-free"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "pole",
+    "box"
+  ],
+  "primary_muscles": [
+    "quadriceps",
+    "gluteal"
+  ],
+  "secondary_muscles": [
+    "hamstring",
+    "calves"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "quadriceps",
+        "gluteal"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "hamstring",
+        "calves"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps_per_side",
+    "value": 5,
+    "sets": 3
+  },
+  "programming": {
+    "strength_frequency_per_week": "2"
+  },
+  "safety": {
+    "injury_risk": "moderate",
+    "contraindications": [
+      "Acute knee pain",
+      "Limited knee flexion"
+    ]
+  },
+  "sources": [
+    "CM",
+    "FF"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Knee tracks toes",
+        "Upright torso as able"
+      ],
+      "common_faults": [
+        "Losing rear-foot grip"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "shrimp-assisted",
+      "order": 1,
+      "name": "Assisted shrimp",
+      "level": "intermediate",
+      "intent": "Hold rear foot, use pole for balance.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5/side",
+        "rest_seconds": 90,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "title": "Pistol squat — demo clip",
+          "channel": "Tom Merrick (Bodyweight Warrior)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Assisted shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "attribution": "Tom Merrick (Bodyweight Warrior) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Kettlebell_Pistol_Squat",
+          "title": "Form GIF · Kettlebell Pistol Squat",
+          "channel": "anatome.dev",
+          "ext_id": "Kettlebell_Pistol_Squat",
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Assisted shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "8 split squats per side",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Control the sit"
+      ],
+      "common_faults": [
+        "Plopping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "shrimp-box",
+      "order": 2,
+      "name": "Box shrimp",
+      "level": "intermediate",
+      "intent": "Partial depth to a box.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5/side",
+        "rest_seconds": 90,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "title": "Pistol squat — demo clip",
+          "channel": "Tom Merrick (Bodyweight Warrior)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Box shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "attribution": "Tom Merrick (Bodyweight Warrior) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Kettlebell_Pistol_Squat",
+          "title": "Form GIF · Kettlebell Pistol Squat",
+          "channel": "anatome.dev",
+          "ext_id": "Kettlebell_Pistol_Squat",
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Box shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "8 assisted shrimps per side",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "3–5s lower"
+      ],
+      "common_faults": [
+        "Twisting"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "shrimp-negative",
+      "order": 3,
+      "name": "Negative shrimp",
+      "level": "advanced",
+      "intent": "Slow eccentric shrimp.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5/side",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "title": "Pistol squat — demo clip",
+          "channel": "Tom Merrick (Bodyweight Warrior)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Negative shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "attribution": "Tom Merrick (Bodyweight Warrior) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Kettlebell_Pistol_Squat",
+          "title": "Form GIF · Kettlebell Pistol Squat",
+          "channel": "anatome.dev",
+          "ext_id": "Kettlebell_Pistol_Squat",
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Negative shrimp. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "8 box shrimps per side",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Rear knee soft toward floor",
+        "Drive up"
+      ],
+      "common_faults": [
+        "Bouncing"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "shrimp-full",
+      "order": 4,
+      "name": "Full shrimp squat",
+      "level": "advanced",
+      "intent": "Unassisted full ROM.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "3–5/side",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "title": "Pistol squat — demo clip",
+          "channel": "Tom Merrick (Bodyweight Warrior)",
+          "start_seconds": 45,
+          "end_seconds": 75,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Full shrimp squat. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=vq5-vdgJc0I",
+          "attribution": "Tom Merrick (Bodyweight Warrior) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Kettlebell_Pistol_Squat",
+          "title": "Form GIF · Kettlebell Pistol Squat",
+          "channel": "anatome.dev",
+          "ext_id": "Kettlebell_Pistol_Squat",
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Full shrimp squat. title names [pistol-squat] but step covers [shrimp-squat].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Kettlebell_Pistol_Squat.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/Rippy1911/anatome/issues/48"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "5 controlled negative shrimps per side",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 16,
+      "max": 34
+    },
+    "from_level": "20 bodyweight squats, 8 split squats per side, pain-free deep knee flexion",
+    "conditioning_hours_per_week": 2,
+    "confidence": "estimated",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation"
+    ],
+    "human_label": "4–8 months from a solid split squat",
+    "notes": "No named coach publishes a shrimp-squat timeline. These numbers are interpolated from the pistol tree, which OG2 places at a comparable level, adjusted upward slightly for the greater knee-flexion and quad-length demand. Treat as an order-of-magnitude guide.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Split squats",
+        "target": "8 reps per side",
+        "metric": "reps_per_side",
+        "value": 8,
+        "rationale": "Baseline unilateral strength in a split stance.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Pain-free deep knee flexion",
+        "target": "heel to glute, kneeling, no pain",
+        "metric": "custom",
+        "rationale": "The rear leg is fully flexed throughout — this is the actual gate.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Quad flexibility",
+        "target": "couch stretch without lumbar compensation",
+        "metric": "custom",
+        "rationale": "A short rectus femoris pulls the pelvis into tilt and makes the shape impossible.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "rear-leg-cramping",
+        "at_step_ids": [
+          "shrimp-box",
+          "shrimp-negative"
+        ],
+        "signal": "Rear hamstring cramps before the working leg is challenged",
+        "typical_causes": [
+          "Rear leg held actively rather than relaxed",
+          "Insufficient quad and hip-flexor length on the rear side"
+        ],
+        "resolution": [
+          "Hold the rear foot rather than actively pulling it",
+          "Add quad and hip-flexor length work before sessions"
+        ],
+        "expected_stall_weeks": {
+          "min": 2,
+          "max": 8
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "balance-limited",
+        "at_step_ids": [
+          "shrimp-full"
+        ],
+        "signal": "Strong enough on box shrimps but topples at the bottom of the full range",
+        "typical_causes": [
+          "Narrow base with no counterbalance",
+          "Descending too fast to correct"
+        ],
+        "resolution": [
+          "Slow the eccentric deliberately",
+          "Hold a light counterweight at arms' length",
+          "Practise fresh at the start of the session"
+        ],
+        "expected_stall_weeks": {
+          "min": 3,
+          "max": 10
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "knee",
+        "peaks_at_step_ids": [
+          "shrimp-negative",
+          "shrimp-full"
+        ],
+        "mechanism": "Deep flexion on the working leg combined with the rear knee contacting the floor",
+        "onset_weeks_from_entry": {
+          "min": 5,
+          "max": 16
+        },
+        "prophylaxis": [
+          "Pad the rear knee",
+          "Progress via box height over 8–12 weeks rather than by forcing depth",
+          "Stop the set when the descent stops being controlled"
+        ],
+        "red_flags": [
+          "Patellar tendon pain at the bottom",
+          "Rear-knee bruising or bursitis"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 8
+        },
+        "notes": "ACSM recommends 3–4 sessions per week for intermediates and 4–5 for advanced trainees. Tendon work shows no additional benefit beyond roughly 2.5–5 sessions per week, so extra frequency mostly buys injury risk.",
+        "source_ids": [
+          "acsm-progression-2009",
+          "arampatzis-2024-loading",
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Hold times shorter in week 3 of a block than in week 1 despite equal or greater effort",
+        "Joint or tendon soreness that is still present at the start of the next session rather than easing during warm-up",
+        "Needing progressively longer warm-ups to reach the same working quality",
+        "Shape degrading within a set — reaching the time target only by bending arms or piking",
+        "Sleep or appetite disruption alongside stalled numbers"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "protocol": "One week at roughly half the usual hard sets, keeping intensity and shape quality intact.",
+        "trigger": "Planned every 4–8 weeks, or immediately after four consecutive weeks without measurable progress.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "acsm-progression-2009"
+        ]
+      }
+    }
+  }
+}

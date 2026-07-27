@@ -9,7 +9,7 @@ Marketing site (Base44): **https://anatome.dev**
 ```
 api/
 ├── src/           # Hono app, routes, shared lib
-├── data/          # bodyPaths.json, exercises.json (873 rows)
+├── data/          # bodyPaths.json, exercises.json (873 rows), guides/ (skill catalog)
 ├── public/gifs/   # 873 exercise demo GIFs (bundled, served at /exerciseGif)
 ├── test/
 └── wrangler.toml
@@ -18,7 +18,12 @@ api/
 ## Endpoints
 
 `generateImage` · `workoutImage` · `searchExercises` · `getExercise` · `resolveExercise` ·
-`exerciseGif` · `listMuscles` · `muscleInfo` · `listEquipment` · `mcp` · `openapi` · `selfTest`
+`exerciseGif` · `listMuscles` · `muscleInfo` · `listEquipment` · `listGuides` · `getGuide` ·
+`getGuideTree` · `mcp` · `openapi` · `selfTest`
+
+The `listGuides` / `getGuide` / `getGuideTree` trio serves the curated skill-progression
+catalog in `data/guides/`. That content is **CC-BY-4.0** (the API code stays Apache-2.0),
+so those responses carry `guide_catalog_attribution` and `guide_catalog_license`.
 
 **Not ported:** `aiDemo` — AI is internal-only on the Base44 frontend (`anatome.dev`).
 
