@@ -7,7 +7,7 @@
 // was scraped and the upstream compiler says so ("I do not own the copy right for
 // these images"). A dedication cannot be granted by someone who never held the
 // right, so we describe the imagery as unverified rather than repeating the claim.
-// See https://github.com/NextSolutionsStudio/anatome/issues/21.
+// See https://github.com/Rippy1911/anatome/issues/48.
 
 export const ATTRIBUTION =
   "Anatomy paths © Hicham El Boussarghini (MIT). Anatome by NextSolutions.";
@@ -21,7 +21,7 @@ export const LICENSE = "Apache-2.0";
 export const GUIDE_CATALOG_ATTRIBUTION =
   "Skill progressions from the Anatome calisthenics catalog by NextSolutions (CC-BY-4.0).";
 export const GUIDE_CATALOG_SOURCE =
-  "https://github.com/NextSolutionsStudio/anatome/tree/main/api/data/guides";
+  "https://github.com/Rippy1911/anatome/tree/main/api/data/guides";
 /** The catalog content is CC-BY-4.0 even though the API code is Apache-2.0. */
 export const GUIDE_CATALOG_LICENSE = "CC-BY-4.0";
 

@@ -22,13 +22,13 @@ The Service is provided "as is" and is intended for use in fitness applications,
 
 ## 2. Open Source
 
-The Anatome codebase is licensed under the Apache License 2.0 and is publicly available at https://github.com/NextSolutionsStudio/anatome. You are free to self-host the Service under the terms of that license, with no obligation to use our hosted endpoint.
+The Anatome codebase is licensed under the Apache License 2.0 and is publicly available at https://github.com/Rippy1911/anatome. You are free to self-host the Service under the terms of that license, with no obligation to use our hosted endpoint.
 
 Third-party assets bundled into the Service retain their original licenses:
 
 - **Anatomical SVG paths**: MIT license, © Hicham El Boussarghini, originally from react-native-body-highlighter
 - **Exercise metadata**: Unlicense (public-domain dedication by its compiler), originally from yuhonas/free-exercise-db
-- **The JPGs and the GIFs derived from them**: **licence unverified — treat as third-party copyright of unknown ownership.** The dedication above covers the compiler's own work, the metadata. It does not reach the photography: that was scraped, and the upstream compiler states he does not hold the copyright in it. We serve these images for reference; we cannot and do not license them onward. Do not redistribute them or ship them in a commercial product. Tracking: [issue #21](https://github.com/NextSolutionsStudio/anatome/issues/21)
+- **The JPGs and the GIFs derived from them**: **licence unverified — treat as third-party copyright of unknown ownership.** The dedication above covers the compiler's own work, the metadata. It does not reach the photography: that was scraped, and the upstream compiler states he does not hold the copyright in it. We serve these images for reference; we cannot and do not license them onward. Do not redistribute them or ship them in a commercial product. Tracking: [issue #21](https://github.com/Rippy1911/anatome/issues/48)
 
 These attributions must be preserved in any redistribution per the respective licenses.
 
@@ -146,7 +146,7 @@ Continued use of the Service after changes constitutes acceptance of the updated
 NextSolutions
 Email: contact@nextsolutions.studio
 Website: https://nextsolutions.studio
-GitHub: https://github.com/NextSolutionsStudio/anatome
+GitHub: https://github.com/Rippy1911/anatome
 
 For security disclosures: security@nextsolutions.studio (or use GitHub Security Advisories).
 

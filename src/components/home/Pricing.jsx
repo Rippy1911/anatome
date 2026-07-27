@@ -36,8 +36,8 @@ export default function Pricing() {
         <p className="text-xs text-muted-foreground mt-5 leading-relaxed border-t border-border pt-4">
           Pricing is cost-recovery — we aim for no profit. Any surplus funds infrastructure and development.
           Self-host at{" "}
-          <a href="https://github.com/NextSolutionsStudio/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-            github.com/NextSolutionsStudio/anatome
+          <a href="https://github.com/Rippy1911/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            github.com/Rippy1911/anatome
           </a>
           {" "}or subscribe on{" "}
           <a href="https://rapidapi.com/slaczka.sebastian/api/anatome" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">

@@ -9,7 +9,7 @@ import {
 
 /** Tracking issue for the defective free-exercise-db imagery licence chain. */
 export const MEDIA_PROVENANCE_ISSUE =
-  "https://github.com/NextSolutionsStudio/anatome/issues/21";
+  "https://github.com/Rippy1911/anatome/issues/48";
 
 const DEFECTIVE_LICENCE_CLAIM = /^(cc0|public[-\s]?domain|unlicense)/i;
 
