@@ -3,19 +3,18 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // THIS IS THE ONLY FILE THAT KNOWS WHERE THE CATALOG COMES FROM.
 //
-// api.anatome.dev does not serve the catalog yet, so every read falls back to a
-// bundled CC-BY-4.0 snapshot in src/data/guides/calisthenics/. When the Worker
-// ships its guide routes, set CATALOG_ENDPOINTS below to the real paths — no
-// component or page needs to change.
+// api.anatome.dev serves the catalog and is the source of truth. A bundled
+// CC-BY-4.0 snapshot in src/data/guides/calisthenics/ backs it up so the page
+// still renders when the Worker is unreachable — but the snapshot is a copy and
+// will drift, so a fallback is a degraded read, not an equivalent one.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { PUBLIC_API, apiUrl } from "@/lib/apiBase";
 
 /**
- * Worker routes for the catalog. These names match the guide routes being added to
- * `api/` (`/listGuides`, `/getGuide?slug=`, `/getGuideTree?guide=&tree=`) and follow
- * the flat camelCase convention of the rest of that API. They are not deployed yet —
- * every one currently 404s — so each read falls back to the bundled snapshot.
+ * Worker routes for the catalog: `/listGuides`, `/getGuide?slug=`,
+ * `/getGuideTree?guide=&tree=`, following the flat camelCase convention of the rest
+ * of that API. All three are live.
  *
  * The API nests trees under a guide, hence the constant: this page shows the
  * calisthenics guide. Point `GUIDE_SLUG` elsewhere, or make it a route param, when a
@@ -35,12 +34,19 @@ const unwrapTree = (json) => (json?.tree ?? json);
 /** Give up on a probe quickly — the page must not hang behind a dead endpoint. */
 const PROBE_TIMEOUT_MS = 2500;
 
-/**
- * Which candidate answered, remembered for the session. `"none"` records that every
- * candidate failed, so later navigations go straight to the snapshot instead of
- * re-probing a Worker we already know does not serve the catalog.
- */
+/** Which candidate answered, remembered for the session so later reads skip the race. */
 const resolvedEndpoint = { index: null, tree: null };
+
+/**
+ * When a probe last found nothing. A miss suppresses the next few probes so a browsing
+ * session does not pay the timeout on every navigation — but it expires, because the
+ * routes are live: a miss now means a blip, not a verdict. Remembering it for the whole
+ * session would pin the reader to the snapshot until reload, hiding catalog corrections
+ * behind a copy that is only as fresh as the last deploy.
+ */
+const missedAt = { index: 0, tree: 0 };
+const MISS_TTL_MS = 30_000;
+const recentlyMissed = (kind) => Date.now() - missedAt[kind] < MISS_TTL_MS;
 
 // Relative on purpose: Vite resolves `import.meta.glob` patterns from this file, not aliases.
 // It is a compile-time macro, so the call must stay literal — wrapping `import.meta` in a
@@ -80,22 +86,23 @@ async function probe(path) {
  * page shell always renders.
  */
 export async function loadGuideIndex() {
-  if (resolvedEndpoint.index !== "none") {
+  if (!recentlyMissed("index")) {
     const candidates = resolvedEndpoint.index
       ? [resolvedEndpoint.index]
       : CATALOG_ENDPOINTS.index;
 
-    // Raced, not sequential: walking dead candidates in series would leave the page
-    // on skeletons for several seconds while the routes are still unpublished.
+    // Raced, not sequential: walking candidates in series would leave the page on
+    // skeletons for several seconds whenever one of them is slow to fail.
     const hit = await Promise.all(
       candidates.map(async (path) => ({ path, json: unwrapIndex(await probe(path)) })),
     ).then((rs) => rs.find((r) => r.json?.trees?.length));
 
     if (hit) {
       resolvedEndpoint.index = hit.path;
+      missedAt.index = 0;
       return { data: hit.json, source: "api", error: null };
     }
-    resolvedEndpoint.index = "none";
+    missedAt.index = Date.now();
   }
 
   try {
@@ -110,7 +117,7 @@ export async function loadGuideIndex() {
 export async function loadGuideTree(slug) {
   if (!slug) return { data: null, source: "none", error: "No tree requested" };
 
-  if (resolvedEndpoint.tree !== "none") {
+  if (!recentlyMissed("tree")) {
     const builders = resolvedEndpoint.tree
       ? [resolvedEndpoint.tree]
       : CATALOG_ENDPOINTS.tree;
@@ -121,9 +128,10 @@ export async function loadGuideTree(slug) {
 
     if (hit) {
       resolvedEndpoint.tree = hit.build;
+      missedAt.tree = 0;
       return { data: hit.json, source: "api", error: null };
     }
-    resolvedEndpoint.tree = "none";
+    missedAt.tree = Date.now();
   }
 
   const loader = snapshotTreeLoader(slug);
