@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Allow only one concurrent run per ref; cancel superseded runs.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend (lint + typecheck)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      # Typecheck has a known pre-existing baseline from the Base44 export.
+      # Non-blocking until cleaned up separately (tracked task). Do not add new errors.
+      - run: npm run typecheck
+        continue-on-error: true
+
+  api:
+    name: API (typecheck + test + wrangler dry-run)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      # The api/ package lands in Phase 3. Until then, skip gracefully.
+      - name: Detect api package
+        id: detect
+        working-directory: .
+        run: |
+          if [ -f api/package.json ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "api/package.json not present yet — skipping API checks."
+          fi
+      - uses: pnpm/action-setup@v4
+        if: steps.detect.outputs.exists == 'true'
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.exists == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: api/pnpm-lock.yaml
+      - name: Install
+        if: steps.detect.outputs.exists == 'true'
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        if: steps.detect.outputs.exists == 'true'
+        run: pnpm run typecheck
+      - name: Unit + worker tests
+        if: steps.detect.outputs.exists == 'true'
+        run: pnpm test && pnpm run worker:test
+      - name: Wrangler dry-run deploy
+        if: steps.detect.outputs.exists == 'true'
+        run: pnpm exec wrangler deploy --dry-run --outdir dist
+
+  deploy:
+    name: Deploy API to Cloudflare
+    needs: [frontend, api]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    # Manual approval gate: configure the "production" environment in GitHub
+    # repo settings with required reviewers. Preview deploys first; production
+    # waits for approval.
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skip if API not ready
+        id: detect
+        working-directory: .
+        run: |
+          if [ -f api/package.json ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: pnpm/action-setup@v4
+        if: steps.detect.outputs.exists == 'true'
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.exists == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: api/pnpm-lock.yaml
+      - name: Install
+        if: steps.detect.outputs.exists == 'true'
+        run: pnpm install --frozen-lockfile
+      - name: Deploy (production)
+        if: steps.detect.outputs.exists == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: api
+          command: deploy --env production
