@@ -1,0 +1,1007 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "hanging-leg-raise",
+  "name": "Hanging Leg Raise",
+  "family": "core",
+  "difficulty": "intermediate",
+  "summary": "Anti-extension from the bar: knee raise → strict HLR → toes-to-bar. Feeds front lever and L-work.",
+  "prerequisites": [
+    "foundations"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Dead hang",
+      "target": "30s"
+    },
+    {
+      "name": "Hollow hold",
+      "target": "30s"
+    },
+    {
+      "name": "Scapular pull-ups",
+      "target": "8"
+    }
+  ],
+  "equipment": [
+    "bar",
+    "rings",
+    "band",
+    "chalk"
+  ],
+  "primary_muscles": [
+    "abs",
+    "forearm"
+  ],
+  "secondary_muscles": [
+    "upper-back",
+    "biceps",
+    "adductors"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "abs",
+        "forearm"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "upper-back",
+        "biceps",
+        "adductors"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "reps",
+    "value": 10,
+    "sets": 3,
+    "notes": "Strict toes-to-bar, no kip"
+  },
+  "programming": {
+    "strength_frequency_per_week": "2–4",
+    "notes": "Initiate from posterior pelvic tilt / hollow. Avoid swinging volume."
+  },
+  "safety": {
+    "injury_risk": "low",
+    "contraindications": [
+      "Acute lower-back pain with hanging",
+      "Elbow tendinopathy limiting hang time"
+    ],
+    "notes": "Bent-knee variants reduce load — use them for volume."
+  },
+  "sources": [
+    "OG2",
+    "FF",
+    "RR",
+    "CM"
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Posterior pelvic tilt",
+        "Knees to chest",
+        "Minimal swing"
+      ],
+      "common_faults": [
+        "Using momentum",
+        "Loosing shoulder engagement"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-knee-raise",
+      "order": 1,
+      "name": "Hanging knee raise",
+      "level": "beginner",
+      "intent": "Learn hollow-initiated hip flexion without swing.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–15",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 15,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Hanging knee raise. title names [hollow-body] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": {
+            "required": true,
+            "text": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "BJ Gaddour",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "30s dead hang",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      }
+    },
+    {
+      "cues": [
+        "Same hollow start",
+        "Control the lower"
+      ],
+      "common_faults": [
+        "Swinging into reps"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-bent-leg",
+      "order": 2,
+      "name": "Hanging bent-leg raise",
+      "level": "beginner",
+      "intent": "Extend lever slightly — knees at 90°.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10",
+        "rest_seconds": 75,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Hanging bent-leg raise. title names [hollow-body] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": {
+            "required": true,
+            "text": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "BJ Gaddour",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "12 hanging knee raises",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Point toes",
+        "Stop at 90° if full ROM not ready"
+      ],
+      "common_faults": [
+        "Arching low back",
+        "Kipping"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-90",
+      "order": 3,
+      "name": "Hanging leg raise to 90°",
+      "level": "intermediate",
+      "intent": "Straight legs to parallel — strict form.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–12",
+        "rest_seconds": 90,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 12,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Hanging leg raise to 90°. title names [hollow-body] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": {
+            "required": true,
+            "text": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "BJ Gaddour",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "12 bent-leg raises",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Hollow body",
+        "Slow negative",
+        "Depress scapulae at top"
+      ],
+      "common_faults": [
+        "Incomplete ROM",
+        "Using hip drive from swing"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-strict",
+      "order": 4,
+      "name": "Strict hanging leg raise",
+      "level": "intermediate",
+      "intent": "Straight legs to the bar or near-bar without kip.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "6–10",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Strict hanging leg raise yet — showing the closest available asset. title names [front-lever] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "10 leg raises to 90° without swing",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Same hollow",
+        "Full extension at bottom"
+      ],
+      "common_faults": [
+        "Half reps",
+        "Excessive kip"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-toes-to-bar",
+      "order": 5,
+      "name": "Toes to bar",
+      "level": "advanced",
+      "intent": "Full ROM — toes touch bar every rep, strict.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "8–10",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Toes to bar yet — showing the closest available asset. title names [front-lever] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "10 strict straight-leg raises",
+        "confidence": "coach-consensus"
+      }
+    },
+    {
+      "cues": [
+        "Control both directions",
+        "Start bent-knee"
+      ],
+      "common_faults": [
+        "Dropping legs uncontrolled"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-windshield",
+      "order": 6,
+      "name": "Windshield wiper (bent knee → straight)",
+      "level": "advanced",
+      "intent": "Rotational control at 90° — oblique + hip flexor strength.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5/side",
+        "rest_seconds": 120,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps_per_side",
+        "value": 5,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "kind": "embed",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Windshield wiper (bent knee → straight). title names [hollow-body] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": {
+            "required": true,
+            "text": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "BJ Gaddour",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "8 strict toes-to-bar",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Point toes",
+        "Hold 3–5s at top of each rep or static"
+      ],
+      "common_faults": [
+        "Swinging up"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-hanging-l",
+      "order": 7,
+      "name": "Hanging L / V raise",
+      "level": "advanced",
+      "intent": "Hold legs at 90° or higher — static compression from hang.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–8",
+        "rest_seconds": 120,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3,
+        "notes": "3s pause at top"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Hanging L / V raise. title names [l-sit] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 6,
+          "max": 14
+        },
+        "from_level": "8 toes-to-bar plus a 20s floor L-sit",
+        "confidence": "estimated"
+      }
+    },
+    {
+      "cues": [
+        "Ankle weights or slow 5s lower"
+      ],
+      "common_faults": [
+        "Ego loading"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "hlr-weighted",
+      "order": 8,
+      "name": "Weighted / slow eccentric HLR",
+      "level": "elite",
+      "intent": "Overload or 5s lowers — strength cap for FL prep.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–8",
+        "rest_seconds": 150,
+        "frequency_per_week": "2"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 8,
+        "sets": 3,
+        "notes": "strict or weighted"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "title": "Front lever progressions — demo clip",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 55,
+          "end_seconds": 85,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Weighted / slow eccentric HLR yet — showing the closest available asset. title names [front-lever] but step covers [hanging-leg-raise].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Leg_Raise",
+          "title": "Form GIF · Hanging Leg Raise",
+          "channel": "anatome.dev",
+          "kind": "gif",
+          "ext_id": "Hanging_Leg_Raise",
+          "role": "demo",
+          "license": "UNVERIFIED",
+          "license_url": "https://github.com/yuhonas/free-exercise-db/issues/2",
+          "license_verified_at": "2026-07-27",
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Leg_Raise.json",
+          "attribution": {
+            "required": true,
+            "text": "Exercise image from free-exercise-db (Hanging_Leg_Raise), rehosted via api.anatome.dev. COPYRIGHT UNKNOWN — the repository's Unlicense covers the JSON metadata only; the upstream author states he does not own the images. Not cleared for redistribution or commercial use.",
+            "author": "Unknown — original photographers not identified",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "defective"
+          },
+          "tier": 6
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 20
+        },
+        "from_level": "15s hanging L hold",
+        "confidence": "estimated"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 35,
+      "max": 80
+    },
+    "from_level": "30s dead hang, 30s hollow hold, 8 scapular pull-ups",
+    "conditioning_hours_per_week": 2,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "rbwf-recommended-routine"
+    ],
+    "human_label": "8–18 months through the whole tree; strict toes-to-bar typically lands at 4–8 months",
+    "notes": "Grip endurance is the hidden limiter on the later steps — many athletes can produce the compression but cannot hold the bar long enough to express it."
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Dead hang",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "rationale": "Grip endurance is the real limiter on the later steps.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Hollow hold",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "hollow-extended",
+        "rationale": "Posterior pelvic tilt must be available before hanging compression.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Scapular pull-ups",
+        "target": "8 reps",
+        "metric": "reps",
+        "value": 8,
+        "related_step_id": "scap-pull",
+        "rationale": "Active shoulders stop the swing that ruins strict form.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "swing-masking",
+        "at_step_ids": [
+          "hlr-strict",
+          "hlr-toes-to-bar"
+        ],
+        "signal": "Rep count is high but every rep uses a visible backswing",
+        "typical_causes": [
+          "Progressing on reps rather than on strictness",
+          "Weak scapular control letting the body pendulum"
+        ],
+        "resolution": [
+          "Pause 1s at the bottom of every rep",
+          "Drop to a lower progression performed strictly and rebuild"
+        ],
+        "expected_stall_weeks": {
+          "min": 3,
+          "max": 10
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "rbwf-recommended-routine",
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "grip-limited",
+        "at_step_ids": [
+          "hlr-hanging-l",
+          "hlr-weighted"
+        ],
+        "signal": "Compression is available but the hands fail before the set target",
+        "typical_causes": [
+          "Grip endurance not trained separately",
+          "Hook grip or thumbless grip never developed"
+        ],
+        "resolution": [
+          "Add dedicated hang time at the end of sessions",
+          "Use straps for compression-focused work while training grip separately"
+        ],
+        "expected_stall_weeks": {
+          "min": 3,
+          "max": 12
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "lower-back",
+        "peaks_at_step_ids": [
+          "hlr-toes-to-bar",
+          "hlr-windshield"
+        ],
+        "mechanism": "Loaded lumbar flexion combined with rotation when the hollow is not maintained",
+        "onset_weeks_from_entry": {
+          "min": 8,
+          "max": 24
+        },
+        "prophylaxis": [
+          "Keep posterior pelvic tilt throughout",
+          "Introduce the windshield wiper bent-knee first",
+          "Stop the set when the tilt is lost"
+        ],
+        "red_flags": [
+          "Lumbar pain during rotation",
+          "Stiffness the following morning"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "hlr-weighted"
+        ],
+        "mechanism": "Passive hanging under added load with inactive scapulae",
+        "onset_weeks_from_entry": {
+          "min": 16,
+          "max": 40
+        },
+        "prophylaxis": [
+          "Stay in an active hang under load",
+          "Add weight in small increments per the 2–10% rule"
+        ],
+        "red_flags": [
+          "Top-of-shoulder ache under load"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "acsm-progression-2009"
+        ]
+      }
+    ]
+  }
+}

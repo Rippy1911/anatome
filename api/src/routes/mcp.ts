@@ -14,8 +14,10 @@ import {
   type ExerciseRow,
 } from "../lib/exercises.ts";
 import { parseFieldsParam, SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
-import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, EXERCISE_DB_ATTRIBUTION } from "../lib/attribution.ts";
+import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, EXERCISE_DB_ATTRIBUTION, guideCatalogAttribution } from "../lib/attribution.ts";
 import { workoutImageLogic } from "../lib/workoutImage.ts";
+import { listGuides as listGuidesLogic, getGuide as getGuideLogic, getGuideTree as getGuideTreeLogic } from "../lib/guides.ts";
+import { DEFAULT_GUIDE_SLUG } from "../data/guideCatalog.ts";
 
 export const TOOLS = [
   { name: "generate_muscle_image", description: "Render an SVG diagram of the human body with arbitrary muscles highlighted in arbitrary colors. Returns an SVG string.",
@@ -67,6 +69,20 @@ export const TOOLS = [
       width: { type: "number", default: 768 },
       height: { type: "number", default: 1024 } },
       required: ["exercises"] } },
+  { name: "list_guides", description: "List the bundled skill-progression guides (curated calisthenics catalog, CC-BY-4.0) with tree and step counts.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} } },
+  { name: "get_guide", description: "Get one guide: its metadata plus a summary of every skill tree it contains (difficulty, prerequisites, step count, muscle map URL).",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {
+      slug: { type: "string", description: "Guide slug, e.g. 'calisthenics'" } },
+      required: ["slug"] } },
+  { name: "get_guide_tree", description: "Get one full skill tree — every progression step with cues, common faults, drills, unlock criteria and demo media. Use for 'how do I train the planche/front lever/handstand'.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {
+      tree: { type: "string", description: "Skill tree slug, e.g. 'planche', 'front-lever', 'handstand'" },
+      guide: { type: "string", default: "calisthenics", description: "Guide slug (defaults to calisthenics)" } },
+      required: ["tree"] } },
 ];
 
 function fullExercise(e: ExerciseRow | null, base: string, fieldsRaw?: string) {
@@ -182,6 +198,22 @@ export function computeMcpResult(
         attribution_source: ATTRIBUTION_SOURCE,
         license: LICENSE,
       };
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
+    }
+    if (name === "list_guides") {
+      const payload = { ...listGuidesLogic(base), ...guideCatalogAttribution() };
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
+    }
+    if (name === "get_guide") {
+      const { found, guide } = getGuideLogic(args.slug, base);
+      if (!found) return { ok: false, error: { code: -32602, message: `Unknown guide: ${args.slug}` } };
+      const payload = { ...guide, ...guideCatalogAttribution() };
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
+    }
+    if (name === "get_guide_tree") {
+      const { found, tree } = getGuideTreeLogic(args.guide ?? DEFAULT_GUIDE_SLUG, args.tree, base);
+      if (!found) return { ok: false, error: { code: -32602, message: `Unknown skill tree: ${args.tree}` } };
+      const payload = { ...tree, ...guideCatalogAttribution() };
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     return { ok: false, error: { code: -32602, message: `Unknown tool: ${name}` } };

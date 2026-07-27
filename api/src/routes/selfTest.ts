@@ -21,7 +21,10 @@ import { SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
 import { edgeCacheHitOnRepeat } from "../lib/edgeCache.ts";
 import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { handleMcp, TOOLS } from "./mcp.ts";
-import { ATTRIBUTION } from "../lib/attribution.ts";
+import { ATTRIBUTION, guideCatalogAttribution } from "../lib/attribution.ts";
+import {
+  listGuides as listGuidesLogic, getGuideTree as getGuideTreeLogic, guideStepCount, safeGuideSlug,
+} from "../lib/guides.ts";
 import { IP_DAY_LIMIT, HOST_DAY_LIMIT, isPrivateIp, isLocalHost } from "../lib/rateLimit.ts";
 
 const BODY_DEFAULT_COLOR = "#575757";
@@ -77,7 +80,7 @@ export async function runSelfTest(bodyData: BodyData) {
 
   // ---- MCP ----
   T("mcp_initialize", () => { const r = handleMcp({ method: "initialize" }, "https://api.anatome.dev") as { result: { serverInfo: { name: string }; protocolVersion: string } }; return r.result.serverInfo.name === "anatome" && r.result.protocolVersion === "2025-03-26"; });
-  T("mcp_tools_list_count", () => TOOLS.length === 7 || `got ${TOOLS.length}`);
+  T("mcp_tools_list_count", () => TOOLS.length === 10 || `got ${TOOLS.length}`);
   T("mcp_tools_call_generate", () => { const r = handleMcp({ method: "tools/call", params: { name: "generate_muscle_image", arguments: { view: "front", layers: [{ color: "#abcdef", muscles: ["abs"] }] } } }, "https://api.anatome.dev") as { result: { content: { text: string }[] } }; const text = r.result.content[0].text; return text.includes("<svg") && text.includes("#abcdef"); });
 
   // ---- raw output ----
@@ -203,6 +206,30 @@ export async function runSelfTest(bodyData: BodyData) {
   T("get_exercise_id_friendly_fallback", () => {
     const { exercise, match } = lookupExerciseById("Bench_Press");
     return exercise && match === "id_fallback_to_name" || `match=${match}`;
+  });
+
+  // ---- skill guides (bundled CC-BY-4.0 catalog) ----
+  T("guides_catalog_loaded", () => {
+    const { count, guides } = listGuidesLogic("https://api.anatome.dev");
+    return (count >= 1 && guides[0].tree_count >= 19) || `count ${count} trees ${guides[0]?.tree_count}`;
+  });
+  T("guide_steps_bundled", () => guideStepCount() >= 159 || `steps ${guideStepCount()}`);
+  T("guide_tree_planche_steps", () => {
+    const { found, tree } = getGuideTreeLogic("calisthenics", "planche", "https://api.anatome.dev");
+    const steps = (tree?.steps || []) as unknown[];
+    return (found && steps.length > 0) || "planche tree missing";
+  });
+  T("guide_tree_image_src_absolute", () => {
+    const { tree } = getGuideTreeLogic("calisthenics", "planche", "https://api.anatome.dev");
+    return String(tree?.anatome_imageSrc || "").startsWith("https://") || "missing anatome_imageSrc";
+  });
+  T("guide_slug_traversal_rejected", () => {
+    return (safeGuideSlug("../etc/passwd") === null && safeGuideSlug("..") === null && safeGuideSlug("") === null)
+      || "traversal slug accepted";
+  });
+  T("guide_catalog_attribution_present", () => {
+    const a = guideCatalogAttribution();
+    return a.guide_catalog_license === "CC-BY-4.0" || `license ${a.guide_catalog_license}`;
   });
 
   // ---- edge cache ----

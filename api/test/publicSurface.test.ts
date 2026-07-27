@@ -11,6 +11,9 @@ const PUBLIC_ENDPOINTS = [
   "/listMuscles",
   "/muscleInfo",
   "/listEquipment",
+  "/listGuides",
+  "/getGuide",
+  "/getGuideTree",
   "/mcp",
   "/openapi",
   "/ciStatus",
@@ -43,6 +46,9 @@ describe("public API surface (no AI exposure)", () => {
       "get_exercise",
       "get_exercise_gif",
       "workout_image",
+      "list_guides",
+      "get_guide",
+      "get_guide_tree",
     ]);
   });
 });

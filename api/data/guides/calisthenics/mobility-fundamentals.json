@@ -1,0 +1,977 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "slug": "mobility-fundamentals",
+  "name": "Mobility Fundamentals",
+  "family": "foundation",
+  "difficulty": "beginner",
+  "summary": "Daily-ready mobility for calisthenics: wrists, shoulder flexion/extension, pike/pancake, bridge. Run before skill work.",
+  "prerequisites": [],
+  "entry_assessment": [
+    {
+      "name": "Pain-free daily movement",
+      "target": "no acute joint pain"
+    },
+    {
+      "name": "Forward fold",
+      "target": "hands to shins ok"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "wall",
+    "band",
+    "stick",
+    "blocks"
+  ],
+  "primary_muscles": [
+    "forearm",
+    "deltoids",
+    "upper-back"
+  ],
+  "secondary_muscles": [
+    "hamstring",
+    "lower-back",
+    "chest"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "forearm",
+        "deltoids",
+        "upper-back"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "hamstring",
+        "lower-back",
+        "chest"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "custom",
+    "value": 1,
+    "notes": "Pass all mobility checkpoints — pain-free ROM for planche/handstand/lever prep"
+  },
+  "programming": {
+    "skill_frequency_per_week": "5–7 (daily light)",
+    "notes": "5–15 min sessions. Never force end-range. Breathe through holds."
+  },
+  "safety": {
+    "injury_risk": "low",
+    "contraindications": [
+      "Acute joint injury",
+      "Unstable shoulder requiring medical clearance"
+    ],
+    "notes": "Mobility is conditioning — mild stretch discomfort ok; sharp pain is not."
+  },
+  "divergence_notes": "GMB/FF emphasize daily wrist + shoulder prep; pancake/bridge depth varies widely by anatomy.",
+  "sources": [
+    "GMB",
+    "FF",
+    "OG2",
+    "CM"
+  ],
+  "tracks": [
+    {
+      "id": "wrist-shoulder",
+      "name": "Wrist & shoulder",
+      "step_ids": [
+        "mob-wrist-prep",
+        "mob-wrist-load",
+        "mob-shoulder-flexion",
+        "mob-shoulder-extension"
+      ]
+    },
+    {
+      "id": "lower-body",
+      "name": "Pike & pancake",
+      "step_ids": [
+        "mob-pike-fold",
+        "mob-pancake"
+      ]
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge",
+      "step_ids": [
+        "mob-bridge-prep",
+        "mob-bridge-full"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "cues": [
+        "Slow circles both directions",
+        "Prayer stretch — palms together, elbows down"
+      ],
+      "common_faults": [
+        "Rushing",
+        "Loading before warm-up"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-wrist-prep",
+      "order": 1,
+      "name": "Wrist circles + prayer stretch",
+      "level": "beginner",
+      "track": "wrist-shoulder",
+      "intent": "Baseline wrist warm-up before any hand-supported work.",
+      "programming": {
+        "sets": 2,
+        "reps_or_hold": "10 circles + 30s prayer",
+        "rest_seconds": 30,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "custom",
+        "value": 1,
+        "notes": "pain-free circles + 30s prayer"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "title": "Pseudo Planche Done RIGHT — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 45,
+          "end_seconds": 70,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Wrist circles + prayer stretch yet — showing the closest available asset. title names [planche] but step covers [wrist].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Wrist circles + prayer stretch yet — showing the closest available asset. title names [push-up] but step covers [wrist].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 2,
+          "max": 4
+        },
+        "from_level": "no structured wrist work",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "gmb-training-frequency"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Fingers forward or turned out slightly",
+        "Lean gently over wrists",
+        "Short bear-crawl holds"
+      ],
+      "common_faults": [
+        "Too much load too soon",
+        "Pain ignored"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-wrist-load",
+      "order": 2,
+      "name": "Wrist extension load (lean + bear)",
+      "level": "beginner",
+      "track": "wrist-shoulder",
+      "intent": "Build tolerance for dorsiflexion under load — planche/handstand prep.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s lean",
+        "rest_seconds": 45,
+        "frequency_per_week": "5–7"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3,
+        "notes": "pain-free loaded extension"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "title": "Pseudo Planche Done RIGHT — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 45,
+          "end_seconds": 70,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Wrist extension load (lean + bear) yet — showing the closest available asset. title names [planche] but step covers [wrist].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Pushups",
+          "title": "Form GIF · Pushups",
+          "channel": "anatome.dev",
+          "ext_id": "Pushups",
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Wrist extension load (lean + bear) yet — showing the closest available asset. title names [push-up] but step covers [wrist].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Pushups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 14
+        },
+        "from_level": "pain-free unloaded wrist range",
+        "conditioning_hours_per_week": 2,
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ],
+        "scope": "step",
+        "notes": "Held to the ≥8 week tendon-adaptation floor deliberately: wrist tolerance is the most common reason handstand and planche work stalls, and it cannot be rushed."
+      }
+    },
+    {
+      "cues": [
+        "Band/stick dislocates — wide grip",
+        "Wall slides — ribs down"
+      ],
+      "common_faults": [
+        "Rib flare",
+        "Gripping too narrow on dislocates"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-shoulder-flexion",
+      "order": 3,
+      "name": "Shoulder flexion (dislocates + wall slides)",
+      "level": "beginner",
+      "track": "wrist-shoulder",
+      "intent": "Overhead ROM for handstand, HSPU, manna.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10 dislocates + 10 slides",
+        "rest_seconds": 45,
+        "frequency_per_week": "4–6"
+      },
+      "unlock": {
+        "metric": "reps",
+        "value": 10,
+        "sets": 3,
+        "notes": "dislocates with good rib control"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "title": "Handstand progression — wall demo clip",
+          "channel": "GMB Fitness (Praxis)",
+          "start_seconds": 35,
+          "end_seconds": 65,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Shoulder flexion (dislocates + wall slides) yet — showing the closest available asset. title names [handstand] but step covers [shoulder].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
+          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
+          "title": "Form GIF · Handstand Push-Ups",
+          "channel": "anatome.dev",
+          "ext_id": "Handstand_Push-Ups",
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Shoulder flexion (dislocates + wall slides) yet — showing the closest available asset. title names [handstand, hspu, push-up] but step covers [shoulder].",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Handstand_Push-Ups.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "overhead reach with rib flare",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "gmb-training-frequency"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Doorway stretch",
+        "Light supine hang on bar",
+        "Never bounce"
+      ],
+      "common_faults": [
+        "Forcing German hang depth early"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-shoulder-extension",
+      "order": 4,
+      "name": "Shoulder extension (German hang prep)",
+      "level": "beginner",
+      "track": "wrist-shoulder",
+      "intent": "Open chest/shoulders for levers, skin-the-cat, dips.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30s stretch + 15s hang",
+        "rest_seconds": 60,
+        "frequency_per_week": "4–6"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "sets": 3,
+        "notes": "light hang pain-free"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "title": "Back lever coaching — demo clip",
+          "channel": "School of Calisthenics",
+          "start_seconds": 40,
+          "end_seconds": 70,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Shoulder extension (German hang prep). title names [back-lever] but step covers [german-hang, shoulder].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=y0WhGgJlFSY",
+          "attribution": "School of Calisthenics — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 14
+        },
+        "from_level": "hands behind back, limited range",
+        "conditioning_hours_per_week": 2,
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ],
+        "scope": "step",
+        "notes": "Gates the German hang and therefore the entire back lever tree. Loaded shoulder-extension tolerance follows the same ≥8 week tissue timeline."
+      }
+    },
+    {
+      "cues": [
+        "Hinge at hips",
+        "Micro-bend knees ok",
+        "Pull chest toward thighs"
+      ],
+      "common_faults": [
+        "Rounding only upper back",
+        "Bouncing aggressively"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-pike-fold",
+      "order": 5,
+      "name": "Standing pike / forward fold",
+      "level": "beginner",
+      "track": "lower-body",
+      "intent": "Hamstring + spinal flexion for compression and handstand line.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30–45s",
+        "rest_seconds": 45,
+        "frequency_per_week": "4–6"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 45,
+        "sets": 3,
+        "notes": "palms to floor or shins"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "title": "L-sit holds — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 30,
+          "end_seconds": 60,
+          "role": "reference",
+          "match_note": "Related clip from the same movement family, not a demonstration of Standing pike / forward fold. title names [l-sit] but step covers [pike].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=cu0fHp8HCDo",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "fingertips to shins",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "gmb-training-frequency"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle seated",
+        "Fold forward between legs",
+        "Knees point up"
+      ],
+      "common_faults": [
+        "Rounding back only",
+        "Forcing knees down"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-pancake",
+      "order": 6,
+      "name": "Pancake / middle split fold",
+      "level": "intermediate",
+      "track": "lower-body",
+      "intent": "Adductor + hip hinge for straddle skills and press work.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30–60s",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–5"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 45,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Pancake / middle split fold yet — showing the closest available asset. title names [planche] but step covers [pancake].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Hanging_Pike",
+          "title": "Form GIF · Hanging Pike",
+          "channel": "anatome.dev",
+          "ext_id": "Hanging_Pike",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Hanging_Pike.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 16,
+          "max": 40
+        },
+        "from_level": "seated straddle at ~90°",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "gmb-training-frequency"
+        ],
+        "scope": "step",
+        "notes": "The widest band in the library. Passive hip structure varies enormously between individuals and some athletes never reach a flat pancake regardless of training."
+      }
+    },
+    {
+      "cues": [
+        "Glute bridge holds",
+        "Elevated bridge on box",
+        "Push through feet and hands"
+      ],
+      "common_faults": [
+        "Lumbar-only bending",
+        "Knees flaring"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-bridge-prep",
+      "order": 7,
+      "name": "Bridge prep (glute bridge + elevated)",
+      "level": "beginner",
+      "track": "bridge",
+      "intent": "Spinal extension strength before full wheel.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10 glute + 20s elevated",
+        "rest_seconds": 60,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 20,
+        "sets": 3,
+        "notes": "elevated bridge"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Bridge prep (glute bridge + elevated) yet — showing the closest available asset. title names [hollow-body] but step covers [bridge].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "glute bridge without cramping",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "gmb-training-frequency"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Push chest through arms",
+        "Straight legs if able",
+        "Breathe"
+      ],
+      "common_faults": [
+        "Collapsing into lumbar",
+        "Holding breath"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "mob-bridge-full",
+      "order": 8,
+      "name": "Full bridge / wheel hold",
+      "level": "intermediate",
+      "track": "bridge",
+      "intent": "Full spinal extension — shoulder flexion under load.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "2–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3,
+        "notes": "pain-free wheel or bridge"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "title": "Hollow-body hold — short tutorial (~25s clip)",
+          "channel": "BJ Gaddour",
+          "start_seconds": 5,
+          "end_seconds": 30,
+          "role": "placeholder",
+          "match_note": "No accurate media exists for Full bridge / wheel hold yet — showing the closest available asset. title names [hollow-body] but step covers [bridge].",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=skVSiMgOhc0",
+          "attribution": "BJ Gaddour — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        },
+        {
+          "provider": "anatome-gif",
+          "url": "https://api.anatome.dev/exerciseGif?id=Plank",
+          "title": "Form GIF · Plank",
+          "channel": "anatome.dev",
+          "ext_id": "Plank",
+          "role": "demo",
+          "license": "unverified",
+          "license_url": null,
+          "source_url": "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Plank.json",
+          "attribution": "Source imagery of unknown origin, redistributed via free-exercise-db. The upstream compiler states he does not hold the copyright to these images, so the licence applied downstream cannot be relied on. Treat as not redistributable.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "unverified-provenance",
+          "license_note": "Licence claim withheld: the free-exercise-db dedication is not supported by its own upstream, which disclaims ownership of the imagery. Tracking: https://github.com/NextSolutionsStudio/anatome/issues/21"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 24
+        },
+        "from_level": "30s elevated bridge",
+        "conditioning_hours_per_week": 2,
+        "confidence": "estimated",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "gmb-training-frequency"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 24,
+      "max": 56
+    },
+    "from_level": "Pain-free daily movement, forward fold to shins",
+    "conditioning_hours_per_week": 2,
+    "confidence": "estimated",
+    "source_ids": [
+      "bohm-2015-tendon",
+      "gmb-training-frequency"
+    ],
+    "human_label": "6–13 months of near-daily short sessions to own all three tracks",
+    "notes": "No controlled trial gives time-to-range for these positions, so every step here is `estimated`. The one sourced anchor is the connective-tissue window: loaded tissue takes at least 8 weeks to change stiffness and ≥12 weeks to do so reliably (bohm-2015-tendon), which sets the floor on the loaded wrist and bridge steps. Range work responds to frequency far more than to session length.",
+    "parallel_tracks": true,
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "No acute joint pain in daily movement",
+        "target": "pain-free",
+        "metric": "custom",
+        "rationale": "Range work on an irritated joint reliably makes it worse.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Forward fold",
+        "target": "fingertips to shins",
+        "metric": "custom",
+        "related_step_id": "mob-pike-fold",
+        "rationale": "Baseline posterior-chain length before loaded compression work.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "passive-only-stretching",
+        "at_step_ids": [
+          "mob-pancake",
+          "mob-pike-fold"
+        ],
+        "signal": "Range improves within a session but resets by the next one, for weeks on end",
+        "typical_causes": [
+          "Passive stretching without any loaded or active work at end range",
+          "Practising twice a week rather than near-daily"
+        ],
+        "resolution": [
+          "Add loaded end-range holds and active lifts out of the stretch",
+          "Shorten sessions and raise frequency toward daily"
+        ],
+        "expected_stall_weeks": {
+          "min": 4,
+          "max": 12
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "gmb-training-frequency"
+        ]
+      },
+      {
+        "id": "structural-ceiling",
+        "at_step_ids": [
+          "mob-pancake"
+        ],
+        "signal": "No change over 6+ months of consistent, well-executed practice",
+        "typical_causes": [
+          "Hip socket geometry — a genuine structural limit that training does not change"
+        ],
+        "resolution": [
+          "Reassess whether the skills you want actually require this range",
+          "Route around it: a wider straddle is not required for most trees"
+        ],
+        "expected_stall_weeks": {
+          "min": 24,
+          "max": 104
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "stevenlow-rate-adaptation"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "lower-back",
+        "peaks_at_step_ids": [
+          "mob-bridge-full"
+        ],
+        "mechanism": "Extension loaded through the lumbar spine when thoracic and shoulder range are insufficient",
+        "onset_weeks_from_entry": {
+          "min": 8,
+          "max": 24
+        },
+        "prophylaxis": [
+          "Earn mob-shoulder-flexion before full bridge work",
+          "Push the floor away to shift extension into the thoracic spine",
+          "Stop at the point where the ribs flare"
+        ],
+        "red_flags": [
+          "Localised lumbar pinching at the top of the bridge",
+          "Post-session lower-back stiffness lasting into the next day"
+        ],
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 5,
+          "max": 7
+        },
+        "hard_sets_per_session": {
+          "min": 2,
+          "max": 4
+        },
+        "notes": "The one tree where near-daily short exposure clearly beats fewer hard sessions. Keep sessions to 10–20 minutes.",
+        "source_ids": [
+          "gmb-training-frequency"
+        ]
+      },
+      "too_much_signals": [
+        "Joint ache rather than muscular stretch sensation",
+        "Range worse the day after a session",
+        "Needing to warm up longer to reach yesterday's position"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 6,
+          "max": 10
+        },
+        "protocol": "Keep frequency, drop to unloaded range only for one week.",
+        "trigger": "Joint irritation, or six weeks without range change.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      }
+    }
+  }
+}

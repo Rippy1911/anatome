@@ -1,0 +1,55 @@
+# PR-Agent configuration for the anatome repo.
+# Read by the self-hosted pr-agent (the `nextsolutions-studio` bot) — same setup as
+# spaceforge/.pr_agent.toml. Makes the bot RELIABLY auto-run /describe + /review + /improve
+# on every PR open and re-run /review when new commits are pushed. Without this file the
+# bot only runs when someone comments `/review` by hand.
+# See: https://github.com/Codium-ai/pr-agent/blob/main/docs/docs/usage-guide/automations_and_usage.md
+
+[github_app]
+pr_commands = [
+    "/describe --pr_description.final_update_message=false",
+    "/review",
+    "/improve --pr_code_suggestions.commitable_code_suggestions=true --pr_code_suggestions.suggestions_score_threshold=6",
+]
+handle_push_trigger = true
+push_trigger_ignore_bot_commits = true
+push_trigger_ignore_merge_commits = true
+push_trigger_wait_for_initial_review = true
+push_commands = [
+    "/describe",
+    "/review",
+]
+
+[pr_reviewer]
+# anatome is two deployables in one repo, and most regressions come from confusing them:
+#   api/            → Cloudflare Worker (Hono) on api.anatome.dev, shipped by CI on push to main
+#   src/ + base44/  → Base44 app on anatome.dev, shipped only by an operator Publish
+#
+# Standing hazards worth flagging, learned from real incidents in this repo:
+# - Media licensing. free-exercise-db metadata is Unlicense; its PHOTOGRAPHY is not covered
+#   (scraped, upstream disclaims copyright). Any new text or data calling that imagery CC0,
+#   public domain or Unlicense is a defect — see issue #21. Guide media must also carry an
+#   absolute https URL: a relative one is unusable by an API consumer.
+# - Edge cache. withEdgeCache stores responses immutable with s-maxage=604800 under a
+#   URL-derived key. A PR that changes what a cacheable endpoint returns must bump
+#   CACHE_VERSION in api/src/lib/edgeCache.ts or the change cannot reach clients.
+# - Rate limiting. Identity is inferred from IP/Referer with shared bypass secrets; a cache
+#   HIT skips the counters. Flag anything that widens a bypass or makes limits spoofable.
+# - base44/functions/*/entry.ts each deploy as an isolated single-file Deno module with no
+#   bundler and no import map: relative imports break the deploy. Only npm:@base44/sdk@X.Y.Z.
+#   Keep one SDK version across the repo.
+# - Attribution is a legal requirement, not decoration: MIT for the body paths, CC-BY-4.0 for
+#   the guide catalog, Apache-2.0 for the code. Responses that carry third-party data must
+#   keep carrying their notice.
+# - Secrets via env at runtime; never a plaintext value in code, logs or test fixtures.
+extra_instructions = "Focus on: (1) media licensing — free-exercise-db imagery must never be described as CC0, public domain or Unlicense anywhere (metadata may be, imagery may not; see issue #21), and every guide media entry needs an absolute https URL; (2) edge cache — if the PR changes a cacheable endpoint's body, CACHE_VERSION in api/src/lib/edgeCache.ts must be bumped or the deploy cannot invalidate it; (3) rate limiting — flag widened bypasses, spoofable identity, or counters skipped on a cache HIT; (4) no relative imports in base44/functions/*/entry.ts, single @base44/sdk version repo-wide; (5) attribution notices preserved on responses carrying third-party data (MIT body paths, CC-BY-4.0 guide catalog); (6) no plaintext secrets in code, logs or fixtures; (7) which deployable a change lands in — api/ ships automatically on merge, src/ and base44/ need an operator Publish, so say so if a PR's user-visible effect is gated on that."
+require_tests_review = true
+require_security_review = true
+enable_review_labels_security = true
+enable_review_labels_effort = true
+publish_labels = true
+
+[pr_code_suggestions]
+num_code_suggestions = 4
+suggestions_score_threshold = 6
+commitable_code_suggestions = true

@@ -22,7 +22,9 @@ import { checkRateLimit, bypassCheck, rateHeaders, rateLimitBody, nextUtcMidnigh
 import { RateLimiterDO } from "./lib/rateLimiterDO.ts";
 // Re-export the Durable Object class so wrangler can bind it as the DO entrypoint.
 export { RateLimiterDO };
-import { serviceAttribution, imageAttribution, exerciseDataAttribution } from "./lib/attribution.ts";
+import { serviceAttribution, imageAttribution, exerciseDataAttribution, guideCatalogAttribution } from "./lib/attribution.ts";
+import { listGuides as listGuidesLogic, getGuide as getGuideLogic, getGuideTree as getGuideTreeLogic, safeGuideSlug } from "./lib/guides.ts";
+import { DEFAULT_GUIDE_SLUG } from "./data/guideCatalog.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
 import { handleMcp, computeMcpResult, TOOLS, type McpBody } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
@@ -75,7 +77,9 @@ app.get("/", (c) => c.json({
   ok: true, service: "anatome-api", version: "2.0.0",
   endpoints: [
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
-    "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment", "/mcp", "/openapi", "/ciStatus", "/selfTest",
+    "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment",
+    "/listGuides", "/getGuide", "/getGuideTree",
+    "/mcp", "/openapi", "/ciStatus", "/selfTest",
   ],
   ...serviceAttribution(),
 }));
@@ -144,6 +148,35 @@ app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
 app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
   const equipment = listEquipment();
   return c.json({ ok: true, count: equipment.length, equipment, ...exerciseDataAttribution() });
+}));
+
+// ---- skill guides (bundled CC-BY-4.0 catalog) ----
+// Static catalog reads, so they get the same treatment as listMuscles /
+// listEquipment: edge-cached and unmetered. The metered endpoints are the ones
+// that search or render (searchExercises, getExercise, generateImage).
+app.get("/listGuides", (c) => withEdgeCache(c.req.raw, c.executionCtx, () =>
+  c.json({ ok: true, ...listGuidesLogic(baseUrl(c)), ...guideCatalogAttribution() }),
+));
+
+app.get("/getGuide", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+  const slug = c.req.query("slug");
+  if (!slug) return c.json({ ok: false, error: "provide slug query param", ...guideCatalogAttribution() }, 400);
+  if (!safeGuideSlug(slug)) return c.json({ ok: false, error: "invalid slug", ...guideCatalogAttribution() }, 400);
+  const { found, guide } = getGuideLogic(slug, baseUrl(c));
+  if (!found) return c.json({ ok: false, error: `unknown guide: ${slug}`, ...guideCatalogAttribution() }, 404);
+  return c.json({ ok: true, ...guide, ...guideCatalogAttribution() });
+}));
+
+app.get("/getGuideTree", (c) => withEdgeCache(c.req.raw, c.executionCtx, () => {
+  const guideSlug = c.req.query("guide") ?? DEFAULT_GUIDE_SLUG;
+  const treeSlug = c.req.query("tree");
+  if (!treeSlug) return c.json({ ok: false, error: "provide tree query param", ...guideCatalogAttribution() }, 400);
+  if (!safeGuideSlug(guideSlug) || !safeGuideSlug(treeSlug)) {
+    return c.json({ ok: false, error: "invalid slug", ...guideCatalogAttribution() }, 400);
+  }
+  const { found, tree } = getGuideTreeLogic(guideSlug, treeSlug, baseUrl(c));
+  if (!found) return c.json({ ok: false, error: `unknown tree: ${guideSlug}/${treeSlug}`, ...guideCatalogAttribution() }, 404);
+  return c.json({ ok: true, ...tree, ...guideCatalogAttribution() });
 }));
 
 // ---- searchExercises ----
@@ -217,7 +250,7 @@ app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, c.executionCtx, as
   }, 404);
 }));
 
-// ---- exercise reference photo (free-exercise-db, CC0) ----
+// ---- exercise reference photo (free-exercise-db, licence unverified — see issue #21) ----
 // Proxies the source JPEGs through Anatome's host so consumers (incl. RapidAPI)
 // don't hotlink raw.githubusercontent.com. `path` is the relative image path
 // stored on each exercise (e.g. "Barbell_Bench_Press_-_Medium_Grip/0.jpg").

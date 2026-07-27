@@ -88,6 +88,7 @@
 | 2026-06-05 | PR #1 opened: 40 BEFORE screenshots + 7 visual-only React fixes (Tailwind `w-4.5`→`w-4`, theme-aware code blocks, dark-mode Swagger UI, mobile spacing/overflow, CSS-variable theme colors) | [Rippy1911/anatome#1](https://github.com/Rippy1911/anatome/pull/1) (branch `ns-coder/tsk_d6de551ba686fc98`) |
 | 2026-06-06 | PR #2 opened (Run 1): skeleton capture-screenshots/set-env scripts — **DOWNGRADE**, never ran `npm install`/build/screenshots | [Rippy1911/anatome#2](https://github.com/Rippy1911/anatome/pull/2) (branch `ns-coder/tsk_ab3918978b787dee`) |
 | 2026-06-06 | PR #3 opened (Run 4): Playwright video recorder (3 journeys) + GitHub Release with 4 real `.webm` assets — **the one real success** of the experiment series | [Rippy1911/anatome#3](https://github.com/Rippy1911/anatome/pull/3) + Release `experiment-run4-tsk_3d85e40284b498d9` (branch `ns-coder/tsk_3d85e40284b498d9`) |
+| 2026-07-06 | Repo migrated to the NextSolutionsStudio org: [github.com/NextSolutionsStudio/anatome](https://github.com/NextSolutionsStudio/anatome) (public, Apache-2.0). Full `main` history + `experiment-run4-tsk_3d85e40284b498d9` tag + `fix/security-gates-and-license-labels` branch pushed; default branch `main`; dependabot auto-regenerated fresh branches. Live repo links repointed (`Contact.jsx`, `Layout.jsx`, `HealthBar.jsx`, `Pricing.jsx`, `TERMS.md`, `api/src/routes/ciStatus.ts`). Old `Rippy1911/anatome` retained as `legacy` remote. Historical PR links above stay as-is (accurate record of the original repo). | — |
 
 ## Decisions & rationale
 

@@ -91,7 +91,8 @@ Anatome is licensed under [Apache-2.0](./LICENSE). It builds on third-party data
 see [`NOTICE`](./NOTICE): anatomical paths from
 [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter)
 (MIT) and exercise metadata from [free-exercise-db](https://github.com/yuhonas/free-exercise-db)
-(CC0-1.0).
+(Unlicense). That dedication covers the metadata only — the dataset's photography is of
+unverified origin and is not cleared for redistribution ([#21](https://github.com/NextSolutionsStudio/anatome/issues/21)).
 
 > NextSolutions also makes [airon.coach](https://airon.coach) — an AI personal
 > trainer that uses Anatome under the hood.

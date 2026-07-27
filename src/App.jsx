@@ -15,6 +15,8 @@ import Tos from '@/pages/Tos';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import UseCases from '@/pages/UseCases';
+import Guides from '@/pages/Guides';
+import GuideTree from '@/pages/GuideTree';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/playground" element={<Playground />} />
               <Route path="/docs" element={<Docs />} />
+              <Route path="/guides" element={<Guides />} />
+              <Route path="/guides/:slug" element={<GuideTree />} />
               <Route path="/ai-guide" element={<AiGuide />} />
               <Route path="/api" element={<Api />} />
               <Route path="/tos" element={<Tos />} />

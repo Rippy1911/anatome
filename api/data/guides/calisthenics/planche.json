@@ -1,0 +1,1025 @@
+{
+  "schema_version": 2,
+  "kind": "skill_tree",
+  "slug": "planche",
+  "name": "Planche",
+  "family": "push",
+  "difficulty": "elite",
+  "summary": "Straight-arm horizontal push hold. Build lean angle, protraction, and progressive tuck → straddle → full.",
+  "prerequisites": [
+    "foundations",
+    "elbow-lever"
+  ],
+  "entry_assessment": [
+    {
+      "name": "Frog stand / crow",
+      "target": "30s clean hold"
+    },
+    {
+      "name": "Pseudo planche push-ups (elevated feet)",
+      "target": "15–20 reps, lean ≥30°"
+    },
+    {
+      "name": "Wall plank (chest-to-wall)",
+      "target": "30s"
+    },
+    {
+      "name": "Tuck L-sit",
+      "target": "30s"
+    },
+    {
+      "name": "Wrist dorsiflexion under load",
+      "target": "pain-free ≥90°"
+    }
+  ],
+  "equipment": [
+    "floor",
+    "parallettes",
+    "band",
+    "blocks"
+  ],
+  "primary_muscles": [
+    "deltoids",
+    "chest",
+    "abs"
+  ],
+  "secondary_muscles": [
+    "triceps",
+    "forearm",
+    "upper-back"
+  ],
+  "anatome_layers_payload": [
+    {
+      "color": "#DC2626",
+      "muscles": [
+        "deltoids",
+        "chest",
+        "abs"
+      ]
+    },
+    {
+      "color": "#F59E0B",
+      "muscles": [
+        "triceps",
+        "forearm",
+        "upper-back"
+      ]
+    }
+  ],
+  "goal": {
+    "metric": "hold_seconds",
+    "value": 10,
+    "value_max": 15,
+    "sets": 3,
+    "notes": "Full planche, legs together, body horizontal, straight arms"
+  },
+  "programming": {
+    "strength_frequency_per_week": "3–4",
+    "skill_frequency_per_week": "optional light leans daily",
+    "notes": "Never to failure. Pair with front lever for push/pull balance. Rest 3–5 min between hard sets."
+  },
+  "safety": {
+    "injury_risk": "high",
+    "contraindications": [
+      "Active biceps tendinopathy",
+      "Acute wrist pain under load",
+      "Unstable shoulder"
+    ],
+    "notes": "Parallettes strongly preferred from tuck onward. Condition biceps with dragon leans / supine hangs before long full-planche attempts."
+  },
+  "divergence_notes": "OG often wants ~60s tuck before advancing; FitnessFAQs/community often accept 30–45s. Unlock ranges encode both.",
+  "sources": [
+    "OG2",
+    "FF",
+    "CM",
+    "SW"
+  ],
+  "attribution": "Original progression text © NextSolutions / portfolio authors (CC-BY-4.0). Coaching conventions synthesized from publicly discussed standards (OG2, FitnessFAQs, GMB, CaliMove, r/bwf RR, street-workout). YouTube embeds stream from creators — not re-hosted. Muscle diagrams via api.anatome.dev.",
+  "license": "CC-BY-4.0",
+  "steps": [
+    {
+      "cues": [
+        "Push the floor away — round upper back between blades",
+        "Lock elbows; rotate elbow pits forward",
+        "One line from shoulders through hips; do not pike"
+      ],
+      "common_faults": [
+        "Insufficient lean (hands under shoulders)",
+        "Bent elbows",
+        "Hips sagging or piking"
+      ],
+      "drills": [
+        {
+          "slug": "scapular-push-up",
+          "name": "Scapular push-up",
+          "role": "accessory",
+          "instructions": [
+            "Plank position, arms straight",
+            "Protract and retract scapulae without bending elbows"
+          ]
+        },
+        {
+          "slug": "wrist-mobility",
+          "name": "Wrist mobility + extensor work",
+          "role": "mobility",
+          "instructions": [
+            "Daily wrist circles, prayer stretch, reverse wrist curls"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "planche-lean",
+      "order": 1,
+      "name": "Planche lean",
+      "level": "beginner",
+      "intent": "Learn forward lean past wrists with locked elbows and hard protraction.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "45–60s",
+        "rest_seconds": 120,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 60,
+        "sets": 3,
+        "notes": "≥45° lean",
+        "strict_og": true
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "title": "Pseudo Planche Done RIGHT — demo clip",
+          "channel": "FitnessFAQs",
+          "start_seconds": 45,
+          "end_seconds": 70,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=odcPqBOlJhI",
+          "attribution": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 8
+        },
+        "from_level": "20 strict push-ups and pain-free loaded wrist extension",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Look slightly forward",
+        "Knees high on triceps",
+        "Light finger pressure to balance"
+      ],
+      "common_faults": [
+        "Collapsing elbows",
+        "Looking down causing forward tip"
+      ],
+      "drills": [
+        {
+          "slug": "crow-entries",
+          "name": "Crow entries from squat",
+          "role": "main",
+          "instructions": [
+            "From deep squat, place hands, lean, lift one foot then both"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "frog-stand",
+      "order": 2,
+      "name": "Frog stand (crow)",
+      "level": "beginner",
+      "intent": "Build hand balance and straight-arm confidence with knees on arms.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–30s",
+        "rest_seconds": 90,
+        "frequency_per_week": "3–5"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 3,
+          "max": 6
+        },
+        "from_level": "45s planche lean at 30°",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Hips to shoulder height",
+        "Protract hard",
+        "Knees to chest"
+      ],
+      "common_faults": [
+        "Hips too low",
+        "Bent elbows",
+        "Breath-holding"
+      ],
+      "drills": [
+        {
+          "slug": "pppu",
+          "name": "Pseudo planche push-up",
+          "role": "accessory",
+          "instructions": [
+            "Hands by hips, lean forward",
+            "Push-up while maintaining lean"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "tuck-planche",
+      "order": 3,
+      "name": "Tuck planche (floor)",
+      "level": "intermediate",
+      "intent": "Support full bodyweight with knees tucked, hips at shoulder height.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "20–45s",
+        "rest_seconds": 180,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "value_max": 45,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YHkHgJOAe9A",
+          "title": "Tuck planche — demo clip",
+          "channel": "Vitaly Pavlenko",
+          "start_seconds": 20,
+          "end_seconds": 45,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=YHkHgJOAe9A",
+          "attribution": "Vitaly Pavlenko — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 8,
+          "max": 16
+        },
+        "from_level": "30s frog stand and a 60s planche lean at 45°",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Same cues as floor tuck",
+        "Depress scapulae into the bars"
+      ],
+      "common_faults": [
+        "Shrugging",
+        "Short holds with ugly form"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "tuck-planche-parallettes",
+      "order": 4,
+      "name": "Tuck planche (parallettes)",
+      "level": "intermediate",
+      "intent": "Same tuck shape with wrist relief and slightly longer lever.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "30–60s",
+        "rest_seconds": 180,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 45,
+        "value_max": 60,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=YHkHgJOAe9A",
+          "title": "Tuck planche — demo clip",
+          "channel": "Vitaly Pavlenko",
+          "start_seconds": 20,
+          "end_seconds": 45,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=YHkHgJOAe9A",
+          "attribution": "Vitaly Pavlenko — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 4,
+          "max": 10
+        },
+        "from_level": "30s floor tuck planche",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "Flatten the back",
+        "Open hips without dropping",
+        "Keep elbows locked"
+      ],
+      "common_faults": [
+        "Rounded back (still regular tuck)",
+        "Hips dropping below shoulders"
+      ],
+      "drills": [
+        {
+          "slug": "band-assisted-adv-tuck",
+          "name": "Band-assisted advanced tuck",
+          "role": "accessory",
+          "instructions": [
+            "Loop band under hips for volume holds"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "advanced-tuck-planche",
+      "order": 5,
+      "name": "Advanced tuck planche",
+      "level": "advanced",
+      "intent": "Open hips so the back is flat/parallel; knees still tucked. Hardest single jump.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "15–45s",
+        "rest_seconds": 180,
+        "frequency_per_week": "3–4"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 30,
+        "value_max": 45,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 16,
+          "max": 36
+        },
+        "from_level": "60s tuck planche on parallettes",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step",
+        "notes": "The hardest single jump in the tree. Opening the hips flattens the back and roughly doubles the effective lever; a stall of 2–3 months here is normal rather than a sign of bad programming."
+      }
+    },
+    {
+      "cues": [
+        "Wide straddle reduces lever",
+        "Point toes",
+        "Hollow + glute squeeze"
+      ],
+      "common_faults": [
+        "Piked hips",
+        "Soft elbows"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "straddle-planche",
+      "order": 6,
+      "name": "Straddle planche",
+      "level": "advanced",
+      "intent": "Extend legs wide; body horizontal on straight arms.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–30s",
+        "rest_seconds": 180,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "value_max": 30,
+        "sets": 3
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 20,
+          "max": 48
+        },
+        "from_level": "30–45s advanced tuck planche",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ],
+        "scope": "step"
+      }
+    },
+    {
+      "cues": [
+        "One leg tucked, one extended",
+        "Keep hips square"
+      ],
+      "common_faults": [
+        "Twisting torso"
+      ],
+      "drills": [],
+      "exercise_refs": [],
+      "id": "one-leg-planche",
+      "order": 7,
+      "name": "One-leg planche",
+      "level": "advanced",
+      "intent": "Bridge to full when hip mobility limits straddle.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "10–15s/side",
+        "rest_seconds": 180,
+        "frequency_per_week": "3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 15,
+        "sets": 3,
+        "notes": "each side"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 12,
+          "max": 30
+        },
+        "from_level": "15s straddle planche",
+        "conditioning_hours_per_week": 4,
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation",
+          "straighttalking-cali-timelines"
+        ],
+        "scope": "step",
+        "notes": "An optional bridge for athletes whose straddle range limits them; athletes with a wide straddle often skip it entirely and go straight to full."
+      }
+    },
+    {
+      "cues": [
+        "Squeeze legs together",
+        "Protract + hollow",
+        "Short clean holds > long ugly ones"
+      ],
+      "common_faults": [
+        "Banana back",
+        "Bent elbows",
+        "Hips low"
+      ],
+      "drills": [
+        {
+          "slug": "maltese-prep",
+          "name": "Wide PPPU / maltese prep",
+          "role": "accessory",
+          "instructions": [
+            "Wider hand placement, fingers out — advanced track only"
+          ]
+        }
+      ],
+      "exercise_refs": [],
+      "id": "full-planche",
+      "order": 8,
+      "name": "Full planche",
+      "level": "elite",
+      "intent": "Legs together, body horizontal, straight arms — the skill goal.",
+      "programming": {
+        "sets": 3,
+        "reps_or_hold": "5–15s",
+        "rest_seconds": 240,
+        "frequency_per_week": "2–3"
+      },
+      "unlock": {
+        "metric": "hold_seconds",
+        "value": 10,
+        "value_max": 15,
+        "sets": 3,
+        "notes": "clean full planche"
+      },
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "title": "Planche shapes — demo clip",
+          "channel": "Andry Strong",
+          "start_seconds": 60,
+          "end_seconds": 90,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=LgPG0MZPI84",
+          "attribution": "Andry Strong — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
+      "timeline": {
+        "typical_weeks": {
+          "min": 24,
+          "max": 60
+        },
+        "from_level": "20–30s straddle planche",
+        "conditioning_hours_per_week": 4,
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ],
+        "scope": "step"
+      }
+    }
+  ],
+  "timeline": {
+    "typical_weeks": {
+      "min": 91,
+      "max": 214
+    },
+    "from_level": "30s frog stand, 15–20 pseudo planche push-ups with ≥30° lean, 30s wall plank, 30s tuck L-sit, pain-free loaded wrist extension",
+    "conditioning_hours_per_week": 4,
+    "confidence": "coach-consensus",
+    "source_ids": [
+      "overcoming-gravity-2e",
+      "stevenlow-rate-adaptation",
+      "straighttalking-cali-timelines"
+    ],
+    "human_label": "roughly 2–4 years from the planche entry assessment, or 3–6 years from a first solid push-up base once the foundations tree is included",
+    "notes": "OG2 places the full planche near the top of the straight-arm push chart, above the straddle planche that defines its 'intermediate-to-advanced' band, and Steven Low's rate-of-adaptation model explains why the last two steps cost more than the first six combined. The advanced tuck is the single hardest jump in the tree: it is where the hips open and the lever roughly doubles.",
+    "scope": "tree_cumulative",
+    "variance_drivers": [
+      {
+        "factor": "bodyweight",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm and pulling skills scale roughly with bodyweight at a fixed height. Athletes above ~85 kg routinely sit at the top of every band; lighter athletes at the bottom. This is the single largest driver on lever and planche trees."
+      },
+      {
+        "factor": "training_age",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Rate of adaptation is logarithmic. An athlete with 3+ years of consistent resistance training moves through early steps in a fraction of the listed time but gains little advantage on the last two steps of any tree."
+      },
+      {
+        "factor": "chronological_age",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Connective tissue remodels more slowly with age. Athletes over ~40 should read the upper half of every band and extend tendon-conditioning steps rather than compressing them."
+      },
+      {
+        "factor": "limb_length",
+        "direction": "slower",
+        "impact": "moderate",
+        "note": "Longer arms and legs lengthen the lever at a fixed bodyweight. Taller athletes commonly need one extra intermediate shape (one-leg before straddle) that shorter athletes can skip."
+      },
+      {
+        "factor": "session_frequency",
+        "direction": "faster",
+        "impact": "high",
+        "note": "Below roughly 2 quality sessions per week most athletes stall indefinitely on advanced steps. Gains from going beyond 4–5 sessions per week are small and injury risk rises (arampatzis-2024-loading)."
+      },
+      {
+        "factor": "coaching_and_feedback",
+        "direction": "faster",
+        "impact": "moderate",
+        "note": "Video review or a coach correcting shape is repeatedly reported to roughly halve time-to-skill on balance-dominant work versus unguided practice (kyleweiger-handstand)."
+      },
+      {
+        "factor": "wrist_and_bicep_tendon_tolerance",
+        "direction": "slower",
+        "impact": "high",
+        "note": "Straight-arm loading at a long lever is the highest tendon-stress position in the library. Athletes who reach the straddle without conditioning the biceps tendon frequently lose 8–12 weeks to tendinopathy — longer than the conditioning would have taken (bohm-2015-tendon)."
+      }
+    ]
+  },
+  "progression_patterns": {
+    "prerequisite_standards": [
+      {
+        "name": "Frog stand / crow",
+        "target": "30s clean hold",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "frog-stand",
+        "rationale": "Straight-arm balance and wrist confidence.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Pseudo planche push-ups",
+        "target": "15–20 reps at ≥30° lean",
+        "metric": "reps",
+        "value": 15,
+        "related_step_id": "push-pppu",
+        "rationale": "The lean, not the push-up count, is what carries over.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "name": "Tuck L-sit",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "lsit-tuck",
+        "rationale": "Compression and hip-flexor strength to hold the tuck shapes.",
+        "source_ids": [
+          "rbwf-recommended-routine"
+        ]
+      },
+      {
+        "name": "Loaded wrist extension",
+        "target": "pain-free at ≥90°",
+        "metric": "custom",
+        "related_step_id": "mob-wrist-load",
+        "rationale": "Straight-arm pushing at a long lever is the highest wrist-load position in the library.",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "name": "Wall plank (chest-to-wall)",
+        "target": "30s",
+        "metric": "hold_seconds",
+        "value": 30,
+        "related_step_id": "wall-plank",
+        "rationale": "Protraction endurance under inverted load.",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "plateau_signatures": [
+      {
+        "id": "advanced-tuck-wall",
+        "at_step_ids": [
+          "advanced-tuck-planche"
+        ],
+        "signal": "Solid 60s tuck planche but the advanced tuck collapses in under 10s for months",
+        "typical_causes": [
+          "Opening the hips roughly doubles the lever — the single hardest jump in the tree",
+          "Calling a rounded tuck an advanced tuck",
+          "Trying to progress by hold time rather than by shape"
+        ],
+        "resolution": [
+          "Use a band under the hips to accumulate time in the true flat-back shape",
+          "Film from the side every session and score back angle, not seconds",
+          "Expect 4–9 months here and programme accordingly rather than treating it as failure"
+        ],
+        "expected_stall_weeks": {
+          "min": 12,
+          "max": 36
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "stevenlow-rate-adaptation"
+        ]
+      },
+      {
+        "id": "lean-not-earned",
+        "at_step_ids": [
+          "tuck-planche",
+          "tuck-planche-parallettes"
+        ],
+        "signal": "Tuck holds stay short and the shoulders never get in front of the hands",
+        "typical_causes": [
+          "Insufficient planche lean base — the lean angle is the actual currency of this tree",
+          "Elbows bending imperceptibly under load"
+        ],
+        "resolution": [
+          "Go back and earn a 60s lean at 45°",
+          "Film to confirm the elbows stay locked",
+          "Add pseudo planche push-up volume with an exaggerated lean"
+        ],
+        "expected_stall_weeks": {
+          "min": 4,
+          "max": 12
+        },
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "straddle-mobility-limited",
+        "at_step_ids": [
+          "straddle-planche",
+          "one-leg-planche"
+        ],
+        "signal": "Strong enough for the straddle but cannot open the legs wide enough to shorten the lever",
+        "typical_causes": [
+          "Straddle range limited by hip structure or pancake flexibility"
+        ],
+        "resolution": [
+          "Route via one-leg planche instead",
+          "Add pancake work in parallel — it directly shortens the lever you have to hold"
+        ],
+        "expected_stall_weeks": {
+          "min": 8,
+          "max": 24
+        },
+        "confidence": "estimated",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "regression_triggers": [
+      {
+        "id": "layoff-under-4-weeks",
+        "trigger": "Layoff or markedly reduced training for less than 4 weeks (illness, travel, work crunch)",
+        "typical_dropback": "No step lost. Hold times commonly return 10–25% short for the first two sessions; eccentric control and shape quality degrade before maximal strength does.",
+        "recovery_weeks": {
+          "min": 1,
+          "max": 2
+        },
+        "action": "Resume one step below your unlock for two sessions, then retest. Do not re-earn the whole step — strength-trained athletes show only limited decline at this timescale.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-1"
+        ]
+      },
+      {
+        "id": "layoff-8-12-weeks",
+        "trigger": "Complete training stoppage for 8–12 weeks",
+        "typical_dropback": "Force production falls roughly 7–12%, which usually costs one step on hold-based progressions and one to two steps on the hardest dynamic ones. Recently acquired gains are retained far better than the loss in maximal force suggests.",
+        "recovery_weeks": {
+          "min": 3,
+          "max": 8
+        },
+        "action": "Restart two steps below your previous unlock and rebuild with full volume but reduced intensity. Expect to regain the lost steps in a fraction of the time they originally took.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "mujika-2000-detraining-2"
+        ]
+      },
+      {
+        "id": "deload-week",
+        "trigger": "Planned deload, or four consecutive weeks with no measurable progress",
+        "typical_dropback": "None. Hold times often improve in the week after the deload.",
+        "recovery_weeks": {
+          "min": 0,
+          "max": 1
+        },
+        "action": "Cut volume roughly in half and keep intensity, for one week. Overcoming Gravity's rule is that four weeks without progress means the cycle is finished, not that you need to try harder.",
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      },
+      {
+        "id": "tendon-irritation-layoff",
+        "trigger": "Tendon pain forcing modified or stopped training",
+        "typical_dropback": "Highly variable. Time lost is usually 6–12 weeks because the tissue must be reloaded from a low baseline, and the affected step is typically lost entirely.",
+        "recovery_weeks": {
+          "min": 6,
+          "max": 16
+        },
+        "action": "Drop to the last pain-free step, reintroduce isometric then slow eccentric loading, and rebuild across at least 8–12 weeks — the window in which tendon stiffness actually changes. Returning at the previous intensity is the most common cause of recurrence.",
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "mujika-2000-detraining-2"
+        ]
+      }
+    ],
+    "injury_risk_timeline": [
+      {
+        "tissue": "wrist",
+        "peaks_at_step_ids": [
+          "planche-lean",
+          "tuck-planche",
+          "advanced-tuck-planche"
+        ],
+        "mechanism": "Bodyweight driven through an extended wrist with the centre of mass ahead of the hands — the load rises with lean angle, which is exactly what this tree trains",
+        "onset_weeks_from_entry": {
+          "min": 2,
+          "max": 14
+        },
+        "prophylaxis": [
+          "Complete an 8-week loaded wrist block before high-volume lean work",
+          "Move to parallettes from the tuck onward",
+          "Cap total wrist-loaded minutes per session"
+        ],
+        "red_flags": [
+          "Dorsal wrist pinching during leans",
+          "Wrist ache the morning after"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon"
+        ]
+      },
+      {
+        "tissue": "biceps-tendon",
+        "peaks_at_step_ids": [
+          "straddle-planche",
+          "one-leg-planche",
+          "full-planche"
+        ],
+        "mechanism": "Straight-arm loading at maximal lever length puts high tensile stress on the long head of the biceps, arriving at the exact point in the tree where athletes push hardest",
+        "onset_weeks_from_entry": {
+          "min": 40,
+          "max": 120
+        },
+        "prophylaxis": [
+          "Keep dragon leans and supine hangs in the programme as permanent tendon conditioning",
+          "Add one shape change at a time and hold it at least 4–6 weeks",
+          "Accept that tissue adapts on a 8–12 week clock regardless of how strong the muscles feel"
+        ],
+        "red_flags": [
+          "Pain in the biceps groove during or after holds",
+          "Pain on resisted elbow flexion"
+        ],
+        "confidence": "published-standard",
+        "source_ids": [
+          "bohm-2015-tendon",
+          "arampatzis-2024-loading"
+        ]
+      },
+      {
+        "tissue": "shoulder",
+        "peaks_at_step_ids": [
+          "advanced-tuck-planche",
+          "full-planche"
+        ],
+        "mechanism": "Sustained maximal protraction with the humerus loaded in front of the torso",
+        "onset_weeks_from_entry": {
+          "min": 24,
+          "max": 90
+        },
+        "prophylaxis": [
+          "Pair every planche block with front lever work to balance the shoulder",
+          "Do not train to failure — Overcoming Gravity is explicit about this for straight-arm work"
+        ],
+        "red_flags": [
+          "Front-of-shoulder ache",
+          "Reduced protraction range between sessions"
+        ],
+        "confidence": "coach-consensus",
+        "source_ids": [
+          "overcoming-gravity-2e"
+        ]
+      }
+    ],
+    "volume_patterns": {
+      "productive": {
+        "sessions_per_week": {
+          "min": 3,
+          "max": 4
+        },
+        "hard_sets_per_session": {
+          "min": 4,
+          "max": 6
+        },
+        "notes": "Never to failure. Short, high-quality holds with 3–5 minutes of rest beat long ugly ones. Light daily leans are fine and are the exception to the frequency cap.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "arampatzis-2024-loading"
+        ]
+      },
+      "too_much_signals": [
+        "Wrist or biceps discomfort persisting between sessions",
+        "Lean angle decreasing week over week at the same hold time",
+        "Elbows starting to bend on sets that used to be clean",
+        "Needing progressively more warm-up sets to reach the working lean"
+      ],
+      "deload": {
+        "every_weeks": {
+          "min": 4,
+          "max": 6
+        },
+        "protocol": "One week of leans and tuck holds only, at half the usual sets, keeping the lean angle.",
+        "trigger": "Four weeks without progress, or any wrist or biceps symptom carrying between sessions.",
+        "source_ids": [
+          "overcoming-gravity-2e",
+          "bohm-2015-tendon"
+        ]
+      }
+    }
+  }
+}
