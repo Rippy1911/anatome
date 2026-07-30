@@ -13,7 +13,7 @@ concurrency:
 jobs:
   frontend:
     name: Frontend (lint + typecheck)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,7 +30,7 @@ jobs:
 
   api:
     name: API (typecheck + test + wrangler dry-run)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     defaults:
       run:
         working-directory: api
@@ -74,7 +74,7 @@ jobs:
     name: Deploy API to Cloudflare
     needs: [frontend, api]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     defaults:
       run:
         working-directory: api
