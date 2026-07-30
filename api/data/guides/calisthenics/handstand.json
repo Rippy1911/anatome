@@ -157,22 +157,6 @@
       },
       "media": [
         {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "title": "Handstand progression — wall demo clip",
-          "channel": "GMB Fitness (Praxis)",
-          "start_seconds": 35,
-          "end_seconds": 65,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-          "ai_generated": false,
-          "redistributable": false,
-          "tier": "embed"
-        },
-        {
           "provider": "anatome-gif",
           "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
           "title": "Form GIF · Handstand Push-Ups",
@@ -237,22 +221,6 @@
       },
       "media": [
         {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "title": "Handstand progression — wall demo clip",
-          "channel": "GMB Fitness (Praxis)",
-          "start_seconds": 35,
-          "end_seconds": 65,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-          "ai_generated": false,
-          "redistributable": false,
-          "tier": "embed"
-        },
-        {
           "provider": "anatome-gif",
           "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
           "title": "Form GIF · Handstand Push-Ups",
@@ -315,22 +283,6 @@
       },
       "media": [
         {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "title": "Handstand progression — wall demo clip",
-          "channel": "GMB Fitness (Praxis)",
-          "start_seconds": 35,
-          "end_seconds": 65,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-          "ai_generated": false,
-          "redistributable": false,
-          "tier": "embed"
-        },
-        {
           "provider": "anatome-gif",
           "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
           "title": "Form GIF · Handstand Push-Ups",
@@ -391,22 +343,6 @@
         "notes": "per side"
       },
       "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "title": "Handstand progression — wall demo clip",
-          "channel": "GMB Fitness (Praxis)",
-          "start_seconds": 35,
-          "end_seconds": 65,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-          "ai_generated": false,
-          "redistributable": false,
-          "tier": "embed"
-        },
         {
           "provider": "anatome-gif",
           "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",
@@ -866,22 +802,6 @@
         "notes": "1 clean press"
       },
       "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "title": "Handstand progression — wall demo clip",
-          "channel": "GMB Fitness (Praxis)",
-          "start_seconds": 35,
-          "end_seconds": 65,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "source_url": "https://www.youtube.com/watch?v=d6_lcWtQDxw",
-          "attribution": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-          "ai_generated": false,
-          "redistributable": false,
-          "tier": "embed"
-        },
         {
           "provider": "anatome-gif",
           "url": "https://api.anatome.dev/exerciseGif?id=Handstand_Push-Ups",

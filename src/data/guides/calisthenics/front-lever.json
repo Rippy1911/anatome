@@ -139,8 +139,8 @@
           "title": "Front lever progressions — demo clip",
           "channel": "FitnessFAQs",
           "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
+          "start_seconds": 125,
+          "end_seconds": 155,
           "role": "demo",
           "license": "youtube-standard",
           "license_url": "https://www.youtube.com/static?template=terms",
@@ -202,37 +202,7 @@
         "value": 8,
         "sets": 3
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 4,
@@ -269,37 +239,7 @@
         "value": 30,
         "sets": 3
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 8,
@@ -338,37 +278,7 @@
         "value_max": 8,
         "sets": 3
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 4,
@@ -406,37 +316,7 @@
         "sets": 3,
         "notes": "each side"
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 6,
@@ -484,37 +364,7 @@
         "value_max": 30,
         "sets": 3
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 10,
@@ -554,37 +404,7 @@
         "value": 5,
         "sets": 3
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 6,
@@ -622,37 +442,7 @@
         "value_max": 15,
         "sets": 3
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 12,
@@ -694,37 +484,7 @@
         "sets": 3,
         "notes": "elite+"
       },
-      "media": [
-        {
-          "provider": "youtube",
-          "url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "title": "Front lever progressions — demo clip",
-          "channel": "FitnessFAQs",
-          "kind": "embed",
-          "start_seconds": 55,
-          "end_seconds": 85,
-          "role": "demo",
-          "license": "youtube-standard",
-          "license_url": "https://www.youtube.com/static?template=terms",
-          "license_verified_at": "2026-07-27",
-          "source_url": "https://www.youtube.com/watch?v=AGhb8V8M758",
-          "attribution": {
-            "required": true,
-            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
-            "author": "FitnessFAQs",
-            "modified": false
-          },
-          "ai_generated": false,
-          "redistributable": false,
-          "commercial_use": false,
-          "share_alike": false,
-          "sublicensable": false,
-          "provenance": {
-            "status": "verified"
-          },
-          "tier": 5
-        }
-      ],
+      "media": [],
       "timeline": {
         "typical_weeks": {
           "min": 12,
