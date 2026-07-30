@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "name": "WebhookLog",
+  "properties": {
+    "stripe_event_id": {
+      "type": "string",
+      "description": "Unique Stripe event id \u2014 idempotency guard"
+    },
+    "type": {
+      "type": "string",
+      "description": "Stripe event type"
+    },
+    "payload_summary": {
+      "type": "string",
+      "description": "Truncated event payload for debugging"
+    },
+    "processed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "type": "string",
+      "description": "processed | error | duplicate"
+    },
+    "error": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "stripe_event_id",
+    "type"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

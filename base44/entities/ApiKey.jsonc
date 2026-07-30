@@ -1,0 +1,92 @@
+{
+  "type": "object",
+  "name": "ApiKey",
+  "properties": {
+    "key_id": {
+      "type": "string",
+      "description": "Stable public id, e.g. key_a1b2c3d4e5f6"
+    },
+    "key_hash": {
+      "type": "string",
+      "description": "sha256 of the full token \u2014 never store the token itself"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "First 12 chars for display, e.g. ana_live_a1b2"
+    },
+    "name": {
+      "type": "string",
+      "description": "User label, e.g. production"
+    },
+    "plan_slug": {
+      "type": "string",
+      "description": "Plan this key belongs to"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "revoked",
+        "suspended",
+        "pending_sync"
+      ],
+      "default": "active"
+    },
+    "last_used_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "key_id",
+    "key_hash",
+    "prefix",
+    "plan_slug",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

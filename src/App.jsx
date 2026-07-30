@@ -15,6 +15,14 @@ import Tos from '@/pages/Tos';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import UseCases from '@/pages/UseCases';
+import Login from '@/pages/Login';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import Pricing from '@/pages/Pricing';
+import Dashboard from '@/pages/Dashboard';
+import Keys from '@/pages/Keys';
+import KeyDetail from '@/pages/KeyDetail';
+import Account from '@/pages/Account';
+import Admin from '@/pages/Admin';
 import Guides from '@/pages/Guides';
 import GuideTree from '@/pages/GuideTree';
 
@@ -36,6 +44,15 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/use-cases" element={<UseCases />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/login" element={<Login />} />
+              <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/keys" element={<Keys />} />
+                <Route path="/keys/:keyId" element={<KeyDetail />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/admin" element={<Admin />} />
+              </Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>

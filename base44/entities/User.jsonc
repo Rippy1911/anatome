@@ -7,6 +7,14 @@
         "admin",
         "user"
       ]
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID for billing"
+    },
+    "plan_slug": {
+      "type": "string",
+      "description": "Current plan slug"
     }
   },
   "required": [

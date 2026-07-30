@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "name": "Plan",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "URL-safe plan identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name"
+    },
+    "monthly_price_cents": {
+      "type": "number",
+      "description": "Monthly base price in cents (0 for free)"
+    },
+    "included_requests": {
+      "type": "number",
+      "description": "Requests included per month"
+    },
+    "overage_price_per_request_cents": {
+      "type": "number",
+      "description": "Per-request overage price in cents",
+      "default": 0
+    },
+    "allow_overage": {
+      "type": "boolean",
+      "default": false
+    },
+    "stripe_price_id_base": {
+      "type": "string",
+      "description": "Stripe Price ID for the base recurring price (empty for free)"
+    },
+    "stripe_price_id_metered": {
+      "type": "string",
+      "description": "Stripe Price ID for the metered overage price"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": true
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "slug",
+    "name",
+    "monthly_price_cents",
+    "included_requests"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
