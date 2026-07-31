@@ -131,7 +131,37 @@
         "sets": 3
       },
       "safety_notes": "Primary injury-prevention step. Never skip.",
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=5KaDOUeMY98",
+          "title": "German Hang Tutorial - Shoulder Strength and Mobility on the Gymnastic Rings",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 118,
+          "end_seconds": 145,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-30",
+          "source_url": "https://www.youtube.com/watch?v=5KaDOUeMY98",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 4,
@@ -209,7 +239,37 @@
         "value": 30,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=ePf69N6jlko",
+          "title": "Back Lever Tutorial and Progression on Gymnastic Rings",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 145,
+          "end_seconds": 175,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-30",
+          "source_url": "https://www.youtube.com/watch?v=ePf69N6jlko",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 4,
@@ -249,7 +309,37 @@
         "value": 30,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=ePf69N6jlko",
+          "title": "Back Lever Tutorial and Progression on Gymnastic Rings",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 185,
+          "end_seconds": 212,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-30",
+          "source_url": "https://www.youtube.com/watch?v=ePf69N6jlko",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 6,
@@ -323,7 +413,37 @@
         "value_max": 20,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=ePf69N6jlko",
+          "title": "Back Lever Tutorial and Progression on Gymnastic Rings",
+          "channel": "GMB Fitness (Praxis)",
+          "kind": "embed",
+          "start_seconds": 235,
+          "end_seconds": 252,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-30",
+          "source_url": "https://www.youtube.com/watch?v=ePf69N6jlko",
+          "attribution": {
+            "required": true,
+            "text": "GMB Fitness (Praxis) — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "GMB Fitness (Praxis)",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 6,

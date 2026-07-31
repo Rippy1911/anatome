@@ -16,7 +16,7 @@ export function cacheableResponseHeaders(extra?: Record<string, string>): Header
 // the zone token used by CI has no cache-purge scope. Bump this whenever a
 // deploy changes what a cacheable endpoint returns: it moves every entry to a
 // fresh key, which strands the stale ones instead of waiting out their TTL.
-const CACHE_VERSION = "2026-07-30.1";
+const CACHE_VERSION = "2026-07-30.2";
 
 /** Build a cache key from the incoming request (method + URL + cache version). */
 export function cacheKeyForRequest(request: Request): Request {

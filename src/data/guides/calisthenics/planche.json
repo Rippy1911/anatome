@@ -223,7 +223,37 @@
         "value": 30,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=vTjGiacdAUI",
+          "title": "5 Tips To Master The Frog Stand | Calisthenics Beginner Tutorial",
+          "channel": "Vitality",
+          "kind": "embed",
+          "start_seconds": 95,
+          "end_seconds": 115,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-30",
+          "source_url": "https://www.youtube.com/watch?v=vTjGiacdAUI",
+          "attribution": {
+            "required": true,
+            "text": "Vitality — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "Vitality",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 3,
@@ -344,7 +374,37 @@
         "value_max": 60,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=bn-HZm7bpy0",
+          "title": "Planche For Beginners Made Easy",
+          "channel": "FitnessFAQs",
+          "kind": "embed",
+          "start_seconds": 248,
+          "end_seconds": 268,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "license_verified_at": "2026-07-30",
+          "source_url": "https://www.youtube.com/watch?v=bn-HZm7bpy0",
+          "attribution": {
+            "required": true,
+            "text": "FitnessFAQs — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+            "author": "FitnessFAQs",
+            "modified": false
+          },
+          "ai_generated": false,
+          "redistributable": false,
+          "commercial_use": false,
+          "share_alike": false,
+          "sublicensable": false,
+          "provenance": {
+            "status": "verified"
+          },
+          "tier": 5
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 4,

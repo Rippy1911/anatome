@@ -191,7 +191,24 @@
         "value": 8,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "title": "Front Lever Tutorial (IN DEPTH)",
+          "channel": "Tom Merrick",
+          "start_seconds": 703,
+          "end_seconds": 718,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "attribution": "Tom Merrick — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 4,
@@ -235,7 +252,24 @@
         "value": 30,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "title": "Front Lever Tutorial (IN DEPTH)",
+          "channel": "Tom Merrick",
+          "start_seconds": 440,
+          "end_seconds": 455,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "attribution": "Tom Merrick — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 8,
@@ -321,7 +355,24 @@
         "sets": 3,
         "notes": "each side"
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "title": "Front Lever Tutorial (IN DEPTH)",
+          "channel": "Tom Merrick",
+          "start_seconds": 457,
+          "end_seconds": 492,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "attribution": "Tom Merrick — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 6,
@@ -376,7 +427,24 @@
         "value_max": 30,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "title": "Front Lever Tutorial (IN DEPTH)",
+          "channel": "Tom Merrick",
+          "start_seconds": 543,
+          "end_seconds": 558,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "attribution": "Tom Merrick — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 10,
@@ -463,7 +531,24 @@
         "value_max": 15,
         "sets": 3
       },
-      "media": [],
+      "media": [
+        {
+          "provider": "youtube",
+          "url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "title": "Front Lever Tutorial (IN DEPTH)",
+          "channel": "Tom Merrick",
+          "start_seconds": 613,
+          "end_seconds": 630,
+          "role": "demo",
+          "license": "youtube-standard",
+          "license_url": "https://www.youtube.com/static?template=terms",
+          "source_url": "https://www.youtube.com/watch?v=abT3pEtoBh4",
+          "attribution": "Tom Merrick — streamed via the YouTube embedded player under the YouTube Terms of Service. Not re-hosted, not redistributed, and not included in offline packs.",
+          "ai_generated": false,
+          "redistributable": false,
+          "tier": "embed"
+        }
+      ],
       "timeline": {
         "typical_weeks": {
           "min": 12,
