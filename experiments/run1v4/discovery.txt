@@ -1,0 +1,43 @@
+# Browser discovery for Run 1 v4
+## which chromium
+(none - command not found)
+
+## which google-chrome / google-chrome-stable / chromium-browser
+(none - command not found)
+
+## find / -name chrome -type f 2>/dev/null
+(no results - no chrome binary found anywhere on the system)
+
+## find / -name chromium -type f 2>/dev/null
+(no results - no chromium binary found anywhere on the system)
+
+## ls /ms-playwright/
+(does not exist)
+
+## ls ~/.cache/ms-playwright/
+(does not exist - playwright browsers NOT installed)
+
+## npx playwright --version
+1.60.0
+
+## npx playwright install --dry-run
+Shows available browsers but none installed:
+- Chromium 148.0.7778.96 (would be at ~/.cache/ms-playwright/chromium-1223)
+- Firefox 150.0.2 (would be at ~/.cache/ms-playwright/firefox-1522)
+- WebKit 26.4 (would be at ~/.cache/ms-playwright/webkit-2287)
+
+## Python playwright info
+Version: 1.39.0
+Reported executable_path: /home/openhands/.cache/ms-playwright/chromium-1084/chrome-linux/chrome
+But file does NOT exist on disk.
+
+## node / npm / npx
+All available:
+- node: /usr/local/bin/node
+- npm: /usr/local/bin/npm
+- npx: /usr/local/bin/npx
+
+## Conclusion
+No chromium/chrome browser binary is pre-installed anywhere on this system.
+Playwright's browser cache directories are empty.
+Must fall back to HTTP-only mode (curl + save HTML).
