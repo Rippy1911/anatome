@@ -47,7 +47,7 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
             echo "api/package.json not present yet — skipping API checks."
           fi
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         if: steps.detect.outputs.exists == 'true'
         with:
           version: 9
@@ -89,7 +89,7 @@ jobs:
         working-directory: .
         run: |
           if [ -f api/package.json ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         if: steps.detect.outputs.exists == 'true'
         with:
           version: 9
