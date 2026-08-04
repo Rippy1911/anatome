@@ -95,7 +95,7 @@ should equal the number of tree files, and `pnpm test` asserts both counts.
 
 ## Exercise GIFs (optional, pre-deploy)
 
-Two-frame animated GIFs are built from yuhonas CC0 JPEG pairs and served at
+Two-frame animated GIFs are built from wrkout/exercises.json JPEG pairs and served at
 `GET /exerciseGif?id=<ext_id>`:
 
 ```bash
@@ -125,12 +125,10 @@ listed in `fields=`.
   When the API moves to `api.anatome.dev`, the Worker rewrites these to absolute
   URLs at response time (preserving backwards compatibility). Do not hardcode a
   host into the bundled data.
-- `images` are the **raw relative** free-exercise-db paths (e.g.
-  `Barbell_Bench_Press_-_Medium_Grip/0.jpg`). The canonical upstream base is
-  `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/`
-  (NOT `dist/images/` — see yuhonas/free-exercise-db#16). At response time the
-  Worker also emits `source_images`: Anatome-hosted absolute URLs that proxy the
-  CC0 photos via `GET /exerciseImage?path=<rel>` (no third-party hotlinking,
-  works behind RapidAPI auth). Prefer `source_images` for `<img src>`.
+- `images` are Anatome-relative paths (e.g. `Barbell_Bench_Press_-_Medium_Grip/0.jpg`).
+  Upstream JPEG bytes come from [wrkout/exercises.json](https://github.com/wrkout/exercises.json)
+  at `exercises/<folder>/images/<file>` (folder map: `wrkoutFolderByExtId.json`).
+  The Worker emits `source_images` as Anatome-hosted absolute URLs via
+  `GET /exerciseImage?path=<rel>`. Prefer `source_images` for `<img src>`.
 - After dropping the files in, verify counts: `jq 'length' api/data/exercises.json`
   should be **873**; `bodyPaths.json` should have 4 populated `gender.side` arrays.

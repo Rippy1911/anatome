@@ -72,14 +72,20 @@ describe("sanitizeFreeExerciseDbPath", () => {
 });
 
 describe("freeExerciseDbRawUrl", () => {
-  it("builds the canonical upstream URL with slashes preserved", () => {
+  it("maps Anatome paths to wrkout exercises/<folder>/images/<file>", () => {
     expect(freeExerciseDbRawUrl("Barbell_Bench_Press_-_Medium_Grip/0.jpg"))
-      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}Barbell_Bench_Press_-_Medium_Grip/0.jpg`);
+      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}Barbell_Bench_Press_-_Medium_Grip/images/0.jpg`);
+  });
+
+  it("remaps punctuation-stripped ext_ids to wrkout folder names", () => {
+    // encodeURIComponent leaves `'` unescaped (RFC 3986 unreserved-ish set).
+    expect(freeExerciseDbRawUrl("Childs_Pose/0.jpg"))
+      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}Child's_Pose/images/0.jpg`);
   });
 
   it("percent-encodes spaces per segment but keeps slashes", () => {
     expect(freeExerciseDbRawUrl("One-Arm Open Palm/0.jpg"))
-      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}One-Arm%20Open%20Palm/0.jpg`);
+      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}One-Arm%20Open%20Palm/images/0.jpg`);
   });
 
   it("returns null for invalid input", () => {

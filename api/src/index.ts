@@ -271,10 +271,10 @@ app.get("/exerciseGif", async (c) => withEdgeCache(c.req.raw, execCtx(c), async 
   }, 404);
 }));
 
-// ---- exercise reference photo (free-exercise-db, licence unverified — see issue #21) ----
+// ---- exercise reference photo (wrkout/exercises.json via freeExerciseDbRawUrl) ----
 // Proxies the source JPEGs through Anatome's host so consumers (incl. RapidAPI)
-// don't hotlink raw.githubusercontent.com. `path` is the relative image path
-// stored on each exercise (e.g. "Barbell_Bench_Press_-_Medium_Grip/0.jpg").
+// don't hotlink raw.githubusercontent.com. `path` is the Anatome images[] path
+// (e.g. "Barbell_Bench_Press_-_Medium_Grip/0.jpg") mapped to wrkout /images/.
 app.get("/exerciseImage", async (c) => withEdgeCache(c.req.raw, execCtx(c), async () => {
   const path = c.req.query("path");
   if (!path) return c.json({ ok: false, error: "path required (exercise images[] entry)" }, 400);

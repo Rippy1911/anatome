@@ -3,6 +3,7 @@
 // Logic ported from searchExercises / getExercise / resolveExercise functions.
 
 import exercisesJson from "../../data/exercises.json" assert { type: "json" };
+import wrkoutFolderByExtId from "../../data/wrkoutFolderByExtId.json" assert { type: "json" };
 import {
   MUSCLES, PALETTE, ANATOMICAL_NAMES, SIDE_PRESENCE, BODY_REGION, ANTAGONISTS, normalizeSlug,
 } from "../data/muscleCatalog.ts";
@@ -75,15 +76,30 @@ export function absoluteImageSrc(src: string | undefined | null, base: string): 
 }
 
 /**
- * free-exercise-db stores image paths as relative strings like
- * "Barbell_Bench_Press_-_Medium_Grip/0.jpg". The canonical upstream location is
- * the `exercises/` directory (NOT `dist/images/` — see yuhonas/free-exercise-db#16),
- * i.e. https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/<path>
- * To avoid third-party hotlinking and to work behind RapidAPI auth, Anatome proxies
- * these through its own `/exerciseImage?path=<rel>` route; that route is the default.
+ * Exercise `images[]` paths stay in Anatome form: "<ext_id>/0.jpg".
+ * Upstream bytes come from wrkout/exercises.json:
+ *   exercises/<wrkoutFolder>/images/<file>
+ * where wrkoutFolder is resolved via wrkoutFolderByExtId.json (punctuation
+ * differences vs yuhonas-style ext_ids, e.g. Childs_Pose → Child's_Pose).
+ * Proxied through `/exerciseImage?path=<rel>` so clients never hotlink GitHub.
  */
 export const FREE_EXERCISE_DB_RAW_BASE =
-  "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+  "https://raw.githubusercontent.com/wrkout/exercises.json/master/exercises/";
+
+const WRKOUT_FOLDER_BY_EXT_ID = wrkoutFolderByExtId as Record<string, string>;
+
+/** Map Anatome `images[]` path → wrkout relative path under exercises/. */
+export function toWrkoutImagePath(relPath: string): string | null {
+  const safe = sanitizeFreeExerciseDbPath(relPath);
+  if (!safe) return null;
+  const segs = safe.split("/");
+  // Expected: <ext_id>/<file.jpg>  (optionally already <ext_id>/images/<file>)
+  const extId = segs[0];
+  const file = segs[segs.length - 1];
+  if (!extId || !file || !/\.(jpe?g|png|gif|webp)$/i.test(file)) return null;
+  const folder = WRKOUT_FOLDER_BY_EXT_ID[extId] ?? extId;
+  return `${folder}/images/${file}`;
+}
 
 /** Build the Anatome-hosted URL for a free-exercise-db relative image path. */
 export function freeExerciseDbImageUrl(relPath: string | undefined | null, base: string): string | null {
@@ -94,12 +110,12 @@ export function freeExerciseDbImageUrl(relPath: string | undefined | null, base:
   return `${b}/exerciseImage?path=${encodeURIComponent(safe)}`;
 }
 
-/** Build the raw upstream GitHub URL for a free-exercise-db relative image path. */
+/** Build the raw upstream GitHub URL (wrkout) for an Anatome `images[]` path. */
 export function freeExerciseDbRawUrl(relPath: string | undefined | null): string | null {
   if (!relPath || typeof relPath !== "string") return null;
-  const safe = sanitizeFreeExerciseDbPath(relPath);
-  if (!safe) return null;
-  return `${FREE_EXERCISE_DB_RAW_BASE}${safe.split("/").map(encodeURIComponent).join("/")}`;
+  const wrkoutRel = toWrkoutImagePath(relPath);
+  if (!wrkoutRel) return null;
+  return `${FREE_EXERCISE_DB_RAW_BASE}${wrkoutRel.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 /**
@@ -135,10 +151,10 @@ export function freeExerciseDbImageUrls(images: string[] | undefined | null, bas
   return out;
 }
 
-/** Bump when GIF frame timing changes — busts CDN/browser cache on gif_url. */
-export const GIF_PLAYBACK_VERSION = "4";
+/** Bump when GIF frame timing or source bytes change — busts CDN/browser cache on gif_url. */
+export const GIF_PLAYBACK_VERSION = "5";
 
-/** Anatome-hosted exercise demo GIF (2-frame; source licence unverified, see issue #21). */
+/** Anatome-hosted exercise demo GIF (2-frame from wrkout JPEG pairs). */
 export function exerciseGifUrl(extId: string | undefined | null, base: string): string | null {
   if (!extId) return null;
   const b = base.replace(/\/$/, "");
