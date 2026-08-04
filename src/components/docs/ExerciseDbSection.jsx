@@ -69,9 +69,9 @@ export default function ExerciseDbSection() {
   return (
     <>
       <p className="text-sm text-muted-foreground leading-relaxed my-2">
-        Anatome ships with 873 exercises from free-exercise-db (CC0, public domain by yuhonas), pre-mapped to our 23 muscle slugs.
+        Anatome ships with 873 exercises (names, muscles, instructions) pre-mapped to our 23 muscle slugs.
         Every exercise has a pre-built <span className="font-mono text-foreground">anatome_imageSrc</span> URL ready for <span className="font-mono text-foreground">{"<img src>"}</span>.
-        free-exercise-db entries include <span className="font-semibold text-foreground">primary</span> and <span className="font-semibold text-foreground">secondary</span> muscle layers.
+        Records include <span className="font-semibold text-foreground">primary</span> and <span className="font-semibold text-foreground">secondary</span> muscle layers.
         For a third tier (accessory stabilizers, custom colors, per-layer opacity), pass additional layers to <span className="font-mono text-foreground">generateImage</span> — see the Playground default or the Examples section.
       </p>
 
@@ -90,8 +90,7 @@ export default function ExerciseDbSection() {
       <Code>{SCHEMA}</Code>
 
       <p className="text-sm text-muted-foreground leading-relaxed mt-3">
-        Full schema in the <a href="/api" className="text-primary hover:underline">OpenAPI spec</a>. Source data:{" "}
-        <a href="https://github.com/yuhonas/free-exercise-db" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">free-exercise-db on GitHub</a>.
+        Full schema in the <a href="/api" className="text-primary hover:underline">OpenAPI spec</a>.
       </p>
     </>
   );

@@ -1,6 +1,6 @@
-import { PUBLIC_API, RAPIDAPI_HOST } from "@/lib/apiBase";
+import { PUBLIC_API } from "@/lib/apiBase";
 
-/** @typedef {"direct" | "rapidapi"} SearchDemoSource */
+/** @typedef {"direct"} SearchDemoSource */
 
 /**
  * @typedef {object} SearchDemoResult
@@ -11,36 +11,44 @@ import { PUBLIC_API, RAPIDAPI_HOST } from "@/lib/apiBase";
  * @property {string} sourceId
  * @property {string} sourceLabel
  * @property {number | null} upstreamMs
- * @property {number | null} [rapidapiStatus]
+ * @property {boolean} [rateLimited]
  * @property {string} [error]
  */
 
+/** Landing demo hits the Worker directly — RapidAPI is a billing channel, not a demo source. */
 export const SEARCH_DEMO_SOURCES = [
   { id: "direct", label: "api.anatome.dev", description: "Direct Worker" },
-  { id: "rapidapi", label: "RapidAPI", description: RAPIDAPI_HOST },
 ];
 
 /**
- * Run searchExercises via direct API or RapidAPI benchmark proxy.
+ * Run searchExercises on api.anatome.dev.
  * @returns {Promise<SearchDemoResult>}
  */
-export async function fetchSearchDemo({ source, baseUrl = PUBLIC_API, q, limit = 6 }) {
+export async function fetchSearchDemo({ source: _source, baseUrl = PUBLIC_API, q, limit = 6, signal }) {
   const params = new URLSearchParams({ limit: String(limit) });
   const trimmed = String(q ?? "").trim();
   if (trimmed) params.set("q", trimmed);
-  const sourceId = source === "rapidapi" ? "rapidapi" : "direct";
-  const meta = SEARCH_DEMO_SOURCES.find((s) => s.id === sourceId) || SEARCH_DEMO_SOURCES[0];
-
-  const url =
-    sourceId === "rapidapi"
-      ? `${baseUrl}/benchmark/rapidapiSearch?${params}`
-      : `${baseUrl}/searchExercises?${params}`;
+  const sourceId = "direct";
+  const meta = SEARCH_DEMO_SOURCES[0];
+  const url = `${baseUrl}/searchExercises?${params}`;
 
   const t0 = performance.now();
   let res;
   try {
-    res = await fetch(url);
+    res = await fetch(url, signal ? { signal } : undefined);
   } catch (e) {
+    if (e?.name === "AbortError") {
+      return {
+        ok: false,
+        results: [],
+        totalMatched: null,
+        latencyMs: Math.round(performance.now() - t0),
+        sourceId,
+        sourceLabel: meta.label,
+        upstreamMs: null,
+        error: "aborted",
+      };
+    }
     return {
       ok: false,
       results: [],
@@ -70,8 +78,7 @@ export async function fetchSearchDemo({ source, baseUrl = PUBLIC_API, q, limit =
     };
   }
 
-  const upstreamMs = data?._benchmark?.upstream_ms ?? null;
-
+  const rateLimited = res.status === 429 || data?.error === "rate_limited" || data?.error === "quota_exceeded";
   const failed = !res.ok || data?.ok === false;
   return {
     ok: !failed,
@@ -80,8 +87,8 @@ export async function fetchSearchDemo({ source, baseUrl = PUBLIC_API, q, limit =
     latencyMs,
     sourceId,
     sourceLabel: meta.label,
-    upstreamMs,
-    rapidapiStatus: data?._benchmark?.rapidapi_status ?? null,
+    upstreamMs: null,
+    rateLimited,
     error: failed ? (data?.message || data?.error || `HTTP ${res.status}`) : undefined,
   };
 }

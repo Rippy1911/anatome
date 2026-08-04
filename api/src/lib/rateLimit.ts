@@ -34,10 +34,9 @@ export interface Env {
 }
 
 export const IP_DAY_LIMIT = 1000;
-/** Per-Referer/Origin day bucket. Playground traffic from anatome.dev shares one
- *  counter — 100 was too low (one docs session exhausted it). Still metered so
- *  spoofed Referer cannot unlock unlimited (An-M2). */
-export const HOST_DAY_LIMIT = 5000;
+/** Per-Referer/Origin day bucket. anatome.dev marketing traffic shares one counter.
+ *  Spoofed Referer cannot unlock unlimited (An-M2) — still metered. */
+export const HOST_DAY_LIMIT = 150;
 const UPGRADE_URL = "https://rapidapi.com/anatome/api/anatome";
 const KEY_TTL_SECONDS = 36 * 60 * 60; // ~36h: auto-expire after the day rolls over
 
@@ -48,6 +47,8 @@ export interface RateResult {
   key_type?: string;
   key_id?: string;
   key_record?: KeyRecord;
+  /** Opaque DO/KV counter id — set when a fair-use or key quota was consumed. */
+  bucket_key?: string;
   overage?: boolean;
   limit?: number;
   used?: number;
@@ -160,10 +161,13 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
     const result = (await res.json()) as RateResult;
     // The DO returns `reset` but not `reset_at`; add it here for response parity.
     result.reset_at = reset_at;
+    result.bucket_key = key;
     return result;
   }
 
-  return checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
+  const kvResult = await checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
+  kvResult.bucket_key = key;
+  return kvResult;
 }
 
 /** Build today's host_day / ip_day storage key (same scheme as checkRateLimit). */
@@ -199,6 +203,25 @@ export async function resetDayBucket(
     await stub.fetch("https://do/reset", { method: "POST" });
   }
   return { ok: true, key, kind };
+}
+
+/**
+ * Refund one consumed unit after a server-side failure (5xx). No-op for bypass
+ * / unknown buckets. Client errors (4xx) stay charged.
+ */
+export async function refundRateLimitUnit(env: Env, rl: RateResult): Promise<void> {
+  if (!rl || rl.bypass || !rl.bucket_key) return;
+  const key = rl.bucket_key;
+  if (env.RATE_LIMIT_DO) {
+    const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
+    await stub.fetch("https://do/refund", { method: "POST" });
+    return;
+  }
+  if (!env.RATE_LIMIT_KV) return;
+  const current = await env.RATE_LIMIT_KV.get(key);
+  const count = current ? parseInt(current, 10) || 0 : 0;
+  if (count <= 0) return;
+  await env.RATE_LIMIT_KV.put(key, String(count - 1), { expirationTtl: KEY_TTL_SECONDS });
 }
 
 /**
@@ -270,6 +293,7 @@ async function checkApiKeyLimit(req: Request, env: Env): Promise<RateResult | nu
   result.key_type = key_type;
   result.key_id = record.key_id;
   result.key_record = record;
+  result.bucket_key = key;
   result.reset_at = reset_at;
   // Surface the soft (included) quota in headers when overage is on.
   if (record.allow_overage && result.allowed) {

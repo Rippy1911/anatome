@@ -1,9 +1,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { absApiUrl, exerciseMediaUrl } from "@/lib/apiBase";
-import { fetchSearchDemo, SEARCH_DEMO_SOURCES } from "@/lib/searchDemoSources";
+import { fetchSearchDemo } from "@/lib/searchDemoSources";
 import { Search, Loader2, Dumbbell } from "lucide-react";
 import { cn } from "@/lib/utils";
-import MuscleDiagramSkeleton, { DIAGRAM_IMG_CLASS, preloadDiagramSkeleton } from "@/components/home/MuscleDiagramSkeleton";
+import MuscleDiagramSkeleton, { DIAGRAM_IMG_CLASS } from "@/components/home/MuscleDiagramSkeleton";
 
 function Chip({ children, tone = "primary" }) {
   const cls = tone === "primary" ? "bg-primary/10 text-primary" : "bg-secondary text-secondary-foreground";
@@ -16,7 +16,6 @@ function exerciseKey(e) {
 
 export default function SearchDemoCard({ baseUrl }) {
   const [q, setQ] = useState("bench");
-  const [source, setSource] = useState("direct");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -25,17 +24,15 @@ export default function SearchDemoCard({ baseUrl }) {
   const [searchTiming, setSearchTiming] = useState(null);
   const [diagramTiming, setDiagramTiming] = useState(null);
   const [fetchError, setFetchError] = useState(null);
+  const [rateLimited, setRateLimited] = useState(false);
   const [totalMatched, setTotalMatched] = useState(null);
   const timer = useRef(null);
+  const abortRef = useRef(null);
   const muscleImgRef = useRef(null);
   const diagramStartRef = useRef(null);
   const diagramDoneRef = useRef(false);
   const loadTargetRef = useRef(null);
   const browsing = !q.trim();
-
-  useEffect(() => {
-    preloadDiagramSkeleton(baseUrl);
-  }, [baseUrl]);
 
   const finishDiagramTiming = () => {
     if (diagramStartRef.current == null || diagramDoneRef.current) return;
@@ -44,17 +41,31 @@ export default function SearchDemoCard({ baseUrl }) {
   };
 
   useEffect(() => {
+    // Stop auto-search after a 429 — further keystrokes would burn the shared host bucket.
+    if (rateLimited) return undefined;
+
     if (timer.current) clearTimeout(timer.current);
+    abortRef.current?.abort();
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+
     timer.current = setTimeout(async () => {
       setLoading(true);
       setFetchError(null);
-      const out = await fetchSearchDemo({ source, baseUrl, q, limit: 6 });
+      const out = await fetchSearchDemo({ baseUrl, q, limit: 6, signal: ctrl.signal });
+      if (ctrl.signal.aborted || out.error === "aborted") return;
       setSearchTiming({
         latencyMs: out.latencyMs,
         sourceLabel: out.sourceLabel,
         upstreamMs: out.upstreamMs,
       });
-      if (!out.ok) {
+      if (out.rateLimited) {
+        setRateLimited(true);
+        setResults([]);
+        setSelected(null);
+        setTotalMatched(null);
+        setFetchError(out.error || "Daily fair-use limit reached — try again tomorrow or get an API key.");
+      } else if (!out.ok) {
         setResults([]);
         setSelected(null);
         setTotalMatched(null);
@@ -71,8 +82,11 @@ export default function SearchDemoCard({ baseUrl }) {
       }
       setLoading(false);
     }, 350);
-    return () => timer.current && clearTimeout(timer.current);
-  }, [q, baseUrl, source]);
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+      ctrl.abort();
+    };
+  }, [q, baseUrl, rateLimited]);
 
   const pick = (e) => {
     setSelected(e);
@@ -129,43 +143,20 @@ export default function SearchDemoCard({ baseUrl }) {
           <Dumbbell className="w-4 h-4 text-primary" />
           <h3 className="font-display font-semibold">Search 873 exercises</h3>
         </div>
-        <div className="flex flex-col items-end gap-1">
-          <div className="inline-flex rounded-lg bg-secondary p-0.5 gap-0.5">
-            {SEARCH_DEMO_SOURCES.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setSource(s.id)}
-                title={s.description}
-                className={cn(
-                  "px-2.5 py-1 rounded-md text-[10px] font-mono transition-colors",
-                  source === s.id
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-          <div className="text-[10px] font-mono text-muted-foreground tabular-nums text-right space-y-0.5">
-            {searchTiming && !loading && (
-              <p>
-                search {searchTiming.latencyMs} ms
-                <span className="text-muted-foreground/70"> · {searchTiming.sourceLabel}</span>
-                {searchTiming.upstreamMs != null && (
-                  <span className="text-muted-foreground/70"> · upstream {searchTiming.upstreamMs} ms</span>
-                )}
-              </p>
-            )}
-            {selected && imgSrc && !imgError && (
-              <p className={diagramTiming ? "" : "text-muted-foreground/60"}>
-                {diagramTiming
-                  ? <>diagram {diagramTiming.ms} ms<span className="text-muted-foreground/70"> · generateImage</span></>
-                  : "diagram …"}
-              </p>
-            )}
-          </div>
+        <div className="text-[10px] font-mono text-muted-foreground tabular-nums text-right space-y-0.5">
+          {searchTiming && !loading && (
+            <p>
+              search {searchTiming.latencyMs} ms
+              <span className="text-muted-foreground/70"> · {searchTiming.sourceLabel}</span>
+            </p>
+          )}
+          {selected && imgSrc && !imgError && (
+            <p className={diagramTiming ? "" : "text-muted-foreground/60"}>
+              {diagramTiming
+                ? <>diagram {diagramTiming.ms} ms<span className="text-muted-foreground/70"> · generateImage</span></>
+                : "diagram …"}
+            </p>
+          )}
         </div>
       </div>
 
@@ -226,7 +217,7 @@ export default function SearchDemoCard({ baseUrl }) {
                 <div className="relative flex items-center justify-center h-40 w-[7.5rem] shrink-0">
                   {imgSrc && !imgLoaded && !imgError && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <MuscleDiagramSkeleton baseUrl={baseUrl} />
+                      <MuscleDiagramSkeleton />
                     </div>
                   )}
                   {imgSrc && !imgError && (
@@ -279,12 +270,8 @@ export default function SearchDemoCard({ baseUrl }) {
       </div>
 
       <p className="text-xs text-muted-foreground mt-4">
-        Powered by free-exercise-db (CC0). 873 exercises pre-mapped to our 23 muscle slugs.
-        {source === "rapidapi" && (
-          <span className="block mt-1 text-[10px] font-mono">
-            RapidAPI path: browser → Worker proxy → anatome.p.rapidapi.com → api.anatome.dev
-          </span>
-        )}
+        873 exercises pre-mapped to Anatome&apos;s 23 muscle slugs. Live calls go to{" "}
+        <span className="font-mono text-foreground">api.anatome.dev</span>.
       </p>
     </div>
   );

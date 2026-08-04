@@ -32,6 +32,23 @@ export class RateLimiterDO implements DurableObject {
       });
     }
 
+    // Refund one unit after a 5xx (our fault) — see meter.noteUsage.
+    if (request.method === "POST" && (url.pathname === "/refund" || url.searchParams.get("op") === "refund")) {
+      if (this.count === null) {
+        const stored = (await this.ctx.storage.get<StoredCounter>("counter")) || { count: 0, date: "" };
+        this.count = stored.count;
+        this.date = stored.date || null;
+      }
+      const next = Math.max(0, (this.count ?? 0) - 1);
+      this.count = next;
+      if (this.date) {
+        await this.ctx.storage.put("counter", { count: next, date: this.date });
+      }
+      return new Response(JSON.stringify({ ok: true, refunded: true, count: next }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const limit = Number(url.searchParams.get("limit") || "0");
     const keyType = url.searchParams.get("key_type") || "ip_day";
     const date = url.searchParams.get("date") || new Date().toISOString().slice(0, 10);

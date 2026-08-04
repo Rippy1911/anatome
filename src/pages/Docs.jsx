@@ -20,7 +20,7 @@ export default function Docs() {
       <p className="text-muted-foreground mt-2">A self-hosted muscle group image generator API. Returns SVG diagrams of the human body with arbitrary muscles highlighted in arbitrary colors.</p>
 
       <nav className="flex flex-wrap gap-2 mt-6 text-xs">
-        {[["overview","Overview"],["schema","Schema"],["authentication","Authentication"],["endpoints","Endpoints"],["benchmarks","Benchmarks"],["img-urls","Building <img> URLs"],["exercise-db","Exercise Database"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
+        {[["overview","Overview"],["schema","Schema"],["authentication","Authentication"],["endpoints","Endpoints"],["benchmarks","Benchmarks"],["img-urls","Building <img> URLs"],["exercise-db","Exercises"],["mcp","MCP Server"],["examples","Examples"],["attribution","Attribution & License"]].map(([id,l])=>(
           <a key={id} href={`#${id}`} className="px-2.5 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors">{l}</a>
         ))}
       </nav>
@@ -68,7 +68,7 @@ X-RapidAPI-Host: anatome.p.rapidapi.com`}</Code>
       <P>Worker base URL: <span className="font-mono text-foreground">https://api.anatome.dev</span> · RapidAPI: <span className="font-mono text-foreground">https://anatome.p.rapidapi.com</span> (marketing site: <span className="font-mono text-foreground">https://anatome.dev</span>).</P>
       <P><span className="font-mono text-foreground">POST /generateImage</span> — main renderer (full JSON schema). Also supports GET with a simplified query syntax.</P>
       <P><span className="font-mono text-foreground">POST /workoutImage</span> — session heatmap from a list of exercise names.</P>
-      <P><span className="font-mono text-foreground">GET /searchExercises</span> · <span className="font-mono text-foreground">GET /getExercise</span> · <span className="font-mono text-foreground">GET/POST /resolveExercise</span> — free-exercise-db + muscle layers.</P>
+      <P><span className="font-mono text-foreground">GET /searchExercises</span> · <span className="font-mono text-foreground">GET /getExercise</span> · <span className="font-mono text-foreground">GET/POST /resolveExercise</span> — exercise catalog + muscle layers.</P>
       <P><span className="font-mono text-foreground">GET /exerciseGif</span> — hosted 2-frame demo GIF per exercise (<span className="font-mono text-foreground">?id=&lt;ext_id&gt;</span>).</P>
       <P><span className="font-mono text-foreground">GET /listMuscles</span> · <span className="font-mono text-foreground">GET /muscleInfo</span> · <span className="font-mono text-foreground">GET /listEquipment</span> — discovery.</P>
       <P><span className="font-mono text-foreground">POST /mcp</span> — MCP JSON-RPC 2.0. <span className="font-mono text-foreground">GET /openapi</span> for the full spec.</P>
@@ -81,7 +81,7 @@ X-RapidAPI-Host: anatome.p.rapidapi.com`}</Code>
       <H2 id="img-urls">Building &lt;img&gt; URLs (Full Spec)</H2>
       <ImgUrlSpec />
 
-      <H2 id="exercise-db">Exercise Database (873 exercises)</H2>
+      <H2 id="exercise-db">Exercises (873)</H2>
       <ExerciseDbSection />
 
       <H2 id="muscle-slugs">Muscle Slug Aliases</H2>
@@ -178,7 +178,7 @@ curl "https://anatome.p.rapidapi.com/resolveExercise?exercise=bench+press" \\
       <ul className="text-sm text-muted-foreground leading-relaxed my-2 space-y-1.5 list-disc pl-5">
         <li><span className="text-foreground font-medium">This API (Anatome):</span> Apache-2.0 — by NextSolutions.</li>
         <li><span className="text-foreground font-medium">Anatomical SVG path data:</span> MIT (© Hicham El Boussarghini), ported from <a className="text-primary hover:underline" href="https://github.com/HichamELBSI/react-native-body-highlighter" target="_blank" rel="noopener noreferrer">react-native-body-highlighter</a>.</li>
-        <li><span className="text-foreground font-medium">Exercise metadata:</span> CC0 (public domain) — free-exercise-db by yuhonas.</li>
+        <li><span className="text-foreground font-medium">Exercise metadata:</span> catalog names / muscles / instructions bundled with Anatome (Apache-2.0 distribution).</li>
       </ul>
 
       <div className="mt-10"><AironPromo /></div>

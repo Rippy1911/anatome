@@ -171,8 +171,8 @@ export async function runSelfTest(bodyData: BodyData) {
   T("rate_limit_public_ip_limit_1000", () => {
     return !isPrivateIp("203.0.113.5") && IP_DAY_LIMIT === 1000 || `isPrivate=${isPrivateIp("203.0.113.5")} limit=${IP_DAY_LIMIT}`;
   });
-  T("rate_limit_host_limit_5000", () => {
-    return HOST_DAY_LIMIT === 5000 || `limit=${HOST_DAY_LIMIT}`;
+  T("rate_limit_host_limit_150", () => {
+    return HOST_DAY_LIMIT === 150 || `limit=${HOST_DAY_LIMIT}`;
   });
   T("rate_limit_localhost_host_unlimited", () => {
     return isLocalHost("localhost") && isLocalHost("127.0.0.1") && !isLocalHost("example.com") || "localhost detection failed";

@@ -6,6 +6,7 @@ import {
   checkRateLimit,
   rateHeaders,
   rateLimitBody,
+  refundRateLimitUnit,
   type Env,
   type RateResult,
 } from "./rateLimit.ts";
@@ -80,6 +81,10 @@ export function noteUsage(
   res: Response,
   endpoint: string,
 ): void {
+  // Server faults are our bug — don't burn the caller's fair-use / key quota.
+  if (res.status >= 500 && !rl.bypass && rl.bucket_key) {
+    background(c, refundRateLimitUnit(c.env, rl));
+  }
   background(c, recordUsage(c.env, {
     key_id: rl.key_id,
     endpoint,
