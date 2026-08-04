@@ -309,8 +309,8 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/exerciseImage": {
         get: {
           tags: ["Exercise Database"],
-          summary: "Exercise reference photo (free-exercise-db, licence unverified)",
-          description: "Proxies a free-exercise-db source JPEG through Anatome's host so consumers (incl. RapidAPI) don't hotlink raw.githubusercontent.com. Pass the relative path from an exercise's images[] field.",
+          summary: "Exercise reference photo (wrkout/exercises.json, licence unverified)",
+          description: "Proxies a wrkout/exercises.json source JPEG through Anatome's host so consumers (incl. RapidAPI) don't hotlink raw.githubusercontent.com. Image copyright is NOT covered by the dataset Unlicense; provenance unverified and not cleared for redistribution. Pass the relative path from an exercise's images[] field.",
           parameters: [{ name: "path", in: "query", required: true, schema: { type: "string" }, example: "Barbell_Bench_Press_-_Medium_Grip/0.jpg", description: "Relative image path from exercise.images[]" }],
           responses: {
             "200": { description: "JPEG reference photo", content: { "image/jpeg": { schema: { type: "string", format: "binary" } } } },

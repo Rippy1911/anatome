@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import {
   freeExerciseDbImageUrl,
-  freeExerciseDbRawUrl,
+  wrkoutRawUrl,
   freeExerciseDbImageUrls,
   sanitizeFreeExerciseDbPath,
   buildExerciseRecord,
   formatExercise,
-  FREE_EXERCISE_DB_RAW_BASE,
+  WRKOUT_RAW_BASE,
 } from "../src/lib/exercises.ts";
 import { SEARCH_DEFAULT_FIELDS } from "../src/lib/exerciseFields.ts";
 import type { ExerciseRow } from "../src/lib/exercises.ts";
@@ -71,26 +71,26 @@ describe("sanitizeFreeExerciseDbPath", () => {
   });
 });
 
-describe("freeExerciseDbRawUrl", () => {
+describe("wrkoutRawUrl", () => {
   it("maps Anatome paths to wrkout exercises/<folder>/images/<file>", () => {
-    expect(freeExerciseDbRawUrl("Barbell_Bench_Press_-_Medium_Grip/0.jpg"))
-      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}Barbell_Bench_Press_-_Medium_Grip/images/0.jpg`);
+    expect(wrkoutRawUrl("Barbell_Bench_Press_-_Medium_Grip/0.jpg"))
+      .toBe(`${WRKOUT_RAW_BASE}Barbell_Bench_Press_-_Medium_Grip/images/0.jpg`);
   });
 
   it("remaps punctuation-stripped ext_ids to wrkout folder names", () => {
     // encodeURIComponent leaves `'` unescaped (RFC 3986 unreserved-ish set).
-    expect(freeExerciseDbRawUrl("Childs_Pose/0.jpg"))
-      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}Child's_Pose/images/0.jpg`);
+    expect(wrkoutRawUrl("Childs_Pose/0.jpg"))
+      .toBe(`${WRKOUT_RAW_BASE}Child's_Pose/images/0.jpg`);
   });
 
   it("percent-encodes spaces per segment but keeps slashes", () => {
-    expect(freeExerciseDbRawUrl("One-Arm Open Palm/0.jpg"))
-      .toBe(`${FREE_EXERCISE_DB_RAW_BASE}One-Arm%20Open%20Palm/images/0.jpg`);
+    expect(wrkoutRawUrl("One-Arm Open Palm/0.jpg"))
+      .toBe(`${WRKOUT_RAW_BASE}One-Arm%20Open%20Palm/images/0.jpg`);
   });
 
   it("returns null for invalid input", () => {
-    expect(freeExerciseDbRawUrl("../x")).toBeNull();
-    expect(freeExerciseDbRawUrl(null)).toBeNull();
+    expect(wrkoutRawUrl("../x")).toBeNull();
+    expect(wrkoutRawUrl(null)).toBeNull();
   });
 });
 

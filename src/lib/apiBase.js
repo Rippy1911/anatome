@@ -6,7 +6,7 @@ export const SITE_BASE = "https://anatome.dev";
 export const PUBLIC_API = import.meta.env.VITE_PUBLIC_API || "https://api.anatome.dev";
 
 /** Bump when regenerating GIF frame timing — busts `Cache-Control: immutable` in browsers. */
-const GIF_PLAYBACK_VERSION = "4";
+const GIF_PLAYBACK_VERSION = "5";
 
 /** OpenAPI 3.1 spec for Swagger UI / RapidAPI upload. */
 export const OPENAPI_SPEC_URL = `${PUBLIC_API}/openapi`;

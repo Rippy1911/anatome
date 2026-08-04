@@ -28,7 +28,7 @@ The free tier includes a limited number of requests per month. Localhost and dev
 
 - The Anatome API and software are licensed under **Apache-2.0** by NextSolutions.
 - Anatomical SVG path data is **MIT licensed** (© Hicham El Boussarghini), ported from react-native-body-highlighter.
-- Exercise metadata is **CC0** (public domain), from the free-exercise-db project.
+- Exercise metadata is from **wrkout/exercises.json** (**Unlicense**); reference photography served by `/exerciseImage` is uncleared — image copyright is unverified and **not** covered by the metadata Unlicense.
 
 When self-hosting or redistributing, you must retain all applicable license notices.
 

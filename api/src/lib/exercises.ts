@@ -83,7 +83,7 @@ export function absoluteImageSrc(src: string | undefined | null, base: string): 
  * differences vs yuhonas-style ext_ids, e.g. Childs_Pose → Child's_Pose).
  * Proxied through `/exerciseImage?path=<rel>` so clients never hotlink GitHub.
  */
-export const FREE_EXERCISE_DB_RAW_BASE =
+export const WRKOUT_RAW_BASE =
   "https://raw.githubusercontent.com/wrkout/exercises.json/master/exercises/";
 
 const WRKOUT_FOLDER_BY_EXT_ID = wrkoutFolderByExtId as Record<string, string>;
@@ -111,11 +111,11 @@ export function freeExerciseDbImageUrl(relPath: string | undefined | null, base:
 }
 
 /** Build the raw upstream GitHub URL (wrkout) for an Anatome `images[]` path. */
-export function freeExerciseDbRawUrl(relPath: string | undefined | null): string | null {
+export function wrkoutRawUrl(relPath: string | undefined | null): string | null {
   if (!relPath || typeof relPath !== "string") return null;
   const wrkoutRel = toWrkoutImagePath(relPath);
   if (!wrkoutRel) return null;
-  return `${FREE_EXERCISE_DB_RAW_BASE}${wrkoutRel.split("/").map(encodeURIComponent).join("/")}`;
+  return `${WRKOUT_RAW_BASE}${wrkoutRel.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 /**
