@@ -31,7 +31,7 @@ import { runSelfTest } from "./routes/selfTest.ts";
 import { fetchCiStatus } from "./routes/ciStatus.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
 import {
-  putAdminKey, deleteAdminKey, getAdminUsage, getAdminStats,
+  putAdminKey, deleteAdminKey, getAdminUsage, getAdminStats, postAdminRateLimitReset,
 } from "./routes/admin.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
@@ -481,6 +481,7 @@ app.put("/admin/keys/:key_id", (c) => putAdminKey(c));
 app.delete("/admin/keys/:key_id", (c) => deleteAdminKey(c));
 app.get("/admin/usage", (c) => getAdminUsage(c));
 app.get("/admin/stats", (c) => getAdminStats(c));
+app.post("/admin/rate-limit/reset", (c) => postAdminRateLimitReset(c));
 
 // ---- selfTest ----
 // Diagnostic endpoint: gate to private IPs (dev/testing) or a valid

@@ -34,7 +34,10 @@ export interface Env {
 }
 
 export const IP_DAY_LIMIT = 1000;
-export const HOST_DAY_LIMIT = 100;
+/** Per-Referer/Origin day bucket. Playground traffic from anatome.dev shares one
+ *  counter — 100 was too low (one docs session exhausted it). Still metered so
+ *  spoofed Referer cannot unlock unlimited (An-M2). */
+export const HOST_DAY_LIMIT = 5000;
 const UPGRADE_URL = "https://rapidapi.com/anatome/api/anatome";
 const KEY_TTL_SECONDS = 36 * 60 * 60; // ~36h: auto-expire after the day rolls over
 
@@ -161,6 +164,41 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
   }
 
   return checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
+}
+
+/** Build today's host_day / ip_day storage key (same scheme as checkRateLimit). */
+export async function rateLimitBucketKey(
+  kind: "host_day" | "ip_day",
+  identity: string,
+  date = new Date().toISOString().slice(0, 10),
+): Promise<string> {
+  const hash = await sha256(identity);
+  return `${kind}:${hash}:${date}`;
+}
+
+/**
+ * Operator unlock: zero today's counter for a host or IP bucket.
+ * Clears KV fallback + Durable Object storage when bound.
+ */
+export async function resetDayBucket(
+  env: Env,
+  opts: { host?: string; ip?: string },
+): Promise<{ ok: true; key: string; kind: "host_day" | "ip_day" } | { ok: false; error: string }> {
+  const host = (opts.host || "").trim().toLowerCase();
+  const ip = (opts.ip || "").trim();
+  if (!host && !ip) return { ok: false, error: "host or ip required" };
+  if (host && ip) return { ok: false, error: "pass host or ip, not both" };
+  const kind: "host_day" | "ip_day" = host ? "host_day" : "ip_day";
+  const identity = host || ip;
+  const key = await rateLimitBucketKey(kind, identity);
+  try {
+    await env.RATE_LIMIT_KV?.delete(key);
+  } catch { /* optional binding in tests */ }
+  if (env.RATE_LIMIT_DO) {
+    const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
+    await stub.fetch("https://do/reset", { method: "POST" });
+  }
+  return { ok: true, key, kind };
 }
 
 /**

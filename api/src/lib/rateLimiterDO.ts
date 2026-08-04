@@ -21,6 +21,17 @@ export class RateLimiterDO implements DurableObject {
 
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
+
+    // Operator reset (admin route) — wipe counter so a burned day-bucket can reopen.
+    if (request.method === "POST" && (url.pathname === "/reset" || url.searchParams.get("op") === "reset")) {
+      await this.ctx.storage.deleteAll();
+      this.count = 0;
+      this.date = null;
+      return new Response(JSON.stringify({ ok: true, reset: true }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const limit = Number(url.searchParams.get("limit") || "0");
     const keyType = url.searchParams.get("key_type") || "ip_day";
     const date = url.searchParams.get("date") || new Date().toISOString().slice(0, 10);

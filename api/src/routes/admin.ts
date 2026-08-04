@@ -12,7 +12,7 @@ import {
   type KeyStatus,
 } from "../lib/apiKeys.ts";
 import { readUsageSeries } from "../lib/usage.ts";
-import type { Env } from "../lib/rateLimit.ts";
+import { resetDayBucket, type Env } from "../lib/rateLimit.ts";
 
 function unauthorized(): Response {
   // 404 (not 401) so the admin surface is not trivially enumerable — same
@@ -140,6 +140,18 @@ export async function getAdminStats(c: Context<{ Bindings: Env }>): Promise<Resp
       note: "Aggregate stats require Analytics Engine binding + BFF GraphQL query. Per-key series are available via GET /admin/usage.",
     },
   });
+}
+
+/** Zero today's fair-use counter for a host (Referer) or IP bucket. */
+export async function postAdminRateLimitReset(c: Context<{ Bindings: Env }>): Promise<Response> {
+  if (!requireAdmin(c)) return unauthorized();
+  let body: Record<string, unknown> = {};
+  try { body = await c.req.json(); } catch { /* empty body ok if query used */ }
+  const host = typeof body.host === "string" ? body.host : c.req.query("host") || undefined;
+  const ip = typeof body.ip === "string" ? body.ip : c.req.query("ip") || undefined;
+  const result = await resetDayBucket(c.env, { host, ip });
+  if (!result.ok) return c.json({ ok: false, error: result.error }, 400);
+  return c.json({ ok: true, reset: true, kind: result.kind, key: result.key });
 }
 
 /** Test helper — hash a plaintext token the same way Base44 will. */

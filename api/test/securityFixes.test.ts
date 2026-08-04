@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { renderMuscleSvg, type RenderPayload } from "../src/lib/muscleEngine.ts";
 import { getBodyData } from "../src/lib/bodyData.ts";
-import { bypassCheck, checkRateLimit, type Env } from "../src/lib/rateLimit.ts";
+import {
+  bypassCheck, checkRateLimit, HOST_DAY_LIMIT, rateLimitBucketKey, type Env,
+} from "../src/lib/rateLimit.ts";
 
 const EMPTY_BODY = { male: { front: [], back: [] }, female: { front: [], back: [] } };
 const BODY = getBodyData();
@@ -15,12 +17,13 @@ function malicious(o: Record<string, unknown>): RenderPayload {
 // Minimal KV stub: count is stored in a Map, never persisted. Enough to assert
 // that a spoofed-Origin public request is *not* bypassed and instead hits the
 // per-day counter.
-function makeKvStub() {
-  const store = new Map<string, string>();
+function makeKvStub(store = new Map<string, string>()) {
   return {
     async get(k: string) { return store.get(k) ?? null; },
     async put(k: string, v: string, _opts?: { expirationTtl?: number }) { store.set(k, v); },
-  } as unknown as KVNamespace;
+    async delete(k: string) { store.delete(k); },
+    store,
+  } as unknown as KVNamespace & { store: Map<string, string> };
 }
 
 const NO_SECRETS: Env = { RATE_LIMIT_KV: makeKvStub() };
@@ -110,9 +113,9 @@ describe("An-M2: rate-limit bypass no longer trusts Origin/Referer", () => {
     expect(rl.source).not.toBe("localhost");
     expect(rl.allowed).toBe(true); // first request still allowed, but counted
     // A host header is present (localhost), so it lands in the host_day bucket
-    // (100/day) — still metered, just the stricter per-host tier.
+    // — still metered, just the stricter per-host tier (not unlimited bypass).
     expect(rl.key_type).toBe("host_day");
-    expect(rl.limit).toBe(100);
+    expect(rl.limit).toBe(HOST_DAY_LIMIT);
   });
 
   it("bypassCheck still bypasses for a private (loopback) edge IP", () => {
@@ -149,18 +152,15 @@ describe("An-M2: rate-limit bypass no longer trusts Origin/Referer", () => {
   });
 
   it("a spoofed-localhost Origin from a public IP is eventually blocked (no unlimited bypass)", async () => {
-    const env: Env = { RATE_LIMIT_KV: makeKvStub() };
-    // host_day limit is 100 — fire 101 spoofed requests and confirm the 101st
-    // is denied. Before the fix this would have been unlimited (bypass:true).
-    let lastAllowed = true;
-    for (let i = 0; i < 101; i++) {
-      const rl = await checkRateLimit(publicReq({ origin: "http://localhost" }), env);
-      lastAllowed = rl.allowed === true;
-      if (rl.allowed === false) {
-        lastAllowed = false;
-        break;
-      }
-    }
-    expect(lastAllowed).toBe(false);
+    const kv = makeKvStub();
+    const env: Env = { RATE_LIMIT_KV: kv };
+    // Pre-fill today's host_day bucket at the ceiling (Origin→hostname "localhost").
+    const key = await rateLimitBucketKey("host_day", "localhost");
+    await kv.put(key, String(HOST_DAY_LIMIT));
+    const rl = await checkRateLimit(publicReq({ origin: "http://localhost" }), env);
+    expect(rl.bypass).not.toBe(true);
+    expect(rl.source).not.toBe("localhost");
+    expect(rl.key_type).toBe("host_day");
+    expect(rl.allowed).toBe(false);
   });
 });
