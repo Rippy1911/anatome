@@ -7,7 +7,8 @@ import { cors } from "hono/cors";
 import { renderMuscleSvg } from "./lib/muscleEngine.ts";
 import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION, ANTAGONISTS } from "./data/muscleCatalog.ts";
 import { getBodyData } from "./lib/bodyData.ts";
-import { payloadFromQuery, sha256 } from "./lib/query.ts";import {
+import { payloadFromQuery, sha256 } from "./lib/query.ts";
+import {
   searchExercisesLogic, formatExercise, lookupExerciseById, getByMuscle, getRandom, getByName,
   cleanExercise,
   resolveExercise as resolveEx,
@@ -18,7 +19,10 @@ import { payloadFromQuery, sha256 } from "./lib/query.ts";import {
 import { withEdgeCache } from "./lib/edgeCache.ts";
 import { SEARCH_DEFAULT_FIELDS, parseFieldsParam } from "./lib/exerciseFields.ts";
 import { workoutImageLogic, workoutImageSrc } from "./lib/workoutImage.ts";
-import { clientIp, isPrivateIp, type Env } from "./lib/rateLimit.ts";
+import {
+  clientIp, isPrivateIp, rateHeaders, rateLimitMessage, upgradeUrl,
+  fairUseLimit, type Env, type RateResult,
+} from "./lib/rateLimit.ts";
 import { RateLimiterDO } from "./lib/rateLimiterDO.ts";
 // Re-export the Durable Object class so wrangler can bind it as the DO entrypoint.
 export { RateLimiterDO };
@@ -26,13 +30,11 @@ import { serviceAttribution, imageAttribution, exerciseDataAttribution, guideCat
 import { listGuides as listGuidesLogic, getGuide as getGuideLogic, getGuideTree as getGuideTreeLogic, safeGuideSlug } from "./lib/guides.ts";
 import { DEFAULT_GUIDE_SLUG } from "./data/guideCatalog.ts";
 import { buildOpenApiSpec } from "./routes/openapi.ts";
-import { handleMcp, computeMcpResult, TOOLS, type McpBody } from "./routes/mcp.ts";
+import { handleMcp, computeMcpResult, TOOLS, MCP_PROTOCOL_VERSION, guideWipNotice, type McpBody } from "./routes/mcp.ts";
 import { runSelfTest } from "./routes/selfTest.ts";
 import { fetchCiStatus } from "./routes/ciStatus.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
-import {
-  putAdminKey, deleteAdminKey, getAdminUsage, getAdminStats, postAdminRateLimitReset,
-} from "./routes/admin.ts";
+import { getAdminStats, postAdminRateLimitReset } from "./routes/admin.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
 import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
@@ -40,6 +42,8 @@ import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
 /** GIFs are regenerated in-place; avoid immutable so timing fixes can roll out. */
 const GIF_CACHE_CONTROL = "public, max-age=86400, s-maxage=86400";
+/** 3.x drops API keys and the paid tier. Kept in one place — /, /mcp and MCP serverInfo drifted. */
+export const API_VERSION = "3.0.0";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -82,20 +86,35 @@ function baseUrl(c: { env: Env }): string {
 }
 
 app.get("/", (c) => c.json({
-  ok: true, service: "anatome-api", version: "2.1.0",
+  ok: true, service: "anatome-api", version: API_VERSION,
   endpoints: [
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
     "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment",
     "/listGuides", "/getGuide", "/getGuideTree",
     "/mcp", "/openapi", "/ciStatus", "/selfTest",
-    "/admin/keys/{key_id}", "/admin/usage", "/admin/stats",
+    "/admin/stats", "/admin/rate-limit/reset",
   ],
   auth: {
-    anonymous: "IP/host fair-use day buckets",
-    api_key: "Authorization: Bearer ana_live_… or ana_test_…",
-    rapidapi: "X-RapidAPI-Proxy-Secret",
+    scheme: "none",
+    detail: "Anatome is keyless. There is no signup, no API key and no token to paste.",
+    fair_use: `${fairUseLimit(c.env)} requests per day per caller, resetting at 00:00 UTC.`,
+    rapidapi: "X-RapidAPI-Proxy-Secret (marketplace listing only)",
   },
+  mcp: { endpoint: `${baseUrl(c)}/mcp`, transport: "streamable-http", protocol_version: MCP_PROTOCOL_VERSION },
+  more: upgradeUrl(c.env),
   ...serviceAttribution(),
+}));
+
+// Agent discovery: a stable, machine-readable pointer at the MCP endpoint so a crawler or an
+// assistant that lands on the domain can find the connector without reading marketing copy.
+app.get("/.well-known/mcp.json", (c) => c.json({
+  name: "anatome",
+  description: "Muscle anatomy diagrams, a 873-exercise database and session heatmaps. Free, keyless.",
+  version: API_VERSION,
+  transport: { type: "streamable-http", url: `${baseUrl(c)}/mcp` },
+  authentication: { type: "none" },
+  fair_use: { requests_per_day: fairUseLimit(c.env), window: "UTC day" },
+  documentation: "https://anatome.dev",
 }));
 
 // ---- generateImage (GET query + POST JSON) ----
@@ -179,7 +198,7 @@ app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
 // listEquipment: edge-cached and unmetered. The metered endpoints are the ones
 // that search or render (searchExercises, getExercise, generateImage).
 app.get("/listGuides", (c) => withEdgeCache(c.req.raw, execCtx(c), () =>
-  c.json({ ok: true, ...listGuidesLogic(baseUrl(c)), ...guideCatalogAttribution() }),
+  c.json({ ok: true, ...listGuidesLogic(baseUrl(c)), ...guideWipNotice(), ...guideCatalogAttribution() }),
 ));
 
 app.get("/getGuide", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
@@ -188,7 +207,7 @@ app.get("/getGuide", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   if (!safeGuideSlug(slug)) return c.json({ ok: false, error: "invalid slug", ...guideCatalogAttribution() }, 400);
   const { found, guide } = getGuideLogic(slug, baseUrl(c));
   if (!found) return c.json({ ok: false, error: `unknown guide: ${slug}`, ...guideCatalogAttribution() }, 404);
-  return c.json({ ok: true, ...guide, ...guideCatalogAttribution() });
+  return c.json({ ok: true, ...guide, ...guideWipNotice(), ...guideCatalogAttribution() });
 }));
 
 app.get("/getGuideTree", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
@@ -200,7 +219,7 @@ app.get("/getGuideTree", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   }
   const { found, tree } = getGuideTreeLogic(guideSlug, treeSlug, baseUrl(c));
   if (!found) return c.json({ ok: false, error: `unknown tree: ${guideSlug}/${treeSlug}`, ...guideCatalogAttribution() }, 404);
-  return c.json({ ok: true, ...tree, ...guideCatalogAttribution() });
+  return c.json({ ok: true, ...tree, ...guideWipNotice(), ...guideCatalogAttribution() });
 }));
 
 // ---- searchExercises ----
@@ -413,60 +432,145 @@ app.post("/workoutImage", async (c) => {
   return res;
 });
 
-// ---- mcp (JSON-RPC) ----
-app.get("/mcp", (c) => c.json({ ok: true, server: "anatome", version: "2.1.0", protocol: "mcp/2024-11-05", tools: TOOLS.map((t) => t.name) }));
+// ---- mcp (JSON-RPC over Streamable HTTP) ----
+
+/**
+ * A quota denial rendered as a *tool* error, not a protocol error.
+ *
+ * MCP hosts treat a JSON-RPC `error` on tools/call as the server malfunctioning: Claude and
+ * ChatGPT surface it as "the connector failed" and the model never sees why. `isError: true`
+ * inside a normal result is the spec's own channel for "the tool ran and could not do the job",
+ * and it puts the explanation in front of the model, which is the whole point — the user should
+ * be told they are out of requests for today, not that Anatome is down.
+ */
+function rateLimitToolResult(id: unknown, rl: RateResult, upgrade: string) {
+  return {
+    jsonrpc: "2.0",
+    id: id ?? null,
+    result: {
+      isError: true,
+      content: [{ type: "text", text: rateLimitMessage(rl, upgrade) }],
+      structuredContent: {
+        error: rl.scope === "network" ? "network_rate_limit_exceeded" : "daily_fair_use_limit_reached",
+        scope: rl.scope,
+        limit: rl.limit,
+        used: rl.used,
+        remaining: 0,
+        reset_at: rl.reset_at,
+        retry_after_seconds: rl.retry_after,
+        retryable: false,
+        more_info: upgrade,
+      },
+    },
+  };
+}
+
+/** Warn before the wall: once the budget is nearly gone, say so inside the tool result. */
+const QUOTA_NOTICE_THRESHOLD = 10;
+function withQuotaNotice(result: unknown, rl: RateResult): unknown {
+  const remaining = rl.remaining;
+  if (rl.bypass || remaining == null || remaining > QUOTA_NOTICE_THRESHOLD) return result;
+  if (!result || typeof result !== "object") return result;
+  const r = result as { structuredContent?: Record<string, unknown> };
+  return {
+    ...r,
+    structuredContent: {
+      ...(r.structuredContent || {}),
+      quota: {
+        remaining_today: remaining,
+        limit: rl.limit,
+        reset_at: rl.reset_at,
+        note: `${remaining} of ${rl.limit} free Anatome requests left today. Mention this to the user if you plan several more calls.`,
+      },
+    },
+  };
+}
+
+/** Opaque per-connection id so anonymous fair use has something better than a shared egress IP. */
+function newSessionId(): string {
+  return crypto.randomUUID().replace(/-/g, "");
+}
+
+app.get("/mcp", (c) => c.json({
+  ok: true,
+  server: "anatome",
+  version: API_VERSION,
+  protocol: MCP_PROTOCOL_VERSION,
+  transport: "streamable-http",
+  endpoint: `${baseUrl(c)}/mcp`,
+  auth: "none",
+  fair_use: { requests_per_day: fairUseLimit(c.env), window: "UTC day", applies_to: "tools/call" },
+  tools: TOOLS.map((t) => t.name),
+}));
+
 app.post("/mcp", async (c) => {
-  const gate = await gateMetered(c, "/mcp");
-  if (!gate.ok) {
-    const denied = await gate.response.clone().json().catch(() => ({})) as { message?: string };
-    return c.json({
-      jsonrpc: "2.0",
-      id: null,
-      error: { code: -32000, message: denied.message || "Rate limit exceeded" },
-    }, 429, { "Retry-After": gate.response.headers.get("Retry-After") || "60" });
-  }
   let body: unknown;
-  try { body = await c.req.json(); } catch { return c.json({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } }); }
+  try { body = await c.req.json(); } catch {
+    return c.json({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } }, 400);
+  }
   const parsed = body as McpBody;
   const base = baseUrl(c);
+  const method = parsed.method;
 
-  // Cache deterministic tools/call results in the edge cache, keyed by
-  // method+params (NOT the JSON-RPC id, which varies per request). The cached
-  // inner result is re-wrapped with the live id. Skip non-deterministic calls
-  // (get_exercise with random=true) and non-tools/call methods.
-  // Metering already ran above — MCP cache HITs still burn quota.
-  const isCacheableCall =
-    parsed.method === "tools/call" &&
-    !(parsed.params?.name === "get_exercise" && parsed.params?.arguments?.random);
+  // Notifications carry no id and expect no body (Streamable HTTP: 202 Accepted). Answering
+  // them with "Method not found" made every compliant client log an error on connect.
+  const isNotification = !("id" in (parsed || {})) || method?.startsWith("notifications/");
+  if (isNotification) return c.body(null, 202);
 
+  // Reuse the client's session id, or mint one during the handshake. See rateLimit.ts for why
+  // a remote connector cannot be fairly metered on its IP.
+  const incomingSession = c.req.header("mcp-session-id") || "";
+  const sessionId = incomingSession || (method === "initialize" ? newSessionId() : "");
+  const sessionHeaders: Record<string, string> = {};
+  if (!incomingSession && sessionId) sessionHeaders["Mcp-Session-Id"] = sessionId;
+
+  // Only tools/call is metered. Metering the handshake means a user who is merely out of
+  // requests for today cannot even connect, and every host renders that as a broken connector —
+  // the single most misleading failure this API can produce.
+  if (method !== "tools/call") {
+    return c.json(handleMcp(parsed, base), 200, sessionHeaders);
+  }
+
+  const gate = await gateMetered(c, "/mcp", { mcpSessionId: sessionId || undefined });
+  if (!gate.ok) {
+    return c.json(rateLimitToolResult(parsed.id, gate.rl, upgradeUrl(c.env)), 200, {
+      ...rateHeaders(gate.rl, c.env),
+      "Retry-After": String(gate.rl.retry_after ?? 60),
+      ...sessionHeaders,
+    });
+  }
+
+  const headers = { ...gate.headers, ...sessionHeaders };
+
+  // Cache deterministic tools/call results in the edge cache, keyed by method+params (NOT the
+  // JSON-RPC id, which varies per request). The cached inner result is re-wrapped with the live
+  // id and the caller's own quota notice. Skip non-deterministic calls (get_exercise random=true).
+  // Metering already ran above — MCP cache HITs still cost a unit.
+  const isCacheableCall = !(parsed.params?.name === "get_exercise" && parsed.params?.arguments?.random);
+
+  let inner: { ok: boolean; result?: unknown; error?: { code: number; message: string } };
   if (isCacheableCall) {
     const keyStr = `mcp:${parsed.method}:${JSON.stringify(parsed.params || {})}`;
     const cacheKey = new Request(`https://cache.anatome.dev/mcp/${await sha256(keyStr)}`);
     const cache = caches.default;
     const hit = await cache.match(cacheKey);
     if (hit) {
-      const inner = (await hit.json()) as { ok: boolean; result?: unknown; error?: { code: number; message: string } };
-      const out = inner.ok
-        ? { jsonrpc: "2.0", id: parsed.id ?? null, result: inner.result }
-        : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
-      const res = c.json(out);
-      noteUsage(c, gate.rl, res, "/mcp");
-      return res;
+      inner = await hit.json();
+    } else {
+      inner = computeMcpResult(parsed.method, parsed.params || {}, base);
+      if (inner.ok) {
+        const stored = new Response(JSON.stringify(inner), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=86400, s-maxage=604800" } });
+        execCtx(c)?.waitUntil(cache.put(cacheKey, stored));
+      }
     }
-    const inner = computeMcpResult(parsed.method, parsed.params || {}, base);
-    if (inner.ok) {
-      const stored = new Response(JSON.stringify(inner), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=86400, s-maxage=604800" } });
-      execCtx(c)?.waitUntil(cache.put(cacheKey, stored));
-    }
-    const out = inner.ok
-      ? { jsonrpc: "2.0", id: parsed.id ?? null, result: inner.result }
-      : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
-    const res = c.json(out);
-    noteUsage(c, gate.rl, res, "/mcp");
-    return res;
+  } else {
+    inner = computeMcpResult(parsed.method, parsed.params || {}, base);
   }
 
-  const res = c.json(handleMcp(parsed, base));
+  const out = inner.ok
+    ? { jsonrpc: "2.0", id: parsed.id ?? null, result: withQuotaNotice(inner.result, gate.rl) }
+    : { jsonrpc: "2.0", id: parsed.id ?? null, error: inner.error };
+  const res = c.json(out, 200, headers);
   noteUsage(c, gate.rl, res, "/mcp");
   return res;
 });
@@ -476,10 +580,7 @@ app.get("/openapi", (c) => withEdgeCache(c.req.raw, execCtx(c), () =>
   c.json(buildOpenApiSpec(baseUrl(c))),
 ));
 
-// ---- admin (Base44 BFF only — Bearer ADMIN_TOKEN) ----
-app.put("/admin/keys/:key_id", (c) => putAdminKey(c));
-app.delete("/admin/keys/:key_id", (c) => deleteAdminKey(c));
-app.get("/admin/usage", (c) => getAdminUsage(c));
+// ---- admin (operator only — Bearer ADMIN_TOKEN) ----
 app.get("/admin/stats", (c) => getAdminStats(c));
 app.post("/admin/rate-limit/reset", (c) => postAdminRateLimitReset(c));
 

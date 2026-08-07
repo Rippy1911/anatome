@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { renderMuscleSvg, type RenderPayload } from "../src/lib/muscleEngine.ts";
 import { getBodyData } from "../src/lib/bodyData.ts";
 import {
-  bypassCheck, checkRateLimit, HOST_DAY_LIMIT, rateLimitBucketKey, type Env,
+  bypassCheck, checkRateLimit, DEFAULT_FAIR_USE_DAILY_LIMIT, rateLimitBucketKey, type Env,
 } from "../src/lib/rateLimit.ts";
 
 const EMPTY_BODY = { male: { front: [], back: [] }, female: { front: [], back: [] } };
@@ -112,10 +112,10 @@ describe("An-M2: rate-limit bypass no longer trusts Origin/Referer", () => {
     expect(rl.bypass).not.toBe(true);
     expect(rl.source).not.toBe("localhost");
     expect(rl.allowed).toBe(true); // first request still allowed, but counted
-    // A host header is present (localhost), so it lands in the host_day bucket
-    // — still metered, just the stricter per-host tier (not unlimited bypass).
-    expect(rl.key_type).toBe("host_day");
-    expect(rl.limit).toBe(HOST_DAY_LIMIT);
+    // Origin/Referer is not consulted at all any more: identity is the edge IP, so a spoofed
+    // header cannot move the caller into any other bucket, generous or strict.
+    expect(rl.scope).toBe("ip");
+    expect(rl.limit).toBe(DEFAULT_FAIR_USE_DAILY_LIMIT);
   });
 
   it("bypassCheck still bypasses for a private (loopback) edge IP", () => {
@@ -143,24 +143,25 @@ describe("An-M2: rate-limit bypass no longer trusts Origin/Referer", () => {
     expect(rl?.source).toBe("mcp_trusted");
   });
 
-  it("a public IP with no Referer is metered on the ip_day bucket (1000/day)", async () => {
+  it("a public IP is metered on the fair-use bucket", async () => {
     const env: Env = { RATE_LIMIT_KV: makeKvStub() };
     const rl = await checkRateLimit(publicReq(), env);
     expect(rl.bypass).not.toBe(true);
-    expect(rl.key_type).toBe("ip_day");
-    expect(rl.limit).toBe(1000);
+    expect(rl.scope).toBe("ip");
+    expect(rl.limit).toBe(DEFAULT_FAIR_USE_DAILY_LIMIT);
   });
 
   it("a spoofed-localhost Origin from a public IP is eventually blocked (no unlimited bypass)", async () => {
     const kv = makeKvStub();
     const env: Env = { RATE_LIMIT_KV: kv };
-    // Pre-fill today's host_day bucket at the ceiling (Origin→hostname "localhost").
-    const key = await rateLimitBucketKey("host_day", "localhost");
-    await kv.put(key, String(HOST_DAY_LIMIT));
+    // Pre-fill today's bucket for the caller's IP at the ceiling. The spoofed Origin is
+    // irrelevant — it can neither unlock a bypass nor dodge into a fresh bucket.
+    const key = await rateLimitBucketKey("ip", "203.0.113.5");
+    await kv.put(key, String(DEFAULT_FAIR_USE_DAILY_LIMIT));
     const rl = await checkRateLimit(publicReq({ origin: "http://localhost" }), env);
     expect(rl.bypass).not.toBe(true);
     expect(rl.source).not.toBe("localhost");
-    expect(rl.key_type).toBe("host_day");
+    expect(rl.scope).toBe("ip");
     expect(rl.allowed).toBe(false);
   });
 });

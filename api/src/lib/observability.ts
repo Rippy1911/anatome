@@ -11,7 +11,7 @@ export interface RequestLogFields {
   cache?: "HIT" | "MISS";
   rate_source?: string;
   rate_bypass?: boolean;
-  key_type?: string;
+  rate_scope?: string;
   error?: string;
 }
 

@@ -15,6 +15,9 @@ describe("security headers (launch-readiness §2/§4)", () => {
   it("attaches X-Frame-Options, Permissions-Policy, nosniff, HSTS, Referrer-Policy on a 200", async () => {
     const res = await app.request("/listMuscles", {}, ENV);
     const h = headers(res);
+    // Assert the status the test name claims. This used to 500 (no `caches` under node) and
+    // still passed, because only the headers were checked.
+    expect(res.status).toBe(200);
     expect(h["x-frame-options"]).toBe("DENY");
     expect(h["permissions-policy"]).toBe("geolocation=(), microphone=(), camera=()");
     expect(h["x-content-type-options"]).toBe("nosniff");
