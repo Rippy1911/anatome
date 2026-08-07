@@ -39,7 +39,7 @@ new_sqlite_classes = ["RateLimiterDO"]
 [[d1_databases]]
 binding = "DB"
 database_name = "anatome"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "2d685f1a-cce3-4ace-bde4-dfc3efd2d735"
 migrations_dir = "migrations"
 
 [vars]
@@ -88,7 +88,7 @@ new_sqlite_classes = ["RateLimiterDO"]
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "anatome"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "2d685f1a-cce3-4ace-bde4-dfc3efd2d735"
 migrations_dir = "migrations"
 
 [env.production.vars]
