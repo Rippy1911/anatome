@@ -13,8 +13,31 @@
 
 import { newId, nowUnix, sha256Hex, type DbEnv } from "./db.ts";
 
-/** OWASP's floor for PBKDF2-HMAC-SHA256 is 600k; workerd handles this comfortably. */
-export const PBKDF2_ITERATIONS = 600_000;
+/**
+ * PBKDF2-HMAC-SHA256 iterations.
+ *
+ * **This is the platform maximum, not the number we would choose.** Cloudflare Workers reject
+ * anything higher:
+ *
+ *   NotSupportedError: Pbkdf2 failed: iteration counts above 100000 are not supported
+ *
+ * OWASP's guidance for PBKDF2-HMAC-SHA256 is 600 000, so this is ~6x weaker than the
+ * recommendation. Saying so plainly rather than quietly shipping the cap and calling it best
+ * practice: the mitigation available to us is the 10-character minimum in `passwordProblem`,
+ * and users should use a password manager — which the sign-up page tells them, since there is
+ * no password reset either.
+ *
+ * The count is stored per user (`users.iterations`) and read back by `verifyPassword`, so if
+ * the platform raises the cap — or this moves to a runtime with argon2/scrypt — new and rotated
+ * passwords can use a higher number without invalidating anyone's existing login.
+ *
+ * ⚠️ `wrangler dev --local` does NOT enforce this cap. 600 000 passed the whole test suite and a
+ * full local end-to-end sign-up, then 500'd on the first real request in production. A test in
+ * test-workers/oauth.test.ts pins this value, because the runtime under test will not.
+ */
+export const PBKDF2_ITERATIONS = 100_000;
+/** The hard ceiling workerd enforces in production. Exceeding it throws NotSupportedError. */
+export const PBKDF2_MAX_ITERATIONS = 100_000;
 
 const ACCESS_TOKEN_TTL = 60 * 60;            // 1 hour
 const REFRESH_TOKEN_TTL = 60 * 60 * 24 * 60; // 60 days
