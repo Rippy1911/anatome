@@ -54,6 +54,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run typecheck
       - run: pnpm test
+      # Accounts and logging run inside workerd against a real local D1. A hand-written D1 stub
+      # would only prove the stub behaves the way its author imagined.
+      - run: pnpm run test:workers
       - run: pnpm exec wrangler deploy --dry-run --outdir dist
       # A dry-run only bundles: it does not start workerd, so it cannot catch an entrypoint that
       # the runtime rejects (a stray named export takes the Worker down at boot). Boot it.
@@ -91,6 +94,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: api/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
+      # Schema first: a deploy that adds a route reading a table the database does not have yet
+      # fails for users, not for us. Migrations are additive and idempotent.
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: api
+          command: d1 migrations apply anatome --remote
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

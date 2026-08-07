@@ -23,7 +23,7 @@ const CLIENTS = [
       "Open Settings → Apps",
       "Click Create app",
       "Paste the URL below as the MCP server URL",
-      "Set authentication to None, then save.",
+      "Pick OAuth to enable logging, or None for catalog-only. Save.",
     ],
   },
   {
@@ -51,6 +51,12 @@ const PROMPTS = [
   "Which muscles does a Bulgarian split squat actually work?",
   "I did bench press, rows and squats today — show me a heatmap of what I hit.",
   "Find me a beginner barbell exercise for the posterior chain and show me the movement.",
+];
+
+const LOGGING_PROMPTS = [
+  "Set my timezone to Europe/Warsaw.",
+  "I had oatmeal with berries for breakfast, roughly 420 calories.",
+  "Log 3 sets of 5 bench press at 100kg, then tell me how today looks.",
 ];
 
 function UrlCopy() {
@@ -97,7 +103,7 @@ export default function Onboarding() {
       <div className="mb-8 text-center">
         <div className="mb-1 font-mono text-xs uppercase tracking-wider text-primary">Onboarding</div>
         <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-          Three steps. No account, no API key.
+          Paste one URL. No API key, ever.
         </h2>
         <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
           Anatome is a remote MCP server. Paste one URL into your assistant and start asking.
@@ -142,11 +148,34 @@ export default function Onboarding() {
           </ul>
         </Step>
 
-        <Step n={3} title="Know the fair-use limit">
+        <Step n={3} title="Sign in if you want to log — optional">
+          <p>
+            Everything above works signed out. Signing in adds a private log for meals, water,
+            workouts and body weight. Your client opens a browser once, you pick an email and
+            password, and that is the whole setup — there is still no key to paste.
+          </p>
+          <ul className="space-y-1.5">
+            {LOGGING_PROMPTS.map((p) => (
+              <li key={p} className="rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs leading-relaxed">
+                “{p}”
+              </li>
+            ))}
+          </ul>
+          <p>
+            Anatome does no food lookup and calls no AI — your assistant estimates the macros and
+            sends them, which is what keeps this free. Export or delete everything at any time from{" "}
+            <a className="text-primary hover:underline" href={`${PUBLIC_API}/account`}>your account page</a>{" "}
+            or by asking. There is no password reset, because Anatome sends no email — use a
+            password manager.
+          </p>
+        </Step>
+
+        <Step n={4} title="Know the fair-use limit">
           <p>
             Free, with a fair-use budget of{" "}
             <strong className="text-foreground">{FAIR_USE_PER_DAY} requests a day</strong>, resetting at
-            00:00 UTC. Nothing to sign up for and no card on file.
+            00:00 UTC. No card, ever. Signed out, that budget is shared with whoever else is
+            behind the same address — signing in gives you one of your own.
           </p>
           <p>
             When you run out, the tool returns a plain explanation rather than an error — your

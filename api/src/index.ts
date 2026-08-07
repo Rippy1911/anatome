@@ -36,6 +36,17 @@ import { fetchCiStatus } from "./routes/ciStatus.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
 import { getAdminStats, postAdminRateLimitReset } from "./routes/admin.ts";
 import { API_VERSION } from "./lib/version.ts";
+import type { DbEnv } from "./lib/db.ts";
+import { hasDb } from "./lib/db.ts";
+import {
+  authorizationServerMetadata, getAuthorize, postAuthorize, postRevoke, postToken,
+  protectedResourceMetadata, registerClient,
+} from "./routes/oauth.ts";
+import {
+  availableLoggingTools, callLoggingTool, isLoggingTool, registerPersonalRoutes,
+} from "./routes/personal.ts";
+import { identifyRequest } from "./lib/auth.ts";
+import { accountPage, accountAction, accountExport, accountLogout } from "./routes/account.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
 import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
@@ -44,7 +55,9 @@ const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
 /** GIFs are regenerated in-place; avoid immutable so timing fixes can roll out. */
 const GIF_CACHE_CONTROL = "public, max-age=86400, s-maxage=86400";
 
-const app = new Hono<{ Bindings: Env }>();
+// Bindings are DbEnv: everything in Env, plus an OPTIONAL `DB`. Optional is the point — with no
+// database bound the Worker still serves the whole catalog API and simply has no accounts.
+const app = new Hono<{ Bindings: DbEnv }>();
 
 app.use("*", cors({
   origin: "*",
@@ -532,6 +545,17 @@ app.post("/mcp", async (c) => {
   const sessionHeaders: Record<string, string> = {};
   if (!incomingSession && sessionId) sessionHeaders["Mcp-Session-Id"] = sessionId;
 
+  // tools/list is env-dependent: the logging tools only exist when this deployment has a
+  // database. Advertising a tool the Worker cannot honour teaches the model to try, fail, and
+  // apologise to the user — so the list reflects what is actually available here.
+  if (method === "tools/list") {
+    return c.json({
+      jsonrpc: "2.0",
+      id: parsed.id ?? null,
+      result: { tools: [...TOOLS, ...availableLoggingTools(c.env)] },
+    }, 200, sessionHeaders);
+  }
+
   // Only tools/call is metered. Metering the handshake means a user who is merely out of
   // requests for today cannot even connect, and every host renders that as a broken connector —
   // the single most misleading failure this API can produce.
@@ -539,7 +563,14 @@ app.post("/mcp", async (c) => {
     return c.json(handleMcp(parsed, base), 200, sessionHeaders);
   }
 
-  const gate = await gateMetered(c, "/mcp", { mcpSessionId: sessionId || undefined });
+  // Identify the caller before metering, so a signed-in user is charged to their account rather
+  // than to a session id or a shared egress address. This is what makes "50 requests per day per
+  // user" literally true rather than a best approximation.
+  const identity = await identifyRequest(c.req.raw, c.env);
+  const gate = await gateMetered(c, "/mcp", {
+    userId: identity?.userId,
+    mcpSessionId: sessionId || undefined,
+  });
   if (!gate.ok) {
     return c.json(rateLimitToolResult(parsed.id, gate.rl, upgradeUrl(c.env)), 200, {
       ...rateHeaders(gate.rl, c.env),
@@ -549,6 +580,27 @@ app.post("/mcp", async (c) => {
   }
 
   const headers = { ...gate.headers, ...sessionHeaders };
+
+  // Personal data never touches the edge cache — it is per-user, mutable, and caching it once
+  // would be enough to serve one person's food log to somebody else. Route it out before the
+  // cache key is computed rather than trusting a later condition to exclude it.
+  if (isLoggingTool(parsed.params?.name)) {
+    const outcome = await callLoggingTool(
+      c.env, c.req.raw, parsed.params!.name as string, parsed.params?.arguments || {}, base,
+    );
+    const result = withQuotaNotice({
+      ...(outcome.ok ? {} : { isError: true }),
+      content: [{ type: "text", text: outcome.text ?? JSON.stringify(outcome.payload) }],
+      structuredContent: outcome.payload,
+    }, gate.rl);
+    const res = c.json(
+      { jsonrpc: "2.0", id: parsed.id ?? null, result },
+      200,
+      { ...headers, "Cache-Control": "no-store" },
+    );
+    noteUsage(c, gate.rl, res, "/mcp");
+    return res;
+  }
 
   // Cache deterministic tools/call results in the edge cache, keyed by method+params (NOT the
   // JSON-RPC id, which varies per request). The cached inner result is re-wrapped with the live
@@ -626,5 +678,23 @@ app.get("/ciStatus", async (c) => {
   execCtx(c)?.waitUntil(cache.put(key, stored));
   return c.json(status, 200, { "Cache-Control": "public, max-age=30, s-maxage=60", "X-Cache": "MISS" });
 });
+
+// ---- accounts (OAuth 2.1, PKCE S256, dynamic client registration) ----
+// Discovery first: these are what a 401 points an MCP client at, and they are how "paste a URL
+// and sign in" works without anyone issuing a key.
+app.get("/.well-known/oauth-protected-resource", (c) => protectedResourceMetadata(c));
+app.get("/.well-known/oauth-authorization-server", (c) => authorizationServerMetadata(c));
+app.post("/oauth/register", (c) => registerClient(c));
+app.get("/oauth/authorize", (c) => getAuthorize(c));
+app.post("/oauth/authorize", (c) => postAuthorize(c));
+app.post("/oauth/token", (c) => postToken(c));
+app.post("/oauth/revoke", (c) => postRevoke(c));
+
+// ---- the signed-in user's own data ----
+app.get("/account", (c) => (new URL(c.req.url).searchParams.get("logout") ? accountLogout(c) : accountPage(c)));
+app.post("/account", (c) => accountAction(c));
+app.get("/account/export.json", (c) => accountExport(c, "json"));
+app.get("/account/export.csv", (c) => accountExport(c, "csv"));
+registerPersonalRoutes(app);
 
 export default app;
