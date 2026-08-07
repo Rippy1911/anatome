@@ -1,0 +1,465 @@
+// The signed-in surface: MCP logging tools plus their REST equivalents.
+//
+// Two rules shape this file.
+//
+// 1. These tools are only *advertised* when the deployment can honour them. A tool list that
+//    promises `log_meal` on a Worker with no database teaches the model to try, fail, and
+//    apologise to the user. `hasDb` gates the advertisement, not just the execution.
+//
+// 2. An unauthenticated call to a logging tool is not an error to hide behind. It returns a
+//    result the model can act on — sign in at this URL — because "unauthorized" alone gets
+//    relayed to the user as "the connector is broken", which is the same failure the fair-use
+//    work in the previous release existed to fix.
+
+import type { Context } from "hono";
+import { findUserById, hasDb, type DbEnv, type UserRow } from "../lib/db.ts";
+import { identifyRequest } from "../lib/auth.ts";
+import { gateMetered } from "../lib/meter.ts";
+import { isValidTimezone } from "../lib/tz.ts";
+import {
+  dailySummary, deleteMeal, deleteWorkout, exportEverything, listMeals, listWorkouts,
+  logBodyMetric, logMeal, logWater, logWorkout, setGoals, weightTrend, type LogResult,
+} from "../lib/logging.ts";
+import { deleteUserCompletely, setUserTimezone } from "../lib/db.ts";
+import {
+  MEAL_FIELDS, WATER_FIELDS, WORKOUT_FIELDS, SET_FIELDS, BODY_METRIC_FIELDS, GOAL_FIELDS,
+} from "../lib/validate.ts";
+
+type Ctx = Context<{ Bindings: DbEnv }>;
+
+/** Tool names that need a signed-in user. Everything else is anonymous-friendly. */
+export const LOGGING_TOOL_NAMES = [
+  "get_profile", "set_timezone", "set_goals",
+  "log_meal", "list_meals", "delete_meal",
+  "log_water",
+  "log_workout", "list_workouts", "delete_workout",
+  "log_weight", "get_weight_trend",
+  "get_daily_summary",
+  "export_my_data", "delete_my_account",
+] as const;
+
+const list = (fields: readonly string[]) => fields.join(", ");
+
+/**
+ * Tool schemas. Property names are exactly the accepted field names from validate.ts — a test
+ * asserts that in both directions, because a schema is a promise to an agent and a schema the
+ * write gate then rejects is a promise broken at runtime.
+ */
+export const LOGGING_TOOLS = [
+  {
+    name: "get_profile",
+    description: "Get the signed-in user's Anatome profile: email, timezone and current nutrition goals. Call this first if you need to know their timezone or targets.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "set_timezone",
+    description: "Set the user's timezone so days roll over at their local midnight, not UTC. Accepts an IANA name like 'Europe/Warsaw' or 'America/New_York'. Do this once, early — logs made before it are dated in the previous zone.",
+    inputSchema: {
+      type: "object",
+      properties: { timezone: { type: "string", description: "IANA timezone, e.g. 'Europe/Warsaw'" } },
+      required: ["timezone"],
+    },
+  },
+  {
+    name: "set_goals",
+    description: `Set daily nutrition targets. Any subset of: ${list(GOAL_FIELDS)}. Values already set are kept unless you pass them again.`,
+    inputSchema: {
+      type: "object",
+      properties: {
+        calories: { type: "number" }, protein: { type: "number", description: "grams" },
+        carbs: { type: "number", description: "grams" }, fats: { type: "number", description: "grams" },
+        water_ml: { type: "number", description: "millilitres" },
+      },
+    },
+  },
+  {
+    name: "log_meal",
+    description: "Log a meal the user describes. YOU estimate the macros — Anatome does no food lookup and no AI parsing, it only stores what you send. Say what you estimated so the user can correct you. Defaults to today in the user's timezone.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "What they ate, e.g. 'oatmeal with berries'" },
+        calories: { type: "number" }, protein: { type: "number", description: "grams" },
+        carbs: { type: "number", description: "grams" }, fats: { type: "number", description: "grams" },
+        meal_type: { type: "string", enum: ["breakfast", "lunch", "dinner", "snack"] },
+        date: { type: "string", description: "YYYY-MM-DD; omit for today in the user's timezone" },
+        notes: { type: "string" },
+      },
+      required: ["name"],
+    },
+  },
+  {
+    name: "list_meals",
+    description: "List the meals logged on one day, with their macros.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: { date: { type: "string", description: "YYYY-MM-DD; omit for today" } } },
+  },
+  {
+    name: "delete_meal",
+    description: "Delete one logged meal by id. Get ids from list_meals.",
+    inputSchema: { type: "object", properties: { id: { type: "string" } }, required: ["id"] },
+  },
+  {
+    name: "log_water",
+    description: "Log water intake in millilitres. Returns the running total for the day.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        amount_ml: { type: "number", description: "millilitres" },
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+      },
+      required: ["amount_ml"],
+    },
+  },
+  {
+    name: "log_workout",
+    description: "Log a completed workout with its sets. Weight is in KILOGRAMS and the field is `weight` — sending `weight_kg` also works, but `weight_lb` is rejected rather than silently converted. Use resolve_exercise or search_exercises first if you want the canonical exercise name.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        title: { type: "string", description: "e.g. 'Push day'" },
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+        duration_minutes: { type: "number" },
+        notes: { type: "string" },
+        sets: {
+          type: "array",
+          description: "One entry per set performed.",
+          items: {
+            type: "object",
+            properties: {
+              exercise_name: { type: "string" },
+              set_number: { type: "number" },
+              reps: { type: "number" },
+              weight: { type: "number", description: "kilograms" },
+              rpe: { type: "number", description: "rate of perceived exertion, 1-10" },
+              notes: { type: "string" },
+            },
+            required: ["exercise_name"],
+          },
+        },
+      },
+      required: ["sets"],
+    },
+  },
+  {
+    name: "list_workouts",
+    description: "List recent workouts with their sets and total volume.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: { limit: { type: "number", default: 10, description: "1-50" } } },
+  },
+  {
+    name: "delete_workout",
+    description: "Delete one logged workout and its sets by id.",
+    inputSchema: { type: "object", properties: { id: { type: "string" } }, required: ["id"] },
+  },
+  {
+    name: "log_weight",
+    description: "Log body weight. unit must be 'kg' or 'lb' — it is stored as given and never converted.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        value: { type: "number" },
+        unit: { type: "string", enum: ["kg", "lb"], default: "kg" },
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+        notes: { type: "string" },
+        metric_type: { type: "string", default: "weight", description: "weight | body_fat | waist | ..." },
+      },
+      required: ["value"],
+    },
+  },
+  {
+    name: "get_weight_trend",
+    description: "Body-weight entries over a window, with the change between the first and last. Reports no change when the units differ rather than inventing a conversion.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: { days: { type: "number", default: 30, description: "1-365" } } },
+  },
+  {
+    name: "get_daily_summary",
+    description: "One day at a glance: calories and macros against goals, water, workouts, sets and training volume. The tool to reach for when asked 'how am I doing today?'.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: { date: { type: "string", description: "YYYY-MM-DD; omit for today" } } },
+  },
+  {
+    name: "export_my_data",
+    description: "Return everything Anatome stores for this user, as JSON. The user owns their data and can take it at any time.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "delete_my_account",
+    description: "Permanently delete the account and every log it owns. Irreversible. Requires confirm:true — ALWAYS ask the user in plain words first, and offer export_my_data before doing it.",
+    annotations: { destructiveHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { confirm: { type: "boolean", description: "Must be true. Ask the user first." } },
+      required: ["confirm"],
+    },
+  },
+];
+
+/** Fields the write gate accepts, keyed by tool — used by the schema/gate parity test. */
+export const TOOL_FIELD_CONTRACT: Record<string, readonly string[]> = {
+  log_meal: MEAL_FIELDS,
+  log_water: WATER_FIELDS,
+  log_workout: WORKOUT_FIELDS,
+  log_weight: BODY_METRIC_FIELDS,
+  set_goals: GOAL_FIELDS,
+};
+export const SET_FIELD_CONTRACT = SET_FIELDS;
+
+export function isLoggingTool(name: unknown): boolean {
+  return typeof name === "string" && (LOGGING_TOOL_NAMES as readonly string[]).includes(name);
+}
+
+/** Tools this deployment can actually honour. */
+export function availableLoggingTools(env: DbEnv) {
+  return hasDb(env) ? LOGGING_TOOLS : [];
+}
+
+// ---------------------------------------------------------------------------
+// Execution
+// ---------------------------------------------------------------------------
+
+export interface ToolOutcome {
+  ok: boolean;
+  payload: Record<string, unknown>;
+  /** Human text put in front of the model. Present on every failure. */
+  text?: string;
+}
+
+function signInPrompt(base: string): ToolOutcome {
+  return {
+    ok: false,
+    text: [
+      "This tool needs an Anatome account, and this connection is not signed in yet.",
+      "The connector itself is fine — nothing is broken.",
+      `Tell the user to reconnect and sign in at ${base}/oauth/authorize, or to re-add the connector so their client can run the sign-in flow.`,
+      "Everything else (exercise search, muscle diagrams, session heatmaps) keeps working without an account.",
+    ].join(" "),
+    payload: { error: "not_signed_in", retryable: false, sign_in_url: `${base}/oauth/authorize` },
+  };
+}
+
+function noAccounts(): ToolOutcome {
+  return {
+    ok: false,
+    text: "This Anatome deployment has no database configured, so it has no accounts and cannot store logs. Tell the user their catalog and diagram tools still work. This is a deployment choice, not a fault.",
+    payload: { error: "accounts_unavailable", retryable: false },
+  };
+}
+
+function fromResult(r: LogResult): ToolOutcome {
+  if (r.ok) return { ok: true, payload: r.data || {} };
+  return {
+    ok: false,
+    // The write gate's message already names the bad field and the accepted list, which is the
+    // whole point — an agent can fix its own call from it.
+    text: r.message || r.error || "The request was rejected.",
+    payload: { error: r.error, message: r.message, field: r.field, retryable: false },
+  };
+}
+
+/** Run a logging tool. `base` is the public API origin, used in sign-in guidance. */
+export async function callLoggingTool(
+  env: DbEnv,
+  req: Request,
+  name: string,
+  args: Record<string, unknown>,
+  base: string,
+): Promise<ToolOutcome> {
+  if (!hasDb(env)) return noAccounts();
+  const identity = await identifyRequest(req, env);
+  if (!identity) return signInPrompt(base);
+  const user = await findUserById(env.DB, identity.userId);
+  if (!user) return signInPrompt(base);
+  const db = env.DB;
+
+  switch (name) {
+    case "get_profile": {
+      const goals = await db.prepare("SELECT calories, protein, carbs, fats, water_ml FROM goals WHERE user_id = ?")
+        .bind(user.id).first();
+      return {
+        ok: true,
+        payload: {
+          email: user.email,
+          timezone: user.timezone,
+          timezone_is_default: user.timezone === "UTC",
+          goals: goals ?? null,
+          member_since: user.created_at,
+        },
+      };
+    }
+
+    case "set_timezone": {
+      const tz = String(args.timezone ?? "");
+      if (!isValidTimezone(tz)) {
+        return {
+          ok: false,
+          text: `"${tz}" is not a timezone this server recognises. Use an IANA name such as Europe/Warsaw, America/New_York or Asia/Tokyo.`,
+          payload: { error: "invalid_timezone", field: "timezone", retryable: false },
+        };
+      }
+      await setUserTimezone(db, user.id, tz);
+      return { ok: true, payload: { timezone: tz, note: "Days now roll over at midnight in this zone. Entries logged earlier keep the date they were given." } };
+    }
+
+    case "set_goals": return fromResult(await setGoals(db, user, args));
+    case "log_meal": return fromResult(await logMeal(db, user, args));
+    case "list_meals": return fromResult(await listMeals(db, user, args));
+    case "delete_meal": return fromResult(await deleteMeal(db, user, args.id));
+    case "log_water": return fromResult(await logWater(db, user, args));
+    case "log_workout": return fromResult(await logWorkout(db, user, args));
+    case "list_workouts": return fromResult(await listWorkouts(db, user, args));
+    case "delete_workout": return fromResult(await deleteWorkout(db, user, args.id));
+    case "log_weight": return fromResult(await logBodyMetric(db, user, args));
+    case "get_weight_trend": return fromResult(await weightTrend(db, user, args));
+    case "get_daily_summary": return fromResult(await dailySummary(db, user, args));
+
+    case "export_my_data":
+      return { ok: true, payload: await exportEverything(db, user) };
+
+    case "delete_my_account": {
+      if (args.confirm !== true) {
+        return {
+          ok: false,
+          text: "Account deletion needs confirm:true, and you should ask the user in plain words before setting it. Offer export_my_data first — this cannot be undone.",
+          payload: { error: "confirmation_required", retryable: false },
+        };
+      }
+      await deleteUserCompletely(db, user.id);
+      return { ok: true, payload: { deleted: true, note: "The account and every log it owned are gone. This connection's tokens no longer work." } };
+    }
+
+    default:
+      return { ok: false, text: `Unknown tool: ${name}`, payload: { error: "unknown_tool" } };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// REST mirror, /v1/*
+// ---------------------------------------------------------------------------
+
+async function requireUser(c: Ctx): Promise<UserRow | Response> {
+  if (!hasDb(c.env)) {
+    return c.json({ ok: false, error: "accounts_unavailable", message: "This deployment has no database bound." }, 501);
+  }
+  const identity = await identifyRequest(c.req.raw, c.env);
+  if (!identity) {
+    const base = c.env.PUBLIC_BASE_URL || new URL(c.req.url).origin;
+    return new Response(JSON.stringify({
+      ok: false, error: "not_signed_in",
+      message: "Sign in first. This endpoint needs an Anatome account.",
+      sign_in_url: `${base}/oauth/authorize`,
+    }), {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json",
+        "WWW-Authenticate": `Bearer realm="anatome", resource_metadata="${base}/.well-known/oauth-protected-resource"`,
+      },
+    });
+  }
+  const user = await findUserById(c.env.DB, identity.userId);
+  if (!user) return c.json({ ok: false, error: "not_signed_in" }, 401);
+
+  // The REST mirror spends the same budget as the tools do. Leaving it unmetered would make the
+  // published fair-use number a statement about one transport rather than about the API.
+  const gate = await gateMetered(c, new URL(c.req.url).pathname, { userId: user.id });
+  if (!gate.ok) return gate.response;
+
+  return user;
+}
+
+function send(c: Ctx, r: LogResult): Response {
+  if (r.ok) return c.json({ ok: true, ...r.data }, r.status as 200);
+  return c.json({ ok: false, error: r.error, message: r.message, field: r.field }, r.status as 400);
+}
+
+export function registerPersonalRoutes(app: {
+  get: (p: string, h: (c: Ctx) => Promise<Response>) => unknown;
+  post: (p: string, h: (c: Ctx) => Promise<Response>) => unknown;
+  delete: (p: string, h: (c: Ctx) => Promise<Response>) => unknown;
+}): void {
+  const body = async (c: Ctx): Promise<Record<string, unknown>> => {
+    try { return await c.req.json(); } catch { return {}; }
+  };
+
+  app.get("/v1/profile", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    const out = await callLoggingTool(c.env, c.req.raw, "get_profile", {}, c.env.PUBLIC_BASE_URL || "");
+    return c.json({ ok: out.ok, ...out.payload });
+  });
+
+  app.post("/v1/meals", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await logMeal(c.env.DB!, u, await body(c)));
+  });
+
+  app.get("/v1/meals", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await listMeals(c.env.DB!, u, c.req.query()));
+  });
+
+  app.delete("/v1/meals/:id", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await deleteMeal(c.env.DB!, u, (c.req as unknown as { param: (k: string) => string }).param("id")));
+  });
+
+  app.post("/v1/water", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await logWater(c.env.DB!, u, await body(c)));
+  });
+
+  app.post("/v1/workouts", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await logWorkout(c.env.DB!, u, await body(c)));
+  });
+
+  app.get("/v1/workouts", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await listWorkouts(c.env.DB!, u, c.req.query()));
+  });
+
+  app.delete("/v1/workouts/:id", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await deleteWorkout(c.env.DB!, u, (c.req as unknown as { param: (k: string) => string }).param("id")));
+  });
+
+  app.post("/v1/body-metrics", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await logBodyMetric(c.env.DB!, u, await body(c)));
+  });
+
+  app.get("/v1/weight-trend", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await weightTrend(c.env.DB!, u, c.req.query()));
+  });
+
+  app.post("/v1/goals", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await setGoals(c.env.DB!, u, await body(c)));
+  });
+
+  app.get("/v1/summary", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await dailySummary(c.env.DB!, u, c.req.query()));
+  });
+
+  app.get("/v1/export", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return c.json({ ok: true, ...(await exportEverything(c.env.DB!, u)) });
+  });
+}

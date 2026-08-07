@@ -50,6 +50,10 @@ Two behaviours on the MCP path exist for a specific reason and are pinned by tes
    that as a broken connector.
 2. **An exhausted `tools/call` returns HTTP 200 with `isError: true`**, not a JSON-RPC error, so
    the calling model reads the explanation instead of the host swallowing it.
+3. **An unauthenticated logging `tools/call` returns HTTP 401 with `WWW-Authenticate`** — the
+   opposite choice, on purpose. "Not signed in" is a state the *client* can fix by running the
+   OAuth flow; "out of requests" is a state only the *user* can act on. Different audiences,
+   different channel.
 
 MCP callers are counted per `Mcp-Session-Id` rather than per IP, because a remote connector
 reaches the Worker from the assistant vendor's egress addresses. See the header comment in

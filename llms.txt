@@ -18,8 +18,22 @@ Model Context Protocol so AI agents can call it as a tool with zero integration 
 
 ## Authentication
 
-**There is none.** Anatome is keyless: no signup, no API key, no token, no header. Every request
-below works exactly as written.
+**No API key, ever.** The catalog — diagrams, exercise search, muscle data, session heatmaps —
+needs no account at all. Every catalog request below works exactly as written.
+
+**Personal logging needs a sign-in**, because storing someone's food and workout history requires
+knowing whose it is. That is OAuth 2.1 with PKCE and dynamic client registration: your client
+registers itself, opens a browser, the user signs in, and you get a token. Nobody types a key.
+Discovery lives at `/.well-known/oauth-protected-resource` and
+`/.well-known/oauth-authorization-server`; a 401 from a logging tool carries the
+`WWW-Authenticate` header that starts it.
+
+Calling a logging tool without a token returns **HTTP 401** with a `WWW-Authenticate: Bearer …
+resource_metadata="…"` header. That is a signal to your *client*, not an error to relay: run the
+OAuth flow and retry. The catalog tools never 401.
+
+Do not confuse it with the fair-use denial, which is deliberately **not** a 401 — that one is a
+200 carrying `isError`, and it is for you to explain to the user.
 
 ## Fair use — read this before retrying anything
 
@@ -28,6 +42,11 @@ Base URL: `https://api.anatome.dev`
 **50 requests per caller per day**, resetting at 00:00 UTC. Loopback and private addresses are
 unlimited. Static catalog reads (`/listMuscles`, `/listEquipment`, `/bodyPaths`, `/openapi`,
 guide endpoints) are edge-cached and not counted.
+
+"Per caller" means: per signed-in **account** when there is one, otherwise per MCP **session**,
+otherwise per **IP**. Only the account is durable — a remote connector reaches this API from the
+assistant vendor's egress addresses, which every user of that assistant shares, so an anonymous
+budget is an approximation. Signing in gives the user a budget of their own.
 
 Over the limit, REST endpoints return **429** with:
 
@@ -76,9 +95,15 @@ GET  /listMuscles     List all 23 muscle slugs with anatomical names
 GET  /muscleInfo      Stats for a single muscle slug
 GET  /listEquipment   List all equipment types in the database
 GET  /bodyPaths       Raw anatomical path data for client-side rendering
-POST /mcp             MCP endpoint (Streamable HTTP, 10 tools)
+POST /mcp             MCP endpoint (Streamable HTTP; 10 tools, 25 when signed in)
 GET  /openapi         OpenAPI 3.1 spec
 GET  /.well-known/mcp.json  Machine-readable connector pointer
+
+Signed-in only (OAuth 2.1; mirrors of the logging tools):
+POST /v1/meals · GET /v1/meals · DELETE /v1/meals/{id}
+POST /v1/water · POST /v1/workouts · GET /v1/workouts · DELETE /v1/workouts/{id}
+POST /v1/body-metrics · GET /v1/weight-trend · POST /v1/goals
+GET  /v1/summary · GET /v1/profile · GET /v1/export
 ```
 
 ## MCP tools (for AI agents)
@@ -95,6 +120,31 @@ GET  /.well-known/mcp.json  Machine-readable connector pointer
 | `list_guides` ⚠️ | List skill-progression guides — **work in progress** |
 | `get_guide` ⚠️ | One guide + its skill trees — **work in progress** |
 | `get_guide_tree` ⚠️ | One full skill tree — **work in progress** |
+
+### Personal logging (requires sign-in; absent when the deployment has no database)
+
+| Tool | What it does |
+|------|-------------|
+| `get_profile` | Email, timezone, current goals |
+| `set_timezone` | IANA zone, so days roll over at local midnight |
+| `set_goals` | Daily calorie / macro / water targets |
+| `log_meal` | Store a meal. **You** supply the macros — see below |
+| `list_meals` · `delete_meal` | Read and remove entries for a day |
+| `log_water` | Millilitres, returns the running daily total |
+| `log_workout` | Workout plus its sets. `weight` is KILOGRAMS |
+| `list_workouts` · `delete_workout` | Recent workouts with volume |
+| `log_weight` · `get_weight_trend` | Body weight and its change over a window |
+| `get_daily_summary` | Macros vs goals, water, training volume for a day |
+| `export_my_data` · `delete_my_account` | The user's data rights, as tools |
+
+**Anatome does not parse food.** There is no food database and no AI on this server. When a user
+says "oatmeal with berries", *you* estimate `{calories, protein, carbs, fats}` and send them —
+then tell the user what you estimated so they can correct it.
+
+**Write errors are actionable, so act on them.** An unknown field returns 400 naming the field,
+the closest accepted name and the full accepted list; fix your call and retry once. Aliases like
+`kcal`, `protein_g` and `weight_kg` are accepted and rewritten. `weight_lb` is **rejected, not
+converted** — send kilograms.
 
 ⚠️ **The three guide tools are unfinished.** Media coverage is incomplete and the coaching cues
 have not been reviewed. Every guide response carries `status: "work_in_progress"`. Present that
@@ -114,7 +164,8 @@ MCP config:
 ```
 
 In Claude: Settings → Connectors → Add custom connector → paste the URL.
-In ChatGPT: Settings → Apps → Create app → paste the URL → authentication None.
+In ChatGPT: Settings → Apps → Create app → paste the URL. Choose OAuth if you want logging;
+choose None for catalog-only access.
 
 ## Quick example
 
@@ -133,10 +184,13 @@ curl "https://api.anatome.dev/searchExercises?muscle=chest&limit=5"
 
 ## What Anatome does not do
 
-It never calls a language model. It renders, searches and resolves; the reasoning is yours. It
-stores nothing about callers beyond a hashed daily counter — there are no accounts, no user data,
-no logging of meals or workouts. Those live in the separate hosted platform at
-https://platform.anatome.dev.
+It never calls a language model. It renders, searches, resolves, stores and adds up; the
+reasoning is yours. There is no food database, no barcode lookup, no recipes, no meal plans, no
+coaches, no programming and no wearable imports — those are the hosted platform at
+https://platform.anatome.dev, which is a different and larger service.
+
+For anonymous callers it stores nothing but a hashed daily counter. For signed-in users it stores
+exactly what they logged, and they can export or delete all of it at any time — see PRIVACY.md.
 
 ## Repository layout
 

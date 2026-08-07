@@ -75,8 +75,14 @@ export function upgradeUrl(env: Env): string {
   return env.UPGRADE_URL || DEFAULT_UPGRADE_URL;
 }
 
-/** Which identity the budget was charged to. `network` is the runaway guard, not fair use. */
-export type RateScope = "ip" | "mcp_session" | "network";
+/**
+ * Which identity the budget was charged to. `network` is the runaway guard, not fair use.
+ *
+ * `user` is the only one of these that is durable and unforgeable — which is why the published
+ * promise, "50 requests per day per user", is only literally true once someone signs in. The
+ * others are the best approximation available for an anonymous caller, and the docs say so.
+ */
+export type RateScope = "user" | "ip" | "mcp_session" | "network";
 
 export interface RateResult {
   allowed: boolean;
@@ -159,6 +165,8 @@ export function bypassCheck(req: Request, env: Env): RateResult | null {
 }
 
 export interface RateOptions {
+  /** Signed-in account id. Takes precedence over everything else — it is the real identity. */
+  userId?: string;
   /** MCP session id from the request, when the caller is an MCP client. */
   mcpSessionId?: string;
 }
@@ -187,11 +195,18 @@ export async function checkRateLimit(req: Request, env: Env, opts: RateOptions =
   if (bypass) return bypass;
 
   const ip = clientIp(req);
+  const user = (opts.userId || "").trim();
   const session = (opts.mcpSessionId || "").trim();
-  const scope: RateScope = session ? "mcp_session" : "ip";
-  const identity = session || ip;
+
+  // A signed-in account beats a session id beats an address. Only the first is durable, so
+  // signing in is what turns "50 a day" from an approximation into a fact — and it also means a
+  // user behind a shared NAT stops competing with strangers for one budget.
+  const scope: RateScope = user ? "user" : session ? "mcp_session" : "ip";
+  const identity = user || session || ip;
 
   const primary = await consume(env, scope, identity, fairUseLimit(env));
+  // An account is its own accounting unit; the network guard exists to stop *anonymous* callers
+  // re-minting session ids, which a signed-in user has no need to do.
   if (!primary.allowed || scope !== "mcp_session") return primary;
 
   // Session-scoped callers additionally share a network ceiling. Over it, refund the session

@@ -10,12 +10,17 @@
     "worker:test": "vitest run",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "test:workers": "vitest run --config vitest.workers.config.ts",
+    "test:all": "npm run test && npm run test:workers",
+    "db:migrate:local": "wrangler d1 migrations apply anatome --local",
+    "db:migrate": "wrangler d1 migrations apply anatome --remote"
   },
   "dependencies": {
     "hono": "^4.6.14"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.19",
     "@cloudflare/workers-types": "^4.20241218.0",
     "typescript": "^5.8.2",
     "vitest": "^2.1.8",

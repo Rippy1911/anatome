@@ -22,7 +22,8 @@ so an assistant can use it as a tool with no integration work at all.
 - 🔓 **No API key.** No signup, no token, no header. Every example below runs as written.
 - 🎨 Multi-colour layered muscle rendering, `<img src>`-friendly via `?output=raw`
 - 💪 873 exercises, searchable and resolvable to muscle layers, with hosted demo GIFs
-- 🤖 MCP server (10 tools) + OpenAPI 3.1 spec
+- 🤖 MCP server (10 tools, 25 when signed in) + OpenAPI 3.1 spec
+- 📓 Optional accounts for logging meals and workouts — OAuth 2.1, one browser sign-in, no key
 - ☁️ Runs on Cloudflare and nothing else — see [SELF_HOSTING.md](./SELF_HOSTING.md)
 
 ## Connect it to an assistant
@@ -33,7 +34,7 @@ so an assistant can use it as a tool with no integration work at all.
 https://api.anatome.dev/mcp
 ```
 
-**ChatGPT** — Settings → Apps → Create app → same URL → authentication *None*.
+**ChatGPT** — Settings → Apps → Create app → same URL. Pick *OAuth* if you want logging, *None* for catalog-only.
 
 **Config file** —
 
@@ -46,6 +47,24 @@ https://api.anatome.dev/mcp
 ```
 
 Then just ask: *"which muscles does a Bulgarian split squat actually work?"*
+
+## Optionally, log to it
+
+Signing in adds meals, water, workouts and body weight. It is OAuth 2.1 with PKCE — your client
+registers itself, a browser opens, you enter an email and password, and that is the whole setup.
+There is still no key.
+
+> *"Set my timezone to Europe/Warsaw."*
+> *"I had oatmeal with berries for breakfast, about 420 calories."*
+> *"Log 3×5 bench press at 100kg."*
+> *"How am I doing today?"*
+
+**Anatome does no food lookup and calls no model** — your assistant estimates the macros and
+sends them, and Anatome stores and adds them up. That is what keeps this tier free.
+
+Your data is yours: `export_my_data` and `delete_my_account` are tools, and the same buttons are
+on `/account`. See [PRIVACY.md](./PRIVACY.md) — including the one real gap, that there is no
+password reset because Anatome sends no email.
 
 ## Use the HTTP API
 
@@ -72,6 +91,11 @@ Free, with a budget of **50 requests per caller per day**, resetting at 00:00 UT
 private addresses are never counted, so local development is unlimited. Static catalog reads
 (`/listMuscles`, `/listEquipment`, `/bodyPaths`, `/openapi`, the guide endpoints) are edge-cached
 and not counted either.
+
+"Per caller" is your **account** once you sign in, and otherwise your MCP session or your IP.
+Only the account is durable: a remote connector reaches this API from the assistant vendor's
+egress addresses, shared by every user of that assistant, so an anonymous budget is an
+approximation. Signing in gives you one of your own.
 
 Running out returns `429` with a body a program can act on:
 
@@ -104,7 +128,8 @@ production quotas.
 | repo root (`src/`, `index.html`, `vite.config.js`, …) | React/Vite site + playground at **anatome.dev** | `npm run build && wrangler deploy` |
 | [`docs/`](./docs) | Working notes and audits | — |
 
-Two independent deployables, no shared runtime. Neither needs a database.
+Two independent deployables, no shared runtime. The site needs no backend at all; the API needs a
+D1 database **only** for accounts, and serves the whole catalog without one.
 
 ## Endpoints
 
@@ -112,8 +137,13 @@ Two independent deployables, no shared runtime. Neither needs a database.
 `exerciseGif` · `exerciseImage` · `listMuscles` · `muscleInfo` · `listEquipment` · `bodyPaths` ·
 `listGuides` · `getGuide` · `getGuideTree` · `mcp` · `openapi` · `ciStatus` · `selfTest`
 
+Signed-in only: `/v1/meals` · `/v1/water` · `/v1/workouts` · `/v1/body-metrics` ·
+`/v1/weight-trend` · `/v1/goals` · `/v1/summary` · `/v1/profile` · `/v1/export`, plus
+`/oauth/*` and `/account`.
+
 Full schema: `GET https://api.anatome.dev/openapi`. Machine discovery:
-`GET https://api.anatome.dev/.well-known/mcp.json`.
+`GET https://api.anatome.dev/.well-known/mcp.json` and
+`GET https://api.anatome.dev/.well-known/oauth-authorization-server`.
 
 > ⚠️ The **skill guides** (`listGuides` / `getGuide` / `getGuideTree` and their MCP tools) are a
 > **work in progress**: media coverage is incomplete and the coaching cues are unreviewed. Every
@@ -125,7 +155,10 @@ Full schema: `GET https://api.anatome.dev/openapi`. Machine discovery:
 ```bash
 # API
 cd api && pnpm install && pnpm run worker:dev     # → http://localhost:8787
-cd api && pnpm test && pnpm run typecheck
+cd api && pnpm run db:migrate:local               # only if you want accounts locally
+cd api && pnpm test                               # 257 tests, plain node
+cd api && pnpm run test:workers                   # 52 tests inside workerd, real local D1
+cd api && pnpm run typecheck
 
 # Site
 npm install && npm run dev

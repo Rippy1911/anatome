@@ -1,8 +1,8 @@
 # Self-hosting Anatome
 
-Anatome runs entirely on Cloudflare: a Worker for the API, static assets for the site. There is
-no database, no third-party account, no billing provider and no secret you must obtain from
-anyone. If you have a Cloudflare account, you can have your own copy running in about ten
+Anatome runs entirely on Cloudflare: a Worker for the API, static assets for the site, and one
+optional D1 database if you want accounts. There is no third-party account to register with, no
+billing provider and no secret you must obtain from anyone. If you have a Cloudflare account, you can have your own copy running in about ten
 minutes, and it will be the same software that runs anatome.dev.
 
 This is the honest version of "open source": not a source dump next to a hosted product you
@@ -13,10 +13,15 @@ actually have to pay for, but the deployable thing.
 | Piece | Where | What it needs |
 | --- | --- | --- |
 | `api/` | Cloudflare Worker at your own hostname | one KV namespace, one Durable Object |
+| `api/` accounts + logging | the same Worker | one D1 database — **optional** |
 | repo root | Cloudflare Workers Static Assets | nothing |
 
-No Postgres. No Redis. No S3. The 873-exercise catalog, the 23-muscle anatomical path data and
-the demo GIFs are all files in the repo, bundled into the Worker at deploy time.
+No Postgres. No Redis. No S3. No third-party identity provider. The 873-exercise catalog, the
+23-muscle anatomical path data and the demo GIFs are all files in the repo, bundled into the
+Worker at deploy time.
+
+The D1 database is genuinely optional. Skip it and the Worker serves the entire catalog API and
+simply stops advertising the logging tools — a supported way to run this, and the fastest one.
 
 ## Prerequisites
 
@@ -66,6 +71,33 @@ tests are always unlimited.
 [docs on how identity is resolved](#a-note-on-who-gets-counted) below. Leave it well above
 `FAIR_USE_DAILY_LIMIT`.
 
+### Adding accounts and logging (optional)
+
+Skip this section entirely if you only want the catalog API.
+
+```bash
+pnpm exec wrangler d1 create anatome
+```
+
+Paste the returned `database_id` into the `[[d1_databases]]` block in `api/wrangler.toml`, then
+create the schema:
+
+```bash
+pnpm exec wrangler d1 migrations apply anatome            # remote
+pnpm exec wrangler d1 migrations apply anatome --local    # for `wrangler dev`
+```
+
+That is all. There is no identity provider to register with, no OAuth client to obtain and no
+mail provider to configure — Anatome is its own OAuth 2.1 authorization server, and users sign in
+with an email and password held only by your deployment.
+
+Two consequences you should know before you offer this to anyone:
+
+- **There is no password reset**, because there is no way to send email. A user who forgets their
+  password loses the account. Say so on your own site, as `PRIVACY.md` does on ours.
+- **You become the data controller** for whatever your users log. `PRIVACY.md` in this repo
+  describes anatome.dev; publish your own version rather than pointing at ours.
+
 ### Optional secrets
 
 None of these are required. The Worker starts and serves the whole API without any of them.
@@ -112,9 +144,15 @@ Local requests come from a private address, so nothing is rate limited while you
 ## Tests
 
 ```bash
-cd api && pnpm test && pnpm run typecheck
-pnpm exec wrangler deploy --dry-run --outdir dist   # catches config errors before they ship
+cd api
+pnpm test                                          # pure logic + route shape, plain node
+pnpm run test:workers                              # runs inside workerd against a real local D1
+pnpm run typecheck
+pnpm exec wrangler deploy --dry-run --outdir dist  # catches config errors before they ship
 ```
+
+`test:workers` is where the account and logging tests live. They need the real runtime because a
+hand-written D1 stub would only prove that the stub behaves the way its author imagined.
 
 ```bash
 # repo root
@@ -149,16 +187,20 @@ daily bucket and make the connector look permanently broken.
 Be clear-eyed about what that buys: a session id is client-supplied and free to re-mint, so this
 is a fair-use speed bump, not an access control. `ANON_NETWORK_DAILY_LIMIT` (default 10 000) caps
 how much one network can take through re-minted sessions, and Cloudflare's WAF is the real flood
-layer if you need one. A durable per-user budget needs a durable user, which means accounts — not
-in this release.
+layer if you need one.
+
+Once a user signs in, fair use is charged to **their account** instead — a durable identity that
+does not depend on a session id or an egress address.
 
 ## What is deliberately not here
 
-- **No accounts and no per-user data.** Nothing is stored about a caller beyond a daily counter
-  keyed on a hash. There is nothing to export and nothing to leak.
-- **No AI.** Anatome renders, searches and resolves; it never calls a model. When an assistant
-  uses these tools, the assistant does the thinking.
+- **No AI.** Anatome renders, searches, resolves, stores and adds up. It never calls a model —
+  when an assistant logs "oatmeal with berries", the *assistant* worked out the macros and sent
+  them as structured JSON. That keeps this tier free and dependency-free.
+- **No food database and no barcode lookup.** Nutrition numbers are whatever the caller supplies.
+- **No coaches, no programming, no meal plans, no wearables.**
 - **No payments.** There is no billing code in this repo at all.
+- **No email**, and therefore no password reset. See above.
 
 If you want per-user workouts and meals, AI parsing, interactive widgets, coach and trainee
 accounts or production quotas, that is the hosted platform at

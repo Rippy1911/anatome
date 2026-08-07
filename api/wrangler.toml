@@ -27,6 +27,21 @@ class_name = "RateLimiterDO"
 tag = "v1"
 new_sqlite_classes = ["RateLimiterDO"]
 
+# Accounts and personal logging (meals, workouts, body weight).
+#
+# OPTIONAL. Comment this block out and the Worker still serves the entire catalog API — it just
+# has no accounts and stops advertising the logging tools. That is a supported way to run it.
+#
+# Create with:  wrangler d1 create anatome
+# then paste the returned database_id below, and apply the schema:
+#               wrangler d1 migrations apply anatome            # remote
+#               wrangler d1 migrations apply anatome --local     # local dev
+[[d1_databases]]
+binding = "DB"
+database_name = "anatome"
+database_id = "2d685f1a-cce3-4ace-bde4-dfc3efd2d735"
+migrations_dir = "migrations"
+
 [vars]
 # Non-secret config only. Secrets are set with `wrangler secret put`:
 #   wrangler secret put ADMIN_TOKEN      # operator endpoints (/admin/*)
@@ -69,6 +84,12 @@ class_name = "RateLimiterDO"
 [[env.production.migrations]]
 tag = "v1"
 new_sqlite_classes = ["RateLimiterDO"]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "anatome"
+database_id = "2d685f1a-cce3-4ace-bde4-dfc3efd2d735"
+migrations_dir = "migrations"
 
 [env.production.vars]
 PUBLIC_BASE_URL = "https://api.anatome.dev"

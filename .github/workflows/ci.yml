@@ -1,3 +1,14 @@
+# CI runs anywhere; deploys run in exactly one place.
+#
+# This repo is mirrored to a public one and is meant to be forked. Two consequences are handled
+# explicitly rather than left to fail confusingly:
+#
+#   - `runs-on` falls back to `ubuntu-latest` off the canonical repo. The self-hosted runners are
+#     registered to NextSolutionsStudio/anatome-os only, so anywhere else these jobs would queue
+#     forever with no error — a fork's CI that never starts looks like a broken project.
+#   - The deploy jobs are pinned to the canonical repo by name. A fork has no Cloudflare
+#     credentials, and more importantly must never be able to deploy over ours.
+#
 name: CI
 
 on:
@@ -13,12 +24,12 @@ concurrency:
 jobs:
   site:
     name: Site (lint + build)
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
@@ -37,7 +48,7 @@ jobs:
 
   api:
     name: API (typecheck + test + wrangler dry-run)
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     defaults:
       run:
         working-directory: api
@@ -54,6 +65,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run typecheck
       - run: pnpm test
+      # Accounts and logging run inside workerd against a real local D1. A hand-written D1 stub
+      # would only prove the stub behaves the way its author imagined.
+      - run: pnpm run test:workers
       - run: pnpm exec wrangler deploy --dry-run --outdir dist
       # A dry-run only bundles: it does not start workerd, so it cannot catch an entrypoint the
       # runtime rejects (a stray named export takes the Worker down at boot). Boot it for real.
@@ -80,8 +94,8 @@ jobs:
   deploy-api:
     name: Deploy API to Cloudflare
     needs: [site, api]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: [self-hosted, linux, x64]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'NextSolutionsStudio/anatome-os'
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     defaults:
       run:
         working-directory: api
@@ -101,24 +115,34 @@ jobs:
           cache: pnpm
           cache-dependency-path: api/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
+      # Schema first: a deploy that adds a route reading a table the database does not have yet
+      # fails for users, not for us. Migrations are additive and idempotent.
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: api
+          wranglerVersion: "4"
+          command: d1 migrations apply anatome --remote
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: api
+          wranglerVersion: "4"
           command: deploy --env production
 
   deploy-site:
     name: Deploy site to Cloudflare
     needs: [site, api]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: [self-hosted, linux, x64]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'NextSolutionsStudio/anatome-os'
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
@@ -127,4 +151,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Pinned: if the repo's own wrangler is ever unusable, this action's default
+          # fallback is wrangler 3, which silently deploys a different thing instead of failing.
+          wranglerVersion: "4"
           command: deploy --env production
