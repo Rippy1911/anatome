@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
@@ -122,12 +122,14 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: api
+          wranglerVersion: "4"
           command: d1 migrations apply anatome --remote
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: api
+          wranglerVersion: "4"
           command: deploy --env production
 
   deploy-site:
@@ -140,7 +142,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
@@ -149,4 +151,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Pinned: if the repo's own wrangler is ever unusable, this action's default
+          # fallback is wrangler 3, which silently deploys a different thing instead of failing.
+          wranglerVersion: "4"
           command: deploy --env production
