@@ -88,7 +88,10 @@ jobs:
     defaults:
       run:
         working-directory: api
-    # Manual approval gate: the "production" environment in repo settings has required reviewers.
+    # NOTE: the "production" environment currently has NO protection rules, so this deploys
+    # unattended on every push to main. That is deliberate for now. To require a human, add
+    # required reviewers to the environment in repo settings — this line already routes through
+    # it, so the gate takes effect with no workflow change.
     environment: production
     steps:
       - uses: actions/checkout@v4
