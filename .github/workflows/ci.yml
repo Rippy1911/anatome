@@ -58,20 +58,27 @@ jobs:
       # would only prove the stub behaves the way its author imagined.
       - run: pnpm run test:workers
       - run: pnpm exec wrangler deploy --dry-run --outdir dist
-      # A dry-run only bundles: it does not start workerd, so it cannot catch an entrypoint that
-      # the runtime rejects (a stray named export takes the Worker down at boot). Boot it.
+      # A dry-run only bundles: it does not start workerd, so it cannot catch an entrypoint the
+      # runtime rejects (a stray named export takes the Worker down at boot). Boot it for real.
+      #
+      # The port is chosen by the OS, not hard-coded. These runners are self-hosted and shared,
+      # so a fixed 8787 collided with a concurrent job and failed this step on both open PRs —
+      # a CI failure caused by CI, which is the least useful kind.
       - name: Boot the Worker and probe it
         run: |
-          pnpm exec wrangler dev --port 8787 --local &
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:8787/ >/dev/null; then break; fi
+          PORT=$(node -e 'const s=require("net").createServer();s.listen(0,"127.0.0.1",()=>{console.log(s.address().port);s.close()})')
+          echo "Booting workerd on 127.0.0.1:$PORT"
+          pnpm exec wrangler dev --port "$PORT" --ip 127.0.0.1 --local &
+          WRANGLER_PID=$!
+          trap 'kill "$WRANGLER_PID" 2>/dev/null || true' EXIT
+          for _ in $(seq 1 30); do
+            if curl -sf "http://127.0.0.1:$PORT/" >/dev/null; then break; fi
             sleep 2
           done
-          curl -sf http://localhost:8787/ | grep -q '"ok":true'
-          curl -sf -X POST http://localhost:8787/mcp \
+          curl -sf "http://127.0.0.1:$PORT/" | grep -q '"ok":true'
+          curl -sf -X POST "http://127.0.0.1:$PORT/mcp" \
             -H 'content-type: application/json' \
             -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | grep -q '"tools"'
-          kill %1
 
   deploy-api:
     name: Deploy API to Cloudflare
