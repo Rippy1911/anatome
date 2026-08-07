@@ -1,111 +1,131 @@
 # AGENTS.md — Anatome
 
-*Last updated: 2026-06-08 by IdeaForge Copilot. Read automatically by Cursor Composer, OpenAI Codex, Google Jules, Amp, ns-coder, ns-pi and any other AGENTS.md-aware coding agent. Treat as your onboarding doc.*
+*Read automatically by Cursor, Codex, Claude Code, Jules, Amp, and any other AGENTS.md-aware
+coding agent. Treat it as your onboarding doc.*
 
 ---
 
 ## What Anatome is
 
-**Anatome** (homepage: anatome.dev) is an open-source **muscle-group image generator API + ExerciseDB** by NextSolutions. Apache-2.0 licensed, MCP-compatible, 873 exercises pre-mapped to muscle groups. Stack:
+**Anatome** (site: anatome.dev) is a **free, keyless** muscle-anatomy and exercise API, plus an
+MCP server. Apache-2.0. Two independent deployables, both on Cloudflare, neither with a database:
 
-- **Cloudflare Workers** runtime
-- **Hono** framework
-- **JavaScript** (not TypeScript currently)
-- **Wrangler** for deploy + local dev
+| Path | What | Runtime | Deploy |
+| --- | --- | --- | --- |
+| `api/` | Public API + MCP at **api.anatome.dev** | Cloudflare Workers, Hono, **TypeScript** | `wrangler deploy --env production` |
+| repo root | Site + playground at **anatome.dev** | Vite + React 18 + Tailwind, **static assets** | `npm run build && wrangler deploy --env production` |
 
-Unlike Sebastian's other repos, **this one is NOT a Base44 mirror** — it's a real codebase with real build commands. You can clone, install, test, and deploy normally.
+Used by [airon.coach](https://airon.coach) to render muscle-group SVGs on workout cards.
 
-Used by Airon Coach (via npm dependency or direct API call) to render muscle-group SVGs for workout cards.
+> **This file was badly stale until 2026-08-07** — it claimed the project was JavaScript with no
+> TypeScript, described a `src/` layout the Worker never had, and predated both the keyless
+> migration and the removal of Base44. If something here contradicts the code, the code wins;
+> please fix this file in the same PR.
 
-## Build + test + deploy
+## Build, test, deploy
 
 ```bash
-# Install
+# ---- API (api/) ----
+cd api
+pnpm install                 # npm works too; pnpm-lock.yaml is what CI uses
+pnpm run worker:dev          # local Worker → http://localhost:8787
+pnpm test                    # vitest, ~256 tests
+pnpm run typecheck           # tsc --noEmit — must be clean
+pnpm exec wrangler deploy --dry-run --outdir dist   # catches config errors
+
+# ---- Site (repo root) ----
 npm install
-
-# Local dev (Wrangler dev server)
-npm run dev
-# → typically http://localhost:8787
-
-# Lint
-npm run lint            # if defined
-
-# Type check
-# (no TS yet, but JSDoc/jsconfig may exist — check)
-
-# Test
-npm test                # if defined in package.json
-npm run test:unit       # if split
-
-# Deploy (production)
-npx wrangler deploy
-# → deploys to Cloudflare Workers in the configured account
-
-# Tail logs
-npx wrangler tail
+npm run dev                  # Vite dev server
+npm run lint                 # eslint --quiet — must be clean
+npm run build                # → dist/
 ```
 
-**Cursor Composer**: you have a full Linux sandbox — you CAN run `npm install`, `npm test`, `wrangler deploy --dry-run`. Use it. Self-verify before opening a PR.
+Point the site at a local Worker: `VITE_PUBLIC_API=http://localhost:8787 npm run dev`.
 
-**ns-coder / ns-pi**: you may not have npm dependencies installed in your sandbox. Lint/test in CI instead via GitHub Actions.
+CI (`.github/workflows/ci.yml`) runs all of the above on self-hosted runners and deploys the API
+from `main` behind a manual approval gate.
 
-## Repo layout (best-effort)
+## The things most likely to trip you up
+
+1. **There are no API keys.** If you find yourself adding an `Authorization` header, a plan, a
+   quota tier or a billing hook, stop — that is the hosted platform's job, not this repo's.
+   Anatome's entire auth story is "there isn't one", and the docs, the OpenAPI description and
+   the landing page all promise that.
+
+2. **`initialize` and `tools/list` must never be rate limited.** Metering the MCP handshake means
+   a user who is merely out of requests for the day cannot connect, and every host renders that
+   as *"connector failed"* — the most misleading failure this API can produce. Only `tools/call`
+   spends budget. There is a test pinning this; do not "simplify" it away.
+
+3. **An exhausted `tools/call` returns HTTP 200 with `isError: true`, not a JSON-RPC error.**
+   Same reason: hosts swallow protocol errors and the model never sees why. See
+   `rateLimitToolResult` in `api/src/index.ts`.
+
+4. **Fair use is not keyed on the IP for MCP.** A remote connector is called by the assistant
+   vendor's servers, so every user of that assistant shares one address. Requests carrying an
+   `Mcp-Session-Id` are counted per session; see the header comment in `api/src/lib/rateLimit.ts`
+   before changing anything there.
+
+5. **Never trust `Referer` / `Origin` for identity.** It is client-controlled. An earlier version
+   used it to pick a rate-limit bucket and was spoofable (An-M2). Identity comes from
+   `cf-connecting-ip` and the session id, nothing else.
+
+6. **Bump `CACHE_VERSION` in `api/src/lib/edgeCache.ts` whenever a cacheable response body
+   changes.** Entries are stored `immutable` for a week and the CI token has no cache-purge
+   scope, so without a bump the edge keeps serving the old body after your deploy.
+
+7. **Workers runtime only.** No `fs`, no `process`, no Node built-ins in `api/src`. Web APIs
+   (`fetch`, `Request`, `Response`, `crypto`) only.
+
+8. **The exercise data is the asset.** Don't regenerate or refactor `api/data/exercises.json` or
+   the muscle mappings without explicit approval; edit consumers instead.
+
+9. **Guides are a work in progress and every surface says so.** Tool descriptions carry a
+   `[WORK IN PROGRESS]` prefix, payloads carry `status: "work_in_progress"`, both site pages show
+   a banner, and `/guides` is unlinked from the nav. If you touch the guide catalog, keep all
+   four in step.
+
+10. **Photography licensing.** Exercise *metadata* is Unlicense. The *photography* served through
+    `/exerciseImage` is of unverified origin and is **not** cleared for redistribution. Never
+    write a CC0 or public-domain claim over the imagery — that has been fixed twice already.
+
+## Layout
 
 ```
-src/                        Worker source code (Hono routes, handlers)
-  index.js                  main entrypoint
-  routes/                   per-route modules
-  exercises/                exercise database + muscle mapping
-  svg/                      SVG generation helpers
-  mcp/                      MCP server integration
-public/                     static assets if any
-wrangler.toml               Cloudflare Workers config
-package.json                npm scripts + deps
-README.md                   the existing one is good — read it first
-.github/workflows/          CI (build + test + deploy on tag)
-AGENTS.md                   this file
-LICENSE                     Apache-2.0
+api/
+  src/index.ts            Hono app: all routes
+  src/routes/             mcp.ts · openapi.ts · admin.ts · selfTest.ts · ciStatus.ts
+  src/lib/                rateLimit.ts · rateLimiterDO.ts · meter.ts · edgeCache.ts ·
+                          exercises.ts · muscleEngine.ts · guides.ts · attribution.ts
+  src/data/               muscleCatalog.ts · guideCatalog.ts · bodyWrappers.ts
+  data/                   exercises.json · bodyPaths.json · guides/
+  public/gifs/            generated demo GIFs (static assets binding)
+  test/                   vitest; test/setup.ts installs a `caches.default` shim
+  wrangler.toml           KV + Durable Object + vars
+src/                      React site (pages/ components/ lib/ hooks/ data/)
+public/                   logo.png, hero-muscles.svg, docs screenshots
+wrangler.toml             site deployment (static assets)
+SELF_HOSTING.md           the deploy-it-yourself guide — keep it true
 ```
 
-## How to do good work here
+## Conventions
 
-1. **Read first.** Check `README.md`, `package.json` scripts, `wrangler.toml`, and `src/index.js` before any change.
-2. **Real CI applies.** Tests will run. Make them pass before opening a PR.
-3. **Match style.** Functional ES modules, single quotes, no semicolons-at-end (check the existing files), kebab-case for files.
-4. **Cloudflare Workers constraints**: no Node-specific APIs (no `fs`, no `process`). Use Web APIs (`fetch`, `Request`, `Response`, `crypto`).
-5. **Don't break the public API.** If a route is documented in README, treat it as a contract. Version a new behavior, don't silently change the old one.
-6. **873 exercise mappings**: the muscle-group data is the asset. Don't regenerate or refactor it without explicit approval; just edit the consumer code.
-7. **Open source courtesy**: this repo may attract external contributors. Write commit messages + PR descriptions that read well to strangers.
-
-## Commit + PR conventions
-
-- Branch naming: `cursor/<slug>`, `ns-coder/<task-id>`, `ns-pi/<task-id>`, `chat/<slug>`, `feat/<slug>`, `fix/<slug>`, `chore/<slug>`, `docs/<slug>`
-- PR title: Conventional commits style — `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `perf:`, `ci:`
-- PR body: what, why, screenshots if UI-visible, breaking-change call-out if applicable, agent metadata
+- Branches: `feat/<slug>`, `fix/<slug>`, `chore/<slug>`, `docs/<slug>`, `cursor/<slug>`
+- PR titles: conventional commits (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `perf:`, `ci:`)
 - Squash on merge
+- TypeScript in `api/`, JSX in `src/`. Match the file you are editing.
+- Tests live beside the behaviour they protect. If you fix a bug, pin it with a test that fails
+  without your change.
 
-## Hard 'do not touch' list
+## Hard "do not touch" list
 
-- Apache-2.0 LICENSE file (don't change without explicit approval)
-- `wrangler.toml` production account_id or zone bindings
-- 873 exercise muscle-group mappings (edit consumers, not the data)
-- `package.json` `version` bump without intent
-- Lock files unless explicitly asked
-
-## Worker fleet (who you might be)
-
-- **Cursor Composer-2.5** — cloud VM with full Linux sandbox. **You can and SHOULD run `npm install` + `npm test` + `wrangler deploy --dry-run` before opening a PR.** Self-verify.
-- **ns-coder** — OpenHands on Hetzner. Limited shell. Rely on CI for verification.
-- **ns-pi** — Pi CLI on Hetzner, Haiku 4.5. Simple chores only.
-- **IdeaForge Copilot** — Claude Sonnet 4.5 orchestrator + reviewer.
+- `LICENSE` (Apache-2.0)
+- `wrangler.toml` production account/zone bindings
+- The 873 exercise muscle mappings
+- `package.json` version, without intent
+- Lock files, unless explicitly asked
 
 ## When you finish
 
-Include in PR description:
-- Agent name + ID
-- Model used
-- Wall clock
-- Whether you ran `npm test` (and the result)
-- Optional: 1-line 'I'd-do-differently'
-
-Ship good work. — Copilot 💙
+In the PR description: what changed and why, whether `pnpm test` / `npm run build` passed and
+their output, any behaviour you could not verify, and a call-out for anything breaking.

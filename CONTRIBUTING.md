@@ -3,19 +3,22 @@
 Thanks for your interest in improving Anatome! The repo has two independently
 deployed parts:
 
-- **Frontend (repo root)** — the React/Vite marketing + playground app
-  (deploys through Base44; `base44/config.jsonc` must stay at the repo root).
 - **`api/`** — the Cloudflare Workers API at **api.anatome.dev** (deploys via `wrangler`).
-- **Marketing site** — **anatome.dev** on Base44 (repo root frontend).
+- **Site (repo root)** — the React/Vite site + playground at **anatome.dev**, built to static
+  files and served by Cloudflare Workers Static Assets (also `wrangler`).
+
+Neither has a database or a third-party dependency you need an account for. See
+[SELF_HOSTING.md](./SELF_HOSTING.md) if you want your own copy running.
 
 ## Local setup
 
-### Frontend (repo root)
+### Site (repo root)
 
 ```bash
 npm install
-cp .env.local.example .env.local   # set VITE_BASE44_APP_ID + VITE_BASE44_APP_BASE_URL
 npm run dev
+# point it at a local Worker instead of production:
+VITE_PUBLIC_API=http://localhost:8787 npm run dev
 ```
 
 ### API (Cloudflare Workers)
@@ -47,11 +50,11 @@ Add a scope when helpful, e.g. `feat(api): add muscle catalog endpoint`.
 
 ## Tests (required before opening a PR)
 
-- **Frontend:** `npm run lint` must pass. (`npm run typecheck` has a known
-  pre-existing baseline of failures from the Base44 export and is currently
-  non-blocking — don't add new ones.)
-- **API:** `pnpm test && pnpm run worker:test` must pass, and the `selfTest`
-  endpoint must report **≥ 46/46** (never fewer than before your change).
+- **Site:** `npm run lint` and `npm run build` must pass.
+- **API:** `pnpm test` and `pnpm run typecheck` must pass, and the `selfTest`
+  endpoint must stay green (never fewer passing cases than before your change).
+  `pnpm exec wrangler deploy --dry-run --outdir dist` catches config errors that
+  tests cannot.
 
 PRs with failing checks will not be merged.
 
@@ -61,12 +64,19 @@ PRs with failing checks will not be merged.
   legal attribution fields (`attribution`, `attribution_source`, `license`, plus
   `exercise_db_attribution` on exercise responses). Don't remove them. The
   `built_by`/`try_also` marketing fields are intentionally omitted.
-- The rate-limit model is intentional (free for testing; per-IP and per-host day
-  limits; a monthly tier gate). Don't change it without maintainer sign-off.
-- AI features are internal-only and live in the frontend. The public API has **no**
-  AI/LLM endpoints — please don't add any.
-- Don't break backwards compatibility: existing URLs (RapidAPI, embedded `<img src>`,
-  MCP configs) must keep working.
+- **Anatome is keyless and stays keyless.** No `Authorization` header, no plans, no
+  quota tiers, no billing hooks. If a change needs one of those, it belongs in the
+  hosted platform, not here.
+- The fair-use model is deliberate and subtle in two places: the MCP handshake
+  (`initialize` / `tools/list`) is never metered, and an exhausted `tools/call`
+  returns `isError` inside a normal result rather than a JSON-RPC error. Both exist
+  so an assistant reports "you're out of requests today" instead of "the connector
+  is broken". Read the header comment in `api/src/lib/rateLimit.ts` before changing
+  anything there, and don't delete the tests that pin it.
+- The public API has **no** AI/LLM endpoints — please don't add any. Anatome renders,
+  searches and resolves; the model calling it does the thinking.
+- Don't break backwards compatibility: existing URLs (embedded `<img src>`, MCP
+  configs) must keep working.
 
 ## PR process
 
@@ -74,8 +84,8 @@ PRs with failing checks will not be merged.
 2. Make focused changes with conventional commits.
 3. Ensure all tests/linters pass.
 4. Open a PR using the template; describe what changed and why.
-5. **Frontend changes deploy through Base44. API changes deploy via `wrangler`.
-   PRs that span both need review from a maintainer.**
+5. Both halves deploy via `wrangler`, independently. PRs that span both need review
+   from a maintainer.
 
 By participating, you agree to abide by our [Code of Conduct](./CODE_OF_CONDUCT.md).
 Questions: contact@nextsolutions.studio
