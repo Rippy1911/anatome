@@ -40,7 +40,7 @@ import type { DbEnv } from "./lib/db.ts";
 import { hasDb } from "./lib/db.ts";
 import {
   authorizationServerMetadata, getAuthorize, postAuthorize, postRevoke, postToken,
-  protectedResourceMetadata, registerClient,
+  protectedResourceMetadata, registerClient, unauthorizedWithDiscovery,
 } from "./routes/oauth.ts";
 import {
   availableLoggingTools, callLoggingTool, isLoggingTool, registerPersonalRoutes,
@@ -585,6 +585,22 @@ app.post("/mcp", async (c) => {
   // would be enough to serve one person's food log to somebody else. Route it out before the
   // cache key is computed rather than trusting a later condition to exclude it.
   if (isLoggingTool(parsed.params?.name)) {
+    // An unauthenticated call to a logging tool answers **401 with WWW-Authenticate**, not a
+    // tool-level message. That header is what makes a client run the OAuth flow and retry —
+    // prose in a tool result cannot, so a connector added anonymously would otherwise have no
+    // way to sign in short of being deleted and re-added by hand.
+    //
+    // Note the deliberate asymmetry with the fair-use denial a few lines up, which must NOT be
+    // a protocol-level error: "you are out of requests" is a state the model should explain,
+    // while "you are not signed in" is a state the client can fix on its own. Different
+    // audiences, different channel.
+    if (hasDb(c.env) && !identity) {
+      return unauthorizedWithDiscovery(
+        c,
+        `The "${parsed.params!.name}" tool needs an Anatome account. Sign in to enable it; the catalog, diagram and search tools keep working without one.`,
+      );
+    }
+
     const outcome = await callLoggingTool(
       c.env, c.req.raw, parsed.params!.name as string, parsed.params?.arguments || {}, base,
     );

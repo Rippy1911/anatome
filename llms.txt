@@ -28,8 +28,12 @@ Discovery lives at `/.well-known/oauth-protected-resource` and
 `/.well-known/oauth-authorization-server`; a 401 from a logging tool carries the
 `WWW-Authenticate` header that starts it.
 
-If a logging tool returns `error: "not_signed_in"`, the connector is fine — tell the user to
-reconnect and sign in. Do not report it as a failure.
+Calling a logging tool without a token returns **HTTP 401** with a `WWW-Authenticate: Bearer …
+resource_metadata="…"` header. That is a signal to your *client*, not an error to relay: run the
+OAuth flow and retry. The catalog tools never 401.
+
+Do not confuse it with the fair-use denial, which is deliberately **not** a 401 — that one is a
+200 carrying `isError`, and it is for you to explain to the user.
 
 ## Fair use — read this before retrying anything
 

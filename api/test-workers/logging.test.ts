@@ -218,19 +218,72 @@ describe("days roll over at the user's local midnight", () => {
   });
 });
 
-describe("signed-out callers get guidance, not a dead end", () => {
-  it("explains how to sign in and says the connector is fine", async () => {
-    const out = await callTool(app, null, "log_meal", { name: "x" });
-    expect(out.isError).toBe(true);
-    expect(out.text).toMatch(/connector itself is fine/i);
-    expect(out.text).toContain("/oauth/authorize");
-    // Same failure shape the fair-use work fixed: never let "unauthorized" read as "broken".
-    expect(out.data.retryable).toBe(false);
+describe("signed-out callers can actually get signed in", () => {
+  it("answers a logging tool with 401 + WWW-Authenticate so the client runs OAuth", async () => {
+    // This header is the entire mechanism behind "paste a URL and sign in". Prose in a tool
+    // result cannot trigger it, so without this a connector added anonymously has no route to
+    // an account except being deleted and re-added by hand.
+    const res = await app.request("https://api.anatome.dev/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json", "cf-connecting-ip": "198.51.100.30" },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1, method: "tools/call",
+        params: { name: "log_meal", arguments: { name: "x" } },
+      }),
+    }, env);
+
+    expect(res.status).toBe(401);
+    const header = res.headers.get("www-authenticate") ?? "";
+    expect(header).toContain("Bearer");
+    expect(header).toContain("resource_metadata=");
+    // The advertised metadata URL must actually resolve, or the client's dance dead-ends.
+    const url = header.match(/resource_metadata="([^"]+)"/)?.[1];
+    expect(url).toBeTruthy();
+    const meta = await app.request(url!, {}, env);
+    expect(meta.status).toBe(200);
+  });
+
+  it("still explains itself in the body, for a client that shows it", async () => {
+    const res = await app.request("https://api.anatome.dev/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json", "cf-connecting-ip": "198.51.100.31" },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1, method: "tools/call",
+        params: { name: "log_workout", arguments: { sets: [] } },
+      }),
+    }, env);
+    const body = await res.json() as { error_description: string; sign_in: string };
+    expect(body.error_description).toContain("log_workout");
+    expect(body.sign_in).toContain("/oauth/authorize");
   });
 
   it("leaves the catalog tools working without an account", async () => {
+    // The whole point of staying open: this must not 401.
     const out = await callTool(app, null, "list_muscles", {});
     expect(out.isError).toBe(false);
+  });
+
+  it("does not 401 a fair-use denial — that one the model must explain", async () => {
+    // Different audiences: "not signed in" is for the client to fix, "out of requests" is for
+    // the user to hear. Conflating them is how a working connector reads as broken.
+    const spent = { ...env, FAIR_USE_DAILY_LIMIT: "1" } as unknown as typeof env;
+    const call = () => app.request("https://api.anatome.dev/mcp", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "cf-connecting-ip": "198.51.100.32",
+        "mcp-session-id": "quota-vs-auth",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1, method: "tools/call",
+        params: { name: "list_muscles", arguments: {} },
+      }),
+    }, spent);
+    await call();
+    const res = await call();
+    expect(res.status).toBe(200);
+    const body = await res.json() as { result: { isError?: boolean } };
+    expect(body.result.isError).toBe(true);
   });
 });
 
@@ -298,9 +351,23 @@ describe("deletion means deletion", () => {
   it("makes the deleted account's token stop working", async () => {
     const user = await signUp(app, "revoked-by-deletion@example.com");
     await callTool(app, user, "delete_my_account", { confirm: true });
-    const after = await callTool(app, user, "log_meal", { name: "ghost", calories: 1 });
-    expect(after.isError).toBe(true);
-    expect(after.text).toMatch(/not signed in|sign in/i);
+
+    // The token is now unknown, so this takes the same path as never having signed in: 401 with
+    // the discovery header, inviting a fresh sign-in rather than silently doing nothing.
+    const after = await app.request("https://api.anatome.dev/mcp", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${user.accessToken}`,
+        "cf-connecting-ip": "198.51.100.33",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1, method: "tools/call",
+        params: { name: "log_meal", arguments: { name: "ghost", calories: 1 } },
+      }),
+    }, env);
+    expect(after.status).toBe(401);
+    expect(after.headers.get("www-authenticate")).toContain("resource_metadata=");
   });
 });
 
