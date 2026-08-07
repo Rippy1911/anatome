@@ -7,6 +7,7 @@ import { env } from "cloudflare:test";
 import { beforeAll, describe, it, expect } from "vitest";
 import app from "../src/index.ts";
 import { applySchema, challengeFor, signUp } from "./helpers.ts";
+import { PBKDF2_ITERATIONS, PBKDF2_MAX_ITERATIONS, hashPassword, newSalt } from "../src/lib/auth.ts";
 
 const REDIRECT = "https://claude.ai/api/mcp/auth_callback";
 
@@ -246,7 +247,24 @@ describe("password storage", () => {
     expect(row).toBeTruthy();
     expect(JSON.stringify(row)).not.toContain(password);
     expect(String(row!.password_salt).length).toBeGreaterThan(10);
-    expect(Number(row!.iterations)).toBeGreaterThanOrEqual(600_000);
+    expect(Number(row!.iterations)).toBe(PBKDF2_ITERATIONS);
+  });
+
+  it("stays within the iteration cap workerd enforces in production", () => {
+    // This test exists because the runtime under test will not catch it. `wrangler dev --local`
+    // happily ran 600 000 iterations — the whole suite passed and a full local sign-up worked —
+    // and then production answered the very first request with
+    //   NotSupportedError: Pbkdf2 failed: iteration counts above 100000 are not supported
+    // A local runtime that is more permissive than the real one is the worst kind of green.
+    expect(PBKDF2_ITERATIONS).toBeLessThanOrEqual(PBKDF2_MAX_ITERATIONS);
+  });
+
+  it("actually derives a hash at the configured count, in this runtime", async () => {
+    // Not a tautology: it calls the same WebCrypto path production does, so if the cap ever
+    // moves and someone raises PBKDF2_ITERATIONS past it, this throws instead of shipping.
+    const salt = newSalt();
+    const hash = await hashPassword("correct-horse-battery-staple", salt, PBKDF2_ITERATIONS);
+    expect(hash.length).toBeGreaterThan(20);
   });
 
   it("gives two accounts with the same password different hashes", async () => {

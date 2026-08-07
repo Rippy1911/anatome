@@ -37,7 +37,7 @@ What is stored:
 | What | Notes |
 | --- | --- |
 | Your email address | The only identifier. Used to sign in. We do not email you — see below. |
-| A salted PBKDF2-SHA256 hash of your password | The password itself is never stored and cannot be recovered. |
+| A salted PBKDF2-SHA256 hash of your password | The password itself is never stored and cannot be recovered. See the note below on the iteration count. |
 | Your timezone | So days roll over at your local midnight rather than UTC. |
 | Meals, water, workouts, sets, body measurements, goals | Exactly what you (or your assistant on your behalf) logged. |
 | Hashes of your access, refresh and session tokens | So a token can be checked and revoked. The tokens themselves are not stored. |
@@ -71,6 +71,20 @@ Cloudflare account the deployment belongs to; for anatome.dev that is the EU.
 **If you self-host,** none of your users' data comes to us at all — it lives in your own
 Cloudflare account, and this document then describes your service, not ours. You are the
 controller and should publish your own version.
+
+### One thing to know about how passwords are hashed
+
+Passwords are hashed with PBKDF2-HMAC-SHA256, a unique salt per account, at **100 000
+iterations**. That is the maximum Cloudflare Workers allows — the runtime rejects anything
+higher. OWASP's guidance for this algorithm is 600 000, so it is weaker than we would pick if
+the platform let us.
+
+What that means practically: an attacker who obtained the database would find brute-forcing a
+short or common password roughly six times cheaper than the current recommendation. **Use a
+password manager and a long random password.** The stored iteration count is per account, so if
+the cap is raised we can strengthen new and changed passwords without locking anyone out.
+
+We would rather write this down than let you assume it is stronger than it is.
 
 ## No email, and what that costs you
 
