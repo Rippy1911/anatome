@@ -18,12 +18,13 @@ import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, EXERCISE_DB_ATTRIBUTION, guid
 import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { listGuides as listGuidesLogic, getGuide as getGuideLogic, getGuideTree as getGuideTreeLogic } from "../lib/guides.ts";
 import { DEFAULT_GUIDE_SLUG } from "../data/guideCatalog.ts";
+import { API_VERSION } from "../lib/version.ts";
 
 /** The version we speak. `GET /mcp` and `initialize` used to disagree (2024-11-05 vs 2025-03-26). */
 export const MCP_PROTOCOL_VERSION = "2025-06-18";
 /** Older revisions we still answer to, newest first. An unknown request falls back to ours. */
 export const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
-export const MCP_SERVER_VERSION = "3.0.0";
+export { API_VERSION as MCP_SERVER_VERSION };
 
 /**
  * The skill-progression guides are not finished: step media coverage is incomplete and the
@@ -154,7 +155,7 @@ export function computeMcpResult(
       result: {
         protocolVersion,
         capabilities: { tools: {} },
-        serverInfo: { name: "anatome", version: MCP_SERVER_VERSION },
+        serverInfo: { name: "anatome", version: API_VERSION },
         instructions: "Anatome is free and keyless. Catalog and diagram tools work with no account. There is a daily fair-use budget; when it runs out the tool returns isError with a plain explanation — relay it to the user rather than retrying.",
       },
     };

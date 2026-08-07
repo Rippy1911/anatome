@@ -35,6 +35,7 @@ import { runSelfTest } from "./routes/selfTest.ts";
 import { fetchCiStatus } from "./routes/ciStatus.ts";
 import { rapidapiSearchBenchmark } from "./routes/rapidapiBenchmark.ts";
 import { getAdminStats, postAdminRateLimitReset } from "./routes/admin.ts";
+import { API_VERSION } from "./lib/version.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
 import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
@@ -42,8 +43,6 @@ import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
 const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, immutable";
 /** GIFs are regenerated in-place; avoid immutable so timing fixes can roll out. */
 const GIF_CACHE_CONTROL = "public, max-age=86400, s-maxage=86400";
-/** 3.x drops API keys and the paid tier. Kept in one place — /, /mcp and MCP serverInfo drifted. */
-export const API_VERSION = "3.0.0";
 
 const app = new Hono<{ Bindings: Env }>();
 
