@@ -6,7 +6,7 @@
 export const LIVE_API = "https://api.anatome.dev";
 
 export const BENCHMARK_DATE = "2026-06-02";
-export const BENCHMARK_SCOPE = "api.anatome.dev only — excludes Base44 frontend latency";
+export const BENCHMARK_SCOPE = "api.anatome.dev only — excludes this site's own load time";
 
 /** Static cards on Home + Docs */
 export const API_BENCHMARKS = [

@@ -5,9 +5,18 @@ import ThemeToggle from "@/components/ThemeToggle";
 import SiteFooter from "@/components/SiteFooter";
 import Logo from "@/components/Logo";
 import { useTheme } from "@/hooks/useTheme";
-import { useAuth } from "@/lib/AuthContext";
 
 const REPO_URL = "https://github.com/Rippy1911/anatome";
+
+// /guides is deliberately absent: the skill catalog is a work in progress, so the pages stay
+// reachable by URL (and by the MCP tools, which say so) but are not advertised in the nav.
+const NAV = [
+  { to: "/", label: "Home" },
+  { to: "/playground", label: "Playground" },
+  { to: "/docs", label: "Docs" },
+  { to: "/api", label: "API" },
+  { to: "/use-cases", label: "Use cases" },
+];
 
 function NavLink({ to, children, onClick = undefined }) {
   const { pathname } = useLocation();
@@ -27,7 +36,6 @@ function NavLink({ to, children, onClick = undefined }) {
 
 export default function Layout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, isAuthenticated } = useAuth();
   // Initialize theme on mount (applies stored/system preference before first paint of children).
   useTheme();
   return (
@@ -44,8 +52,8 @@ export default function Layout() {
               <Github className="w-5 h-5" />
             </a>
             <ThemeToggle />
-            <button 
-              className="p-2 text-muted-foreground hover:text-foreground" 
+            <button
+              className="p-2 text-muted-foreground hover:text-foreground"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -54,21 +62,9 @@ export default function Layout() {
           </div>
 
           <nav className="hidden md:flex items-center gap-1">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/playground">Playground</NavLink>
-            <NavLink to="/docs">Docs</NavLink>
-            <NavLink to="/guides">Guides</NavLink>
-            <NavLink to="/ai-guide">AI Guide</NavLink>
-            <NavLink to="/api">API</NavLink>
-            <NavLink to="/pricing">Pricing</NavLink>
-            {isAuthenticated && (
-              <>
-                <NavLink to="/dashboard">Dashboard</NavLink>
-                <NavLink to="/keys">Keys</NavLink>
-                <NavLink to="/account">Account</NavLink>
-              </>
-            )}
-            {user && user.role === 'admin' && <NavLink to="/admin">Admin</NavLink>}
+            {NAV.map((item) => (
+              <NavLink key={item.to} to={item.to}>{item.label}</NavLink>
+            ))}
             <div className="ml-2 pl-2 border-l border-border shrink-0 flex items-center gap-1">
               <a href={REPO_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" className="p-2 text-muted-foreground hover:text-foreground">
                 <Github className="w-5 h-5" />
@@ -81,21 +77,11 @@ export default function Layout() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-border bg-background px-4 py-4 shadow-lg absolute w-full">
             <nav className="flex flex-col gap-2">
-              <NavLink to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink>
-              <NavLink to="/playground" onClick={() => setIsMobileMenuOpen(false)}>Playground</NavLink>
-              <NavLink to="/docs" onClick={() => setIsMobileMenuOpen(false)}>Docs</NavLink>
-              <NavLink to="/guides" onClick={() => setIsMobileMenuOpen(false)}>Guides</NavLink>
-              <NavLink to="/ai-guide" onClick={() => setIsMobileMenuOpen(false)}>AI Guide</NavLink>
-              <NavLink to="/api" onClick={() => setIsMobileMenuOpen(false)}>API</NavLink>
-              <NavLink to="/pricing" onClick={() => setIsMobileMenuOpen(false)}>Pricing</NavLink>
-              {isAuthenticated && (
-                <>
-                  <NavLink to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>Dashboard</NavLink>
-                  <NavLink to="/keys" onClick={() => setIsMobileMenuOpen(false)}>Keys</NavLink>
-                  <NavLink to="/account" onClick={() => setIsMobileMenuOpen(false)}>Account</NavLink>
-                </>
-              )}
-              {user && user.role === 'admin' && <NavLink to="/admin" onClick={() => setIsMobileMenuOpen(false)}>Admin</NavLink>}
+              {NAV.map((item) => (
+                <NavLink key={item.to} to={item.to} onClick={() => setIsMobileMenuOpen(false)}>
+                  {item.label}
+                </NavLink>
+              ))}
               <a href={REPO_URL} target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground">
                 <Github className="w-4 h-4" /> GitHub
               </a>

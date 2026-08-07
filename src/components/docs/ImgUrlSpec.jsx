@@ -47,11 +47,9 @@ export default function ImgUrlSpec() {
   return (
     <>
       <p className="text-sm text-muted-foreground leading-relaxed my-2">
-        Every parameter the generateImage endpoint accepts. Drop-in <span className="font-mono text-foreground">{"<img src>"}</span> URLs
-        work on direct <span className="font-mono text-foreground">api.anatome.dev</span> (self-host or fair-use embeds).
-        RapidAPI subscribers must call <span className="font-mono text-foreground">anatome.p.rapidapi.com</span> with{" "}
-        <span className="font-mono text-foreground">X-RapidAPI-Key</span> via fetch or a server proxy — not a bare{" "}
-        <span className="font-mono text-foreground">{"<img>"}</span> tag.
+        Every parameter the generateImage endpoint accepts. Because there is no auth header to
+        attach, these URLs work as a bare <span className="font-mono text-foreground">{"<img src>"}</span> tag —
+        no fetch, no blob, no proxy.
       </p>
 
       <h3 className="font-display font-semibold mt-6 mb-2">Query Parameters</h3>

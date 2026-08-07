@@ -15,7 +15,7 @@ import { PUBLIC_API } from "@/lib/apiBase";
  * @property {string} [error]
  */
 
-/** Landing demo hits the Worker directly — RapidAPI is a billing channel, not a demo source. */
+/** The landing demo calls the public API directly. There is no other channel to choose from. */
 export const SEARCH_DEMO_SOURCES = [
   { id: "direct", label: "api.anatome.dev", description: "Direct Worker" },
 ];

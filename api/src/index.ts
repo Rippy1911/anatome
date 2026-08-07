@@ -89,7 +89,7 @@ app.get("/", (c) => c.json({
   ok: true, service: "anatome-api", version: API_VERSION,
   endpoints: [
     "/generateImage", "/workoutImage", "/searchExercises", "/getExercise", "/resolveExercise",
-    "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment",
+    "/exerciseGif", "/exerciseImage", "/listMuscles", "/muscleInfo", "/listEquipment", "/bodyPaths",
     "/listGuides", "/getGuide", "/getGuideTree",
     "/mcp", "/openapi", "/ciStatus", "/selfTest",
     "/admin/stats", "/admin/rate-limit/reset",
@@ -186,6 +186,15 @@ app.get("/muscleInfo", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   if (!info) return c.json({ ok: false, error: `unknown muscle slug: ${slug}`, ...imageAttribution() }, 404);
   return c.json({ ok: true, ...info, ...imageAttribution() });
 }));
+
+// ---- bodyPaths ----
+// The raw anatomical SVG path data, so a browser (this repo's playground, or anyone's) can
+// render and hit-test the body locally instead of round-tripping to /generateImage per frame.
+// Static, edge-cached and unmetered for the same reason listMuscles is: it is one immutable
+// asset, and charging fair use for it would make an interactive UI impossible.
+app.get("/bodyPaths", (c) => withEdgeCache(c.req.raw, execCtx(c), () =>
+  c.json({ ok: true, data: getBodyData(), ...imageAttribution() }, 200, { "Cache-Control": CACHE_CONTROL }),
+));
 
 // ---- listEquipment ----
 app.get("/listEquipment", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {

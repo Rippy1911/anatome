@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlertTriangle, Clock, Layers, RotateCw } from "lucide-react";
 import GuidesAttribution from "@/components/guides/GuidesAttribution";
+import WipBanner from "@/components/guides/WipBanner";
 import { DIFFICULTY_ORDER, formatWeekRange, loadGuideIndex } from "@/lib/guides";
 
 const DIFFICULTY_STYLES = {
@@ -112,6 +113,7 @@ export default function Guides() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="mb-4 font-display text-3xl font-bold tracking-tight">Skill Progressions</h1>
+      <WipBanner />
       <p className="mb-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
         Curated calisthenics skill trees — the ordered steps from where you are now to the full
         skill, with the unlock criteria for each one, how long it realistically takes, where

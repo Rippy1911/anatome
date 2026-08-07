@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { absApiUrl, exerciseMediaUrl } from "@/lib/apiBase";
+import { absApiUrl, exerciseMediaUrl, FAIR_USE_PER_DAY } from "@/lib/apiBase";
 import { fetchSearchDemo } from "@/lib/searchDemoSources";
-import { Search, Loader2, Dumbbell } from "lucide-react";
+import { Search, Loader2, Dumbbell, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MuscleDiagramSkeleton, { DIAGRAM_IMG_CLASS } from "@/components/home/MuscleDiagramSkeleton";
 
@@ -15,6 +15,10 @@ function exerciseKey(e) {
 }
 
 export default function SearchDemoCard({ baseUrl }) {
+  // Nothing is fetched until the visitor asks. Fair use is 50 requests a day per caller and
+  // this card is debounced-per-keystroke — auto-running it on page load spent a visible slice
+  // of someone's budget on a page they were only reading.
+  const [armed, setArmed] = useState(false);
   const [q, setQ] = useState("bench");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -41,7 +45,8 @@ export default function SearchDemoCard({ baseUrl }) {
   };
 
   useEffect(() => {
-    // Stop auto-search after a 429 — further keystrokes would burn the shared host bucket.
+    if (!armed) return undefined;
+    // Stop auto-search after a 429 — further keystrokes would spend budget that isn't there.
     if (rateLimited) return undefined;
 
     if (timer.current) clearTimeout(timer.current);
@@ -64,7 +69,7 @@ export default function SearchDemoCard({ baseUrl }) {
         setResults([]);
         setSelected(null);
         setTotalMatched(null);
-        setFetchError(out.error || "Daily fair-use limit reached — try again tomorrow or get an API key.");
+        setFetchError(out.error || "Daily fair-use limit reached. It resets at 00:00 UTC — nothing is broken.");
       } else if (!out.ok) {
         setResults([]);
         setSelected(null);
@@ -86,7 +91,7 @@ export default function SearchDemoCard({ baseUrl }) {
       if (timer.current) clearTimeout(timer.current);
       ctrl.abort();
     };
-  }, [q, baseUrl, rateLimited]);
+  }, [q, baseUrl, rateLimited, armed]);
 
   const pick = (e) => {
     setSelected(e);
@@ -160,7 +165,22 @@ export default function SearchDemoCard({ baseUrl }) {
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-5">
+      {!armed && (
+        <div className="rounded-xl border border-dashed border-border bg-secondary/20 px-4 py-8 text-center">
+          <button
+            onClick={() => setArmed(true)}
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <Play className="h-4 w-4" /> Run it live
+          </button>
+          <p className="mx-auto mt-3 max-w-sm text-xs text-muted-foreground">
+            This searches the real API. It stays idle until you press the button so that reading
+            this page costs you nothing against the {FAIR_USE_PER_DAY}/day fair-use budget.
+          </p>
+        </div>
+      )}
+
+      <div className={`grid sm:grid-cols-2 gap-5 ${armed ? "" : "hidden"}`}>
         <div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

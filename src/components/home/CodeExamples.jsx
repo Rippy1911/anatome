@@ -1,52 +1,46 @@
 import React, { useState } from "react";
 import { Code2 } from "lucide-react";
-import { PUBLIC_API, RAPIDAPI_BASE, RAPIDAPI_HOST, RAPIDAPI_LISTING_URL } from "@/lib/apiBase";
+import { PUBLIC_API, MCP_ENDPOINT, FAIR_USE_PER_DAY } from "@/lib/apiBase";
 import CopyBlock from "./CopyBlock";
 
+// Every example is unauthenticated, because every call is. There is no key tab any more and no
+// marketplace tab: the paid path is the hosted platform, not a header.
 const TABS = [
   {
     key: "img",
     label: "<img> embed",
     note: (
       <>
-        Direct <span className="font-mono text-foreground">api.anatome.dev</span> embeds are fair-use
-        limited (150 req/day per public host). For production volume use a Bearer key or{" "}
-        <a href={RAPIDAPI_LISTING_URL} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-          RapidAPI
-        </a>.
+        No auth headers, so it works straight from HTML. Fair use is {FAIR_USE_PER_DAY} requests
+        a day per caller — for an embed on a busy page, self-host the Worker or use the platform.
       </>
     ),
-    code: `<!-- Drop-in SVG — no auth headers -->
-<img
+    code: `<img
   src="${PUBLIC_API}/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw"
   alt="Muscle diagram"
   width="384"
 />`,
   },
   {
-    key: "bearer",
-    label: "Bearer key",
+    key: "fetch",
+    label: "fetch",
     code: `const res = await fetch(
-  "${PUBLIC_API}/searchExercises?q=bench&limit=5",
-  { headers: { Authorization: "Bearer ana_live_YOUR_KEY" } }
+  "${PUBLIC_API}/searchExercises?q=bench&limit=5"
 );
-const { results } = await res.json();`,
+const { results } = await res.json();
+
+// Out of fair use? 429 with a body you can act on:
+// { error: "daily_fair_use_limit_reached", retryable: false, reset_at: "…" }`,
   },
   {
-    key: "rapidapi-fetch",
-    label: "RapidAPI (optional)",
-    code: `// Alternate billing channel — keep the key server-side
-const res = await fetch(
-  "${RAPIDAPI_BASE}/generateImage?gender=male&view=dual&layers=DC2626:chest|F59E0B:triceps&output=raw",
-  {
-    headers: {
-      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
-      "X-RapidAPI-Host": "${RAPIDAPI_HOST}",
-    },
+    key: "mcp",
+    label: "MCP",
+    note: <>Point any MCP client at this URL. No token, no registration step.</>,
+    code: `{
+  "mcpServers": {
+    "anatome": { "type": "http", "url": "${MCP_ENDPOINT}" }
   }
-);
-const blob = await res.blob();
-img.src = URL.createObjectURL(blob);`,
+}`,
   },
 ];
 
@@ -61,8 +55,7 @@ export default function CodeExamples() {
         <h3 className="font-display font-semibold">Ways to integrate</h3>
       </div>
       <p className="text-xs text-muted-foreground mb-4">
-        Start with a direct <span className="font-mono text-foreground">&lt;img&gt;</span> embed or a Bearer key.
-        RapidAPI remains an optional billing channel.
+        Three shapes, one API, no credentials in any of them.
       </p>
       <div className="flex gap-1 mb-3 flex-wrap">
         {TABS.map((t) => (

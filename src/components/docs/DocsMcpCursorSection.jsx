@@ -49,10 +49,8 @@ export default function DocsMcpCursorSection() {
       </figure>
 
       <p className="text-sm text-muted-foreground leading-relaxed my-2">
-        The returned URL works as a drop-in embed on direct <span className="font-mono text-foreground">api.anatome.dev</span>{" "}
-        (self-host or fair-use). RapidAPI production apps should fetch the same path on{" "}
-        <span className="font-mono text-foreground">anatome.p.rapidapi.com</span> with{" "}
-        <span className="font-mono text-foreground">X-RapidAPI-Key</span>, then attach via blob URL. Ask for a{" "}
+        The returned URL is a drop-in embed — it needs no headers, so it works anywhere an image
+        URL works. Ask for a{" "}
         <span className="font-mono text-foreground">dual view</span> or{" "}
         <span className="font-mono text-foreground">female</span> variant in follow-up messages.
       </p>

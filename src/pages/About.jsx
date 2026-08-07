@@ -7,11 +7,11 @@ const ABOUT_MD = `# About Anatome
 
 ## Who it's for
 
-Anatome is built for fitness app developers, personal training platforms, physiotherapy and rehab tools, e-learning and educational products, and anyone building AI agents that need to reason about exercises and human anatomy. Instead of commissioning custom illustrations or wrestling with complex 3D rendering, teams can drop in a lightweight, fast, cache-friendly image URL and ship muscle visualizations in minutes. The free tier covers development and small projects, while the hosted production API scales through RapidAPI.
+Anatome is built for fitness app developers, personal training platforms, physiotherapy and rehab tools, e-learning and educational products, and anyone building AI agents that need to reason about exercises and human anatomy. Instead of commissioning custom illustrations or wrestling with complex 3D rendering, teams can drop in a lightweight, fast, cache-friendly image URL and ship muscle visualizations in minutes. It is free and keyless within a daily fair-use budget; beyond that, self-host it on your own Cloudflare account or move to the hosted platform at platform.anatome.dev.
 
 ## Who builds it
 
-Anatome is designed and maintained by **NextSolutions**, the studio behind the Airon AI coaching platform. We build practical developer tools and AI-powered fitness products. The Anatome API and software are open source under Apache-2.0, with anatomical path data (MIT) and exercise metadata (CC0) credited to their original authors.
+Anatome is designed and maintained by **NextSolutions**, the studio behind the Airon AI coaching platform. We build practical developer tools and AI-powered fitness products. The Anatome API and software are open source under Apache-2.0, with anatomical path data (MIT) and exercise metadata (Unlicense) credited to their original authors. Reference photography served by `/exerciseImage` is of unverified origin and is **not** covered by that Unlicense.
 `;
 
 const components = {
