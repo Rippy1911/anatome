@@ -1,3 +1,14 @@
+# CI runs anywhere; deploys run in exactly one place.
+#
+# This repo is mirrored to a public one and is meant to be forked. Two consequences are handled
+# explicitly rather than left to fail confusingly:
+#
+#   - `runs-on` falls back to `ubuntu-latest` off the canonical repo. The self-hosted runners are
+#     registered to NextSolutionsStudio/anatome-os only, so anywhere else these jobs would queue
+#     forever with no error — a fork's CI that never starts looks like a broken project.
+#   - The deploy jobs are pinned to the canonical repo by name. A fork has no Cloudflare
+#     credentials, and more importantly must never be able to deploy over ours.
+#
 name: CI
 
 on:
@@ -13,7 +24,7 @@ concurrency:
 jobs:
   site:
     name: Site (lint + build)
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,7 +48,7 @@ jobs:
 
   api:
     name: API (typecheck + test + wrangler dry-run)
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     defaults:
       run:
         working-directory: api
@@ -83,8 +94,8 @@ jobs:
   deploy-api:
     name: Deploy API to Cloudflare
     needs: [site, api]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: [self-hosted, linux, x64]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'NextSolutionsStudio/anatome-os'
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     defaults:
       run:
         working-directory: api
@@ -122,8 +133,8 @@ jobs:
   deploy-site:
     name: Deploy site to Cloudflare
     needs: [site, api]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: [self-hosted, linux, x64]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'NextSolutionsStudio/anatome-os'
+    runs-on: ${{ github.repository == 'NextSolutionsStudio/anatome-os' && fromJSON('["self-hosted","linux","x64"]') || 'ubuntu-latest' }}
     environment: production
     steps:
       - uses: actions/checkout@v4
