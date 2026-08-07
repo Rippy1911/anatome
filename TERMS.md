@@ -38,32 +38,30 @@ You agree NOT to:
 
 - Use the Service in any way that violates applicable law (including but not limited to laws of the Republic of Poland, the European Union, or your local jurisdiction)
 - Use the Service to provide medical diagnosis, treatment, or other licensed medical advice
-- Attempt to exceed rate limits through circumvention (e.g. using multiple RapidAPI accounts, rotating IPs, or stripping authentication headers)
+- Attempt to exceed the fair-use limit through circumvention (e.g. rotating IP addresses, or re-minting MCP session identifiers to reset a counter)
 - Reverse engineer, decompile, or attempt to extract proprietary infrastructure of the hosted endpoint
 - Resell access to the Service as a wrapper or proxy without substantial added functionality
 - Use the Service to generate or distribute content that is defamatory, harassing, obscene, or unlawful
 
 We reserve the right to suspend or revoke access for users who violate these Acceptable Use rules.
 
-## 4. Pricing and Plans
+## 4. Price and Fair Use
 
-The Service is offered through two channels:
+The Service is **free** and requires no account, no API key and no payment method. There is no
+paid tier of this Service.
 
-**a) Free, direct access at anatome.dev and api.anatome.dev**
+Use is subject to a fair-use budget:
 
+- **50 requests per caller per day**, resetting at 00:00 UTC
 - Unlimited from localhost and private IP ranges (for development)
-- 1,000 requests per day per public IP (anonymous users)
-- 100 requests per day per public host/referer (anonymous users)
-- No registration required
-- We may adjust these limits with reasonable notice
+- Static catalog reads are cached at the edge and not counted
+- Requests over the limit receive HTTP 429 with the reset time; they are refused, not billed
+- We may adjust the limit with reasonable notice. The figure in force is always the one published
+  in our documentation and returned by the API itself
 
-**b) RapidAPI marketplace listing**
-
-- Pricing tiers and quotas as listed at rapidapi.com
-- RapidAPI handles billing, authentication, and quota enforcement
-- Subject to RapidAPI's own terms of service
-
-Pricing aims for cost-recovery only. Any surplus revenue funds infrastructure, exercise database expansion, translations, and continued development of the open-source codebase. We do not target a profit on the hosted endpoint.
+If you need more than fair use, there are two supported routes and neither involves paying us for
+this Service: **self-host it** (the software is Apache-2.0 — see `SELF_HOSTING.md`), or use the
+separate hosted product at **platform.anatome.dev**, which has its own terms.
 
 ## 5. No Medical Advice
 
@@ -73,7 +71,7 @@ If you incorporate Anatome into an application that provides health or fitness g
 
 ## 6. Service Availability
 
-We provide the Service on a best-effort basis with no guaranteed uptime SLA on free tiers. For paid plans on RapidAPI, availability commitments are governed by RapidAPI's marketplace terms.
+We provide the Service on a best-effort basis with **no uptime SLA of any kind**. It is free, and we make no availability commitment for it.
 
 We may modify, suspend, or discontinue the Service at any time. If we discontinue the hosted endpoint, the open-source codebase will remain available so you can self-host.
 
@@ -121,8 +119,6 @@ The Service:
 - Does not store user-identifying data beyond what is necessary for rate limiting
 - Rate-limit data expires automatically after ~36 hours
 
-When accessed through RapidAPI, RapidAPI's privacy policy also applies.
-
 We do not sell, share, or transfer any logged data to third parties for marketing purposes.
 
 ## 12. Governing Law
@@ -137,7 +133,6 @@ We may update these Terms from time to time. The "Last updated" date at the top 
 
 - A notice on anatome.dev
 - A CHANGELOG entry in the GitHub repository
-- For RapidAPI subscribers, via RapidAPI's notification system
 
 Continued use of the Service after changes constitutes acceptance of the updated Terms.
 

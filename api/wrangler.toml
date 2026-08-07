@@ -29,11 +29,26 @@ new_sqlite_classes = ["RateLimiterDO"]
 
 [vars]
 # Non-secret config only. Secrets are set with `wrangler secret put`:
-#   wrangler secret put PROXY_SECRET
-#   wrangler secret put MCP_TRUSTED_KEY
-#   wrangler secret put ADMIN_TOKEN
-#   wrangler secret put STRIPE_SECRET_KEY   # optional; enables overage meter events
+#   wrangler secret put ADMIN_TOKEN      # operator endpoints (/admin/*)
+#   wrangler secret put PROXY_SECRET     # optional; RapidAPI marketplace listing
+#   wrangler secret put MCP_TRUSTED_KEY  # optional; first-party MCP bridge
+#   wrangler secret put GITHUB_TOKEN     # optional; /ciStatus badge
 PUBLIC_BASE_URL = "https://api.anatome.dev"
+
+# ---- Fair use ----
+# Anatome is keyless: no signup, no API key, no token to paste. The only gate is this daily
+# budget per caller. Self-hosters: this is the number to change. Raise it, or set it absurdly
+# high on a private deployment — nothing else needs editing.
+FAIR_USE_DAILY_LIMIT = "50"
+
+# Runaway guard only. A remote MCP connector reaches us from the assistant vendor's egress
+# addresses, so fair use is counted per MCP session rather than per IP; this ceiling stops a
+# script from re-minting sessions forever. It is NOT the fair-use number and should stay far
+# above it. Cloudflare's WAF is the real flood layer.
+ANON_NETWORK_DAILY_LIMIT = "10000"
+
+# Where callers who need more than fair use are sent.
+UPGRADE_URL = "https://platform.anatome.dev"
 
 # ---- Production environment ----
 [env.production]
@@ -57,6 +72,9 @@ new_sqlite_classes = ["RateLimiterDO"]
 
 [env.production.vars]
 PUBLIC_BASE_URL = "https://api.anatome.dev"
+FAIR_USE_DAILY_LIMIT = "50"
+ANON_NETWORK_DAILY_LIMIT = "10000"
+UPGRADE_URL = "https://platform.anatome.dev"
 
 [env.production.assets]
 directory = "public"

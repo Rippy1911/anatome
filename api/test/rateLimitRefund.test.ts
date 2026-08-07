@@ -16,7 +16,7 @@ function makeKvStub(store = new Map<string, string>()) {
 }
 
 describe("refundRateLimitUnit — 5xx should not burn quota", () => {
-  it("decrements a consumed host_day unit", async () => {
+  it("decrements a consumed fair-use unit", async () => {
     const kv = makeKvStub();
     const env: Env = { RATE_LIMIT_KV: kv };
     const req = new Request("https://api.anatome.dev/searchExercises?q=bench", {
@@ -31,7 +31,7 @@ describe("refundRateLimitUnit — 5xx should not burn quota", () => {
     expect(rl.used).toBe(1);
 
     await refundRateLimitUnit(env, rl);
-    const key = await rateLimitBucketKey("host_day", "anatome.dev");
+    const key = await rateLimitBucketKey("ip", "203.0.113.9");
     expect(await kv.get(key)).toBe("0");
   });
 

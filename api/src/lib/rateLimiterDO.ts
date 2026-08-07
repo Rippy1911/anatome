@@ -1,12 +1,12 @@
 // Durable Object rate limiter — replaces the per-request KV read+write with a
 // single-threaded in-DO counter. One DO instance per rate-limit key
-// (`ip_day:<hash>:<date>` / `host_day:<hash>:<date>`), so the counter is
-// consistent and writes are bounded (one storage.put per counted request, no KV
-// quota involved). The DO evicts when idle; on cold start it rehydrates from
-// storage. KV is kept as a fallback when the DO binding is absent (local dev /
-// older deploys) — see rateLimit.ts `checkRateLimit`.
+// (`ip:<hash>:<date>` / `mcp_session:<hash>:<date>` / `network:<hash>:<date>`),
+// so the counter is consistent and writes are bounded (one storage.put per
+// counted request, no KV quota involved). The DO evicts when idle; on cold start
+// it rehydrates from storage. KV is kept as a fallback when the DO binding is
+// absent (local dev / older deploys) — see rateLimit.ts `checkRateLimit`.
 
-import type { RateResult } from "./rateLimit.ts";
+import type { RateResult, RateScope } from "./rateLimit.ts";
 
 interface StoredCounter {
   count: number;
@@ -50,7 +50,7 @@ export class RateLimiterDO implements DurableObject {
     }
 
     const limit = Number(url.searchParams.get("limit") || "0");
-    const keyType = url.searchParams.get("key_type") || "ip_day";
+    const scope = (url.searchParams.get("scope") || "ip") as RateScope;
     const date = url.searchParams.get("date") || new Date().toISOString().slice(0, 10);
     const resetParam = Number(url.searchParams.get("reset") || "0");
     const reset = resetParam > 0 ? resetParam : nextUtcMidnightUnix();
@@ -67,8 +67,8 @@ export class RateLimiterDO implements DurableObject {
     if (current >= limit) {
       const result: RateResult = {
         allowed: false,
-        source: "free",
-        key_type: keyType,
+        source: "fair_use",
+        scope,
         limit,
         used: current,
         remaining: 0,
@@ -86,8 +86,8 @@ export class RateLimiterDO implements DurableObject {
     this.ctx.storage.put("counter", { count: next, date });
     const result: RateResult = {
       allowed: true,
-      source: "free",
-      key_type: keyType,
+      source: "fair_use",
+      scope,
       limit,
       used: next,
       remaining: limit - next,

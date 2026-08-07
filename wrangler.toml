@@ -1,0 +1,33 @@
+# anatome.dev — the marketing site, playground and docs.
+#
+# This is a plain static SPA served by Cloudflare Workers Static Assets. There is no server-side
+# code: every dynamic thing on the site is a browser fetch against the public API in ./api, which
+# needs no credentials. That is the whole point — the site has nothing to keep secret, so it can
+# be a bundle of files on a CDN.
+#
+# Deploy:
+#   npm install && npm run build && npx wrangler deploy
+#
+# Cutting over from another origin is adding the route below: a Workers route wins over the
+# zone's origin, and removing the route puts the old origin straight back. No DNS change, no gap.
+
+name = "anatome-site"
+compatibility_date = "2026-08-01"
+
+[assets]
+directory = "dist"
+# Client-side routing: unknown paths serve index.html so /docs, /playground and /guides/:slug
+# resolve on a hard refresh instead of 404ing.
+not_found_handling = "single-page-application"
+
+[env.production]
+name = "anatome-site"
+workers_dev = false
+routes = [
+  { pattern = "anatome.dev/*", zone_name = "anatome.dev" },
+  { pattern = "www.anatome.dev/*", zone_name = "anatome.dev" },
+]
+
+[env.production.assets]
+directory = "dist"
+not_found_handling = "single-page-application"

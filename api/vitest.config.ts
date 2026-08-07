@@ -25,6 +25,9 @@ export default defineConfig({
   test: {
     root: here,
     include: ["test/**/*.test.ts"],
+    // Installs a `caches.default` shim. Without it every withEdgeCache route 500s under node
+    // and the routes look tested while asserting nothing. See test/setup.ts.
+    setupFiles: ["test/setup.ts"],
   },
 });
 

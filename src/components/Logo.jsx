@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-const LOGO_URL = "https://media.base44.com/images/public/6a1ea0b8b40fc9c2e83c0952/216c7d0c1_image.png";
+// Served from this site's own /public. It used to be hotlinked from media.base44.com, which
+// meant a self-hosted clone rendered someone else's CDN — and broke if that CDN moved.
+const LOGO_URL = "/logo.png";
 
 // Process the PNG once: knock out the baked-in (near-black) background to transparent,
 // so the white logo art floats cleanly over any page background.

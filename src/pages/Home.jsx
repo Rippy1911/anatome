@@ -1,14 +1,12 @@
 import React from "react";
 import { PUBLIC_API } from "@/lib/apiBase";
 import Hero from "@/components/home/Hero";
+import Onboarding from "@/components/home/Onboarding";
 import ImageDemoCard from "@/components/home/ImageDemoCard";
 import SearchDemoCard from "@/components/home/SearchDemoCard";
 import McpDemoCard from "@/components/home/McpDemoCard";
-import { Link } from "react-router-dom";
-import { Bot, ArrowRight } from "lucide-react";
 import CodeExamples from "@/components/home/CodeExamples";
 import BenchmarksSection from "@/components/home/BenchmarksSection";
-import Pricing from "@/components/home/Pricing";
 
 function SectionHead({ eyebrow, title }) {
   return (
@@ -24,45 +22,29 @@ export default function Home() {
 
   return (
     <div>
-      <Hero baseUrl={baseUrl} />
+      <Hero />
 
       <div className="max-w-5xl mx-auto px-4 py-14 space-y-16">
-        {/* Live demos */}
+        {/* Onboarding comes first: connecting the thing is the point of the page. */}
+        <Onboarding />
+
+        {/* Live demos — each one waits for a click rather than spending fair use on page load. */}
         <section className="space-y-5">
-          <SectionHead eyebrow="Live demos" title="Everything below is calling the real API" />
+          <SectionHead eyebrow="Live demos" title="Press play and these call the real API" />
           <ImageDemoCard baseUrl={baseUrl} />
           <SearchDemoCard baseUrl={baseUrl} />
-          <Link
-            to="/ai-guide"
-            className="block rounded-2xl border border-border bg-card p-6 hover:bg-secondary/40 transition-colors"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <Bot className="w-4 h-4 text-primary" />
-              <h3 className="font-display font-semibold">AI Guide — describe an exercise in plain English</h3>
-              <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto" />
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Live LLM extraction + muscle diagram demo (rate-limited). Integrate Anatome into chatbots via resolveExercise — no AI endpoint on the public API.
-            </p>
-          </Link>
           <McpDemoCard />
         </section>
 
         {/* Code examples */}
         <section>
           <SectionHead eyebrow="Drop-in" title="Three ways to integrate" />
-          <CodeExamples baseUrl={baseUrl} />
+          <CodeExamples />
         </section>
 
         {/* Benchmarks */}
         <section>
           <BenchmarksSection />
-        </section>
-
-        {/* Pricing */}
-        <section>
-          <SectionHead eyebrow="Pricing" title="Simple, cost-recovery pricing" />
-          <Pricing />
         </section>
       </div>
     </div>

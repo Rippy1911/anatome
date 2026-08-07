@@ -20,12 +20,12 @@ import {
 import { SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
 import { edgeCacheHitOnRepeat } from "../lib/edgeCache.ts";
 import { workoutImageLogic } from "../lib/workoutImage.ts";
-import { handleMcp, TOOLS } from "./mcp.ts";
+import { handleMcp, TOOLS, MCP_PROTOCOL_VERSION, GUIDE_STATUS } from "./mcp.ts";
 import { ATTRIBUTION, guideCatalogAttribution } from "../lib/attribution.ts";
 import {
   listGuides as listGuidesLogic, getGuideTree as getGuideTreeLogic, guideStepCount, safeGuideSlug,
 } from "../lib/guides.ts";
-import { IP_DAY_LIMIT, HOST_DAY_LIMIT, isPrivateIp, isLocalHost } from "../lib/rateLimit.ts";
+import { DEFAULT_FAIR_USE_DAILY_LIMIT, isPrivateIp, isLocalHost } from "../lib/rateLimit.ts";
 
 const BODY_DEFAULT_COLOR = "#575757";
 const CONTOUR_DEFAULT_COLOR = "#e5e7eb";
@@ -79,8 +79,20 @@ export async function runSelfTest(bodyData: BodyData) {
   T("exercise_resolve_unmatched", () => resolveExercise("zzzzz nonsense").matched === false);
 
   // ---- MCP ----
-  T("mcp_initialize", () => { const r = handleMcp({ method: "initialize" }, "https://api.anatome.dev") as { result: { serverInfo: { name: string }; protocolVersion: string } }; return r.result.serverInfo.name === "anatome" && r.result.protocolVersion === "2025-03-26"; });
+  T("mcp_initialize", () => { const r = handleMcp({ method: "initialize" }, "https://api.anatome.dev") as { result: { serverInfo: { name: string }; protocolVersion: string } }; return (r.result.serverInfo.name === "anatome" && r.result.protocolVersion === MCP_PROTOCOL_VERSION) || `name=${r.result.serverInfo.name} protocol=${r.result.protocolVersion}`; });
+  T("mcp_initialize_echoes_supported_client_version", () => { const r = handleMcp({ method: "initialize", params: { protocolVersion: "2024-11-05" } as never }, "https://api.anatome.dev") as { result: { protocolVersion: string } }; return r.result.protocolVersion === "2024-11-05" || `got ${r.result.protocolVersion}`; });
+  T("mcp_ping", () => { const r = handleMcp({ id: 1, method: "ping" }, "https://api.anatome.dev") as { result?: unknown; error?: unknown }; return (!!r.result && !r.error) || "ping did not return a result"; });
   T("mcp_tools_list_count", () => TOOLS.length === 10 || `got ${TOOLS.length}`);
+  T("mcp_guide_tools_marked_work_in_progress", () => {
+    const guideTools = TOOLS.filter((t) => t.name.startsWith("list_guide") || t.name.startsWith("get_guide"));
+    if (guideTools.length !== 3) return `expected 3 guide tools, got ${guideTools.length}`;
+    const unmarked = guideTools.filter((t) => !t.description.startsWith("[WORK IN PROGRESS"));
+    return unmarked.length === 0 || `unmarked: ${unmarked.map((t) => t.name).join(", ")}`;
+  });
+  T("mcp_guide_payload_carries_wip_status", () => {
+    const r = handleMcp({ id: 1, method: "tools/call", params: { name: "list_guides", arguments: {} } }, "https://api.anatome.dev") as { result: { structuredContent: { status?: string } } };
+    return r.result.structuredContent.status === GUIDE_STATUS || `status=${r.result.structuredContent.status}`;
+  });
   T("mcp_tools_call_generate", () => { const r = handleMcp({ method: "tools/call", params: { name: "generate_muscle_image", arguments: { view: "front", layers: [{ color: "#abcdef", muscles: ["abs"] }] } } }, "https://api.anatome.dev") as { result: { content: { text: string }[] } }; const text = r.result.content[0].text; return text.includes("<svg") && text.includes("#abcdef"); });
 
   // ---- raw output ----
@@ -168,11 +180,11 @@ export async function runSelfTest(bodyData: BodyData) {
   T("rate_limit_private_ip_unlimited", () => {
     return isPrivateIp("127.0.0.1") && isPrivateIp("192.168.1.1") && isPrivateIp("10.0.0.1") && isPrivateIp("::1") || "private IP detection failed";
   });
-  T("rate_limit_public_ip_limit_1000", () => {
-    return !isPrivateIp("203.0.113.5") && IP_DAY_LIMIT === 1000 || `isPrivate=${isPrivateIp("203.0.113.5")} limit=${IP_DAY_LIMIT}`;
+  T("rate_limit_public_ip_is_metered", () => {
+    return !isPrivateIp("203.0.113.5") || `isPrivate=${isPrivateIp("203.0.113.5")}`;
   });
-  T("rate_limit_host_limit_150", () => {
-    return HOST_DAY_LIMIT === 150 || `limit=${HOST_DAY_LIMIT}`;
+  T("rate_limit_fair_use_default_50", () => {
+    return DEFAULT_FAIR_USE_DAILY_LIMIT === 50 || `limit=${DEFAULT_FAIR_USE_DAILY_LIMIT}`;
   });
   T("rate_limit_localhost_host_unlimited", () => {
     return isLocalHost("localhost") && isLocalHost("127.0.0.1") && !isLocalHost("example.com") || "localhost detection failed";

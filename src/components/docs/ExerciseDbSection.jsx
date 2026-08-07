@@ -4,25 +4,23 @@ function Code({ children }) {
   return <pre className="bg-[#0a0e17] border border-[#1e293b] rounded-lg p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-100 my-3"><code>{children}</code></pre>;
 }
 
-const RAPIDAPI_HEADERS = `{ "X-RapidAPI-Key": process.env.RAPIDAPI_KEY, "X-RapidAPI-Host": "anatome.p.rapidapi.com" }`;
-
-const PATTERN_A = `const { results } = await fetch("https://anatome.p.rapidapi.com/searchExercises?q=bench&limit=5", {
-  headers: ${RAPIDAPI_HEADERS},
-}).then(r => r.json());
+const PATTERN_A = `const { results } = await fetch(
+  "https://api.anatome.dev/searchExercises?q=bench&limit=5"
+).then(r => r.json());
 const first = results[0];
-// anatome_imageSrc is a path — prefix with your API host; use fetch+blob for RapidAPI auth`;
+// anatome_imageSrc is a path — prefix it with the API host to embed it`;
 
-const PATTERN_B = `const { exercise } = await fetch("https://anatome.p.rapidapi.com/getExercise?name=bench+press", {
-  headers: ${RAPIDAPI_HEADERS},
-}).then(r => r.json());
+const PATTERN_B = `const { exercise } = await fetch(
+  "https://api.anatome.dev/getExercise?name=bench+press"
+).then(r => r.json());
 // NOTE: getExercise wraps the data under an "exercise" key:
-console.log(exercise.instructions);    // array of step-by-step strings
-console.log(exercise.anatome_imageSrc); // render via authenticated fetch, not bare <img src>
-console.log(exercise.source_images);   // photo URLs via /exerciseImage proxy (licence unverified)`;
+console.log(exercise.instructions);     // array of step-by-step strings
+console.log(exercise.anatome_imageSrc); // drop straight into <img src>
+console.log(exercise.source_images);    // photo URLs via /exerciseImage proxy (licence unverified)`;
 
-const PATTERN_C = `const { exercise } = await fetch("https://anatome.p.rapidapi.com/getExercise?muscle=chest&limit=10", {
-  headers: ${RAPIDAPI_HEADERS},
-}).then(r => r.json());
+const PATTERN_C = `const { exercise } = await fetch(
+  "https://api.anatome.dev/getExercise?muscle=chest&limit=10"
+).then(r => r.json());
 // exercise is an array of 10 chest exercises in this mode`;
 
 const SCHEMA = `{

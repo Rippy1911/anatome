@@ -22,7 +22,7 @@ You agree not to:
 
 ## 3. Rate Limits & Fair Use
 
-The free tier includes a limited number of requests per month. Localhost and development traffic is unlimited. Production traffic is subject to the limits described in our documentation and on RapidAPI. We reserve the right to throttle or suspend access that exceeds fair-use thresholds.
+The Service is free and requires no account or API key. Use is subject to a daily fair-use budget of 50 requests per caller, resetting at 00:00 UTC; the current figure is always the one published in our documentation. Requests from loopback and private addresses are unlimited, so local development is never counted. We reserve the right to throttle or suspend access that exceeds fair-use thresholds or that degrades the Service for others. If you need more, self-host the software (it is Apache-2.0) or use the hosted platform at platform.anatome.dev.
 
 ## 4. Attribution & Licensing
 

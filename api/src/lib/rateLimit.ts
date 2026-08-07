@@ -1,24 +1,35 @@
-// Rate limiting — ported from the Base44 functions, with the RateLimit entity
-// replaced by Cloudflare KV. Model (see ../../AGENTS.md §8):
-//   - Bearer ana_live_/ana_test_          -> per-key monthly quota (exact DO)
-//   - localhost / private IP              -> unlimited (free for testing)
-//   - public IP (no referer)               -> 1000/day
-//   - public host (Referer/Origin-keyed)   -> 100/day
-//   - bypass on X-RapidAPI-Proxy-Secret (== PROXY_SECRET)
-//                or X-Mcp-Trusted-Key (== MCP_TRUSTED_KEY)
+// Fair-use rate limiting — one rule, no API keys.
 //
-// The Basic plan on RapidAPI: 300 requests/month included, $0.001/request overage
-// (enforced at the RapidAPI layer; PROXY_SECRET bypasses Worker day limits).
-// Direct public access to the Worker still uses per-day fair-use limits below.
-// First-party keys are the system of record for paid direct access.
+// Anatome is keyless: there is nothing to sign up for and nothing to paste. The only gate is a
+// daily fair-use budget, counted against whichever identity we can actually see:
+//
+//   private / loopback IP                     -> unbounded (local dev, self-host smoke tests)
+//   X-RapidAPI-Proxy-Secret == PROXY_SECRET   -> unbounded (RapidAPI meters upstream)
+//   X-Mcp-Trusted-Key == MCP_TRUSTED_KEY      -> unbounded (first-party bridge)
+//   MCP call carrying an Mcp-Session-Id       -> FAIR_USE_DAILY_LIMIT per session per UTC day
+//   everything else                           -> FAIR_USE_DAILY_LIMIT per IP per UTC day
+//
+// Self-hosters raise the ceiling by editing one var in wrangler.toml.
+//
+// WHY IDENTITY IS NOT SIMPLY THE IP
+// A *remote* MCP connector is called by the assistant vendor's servers, not by the end user's
+// device — every Claude or ChatGPT user reaches us from the same handful of egress addresses.
+// Keying fair use on the IP alone would therefore put the entire planet in one 50/day bucket and
+// make the connector look permanently broken. So MCP requests are counted per MCP session when
+// the client supplies one (we issue it on `initialize`; the Streamable HTTP spec has clients echo
+// it back), and a much larger per-network ceiling sits behind that purely as a runaway guard.
+//
+// Be honest about what that does and does not buy: a session id is client-supplied and free to
+// re-mint, so this is a fair-use speed bump, not an access control. A durable per-user budget
+// needs a durable user, which arrives with accounts. Cloudflare's WAF remains the real flood
+// layer; ANON_NETWORK_DAILY_LIMIT only stops a script from spinning the Worker forever.
+//
+// There used to be a second, smaller bucket keyed on Referer/Origin. It existed only so the
+// marketing site could not eat a visitor's IP budget, and it had to stay BELOW the IP limit
+// because Referer/Origin is client-controlled and so spoofable (An-M2) — a bigger host bucket
+// would have been an unlock, not a limit. Both the bucket and the hazard are gone: the site's
+// demos are click-to-run, so a page view costs the API nothing.
 
-import {
-  currentMonthUtc,
-  nextMonthStartUnix,
-  OVERAGE_HARD_CEILING,
-  resolveBearerKey,
-  type KeyRecord,
-} from "./apiKeys.ts";
 export interface Env {
   RATE_LIMIT_KV: KVNamespace;
   RATE_LIMIT_DO?: DurableObjectNamespace;
@@ -30,26 +41,52 @@ export interface Env {
   PUBLIC_BASE_URL?: string;
   ADMIN_TOKEN?: string;
   GITHUB_TOKEN?: string;
-  STRIPE_SECRET_KEY?: string;
+  /** Daily fair-use budget per caller identity. Default DEFAULT_FAIR_USE_DAILY_LIMIT. */
+  FAIR_USE_DAILY_LIMIT?: string;
+  /** Runaway guard for session-identified callers sharing one egress network. */
+  ANON_NETWORK_DAILY_LIMIT?: string;
+  /** Where to send callers who need more than fair use. */
+  UPGRADE_URL?: string;
 }
 
-export const IP_DAY_LIMIT = 1000;
-/** Per-Referer/Origin day bucket. anatome.dev marketing traffic shares one counter.
- *  Spoofed Referer cannot unlock unlimited (An-M2) — still metered. */
-export const HOST_DAY_LIMIT = 150;
-const UPGRADE_URL = "https://rapidapi.com/anatome/api/anatome";
+/** The published fair-use number. Change it in wrangler.toml, not here. */
+export const DEFAULT_FAIR_USE_DAILY_LIMIT = 50;
+/** Runaway guard for one egress network's share of session-identified traffic. */
+export const DEFAULT_ANON_NETWORK_DAILY_LIMIT = 10_000;
+/** Where "I need more than this" goes. */
+export const DEFAULT_UPGRADE_URL = "https://platform.anatome.dev";
+
 const KEY_TTL_SECONDS = 36 * 60 * 60; // ~36h: auto-expire after the day rolls over
+
+function positiveIntFrom(raw: string | undefined, fallback: number): number {
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 1 ? Math.floor(n) : fallback;
+}
+
+export function fairUseLimit(env: Env): number {
+  return positiveIntFrom(env.FAIR_USE_DAILY_LIMIT, DEFAULT_FAIR_USE_DAILY_LIMIT);
+}
+
+export function networkCeiling(env: Env): number {
+  return positiveIntFrom(env.ANON_NETWORK_DAILY_LIMIT, DEFAULT_ANON_NETWORK_DAILY_LIMIT);
+}
+
+export function upgradeUrl(env: Env): string {
+  return env.UPGRADE_URL || DEFAULT_UPGRADE_URL;
+}
+
+/** Which identity the budget was charged to. `network` is the runaway guard, not fair use. */
+export type RateScope = "ip" | "mcp_session" | "network";
 
 export interface RateResult {
   allowed: boolean;
-  source?: string;
+  /** How the decision was reached — for logs, not for callers. */
+  source?: "fair_use" | "localhost" | "rapidapi" | "mcp_trusted";
   bypass?: boolean;
-  key_type?: string;
-  key_id?: string;
-  key_record?: KeyRecord;
-  /** Opaque DO/KV counter id — set when a fair-use or key quota was consumed. */
+  /** Which bucket was charged. Absent on bypass. */
+  scope?: RateScope;
+  /** Opaque DO/KV counter id — set when a budget was consumed (enables refunds). */
   bucket_key?: string;
-  overage?: boolean;
   limit?: number;
   used?: number;
   remaining?: number;
@@ -79,28 +116,30 @@ export function isPrivateIp(ip: string): boolean {
   return false;
 }
 
-function referrerHost(req: Request): string | null {
-  const raw = req.headers.get("referer") || req.headers.get("origin") || "";
-  if (!raw) return null;
-  try { return new URL(raw).hostname; } catch { return raw.replace(/^https?:\/\//, "").split("/")[0] || null; }
-}
-
 export function isLocalHost(host: string | null): boolean {
   if (!host) return false;
   return host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".localhost");
 }
 
-function nextUtcMidnightUnix(): number {
+export function nextUtcMidnightUnix(): number {
   const n = new Date();
   return Math.floor(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate() + 1, 0, 0, 0) / 1000);
 }
-export { nextUtcMidnightUnix };
+
+/** "17h 24m" / "42m" / "51s" — for a message a human (or a model) reads out loud. */
+export function humanDuration(seconds: number): string {
+  const s = Math.max(0, Math.floor(seconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (h > 0) return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  if (m > 0) return `${m}m`;
+  return `${s}s`;
+}
 
 /**
- * Cheap bypass check — returns the RateResult for callers that skip the KV
- * counter (RapidAPI proxy / MCP trusted key / localhost), or null when the
- * request must go through the KV-backed per-day counter. Touches no KV, so it
- * is safe to run on every request including edge-cache HITs.
+ * Cheap bypass check — returns a RateResult for callers that skip the counter entirely
+ * (RapidAPI proxy / trusted MCP bridge / loopback), or null when the request must be counted.
+ * Touches no storage, so it is safe on every request including edge-cache HITs.
  */
 export function bypassCheck(req: Request, env: Env): RateResult | null {
   const proxy = req.headers.get("x-rapidapi-proxy-secret");
@@ -111,50 +150,74 @@ export function bypassCheck(req: Request, env: Env): RateResult | null {
   if (mcpKey && env.MCP_TRUSTED_KEY && mcpKey === env.MCP_TRUSTED_KEY) {
     return { allowed: true, source: "mcp_trusted", bypass: true };
   }
-  // Localhost bypass is keyed ONLY on the edge IP (cf-connecting-ip). The
-  // Origin/Referer header is client-controlled, so trusting it for identity
-  // (isLocalHost(host)) let any public client spoof `Origin: http://localhost`
-  // to get unlimited rate limit (An-M2, live-confirmed). Keep the private-IP
-  // check so the Worker calling itself / dev from a private network still
-  // bypasses; drop the spoofable host check entirely.
+  // Loopback bypass is keyed ONLY on the edge IP (cf-connecting-ip). Origin/Referer is
+  // client-controlled, so trusting it for identity let any public client spoof
+  // `Origin: http://localhost` into an unlimited budget (An-M2, live-confirmed).
   const ip = clientIp(req);
   if (isPrivateIp(ip)) return { allowed: true, source: "localhost", bypass: true };
   return null;
 }
 
-export async function checkRateLimit(req: Request, env: Env): Promise<RateResult> {
-  // First-party keys take precedence over RapidAPI/MCP/IP fair-use so a
-  // paying customer presenting a Bearer token is never bucketed as anonymous.
-  const keyResult = await checkApiKeyLimit(req, env);
-  if (keyResult) return keyResult;
+export interface RateOptions {
+  /** MCP session id from the request, when the caller is an MCP client. */
+  mcpSessionId?: string;
+}
 
+/** Storage key for a bucket. Exported so the admin reset route can rebuild one. */
+export async function rateLimitBucketKey(
+  scope: RateScope,
+  identity: string,
+  date = new Date().toISOString().slice(0, 10),
+): Promise<string> {
+  const hash = await sha256(identity);
+  return `${scope}:${hash}:${date}`;
+}
+
+/**
+ * Enforce the daily budget. Returns the charged result; `allowed:false` means the caller is out.
+ *
+ * Session-identified MCP callers are charged twice: once against their own session budget (the
+ * fair-use number users are told about) and once against a far larger per-network ceiling, so a
+ * script re-minting sessions cannot spin the Worker forever. The network ceiling is deliberately
+ * checked *after* the session budget, so a normal user who is simply out of fair use always gets
+ * the fair-use message rather than an unexplained network error.
+ */
+export async function checkRateLimit(req: Request, env: Env, opts: RateOptions = {}): Promise<RateResult> {
   const bypass = bypassCheck(req, env);
   if (bypass) return bypass;
 
   const ip = clientIp(req);
-  const host = referrerHost(req);
-  // Defense-in-depth: bypassCheck already covers the private-IP localhost case,
-  // but keep the guard here too. Do NOT consult isLocalHost(host) — Origin/Referer
-  // is client-controlled and was spoofable to bypass the limit (An-M2).
-  if (isPrivateIp(ip)) return { allowed: true, source: "localhost", bypass: true };
+  const session = (opts.mcpSessionId || "").trim();
+  const scope: RateScope = session ? "mcp_session" : "ip";
+  const identity = session || ip;
 
+  const primary = await consume(env, scope, identity, fairUseLimit(env));
+  if (!primary.allowed || scope !== "mcp_session") return primary;
+
+  // Session-scoped callers additionally share a network ceiling. Over it, refund the session
+  // unit we just took — the caller never got service, so it should not cost them their budget.
+  const guard = await consume(env, "network", ip, networkCeiling(env));
+  if (!guard.allowed) {
+    await refundRateLimitUnit(env, primary);
+    return guard;
+  }
+  return primary;
+}
+
+/** Count one request against `scope:identity`, via the Durable Object when bound, else KV. */
+async function consume(env: Env, scope: RateScope, identity: string, limit: number): Promise<RateResult> {
   const reset = nextUtcMidnightUnix();
   const reset_at = new Date(reset * 1000).toISOString();
   const date = new Date().toISOString().slice(0, 10);
+  const key = await rateLimitBucketKey(scope, identity, date);
 
-  const useHost = !!host;
-  const limit = useHost ? HOST_DAY_LIMIT : IP_DAY_LIMIT;
-  const key_type = useHost ? "host_day" : "ip_day";
-  const hash = await sha256(useHost ? (host as string) : ip);
-  const key = `${key_type}:${hash}:${date}`;
-
-  // Prefer the Durable Object counter (no KV quota; single-threaded per key).
-  // Fall back to KV when the DO binding is absent (local dev / older deploys).
+  // Prefer the Durable Object counter (no KV write quota; single-threaded per key).
+  // KV stays as the fallback for local dev and any deploy without a DO binding.
   if (env.RATE_LIMIT_DO) {
     const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
     const doUrl = new URL("https://do/check");
     doUrl.searchParams.set("limit", String(limit));
-    doUrl.searchParams.set("key_type", key_type);
+    doUrl.searchParams.set("scope", scope);
     doUrl.searchParams.set("date", date);
     doUrl.searchParams.set("reset", String(reset));
     const res = await stub.fetch(doUrl.toString());
@@ -165,36 +228,51 @@ export async function checkRateLimit(req: Request, env: Env): Promise<RateResult
     return result;
   }
 
-  const kvResult = await checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
+  const kvResult = await consumeKv(env, key, scope, limit, reset, reset_at);
   kvResult.bucket_key = key;
   return kvResult;
 }
 
-/** Build today's host_day / ip_day storage key (same scheme as checkRateLimit). */
-export async function rateLimitBucketKey(
-  kind: "host_day" | "ip_day",
-  identity: string,
-  date = new Date().toISOString().slice(0, 10),
-): Promise<string> {
-  const hash = await sha256(identity);
-  return `${kind}:${hash}:${date}`;
+/** KV-backed counter — used when no Durable Object binding is configured. */
+async function consumeKv(
+  env: Env,
+  key: string,
+  scope: RateScope,
+  limit: number,
+  reset: number,
+  reset_at: string,
+): Promise<RateResult> {
+  const current = await env.RATE_LIMIT_KV.get(key);
+  const count = current ? parseInt(current, 10) || 0 : 0;
+
+  if (count >= limit) {
+    return {
+      allowed: false, source: "fair_use", scope, limit, used: count, remaining: 0, reset, reset_at,
+      retry_after: reset - Math.floor(Date.now() / 1000),
+    };
+  }
+
+  await env.RATE_LIMIT_KV.put(key, String(count + 1), { expirationTtl: KEY_TTL_SECONDS });
+  return {
+    allowed: true, source: "fair_use", scope, limit, used: count + 1,
+    remaining: limit - (count + 1), reset, reset_at,
+  };
 }
 
 /**
- * Operator unlock: zero today's counter for a host or IP bucket.
- * Clears KV fallback + Durable Object storage when bound.
+ * Operator unlock: zero today's counter for one identity.
+ * Clears the KV fallback and the Durable Object storage when bound.
  */
 export async function resetDayBucket(
   env: Env,
-  opts: { host?: string; ip?: string },
-): Promise<{ ok: true; key: string; kind: "host_day" | "ip_day" } | { ok: false; error: string }> {
-  const host = (opts.host || "").trim().toLowerCase();
+  opts: { ip?: string; session?: string },
+): Promise<{ ok: true; key: string; scope: RateScope } | { ok: false; error: string }> {
   const ip = (opts.ip || "").trim();
-  if (!host && !ip) return { ok: false, error: "host or ip required" };
-  if (host && ip) return { ok: false, error: "pass host or ip, not both" };
-  const kind: "host_day" | "ip_day" = host ? "host_day" : "ip_day";
-  const identity = host || ip;
-  const key = await rateLimitBucketKey(kind, identity);
+  const session = (opts.session || "").trim();
+  if (!ip && !session) return { ok: false, error: "ip or session required" };
+  if (ip && session) return { ok: false, error: "pass ip or session, not both" };
+  const scope: RateScope = session ? "mcp_session" : "ip";
+  const key = await rateLimitBucketKey(scope, session || ip);
   try {
     await env.RATE_LIMIT_KV?.delete(key);
   } catch { /* optional binding in tests */ }
@@ -202,12 +280,12 @@ export async function resetDayBucket(
     const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
     await stub.fetch("https://do/reset", { method: "POST" });
   }
-  return { ok: true, key, kind };
+  return { ok: true, key, scope };
 }
 
 /**
- * Refund one consumed unit after a server-side failure (5xx). No-op for bypass
- * / unknown buckets. Client errors (4xx) stay charged.
+ * Refund one consumed unit after a server-side failure (5xx). No-op for bypass / unknown
+ * buckets. Client errors (4xx) stay charged — a malformed request is still a request.
  */
 export async function refundRateLimitUnit(env: Env, rl: RateResult): Promise<void> {
   if (!rl || rl.bypass || !rl.bucket_key) return;
@@ -225,153 +303,80 @@ export async function refundRateLimitUnit(env: Env, rl: RateResult): Promise<voi
 }
 
 /**
- * Resolve + enforce a first-party API key. Returns null when no Bearer ana_*
- * token is present (caller falls through to fair-use / bypass). Returns a
- * denied RateResult for unknown / revoked / suspended / exhausted keys.
+ * Standard rate-limit headers. Both the RFC 9331 names and the older `X-` names, because
+ * plenty of HTTP clients (and every LLM that has read a Stack Overflow answer) look for `X-`.
  */
-async function checkApiKeyLimit(req: Request, env: Env): Promise<RateResult | null> {
-  const record = await resolveBearerKey(req, env);
-  if (!record) {
-    // Present but unrecognised Bearer ana_* → hard deny (do not fall through
-    // to anonymous fair-use — that would let a revoked key keep working).
-    const tokenAttempt = req.headers.get("authorization") || "";
-    if (/^Bearer\s+ana_(?:live|test)_/i.test(tokenAttempt)) {
-      return {
-        allowed: false,
-        source: "api_key",
-        key_type: "key_month",
-        limit: 0,
-        used: 0,
-        remaining: 0,
-        reset: nextMonthStartUnix(),
-        reset_at: new Date(nextMonthStartUnix() * 1000).toISOString(),
-        retry_after: nextMonthStartUnix() - Math.floor(Date.now() / 1000),
-      };
-    }
-    return null;
-  }
-
-  if (record.status !== "active") {
+export function rateHeaders(rl: RateResult, env?: Env): Record<string, string> {
+  if (rl.bypass) {
     return {
-      allowed: false,
-      source: "api_key",
-      key_type: "key_month",
-      key_id: record.key_id,
-      key_record: record,
-      limit: 0,
-      used: 0,
-      remaining: 0,
-      reset: nextMonthStartUnix(),
-      reset_at: new Date(nextMonthStartUnix() * 1000).toISOString(),
-      retry_after: 3600,
+      "RateLimit-Limit": "unlimited",
+      "RateLimit-Remaining": "unlimited",
+      "X-RateLimit-Limit": "unlimited",
+      "X-RateLimit-Remaining": "unlimited",
     };
   }
-
-  const month = currentMonthUtc();
-  const reset = nextMonthStartUnix();
-  const reset_at = new Date(reset * 1000).toISOString();
-  const included = Math.max(0, Number(record.included_requests) || 0);
-  const limit = record.allow_overage ? OVERAGE_HARD_CEILING : included;
-  const key = `key_month:${record.key_id}:${month}`;
-  const key_type = "key_month";
-
-  let result: RateResult;
-  if (env.RATE_LIMIT_DO) {
-    const stub = env.RATE_LIMIT_DO.get(env.RATE_LIMIT_DO.idFromName(key));
-    const doUrl = new URL("https://do/check");
-    doUrl.searchParams.set("limit", String(limit));
-    doUrl.searchParams.set("key_type", key_type);
-    doUrl.searchParams.set("date", month);
-    doUrl.searchParams.set("reset", String(reset));
-    const res = await stub.fetch(doUrl.toString());
-    result = (await res.json()) as RateResult;
-  } else {
-    result = await checkRateLimitKv(env, key, key_type, limit, reset, reset_at);
-  }
-
-  result.source = "api_key";
-  result.key_type = key_type;
-  result.key_id = record.key_id;
-  result.key_record = record;
-  result.bucket_key = key;
-  result.reset_at = reset_at;
-  // Surface the soft (included) quota in headers when overage is on.
-  if (record.allow_overage && result.allowed) {
-    const used = result.used ?? 0;
-    result.overage = used > included;
-    result.limit = included;
-    result.remaining = Math.max(0, included - used);
-    // Stripe meter events are fired by gateMetered via waitUntil — not here —
-    // so unit tests of checkRateLimit do not hit the network.
-  }
-  return result;
-}
-
-/** Legacy KV-backed counter — used when no Durable Object binding is configured. */
-async function checkRateLimitKv(
-  env: Env,
-  key: string,
-  key_type: string,
-  limit: number,
-  reset: number,
-  reset_at: string,
-): Promise<RateResult> {
-  const current = await env.RATE_LIMIT_KV.get(key);
-  const count = current ? parseInt(current, 10) || 0 : 0;
-
-  if (count >= limit) {
-    return {
-      allowed: false, key_type, limit, used: count, remaining: 0, reset, reset_at,
-      retry_after: reset - Math.floor(Date.now() / 1000),
-    };
-  }
-
-  await env.RATE_LIMIT_KV.put(key, String(count + 1), { expirationTtl: KEY_TTL_SECONDS });
+  const limit = String(rl.limit ?? (env ? fairUseLimit(env) : DEFAULT_FAIR_USE_DAILY_LIMIT));
+  const remaining = String(rl.remaining ?? 0);
+  const reset = String(rl.reset ?? nextUtcMidnightUnix());
   return {
-    allowed: true, source: "free", key_type, limit, used: count + 1,
-    remaining: limit - (count + 1), reset, reset_at,
+    "RateLimit-Limit": limit,
+    "RateLimit-Remaining": remaining,
+    "RateLimit-Reset": reset,
+    "X-RateLimit-Limit": limit,
+    "X-RateLimit-Remaining": remaining,
+    "X-RateLimit-Reset": reset,
   };
 }
 
-export function rateHeaders(rl: RateResult): Record<string, string> {
-  if (rl.bypass) return { "X-RateLimit-Limit": "unlimited", "X-RateLimit-Remaining": "unlimited" };
-  return {
-    "X-RateLimit-Limit": String(rl.limit ?? IP_DAY_LIMIT),
-    "X-RateLimit-Remaining": String(rl.remaining != null ? rl.remaining : ""),
-    "X-RateLimit-Reset": String(rl.reset ?? nextUtcMidnightUnix()),
-  };
-}
-
-export function rateLimitBody(rl: RateResult) {
-  if (rl.key_type === "key_month") {
-    const suspended = rl.key_record && rl.key_record.status !== "active";
-    return {
-      ok: false,
-      error: suspended ? "key_inactive" : "quota_exceeded",
-      limit_type: rl.key_type,
-      key_id: rl.key_id,
-      status: rl.key_record?.status,
-      limit: rl.limit,
-      used: rl.used,
-      reset_at: rl.reset_at,
-      retry_after_seconds: rl.retry_after,
-      upgrade_url: "https://anatome.dev/pricing",
-      message: suspended
-        ? `API key is ${rl.key_record?.status || "inactive"}.`
-        : `Monthly included quota (${rl.limit}) exhausted. Enable overage or upgrade at anatome.dev.`,
-    };
-  }
+/**
+ * The 429 body.
+ *
+ * This is read far more often by a language model than by a person, so it says, in words, the
+ * three things a model has to get right: what happened, that the integration is not broken, and
+ * that retrying now will not help. Vague 429s are why assistants tell users "the connector
+ * failed" and then hammer the endpoint.
+ */
+export function rateLimitBody(rl: RateResult, env?: Env) {
+  const upgrade = env ? upgradeUrl(env) : DEFAULT_UPGRADE_URL;
+  const network = rl.scope === "network";
   return {
     ok: false,
-    error: "rate_limit_exceeded",
-    limit_type: rl.key_type,
+    error: network ? "network_rate_limit_exceeded" : "daily_fair_use_limit_reached",
+    scope: rl.scope ?? "ip",
     limit: rl.limit,
     used: rl.used,
+    remaining: 0,
     reset_at: rl.reset_at,
     retry_after_seconds: rl.retry_after,
-    upgrade_url: UPGRADE_URL,
-    message: rl.key_type === "host_day"
-      ? `Daily fair-use limit (${rl.limit}/day per host). Basic on RapidAPI: 300 requests/month included, $0.001/request overage.`
-      : `Daily fair-use limit (${rl.limit}/day per IP). Basic on RapidAPI: 300 requests/month included, $0.001/request overage.`,
+    retryable: false,
+    message: rateLimitMessage(rl, upgrade),
+    more_info: upgrade,
+    documentation: "https://anatome.dev/#fair-use",
   };
+}
+
+/** Plain-English explanation shared by the REST 429 body and the MCP tool error. */
+export function rateLimitMessage(rl: RateResult, upgrade = DEFAULT_UPGRADE_URL): string {
+  const resetAt = rl.reset_at ?? new Date((rl.reset ?? nextUtcMidnightUnix()) * 1000).toISOString();
+  const inWords = humanDuration(rl.retry_after ?? 0);
+
+  if (rl.scope === "network") {
+    return [
+      `Anatome is temporarily rate limiting this network: more than ${rl.limit} requests today came`,
+      "from the same address. This is a shared-network guard, not a problem with your integration",
+      "and not a problem with your account.",
+      `It clears at ${resetAt} (in ${inWords}). Do not retry in a loop.`,
+      `If you need a dedicated quota, see ${upgrade}.`,
+    ].join(" ");
+  }
+
+  return [
+    `Daily fair-use limit reached: you have used all ${rl.limit} free Anatome requests for today.`,
+    "The connector is working correctly — nothing is broken, this is not an outage, and retrying",
+    "now will not help.",
+    `Your allowance resets at ${resetAt} (in ${inWords}).`,
+    "Tell the user they have reached Anatome's free daily fair-use limit and can continue after",
+    "the reset.",
+    `For higher limits and a fully featured, AI-assisted version, see ${upgrade}.`,
+  ].join(" ");
 }

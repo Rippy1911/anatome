@@ -50,3 +50,9 @@ AGENTS.md
 ROADMAP.md
 .cursor/rules/anatome.mdc
 base44/.app.jsonc
+
+# Local worktrees for parallel branches — never part of a commit.
+_worktrees/
+
+# Generated at build time from the repo root by scripts/sync-public.mjs.
+public/llms.txt

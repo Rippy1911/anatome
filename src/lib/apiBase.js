@@ -1,28 +1,29 @@
-// Public API (Cloudflare Workers) and marketing site (Base44).
+// Public API (Cloudflare Workers) and the site itself (Cloudflare static assets).
 // Site: https://anatome.dev · API: https://api.anatome.dev
 
 export const SITE_BASE = "https://anatome.dev";
+
+/** The hosted, fully featured product. Where "I need more than fair use" goes. */
+export const PLATFORM_URL = "https://platform.anatome.dev";
+
+/** Keep in step with FAIR_USE_DAILY_LIMIT in api/wrangler.toml. Displayed, never enforced here. */
+export const FAIR_USE_PER_DAY = 50;
+
+/** The one string a user has to copy to connect an assistant. */
+export const MCP_ENDPOINT = `${import.meta.env.VITE_PUBLIC_API || "https://api.anatome.dev"}/mcp`;
 /** Override in `.env.local` with `VITE_PUBLIC_API=http://localhost:8787` for local Worker + GIFs. */
 export const PUBLIC_API = import.meta.env.VITE_PUBLIC_API || "https://api.anatome.dev";
 
 /** Bump when regenerating GIF frame timing — busts `Cache-Control: immutable` in browsers. */
 const GIF_PLAYBACK_VERSION = "5";
 
-/** OpenAPI 3.1 spec for Swagger UI / RapidAPI upload. */
+/** OpenAPI 3.1 spec, for Swagger UI or any generator. */
 export const OPENAPI_SPEC_URL = `${PUBLIC_API}/openapi`;
 
 /** Legacy alias — prefer PUBLIC_API for Worker routes. */
 export const API_BASE = PUBLIC_API;
 
-/** RapidAPI marketplace host — all production calls need X-RapidAPI-Key + this Host header. */
-export const RAPIDAPI_HOST = "anatome.p.rapidapi.com";
-export const RAPIDAPI_BASE = `https://${RAPIDAPI_HOST}`;
-export const RAPIDAPI_LISTING_URL = "https://rapidapi.com/slaczka.sebastian/api/anatome";
-
-/** Base44 serverless paths on the marketing site (aiDemo, entity-backed invokes). */
-export const BASE44_FUNCTIONS = `${SITE_BASE}/functions`;
-
-/** Build a Worker API URL (paths are root-mounted, not under /functions). */
+/** Build a Worker API URL. */
 export function apiUrl(pathAndQuery) {
   const s = pathAndQuery.startsWith("/") ? pathAndQuery : `/${pathAndQuery}`;
   return `${PUBLIC_API}${s}`;

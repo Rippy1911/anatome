@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AlertTriangle, ArrowLeft, RotateCw, ShieldAlert } from "lucide-react";
 import GuidesAttribution from "@/components/guides/GuidesAttribution";
+import WipBanner from "@/components/guides/WipBanner";
 import MuscleDiagram from "@/components/guides/MuscleDiagram";
 import ProgressionPatterns from "@/components/guides/ProgressionPatterns";
 import StepLadder from "@/components/guides/StepLadder";
@@ -133,6 +134,7 @@ export default function GuideTree() {
 
   return (
     <Shell>
+      <WipBanner />
       <header className="mb-6">
         <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
           <span className="rounded bg-secondary px-2 py-0.5 font-semibold uppercase tracking-wide">

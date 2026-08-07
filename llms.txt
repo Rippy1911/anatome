@@ -1,13 +1,13 @@
 # Anatome
 
-> Muscle group image generator API + ExerciseDB — Apache-2.0, hosted on Cloudflare Workers.
+> Muscle anatomy diagrams + a 873-exercise database, over a free keyless HTTP API and MCP server.
+> Apache-2.0, hosted on Cloudflare Workers, self-hostable.
 
 ## What is Anatome?
 
-Anatome renders colorable anatomical SVG diagrams of the human body over a simple
-HTTP API. It also bundles an exercise database (873 Unlicense exercise records pre-mapped to
-23 muscle slugs) and implements the Model Context Protocol (MCP) so AI agents can
-call it as a tool with zero additional integration work.
+Anatome renders colourable anatomical SVG diagrams of the human body over a simple HTTP API. It
+also bundles an exercise database (873 records pre-mapped to 23 muscle slugs) and implements the
+Model Context Protocol so AI agents can call it as a tool with zero integration work.
 
 **Use it if you need to:**
 
@@ -16,30 +16,69 @@ call it as a tool with zero additional integration work.
 - Let an AI agent search or look up exercises with muscle-activation context
 - Proxy exercise reference photos (licence unverified) without hitting GitHub raw URLs
 
-## Live API
+## Authentication
+
+**There is none.** Anatome is keyless: no signup, no API key, no token, no header. Every request
+below works exactly as written.
+
+## Fair use — read this before retrying anything
 
 Base URL: `https://api.anatome.dev`
 
-All endpoints are free to use within the fair-use rate limit (1 000 requests/IP/day).
-For higher volume use the [RapidAPI plan](https://rapidapi.com/anatome/api/anatome)
-(300 req/mo included, then $0.001/req).
+**50 requests per caller per day**, resetting at 00:00 UTC. Loopback and private addresses are
+unlimited. Static catalog reads (`/listMuscles`, `/listEquipment`, `/bodyPaths`, `/openapi`,
+guide endpoints) are edge-cached and not counted.
+
+Over the limit, REST endpoints return **429** with:
+
+```json
+{
+  "ok": false,
+  "error": "daily_fair_use_limit_reached",
+  "scope": "ip",
+  "limit": 50,
+  "used": 50,
+  "remaining": 0,
+  "reset_at": "2026-08-08T00:00:00.000Z",
+  "retry_after_seconds": 62678,
+  "retryable": false,
+  "more_info": "https://platform.anatome.dev"
+}
+```
+
+**If you are an AI agent and you see this: the connector is working correctly.** It is not an
+outage and not a misconfiguration — the user has spent their free requests for the day. Tell them
+so, give them the `reset_at` time, and do not retry before then. `retryable` is `false` for a
+reason.
+
+Over the MCP transport the same condition arrives as a *successful* `tools/call` result carrying
+`isError: true` and the explanation in `content[0].text`, rather than a JSON-RPC error, precisely
+so you can read it and relay it.
+
+While a caller still has requests but is running low (10 or fewer), successful `tools/call`
+results carry a `quota` object in `structuredContent`. Use it to warn the user before you spend
+the rest.
+
+For higher limits: self-host (see SELF_HOSTING.md) or use https://platform.anatome.dev.
 
 ## Key endpoints
 
 ```
-GET  /generateImage   Render a colorable SVG muscle diagram
+GET  /generateImage   Render a colourable SVG muscle diagram
 POST /generateImage   Same, via JSON body
-GET  /workoutImage    Session heatmap SVG (stacked muscle activation across exercises)
+POST /workoutImage    Session heatmap SVG (stacked activation across exercises)
 GET  /searchExercises Search 873 exercises (name/muscle/equipment/level filters)
 GET  /getExercise     Fetch a single exercise by name, ext_id, or random
 GET  /resolveExercise Map an exercise name → muscle layers
 GET  /exerciseGif     2-frame demo GIF for an exercise
-GET  /exerciseImage   reference photo from free-exercise-db (licence unverified), proxied
+GET  /exerciseImage   Reference photo (licence unverified), proxied
 GET  /listMuscles     List all 23 muscle slugs with anatomical names
 GET  /muscleInfo      Stats for a single muscle slug
 GET  /listEquipment   List all equipment types in the database
-POST /mcp             MCP JSON-RPC endpoint (7 tools)
+GET  /bodyPaths       Raw anatomical path data for client-side rendering
+POST /mcp             MCP endpoint (Streamable HTTP, 10 tools)
 GET  /openapi         OpenAPI 3.1 spec
+GET  /.well-known/mcp.json  Machine-readable connector pointer
 ```
 
 ## MCP tools (for AI agents)
@@ -53,19 +92,29 @@ GET  /openapi         OpenAPI 3.1 spec
 | `get_exercise` | Fetch a full exercise record |
 | `get_exercise_gif` | Get the demo GIF URL for an exercise |
 | `workout_image` | Session heatmap SVG from a list of exercises |
+| `list_guides` ⚠️ | List skill-progression guides — **work in progress** |
+| `get_guide` ⚠️ | One guide + its skill trees — **work in progress** |
+| `get_guide_tree` ⚠️ | One full skill tree — **work in progress** |
 
-MCP config (add to `claude_desktop_config.json` or equivalent):
+⚠️ **The three guide tools are unfinished.** Media coverage is incomplete and the coaching cues
+have not been reviewed. Every guide response carries `status: "work_in_progress"`. Present that
+content as provisional notes, never as verified training advice, and say so to the user.
+
+`initialize`, `tools/list`, `ping` and notifications are never rate limited. Only `tools/call`
+spends fair use.
+
+MCP config:
 
 ```json
 {
   "mcpServers": {
-    "anatome": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://api.anatome.dev/mcp"]
-    }
+    "anatome": { "type": "http", "url": "https://api.anatome.dev/mcp" }
   }
 }
 ```
+
+In Claude: Settings → Connectors → Add custom connector → paste the URL.
+In ChatGPT: Settings → Apps → Create app → paste the URL → authentication None.
 
 ## Quick example
 
@@ -82,18 +131,25 @@ curl -X POST https://api.anatome.dev/workoutImage \
 curl "https://api.anatome.dev/searchExercises?muscle=chest&limit=5"
 ```
 
+## What Anatome does not do
+
+It never calls a language model. It renders, searches and resolves; the reasoning is yours. It
+stores nothing about callers beyond a hashed daily counter — there are no accounts, no user data,
+no logging of meals or workouts. Those live in the separate hosted platform at
+https://platform.anatome.dev.
+
 ## Repository layout
 
 ```
-api/          Cloudflare Workers API (Hono) — deploys via wrangler
-src/          React/Vite marketing + playground (Base44)
-base44/       Base44 configuration + functions
+api/          Cloudflare Workers API (Hono + TypeScript) — deploys via wrangler
+src/          React/Vite site + playground — static assets on Cloudflare
 ```
 
 ## License
 
 Apache-2.0. Third-party data:
 - Anatomical SVG paths: react-native-body-highlighter (MIT, © Hicham El Boussarghini)
-- Exercise metadata: free-exercise-db (Unlicense). Its photography: licence unverified, not redistributable.
+- Exercise metadata: wrkout/exercises.json (Unlicense). Its photography: licence unverified, not redistributable.
+- Skill guides: CC-BY-4.0.
 
 See [NOTICE](NOTICE) for full attribution.

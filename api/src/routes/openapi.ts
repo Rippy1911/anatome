@@ -73,22 +73,36 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
     openapi: "3.1.0",
     info: {
       title: "Anatome — Muscle Group Image Generator API",
-      version: "2.0.0",
-      description: "Anatome — Apache-2.0 licensed muscle group image generator + free-exercise-db API. SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873 exercise records from free-exercise-db (Unlicense; the dataset's photography is of unverified origin and is not cleared for redistribution). Anatomical SVG paths from react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
+      version: "3.0.0",
+      description: [
+        "Anatome — Apache-2.0 licensed muscle group image generator + exercise database.",
+        "SVG rendering of 23 muscle groups (male + female, front + back, dual view), backed by 873",
+        "exercise records from wrkout/exercises.json (Unlicense metadata; the dataset's photography",
+        "is of unverified origin and is not cleared for redistribution). Anatomical SVG paths from",
+        "react-native-body-highlighter (MIT, © Hicham El Boussarghini). MCP-compatible.",
+        "",
+        "AUTHENTICATION: none. Anatome is keyless — no signup, no API key, no token.",
+        "",
+        "FAIR USE: 50 requests per caller per day, resetting at 00:00 UTC. Over the limit, endpoints",
+        "return 429 with `error: \"daily_fair_use_limit_reached\"`, `retryable: false` and a `reset_at`",
+        "timestamp; the MCP endpoint instead returns a normal result with `isError: true` so the",
+        "calling model sees the explanation. A 429 here means the caller is out of requests for the",
+        "day — it does not mean the service is down, and retrying before `reset_at` will not help.",
+        "For higher limits see https://platform.anatome.dev.",
+      ].join(" "),
       termsOfService: "https://anatome.dev/tos",
       contact: { name: "NextSolutions", url: "https://nextsolutions.studio", email: "contact@nextsolutions.studio" },
       license: { name: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
     },
     servers: [
       { url: publicBaseUrl, description: "Cloudflare Workers (production)" },
-      { url: "https://anatome.dev/functions", description: "Base44 marketing site (legacy /functions paths)" },
     ],
     tags: [
       { name: "Image Generation", description: "Render anatomical SVG diagrams" },
       { name: "Exercise Database", description: "873 exercises with muscle mappings" },
       { name: "MCP", description: "Model Context Protocol JSON-RPC" },
       { name: "Discovery", description: "Catalog and capability endpoints" },
-      { name: "Skill Guides", description: "Curated calisthenics skill progressions (CC-BY-4.0)" },
+      { name: "Skill Guides", description: "WORK IN PROGRESS — calisthenics skill progressions. Content is unverified and media coverage is incomplete; treat as provisional." },
     ],
     paths: {
       "/generateImage": {
@@ -152,8 +166,8 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/listGuides": {
         get: {
           tags: ["Skill Guides"],
-          summary: "List the bundled skill-progression guides",
-          description: "Curated calisthenics skill catalog (CC-BY-4.0 content, served by this Apache-2.0 API). Returns one row per guide with tree and step counts.",
+          summary: "List the bundled skill-progression guides (WORK IN PROGRESS)",
+          description: "WORK IN PROGRESS — media coverage is incomplete and the coaching cues are unreviewed; every response carries `status: \"work_in_progress\"`. Curated calisthenics skill catalog (CC-BY-4.0 content, served by this Apache-2.0 API). Returns one row per guide with tree and step counts.",
           responses: {
             "200": { description: "Guide list", content: { "application/json": { schema: { type: "object", properties: {
               ok: { type: "boolean" }, count: { type: "integer" },
@@ -171,7 +185,8 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/getGuide": {
         get: {
           tags: ["Skill Guides"],
-          summary: "Get one guide plus a summary of each skill tree",
+          summary: "Get one guide plus a summary of each skill tree (WORK IN PROGRESS)",
+          description: "WORK IN PROGRESS — unverified content, incomplete media. Responses carry `status: \"work_in_progress\"`.",
           parameters: [{ name: "slug", in: "query", required: true, schema: { type: "string" }, example: "calisthenics" }],
           responses: {
             "200": { description: "Guide with tree summaries", content: { "application/json": { schema: { type: "object", properties: {
@@ -195,8 +210,8 @@ export function buildOpenApiSpec(publicBaseUrl: string) {
       "/getGuideTree": {
         get: {
           tags: ["Skill Guides"],
-          summary: "Get one full skill tree with every progression step",
-          description: "Each step carries intent, cues, common faults, drills, programming, unlock criteria and demo media references.",
+          summary: "Get one full skill tree with every progression step (WORK IN PROGRESS)",
+          description: "WORK IN PROGRESS — the cues have not been reviewed by a coach and some steps have no demo media. Responses carry `status: \"work_in_progress\"`; present the content as provisional rather than as verified training advice. Each step carries intent, cues, common faults, drills, programming, unlock criteria and demo media references.",
           parameters: [
             { name: "tree", in: "query", required: true, schema: { type: "string" }, example: "planche" },
             { name: "guide", in: "query", schema: { type: "string", default: "calisthenics" }, example: "calisthenics" },

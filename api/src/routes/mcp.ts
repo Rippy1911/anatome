@@ -18,6 +18,21 @@ import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, EXERCISE_DB_ATTRIBUTION, guid
 import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { listGuides as listGuidesLogic, getGuide as getGuideLogic, getGuideTree as getGuideTreeLogic } from "../lib/guides.ts";
 import { DEFAULT_GUIDE_SLUG } from "../data/guideCatalog.ts";
+import { API_VERSION } from "../lib/version.ts";
+
+/** The version we speak. `GET /mcp` and `initialize` used to disagree (2024-11-05 vs 2025-03-26). */
+export const MCP_PROTOCOL_VERSION = "2025-06-18";
+/** Older revisions we still answer to, newest first. An unknown request falls back to ours. */
+export const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
+export { API_VERSION as MCP_SERVER_VERSION };
+
+/**
+ * The skill-progression guides are not finished: step media coverage is incomplete and the
+ * cues have not been reviewed by a coach. They stay exposed so existing callers do not break,
+ * but every surface says so up front — an agent that reads this should hedge, not assert.
+ */
+const WIP = "[WORK IN PROGRESS — unverified content, incomplete media, subject to change] ";
+export const GUIDE_STATUS = "work_in_progress";
 
 export const TOOLS = [
   { name: "generate_muscle_image", description: "Render an SVG diagram of the human body with arbitrary muscles highlighted in arbitrary colors. Returns an SVG string.",
@@ -69,21 +84,27 @@ export const TOOLS = [
       width: { type: "number", default: 768 },
       height: { type: "number", default: 1024 } },
       required: ["exercises"] } },
-  { name: "list_guides", description: "List the bundled skill-progression guides (curated calisthenics catalog, CC-BY-4.0) with tree and step counts.",
+  { name: "list_guides", description: `${WIP}List the bundled skill-progression guides (curated calisthenics catalog, CC-BY-4.0) with tree and step counts.`,
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {} } },
-  { name: "get_guide", description: "Get one guide: its metadata plus a summary of every skill tree it contains (difficulty, prerequisites, step count, muscle map URL).",
+  { name: "get_guide", description: `${WIP}Get one guide: its metadata plus a summary of every skill tree it contains (difficulty, prerequisites, step count, muscle map URL).`,
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {
       slug: { type: "string", description: "Guide slug, e.g. 'calisthenics'" } },
       required: ["slug"] } },
-  { name: "get_guide_tree", description: "Get one full skill tree — every progression step with cues, common faults, drills, unlock criteria and demo media. Use for 'how do I train the planche/front lever/handstand'.",
+  { name: "get_guide_tree", description: `${WIP}Get one full skill tree — every progression step with cues, common faults, drills, unlock criteria and demo media. Use for 'how do I train the planche/front lever/handstand', but tell the user this catalog is unfinished and unverified.`,
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {
       tree: { type: "string", description: "Skill tree slug, e.g. 'planche', 'front-lever', 'handstand'" },
       guide: { type: "string", default: "calisthenics", description: "Guide slug (defaults to calisthenics)" } },
       required: ["tree"] } },
 ];
+
+/** Machine-readable WIP marker attached to every guide payload. */
+export const guideWipNotice = () => ({
+  status: GUIDE_STATUS,
+  notice: "The skill-progression guides are a work in progress: media coverage is incomplete and the coaching cues are unreviewed. Present them as provisional, not as verified training advice.",
+});
 
 function fullExercise(e: ExerciseRow | null, base: string, fieldsRaw?: string) {
   if (!e) return null;
@@ -125,10 +146,25 @@ export function computeMcpResult(
 ): McpInnerResult {
   const args = (params && params.arguments) || {};
   if (method === "initialize") {
-    return { ok: true, result: { protocolVersion: "2025-03-26", capabilities: { tools: {} }, serverInfo: { name: "anatome", version: "2.0.0" } } };
+    // Echo the client's version when we speak it, so an older client is not forced to
+    // downgrade-negotiate; otherwise answer with ours and let the client decide.
+    const asked = (params as Record<string, unknown> | undefined)?.protocolVersion as string | undefined;
+    const protocolVersion = asked && SUPPORTED_PROTOCOL_VERSIONS.includes(asked) ? asked : MCP_PROTOCOL_VERSION;
+    return {
+      ok: true,
+      result: {
+        protocolVersion,
+        capabilities: { tools: {} },
+        serverInfo: { name: "anatome", version: API_VERSION },
+        instructions: "Anatome is free and keyless. Catalog and diagram tools work with no account. There is a daily fair-use budget; when it runs out the tool returns isError with a plain explanation — relay it to the user rather than retrying.",
+      },
+    };
   }
   if (method === "tools/list") {
     return { ok: true, result: { tools: TOOLS } };
+  }
+  if (method === "ping") {
+    return { ok: true, result: {} };
   }
   if (method === "tools/call") {
     const name = params && params.name;
@@ -201,19 +237,19 @@ export function computeMcpResult(
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     if (name === "list_guides") {
-      const payload = { ...listGuidesLogic(base), ...guideCatalogAttribution() };
+      const payload = { ...listGuidesLogic(base), ...guideWipNotice(), ...guideCatalogAttribution() };
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     if (name === "get_guide") {
       const { found, guide } = getGuideLogic(args.slug, base);
       if (!found) return { ok: false, error: { code: -32602, message: `Unknown guide: ${args.slug}` } };
-      const payload = { ...guide, ...guideCatalogAttribution() };
+      const payload = { ...guide, ...guideWipNotice(), ...guideCatalogAttribution() };
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     if (name === "get_guide_tree") {
       const { found, tree } = getGuideTreeLogic(args.guide ?? DEFAULT_GUIDE_SLUG, args.tree, base);
       if (!found) return { ok: false, error: { code: -32602, message: `Unknown skill tree: ${args.tree}` } };
-      const payload = { ...tree, ...guideCatalogAttribution() };
+      const payload = { ...tree, ...guideWipNotice(), ...guideCatalogAttribution() };
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(payload) }], structuredContent: payload } };
     }
     return { ok: false, error: { code: -32602, message: `Unknown tool: ${name}` } };

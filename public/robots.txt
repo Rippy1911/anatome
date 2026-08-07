@@ -1,0 +1,19 @@
+# Anatome — free, keyless muscle anatomy and exercise API.
+# Everything here is public and meant to be read, by people and by agents alike.
+User-agent: *
+Allow: /
+
+# Named explicitly rather than left to the wildcard: this project exists to be called by
+# assistants, so being crawled by them is the point, not something to tolerate.
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://anatome.dev/sitemap.xml
