@@ -17,12 +17,14 @@ import { identifyRequest } from "../lib/auth.ts";
 import { gateMetered } from "../lib/meter.ts";
 import { isValidTimezone } from "../lib/tz.ts";
 import {
-  dailySummary, deleteMeal, deleteWorkout, exportEverything, listMeals, listWorkouts,
-  logBodyMetric, logMeal, logWater, logWorkout, setGoals, weightTrend, type LogResult,
+  dailySummary, deleteMeal, deleteWorkout, exerciseHistory, exportEverything, getDay,
+  listMeals, listSupplements, listWorkouts, logBodyMetric, logMeal, logSupplement, logWater,
+  logWorkout, setGoals, weightTrend, type LogResult,
 } from "../lib/logging.ts";
 import { deleteUserCompletely, setUserTimezone } from "../lib/db.ts";
 import {
   MEAL_FIELDS, WATER_FIELDS, WORKOUT_FIELDS, SET_FIELDS, BODY_METRIC_FIELDS, GOAL_FIELDS,
+  SUPPLEMENT_FIELDS,
 } from "../lib/validate.ts";
 
 type Ctx = Context<{ Bindings: DbEnv }>;
@@ -33,12 +35,30 @@ export const LOGGING_TOOL_NAMES = [
   "log_meal", "list_meals", "delete_meal",
   "log_water",
   "log_workout", "list_workouts", "delete_workout",
+  "log_supplement", "list_supplements",
   "log_weight", "get_weight_trend",
-  "get_daily_summary",
+  "get_daily_summary", "get_day", "get_exercise_history",
   "export_my_data", "delete_my_account",
 ] as const;
 
 const list = (fields: readonly string[]) => fields.join(", ");
+
+/**
+ * Every "show me my …" tool takes the same window and page arguments. Declared once so the
+ * schemas cannot drift from each other, which is how a model learns that `from` works on one
+ * tool and not the next.
+ */
+const WINDOW_PROPS = {
+  date: { type: "string", description: "One specific day, YYYY-MM-DD. Shorthand for from=to=date." },
+  from: { type: "string", description: "Start of the range, YYYY-MM-DD (inclusive)." },
+  to: { type: "string", description: "End of the range, YYYY-MM-DD (inclusive). Defaults to today." },
+  days: { type: "number", description: "Alternative to `from`: how many days back from `to`." },
+} as const;
+
+const PAGE_PROPS = {
+  limit: { type: "number", description: "Rows to return, 1-200." },
+  offset: { type: "number", description: "Rows to skip, for paging. Responses carry total_matched and has_more." },
+} as const;
 
 /**
  * Tool schemas. Property names are exactly the accepted field names from validate.ts — a test
@@ -91,9 +111,17 @@ export const LOGGING_TOOLS = [
   },
   {
     name: "list_meals",
-    description: "List the meals logged on one day, with their macros.",
+    description: "Search meals. Defaults to today; pass from/to or days for a range, q to search the name and notes, meal_type to filter. Returns macro totals for whatever matched, so it answers 'how much protein did I average in March' as well as 'what did I eat'.",
     annotations: { readOnlyHint: true },
-    inputSchema: { type: "object", properties: { date: { type: "string", description: "YYYY-MM-DD; omit for today" } } },
+    inputSchema: {
+      type: "object",
+      properties: {
+        ...WINDOW_PROPS,
+        ...PAGE_PROPS,
+        q: { type: "string", description: "Free text matched against the meal name and notes, e.g. 'oats'." },
+        meal_type: { type: "string", enum: ["breakfast", "lunch", "dinner", "snack"] },
+      },
+    },
   },
   {
     name: "delete_meal",
@@ -144,9 +172,71 @@ export const LOGGING_TOOLS = [
   },
   {
     name: "list_workouts",
-    description: "List recent workouts with their sets and total volume.",
+    description: "Search workouts with their sets and volume. Defaults to the last 90 days; pass date/from/to/days for a window, exercise to keep only sessions containing a movement, q to search the title and notes.",
     annotations: { readOnlyHint: true },
-    inputSchema: { type: "object", properties: { limit: { type: "number", default: 10, description: "1-50" } } },
+    inputSchema: {
+      type: "object",
+      properties: {
+        ...WINDOW_PROPS,
+        ...PAGE_PROPS,
+        exercise: { type: "string", description: "Only workouts containing this exercise, matched loosely: 'bench' finds 'Barbell Bench Press'." },
+        q: { type: "string", description: "Free text matched against the workout title and notes, e.g. 'push day'." },
+      },
+    },
+  },
+  {
+    name: "get_exercise_history",
+    description: "One exercise over time: every set grouped by session, with per-session volume, the best set and an estimated 1RM. This is the tool for 'is my bench going anywhere' and for showing a coach someone's progression. Matched loosely, so 'squat' finds 'Barbell Back Squat'.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        exercise: { type: "string", description: "Exercise name or part of one, e.g. 'bench press'." },
+        ...WINDOW_PROPS,
+        ...PAGE_PROPS,
+      },
+      required: ["exercise"],
+    },
+  },
+  {
+    name: "log_supplement",
+    description: "Log a supplement taken. Dose is optional — 'took my magnesium' is a complete entry. Defaults to today in the user's timezone.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "e.g. 'creatine', 'vitamin D3'" },
+        dose: { type: "number", description: "Optional amount." },
+        unit: { type: "string", description: "g | mg | mcg | iu | ml | capsule | scoop" },
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+        notes: { type: "string" },
+      },
+      required: ["name"],
+    },
+  },
+  {
+    name: "list_supplements",
+    description: "Supplements over a window, plus a per-supplement count of how many days each was actually taken — which is the number people want when they ask whether they are being consistent.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { ...WINDOW_PROPS, ...PAGE_PROPS, name: { type: "string", description: "Filter to one supplement, matched loosely." } },
+    },
+  },
+  {
+    name: "get_day",
+    description: "Everything logged on one day in a single call: meals, water, workouts with sets, supplements and measurements. Use this instead of calling list_meals and list_workouts separately — it costs the user one request instead of three. Pass `include` to narrow it.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+        include: {
+          type: "array",
+          items: { type: "string", enum: ["nutrition", "training", "supplements", "body"] },
+          description: "Sections to return. Omit for all of them.",
+        },
+      },
+    },
   },
   {
     name: "delete_workout",
@@ -205,6 +295,7 @@ export const TOOL_FIELD_CONTRACT: Record<string, readonly string[]> = {
   log_workout: WORKOUT_FIELDS,
   log_weight: BODY_METRIC_FIELDS,
   set_goals: GOAL_FIELDS,
+  log_supplement: SUPPLEMENT_FIELDS,
 };
 export const SET_FIELD_CONTRACT = SET_FIELDS;
 
@@ -315,6 +406,10 @@ export async function callLoggingTool(
     case "log_weight": return fromResult(await logBodyMetric(db, user, args));
     case "get_weight_trend": return fromResult(await weightTrend(db, user, args));
     case "get_daily_summary": return fromResult(await dailySummary(db, user, args));
+    case "get_day": return fromResult(await getDay(db, user, args));
+    case "get_exercise_history": return fromResult(await exerciseHistory(db, user, args));
+    case "log_supplement": return fromResult(await logSupplement(db, user, args));
+    case "list_supplements": return fromResult(await listSupplements(db, user, args));
 
     case "export_my_data":
       return { ok: true, payload: await exportEverything(db, user) };
@@ -449,6 +544,30 @@ export function registerPersonalRoutes(app: {
     const u = await requireUser(c);
     if (u instanceof Response) return u;
     return send(c, await setGoals(c.env.DB!, u, await body(c)));
+  });
+
+  app.post("/v1/supplements", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await logSupplement(c.env.DB!, u, await body(c)));
+  });
+
+  app.get("/v1/supplements", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await listSupplements(c.env.DB!, u, c.req.query()));
+  });
+
+  app.get("/v1/day", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await getDay(c.env.DB!, u, c.req.query()));
+  });
+
+  app.get("/v1/exercise-history", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await exerciseHistory(c.env.DB!, u, c.req.query()));
   });
 
   app.get("/v1/summary", async (c) => {

@@ -177,6 +177,16 @@ export const SET_ALIASES: AliasMap = {
 export const BODY_METRIC_FIELDS = ["metric_type", "value", "unit", "date", "notes"] as const;
 export const BODY_METRIC_ALIASES: AliasMap = { type: "metric_type", weight: "value" };
 
+export const SUPPLEMENT_FIELDS = ["date", "name", "dose", "unit", "notes"] as const;
+export const SUPPLEMENT_ALIASES: AliasMap = {
+  // Pure renames only, same rule as everywhere else: `amount` and `dosage` are other words for
+  // the same number, so they are rewritten. Nothing here changes a unit.
+  supplement: "name",
+  amount: "dose",
+  dosage: "dose",
+  units: "unit",
+};
+
 export const GOAL_FIELDS = ["calories", "protein", "carbs", "fats", "water_ml"] as const;
 export const GOAL_ALIASES: AliasMap = {
   kcal: "calories",

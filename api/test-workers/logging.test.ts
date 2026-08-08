@@ -330,6 +330,7 @@ describe("deletion means deletion", () => {
     await callTool(app, user, "log_meal", { name: "Last meal", calories: 500 });
     await callTool(app, user, "log_workout", { sets: [{ exercise_name: "squat", reps: 5, weight: 100 }] });
     await callTool(app, user, "log_water", { amount_ml: 500 });
+    await callTool(app, user, "log_supplement", { name: "creatine", dose: 5, unit: "g" });
     await callTool(app, user, "log_weight", { value: 80, unit: "kg" });
     await callTool(app, user, "set_goals", { calories: 2000 });
 
@@ -340,7 +341,7 @@ describe("deletion means deletion", () => {
     const out = await callTool(app, user, "delete_my_account", { confirm: true });
     expect(out.isError).toBe(false);
 
-    for (const table of ["meals", "workouts", "workout_sets", "water_logs", "body_metrics", "goals", "tokens", "users"]) {
+    for (const table of ["meals", "workouts", "workout_sets", "water_logs", "supplements", "body_metrics", "goals", "tokens", "users"]) {
       const column = table === "users" ? "id" : "user_id";
       const left = await env.DB.prepare(`SELECT COUNT(*) AS n FROM ${table} WHERE ${column} = ?`)
         .bind(userId).first<{ n: number }>();
