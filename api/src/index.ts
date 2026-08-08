@@ -47,6 +47,7 @@ import {
 } from "./routes/personal.ts";
 import { identifyRequest } from "./lib/auth.ts";
 import { accountPage, accountAction, accountExport, accountLogout } from "./routes/account.ts";
+import { renderViewPage, handleViewAction } from "./routes/view.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
 import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
@@ -712,5 +713,11 @@ app.post("/account", (c) => accountAction(c));
 app.get("/account/export.json", (c) => accountExport(c, "json"));
 app.get("/account/export.csv", (c) => accountExport(c, "csv"));
 registerPersonalRoutes(app);
+
+// ---- shared view links ----
+// A bearer URL: no session, no header. Everything it can reach is scoped to the one account
+// that minted it, and the page itself is noindex + private, no-store.
+app.get("/v/:token", (c) => renderViewPage(c));
+app.post("/v/:token", (c) => handleViewAction(c));
 
 export default app;

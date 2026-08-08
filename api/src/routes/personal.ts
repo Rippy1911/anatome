@@ -22,6 +22,7 @@ import {
   logWorkout, setGoals, weightTrend, type LogResult,
 } from "../lib/logging.ts";
 import { deleteUserCompletely, setUserTimezone } from "../lib/db.ts";
+import { createViewLink, listViewLinks, revokeViewLinks } from "./view.ts";
 import {
   MEAL_FIELDS, WATER_FIELDS, WORKOUT_FIELDS, SET_FIELDS, BODY_METRIC_FIELDS, GOAL_FIELDS,
   SUPPLEMENT_FIELDS,
@@ -38,6 +39,7 @@ export const LOGGING_TOOL_NAMES = [
   "log_supplement", "list_supplements",
   "log_weight", "get_weight_trend",
   "get_daily_summary", "get_day", "get_exercise_history",
+  "create_view_link", "list_view_links", "revoke_view_link",
   "export_my_data", "delete_my_account",
 ] as const;
 
@@ -271,6 +273,33 @@ export const LOGGING_TOOLS = [
     inputSchema: { type: "object", properties: { date: { type: "string", description: "YYYY-MM-DD; omit for today" } } },
   },
   {
+    name: "create_view_link",
+    description: "Mint a URL that opens a rendered dashboard of this user's log — today against goals, calories and training volume over 14 days, body-weight trend, recent sessions and supplement adherence. Use it whenever someone asks to SEE their data, to show a coach, or to check something visually. The link expires (24h by default) and is read-only unless you pass can_edit. Always tell the user that anyone holding the URL can see the data.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        label: { type: "string", description: "What it is for, e.g. 'for my coach'. Shown in list_view_links and used to revoke it later." },
+        expires_in_hours: { type: "number", description: "1 to 720. Default 24." },
+        can_edit: { type: "boolean", description: "Allow deleting entries from the page. Default false — ask the user before setting it." },
+      },
+    },
+  },
+  {
+    name: "list_view_links",
+    description: "List the view links this user has minted, with expiry and view counts. Tokens are never returned — they exist only in the URL handed out at creation.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "revoke_view_link",
+    description: "Kill view links immediately. Pass a label to revoke just those, or nothing to revoke every active link. Use this the moment someone says they shared a link by mistake.",
+    annotations: { destructiveHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { label: { type: "string", description: "Only revoke links with this label. Omit to revoke all of them." } },
+    },
+  },
+  {
     name: "export_my_data",
     description: "Return everything Anatome stores for this user, as JSON. The user owns their data and can take it at any time.",
     annotations: { readOnlyHint: true },
@@ -410,6 +439,14 @@ export async function callLoggingTool(
     case "get_exercise_history": return fromResult(await exerciseHistory(db, user, args));
     case "log_supplement": return fromResult(await logSupplement(db, user, args));
     case "list_supplements": return fromResult(await listSupplements(db, user, args));
+
+    case "create_view_link": {
+      const made = await createViewLink(db, user, args, base);
+      if (!made.ok) return { ok: false, text: made.message, payload: { error: "invalid_value", field: made.field, retryable: false } };
+      return { ok: true, payload: made.data };
+    }
+    case "list_view_links": return { ok: true, payload: await listViewLinks(db, user) };
+    case "revoke_view_link": return { ok: true, payload: await revokeViewLinks(db, user, args) };
 
     case "export_my_data":
       return { ok: true, payload: await exportEverything(db, user) };
