@@ -5,7 +5,10 @@
 // who got wedged.
 
 import type { Context } from "hono";
-import { resetDayBucket, type Env } from "../lib/rateLimit.ts";
+import { resetDayBucket } from "../lib/rateLimit.ts";
+// DbEnv, not the rate limiter's Env: resolving an email to an account needs the (optional) D1
+// binding, and `hasDb` is how every other route asks whether this deployment has accounts at all.
+import { hasDb, type DbEnv as Env } from "../lib/db.ts";
 
 function unauthorized(): Response {
   // 404 (not 401) so the admin surface is not trivially enumerable — same pattern as /selfTest.
@@ -48,14 +51,35 @@ export function getAdminStats(c: Context<{ Bindings: Env }>): Response {
   });
 }
 
-/** Zero today's fair-use counter for one IP or one MCP session. */
+/**
+ * Zero today's fair-use counter for one account, MCP session, or IP.
+ *
+ * `email` is the useful one and the reason this takes four parameters instead of one: a person
+ * asking for help quotes their email address, never their internal id. Making the operator run a
+ * D1 query to translate it first is how a support tool goes unused.
+ */
 export async function postAdminRateLimitReset(c: Context<{ Bindings: Env }>): Promise<Response> {
   if (!requireAdmin(c)) return unauthorized();
   let body: Record<string, unknown> = {};
   try { body = await c.req.json(); } catch { /* empty body ok if query used */ }
-  const ip = typeof body.ip === "string" ? body.ip : c.req.query("ip") || undefined;
-  const session = typeof body.session === "string" ? body.session : c.req.query("session") || undefined;
-  const result = await resetDayBucket(c.env, { ip, session });
+  const arg = (name: string): string | undefined => {
+    const fromBody = body[name];
+    return typeof fromBody === "string" ? fromBody : c.req.query(name) || undefined;
+  };
+
+  let user = arg("user");
+  const email = (arg("email") || "").trim().toLowerCase();
+  if (email) {
+    if (user) return c.json({ ok: false, error: "pass email or user, not both" }, 400);
+    if (!hasDb(c.env)) return c.json({ ok: false, error: "no database bound — reset by user id, session or ip" }, 400);
+    const row = await c.env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(email).first<{ id: string }>();
+    // Deliberately not "unknown email": this endpoint is already admin-gated, and an operator who
+    // typed a typo needs to know that, not to be told the reset silently did nothing.
+    if (!row) return c.json({ ok: false, error: "no account with that email" }, 404);
+    user = row.id;
+  }
+
+  const result = await resetDayBucket(c.env, { user, session: arg("session"), ip: arg("ip") });
   if (!result.ok) return c.json({ ok: false, error: result.error }, 400);
   return c.json({ ok: true, reset: true, scope: result.scope, key: result.key });
 }

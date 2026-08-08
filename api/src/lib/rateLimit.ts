@@ -280,14 +280,18 @@ async function consumeKv(
  */
 export async function resetDayBucket(
   env: Env,
-  opts: { ip?: string; session?: string },
+  opts: { user?: string; session?: string; ip?: string },
 ): Promise<{ ok: true; key: string; scope: RateScope } | { ok: false; error: string }> {
-  const ip = (opts.ip || "").trim();
-  const session = (opts.session || "").trim();
-  if (!ip && !session) return { ok: false, error: "ip or session required" };
-  if (ip && session) return { ok: false, error: "pass ip or session, not both" };
-  const scope: RateScope = session ? "mcp_session" : "ip";
-  const key = await rateLimitBucketKey(scope, session || ip);
+  // The same three identities `gateMetered` charges, in the same order. It used to take only ip
+  // and session — which left the *account* bucket, the one almost every real caller lands in once
+  // signed in, with no operator lever at all. Someone reporting "it says I am out and I am not"
+  // is by definition signed in.
+  const given = ([["user", opts.user], ["mcp_session", opts.session], ["ip", opts.ip]] as const)
+    .map(([scope, value]) => [scope, (value || "").trim()] as const)
+    .filter(([, value]) => value !== "");
+  if (given.length !== 1) return { ok: false, error: "pass exactly one of user, session, ip" };
+  const [scope, identity] = given[0];
+  const key = await rateLimitBucketKey(scope, identity);
   try {
     await env.RATE_LIMIT_KV?.delete(key);
   } catch { /* optional binding in tests */ }

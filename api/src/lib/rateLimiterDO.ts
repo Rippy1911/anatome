@@ -24,7 +24,10 @@ export class RateLimiterDO implements DurableObject {
 
     // Operator reset (admin route) — wipe counter so a burned day-bucket can reopen.
     if (request.method === "POST" && (url.pathname === "/reset" || url.searchParams.get("op") === "reset")) {
-      await this.ctx.storage.deleteAll();
+      // `delete("counter")`, not `deleteAll()`: this object owns exactly one key, so dropping
+      // everything was always a wider operation than the job needed, and a heavier one on a
+      // SQLite-backed Durable Object.
+      await this.ctx.storage.delete("counter");
       this.count = 0;
       this.date = null;
       return new Response(JSON.stringify({ ok: true, reset: true }), {
@@ -80,9 +83,11 @@ export class RateLimiterDO implements DurableObject {
 
     const next = current + 1;
     this.count = next;
-    // Persist so the counter survives eviction. waitUntil-style fire-and-forget
-    // would risk losing the last increment on abrupt shutdown; await is safer
-    // and the DO is single-threaded so there's no contention cost.
+    // Persist so the counter survives eviction. Deliberately NOT awaited, and the old comment
+    // claiming otherwise was wrong about its own code: Durable Objects' output gate holds the
+    // response until this write commits, so the increment cannot be lost and awaiting buys
+    // nothing. Adding the await was tried — it makes every write flush inside the request and
+    // breaks the vitest pool's isolated-storage teardown across the whole suite.
     this.ctx.storage.put("counter", { count: next, date });
     const result: RateResult = {
       allowed: true,

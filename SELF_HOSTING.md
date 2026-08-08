@@ -204,6 +204,27 @@ layer if you need one.
 Once a user signs in, fair use is charged to **their account** instead — a durable identity that
 does not depend on a session id or an egress address.
 
+### Giving someone their day back
+
+Sooner or later a user says the connector claims they are out of requests when they are sure they
+are not. `POST /admin/rate-limit/reset` zeroes today's counter for exactly one identity. Address
+them the way they addressed you — by email:
+
+```bash
+curl -X POST https://api.your-domain.example/admin/rate-limit/reset \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H 'content-type: application/json' \
+  -d '{"email":"them@example.com"}'
+# → {"ok":true,"reset":true,"scope":"user","key":"user:…:2026-08-08"}
+```
+
+`user` (the internal id), `session` (an `Mcp-Session-Id`) and `ip` also work — pass **exactly
+one**. Check `scope` in the reply: it names the bucket that was actually cleared, so a `user` you
+expected and an `ip` you got means you cleared a bucket nobody was in.
+
+Signed-out callers are counted per session or per IP, and those buckets are shared, so resetting
+one hands the day to everyone behind it. Resetting by email does not have that problem.
+
 ## What is deliberately not here
 
 - **No AI.** Anatome renders, searches, resolves, stores and adds up. It never calls a model —
