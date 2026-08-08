@@ -1,0 +1,12 @@
+-- How much history a share link shows.
+--
+-- The page was hard-wired to 14 days while llms.txt advertised the exact opposite use case —
+-- "show my coach my last month" — so an assistant could ask for a month, be told it worked, and
+-- hand over a fortnight. `create_view_link` did not even accept a window argument; one passed was
+-- ignored in silence, which is the same class of failure as a dropped field on a write.
+--
+-- Stored on the link rather than read from the URL: the window is part of what the owner decided
+-- to share. A recipient editing ?days= in the address bar must not widen their own view.
+--
+-- 14 stays the default, so every link minted before this keeps rendering exactly as it did.
+ALTER TABLE view_links ADD COLUMN window_days INTEGER NOT NULL DEFAULT 14;

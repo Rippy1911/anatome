@@ -293,11 +293,12 @@ export const LOGGING_TOOLS = [
   },
   {
     name: "create_view_link",
-    description: "Mint a URL that opens a rendered dashboard of this user's log — today against goals, calories and training volume over 14 days, body-weight trend, recent sessions and supplement adherence. Use it whenever someone asks to SEE their data, to show a coach, or to check something visually. The link expires (24h by default) and is read-only unless you pass can_edit. Always tell the user that anyone holding the URL can see the data.",
+    description: "Mint a URL that opens a rendered dashboard of this user's log — today against goals, calories and training volume over the chosen window, body-weight trend, recent sessions and supplement adherence. Use it whenever someone asks to SEE their data, to show a coach, or to check something visually. Pass `days` to match what they asked for: \"show my coach my last month\" is days: 30. The link expires (24h by default) and is read-only unless you pass can_edit. Always tell the user that anyone holding the URL can see the data.",
     inputSchema: {
       type: "object",
       properties: {
         label: { type: "string", description: "What it is for, e.g. 'for my coach'. Shown in list_view_links and used to revoke it later." },
+        days: { type: "number", description: "How much history the page shows, 1 to 365. Default 14. The window is fixed when the link is minted — whoever opens it cannot widen it." },
         expires_in_hours: { type: "number", description: "1 to 720. Default 24." },
         can_edit: { type: "boolean", description: "Allow deleting entries from the page. Default false — ask the user before setting it." },
       },

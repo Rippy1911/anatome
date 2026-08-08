@@ -19,6 +19,10 @@ type Ctx = Context<{ Bindings: DbEnv }>;
 
 const DEFAULT_TTL_HOURS = 24;
 const MAX_TTL_HOURS = 24 * 30;
+const DEFAULT_WINDOW_DAYS = 14;
+// 365, not unbounded: the page renders one bar per day, and a chart with a thousand of them is a
+// texture rather than a chart.
+const MAX_WINDOW_DAYS = 365;
 
 export interface ViewLinkRow {
   token_hash: string;
@@ -28,6 +32,8 @@ export interface ViewLinkRow {
   expires_at: number;
   revoked_at: number | null;
   view_count: number;
+  /** How much history this link shows. Links minted before migration 0006 read 14 by default. */
+  window_days: number;
 }
 
 function esc(s: unknown): string {
@@ -49,6 +55,11 @@ export async function createViewLink(
     ? Math.min(Math.max(1, Math.round(Number(args.expires_in_hours))), MAX_TTL_HOURS)
     : DEFAULT_TTL_HOURS;
   const canEdit = args.can_edit === true;
+  // "Show my coach my last month" is the use case this whole feature exists for, and it is the
+  // example in llms.txt — but the page was fixed at 14 days and `days` was ignored without a word.
+  const days = Number.isFinite(Number(args.days))
+    ? Math.min(Math.max(1, Math.round(Number(args.days))), MAX_WINDOW_DAYS)
+    : DEFAULT_WINDOW_DAYS;
 
   // 256 bits of entropy in the path. This is the only thing standing between a URL and someone's
   // food log, so it is not a short code.
@@ -56,11 +67,11 @@ export async function createViewLink(
   const expiresAt = nowUnix() + hours * 3600;
 
   await db.prepare(
-    `INSERT INTO view_links (token_hash, user_id, label, can_edit, expires_at, created_at)
-     VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO view_links (token_hash, user_id, label, can_edit, expires_at, created_at, window_days)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
   ).bind(
     await sha256Hex(token), user.id, String(args.label ?? "").slice(0, 80),
-    canEdit ? 1 : 0, expiresAt, nowUnix(),
+    canEdit ? 1 : 0, expiresAt, nowUnix(), days,
   ).run();
 
   return {
@@ -70,6 +81,9 @@ export async function createViewLink(
       expires_at: new Date(expiresAt * 1000).toISOString(),
       expires_in_hours: hours,
       can_edit: canEdit,
+      // Echoed so the assistant can say "here is your last 30 days" and be right, or notice that
+      // it asked for 400 and got 365.
+      days,
       label: String(args.label ?? ""),
       warning: "Anyone with this URL can see this data until it expires. Share it deliberately; revoke_view_link kills it early.",
     },
@@ -238,9 +252,14 @@ export async function renderViewPage(c: Ctx): Promise<Response> {
   if (ctx) ctx.waitUntil(counted); else void counted;
 
   const today = localDate(user.timezone);
-  const window14 = recentLocalDates(user.timezone, 14);
-  const window90 = recentLocalDates(user.timezone, 90);
-  const from14 = window14[0], from90 = window90[0];
+  // The window the owner chose when they minted the link, not one the reader can change.
+  const windowDays = Math.min(Math.max(1, Number(link.window_days) || DEFAULT_WINDOW_DAYS), MAX_WINDOW_DAYS);
+  const window14 = recentLocalDates(user.timezone, windowDays);
+  const from14 = window14[0];
+  // Body weight always gets the longer view: a fortnight of it is noise, and the question people
+  // ask a weight chart ("is this going anywhere?") needs more than the trend of the window.
+  const from90 = recentLocalDates(user.timezone, Math.max(windowDays, 90))[0];
+  const windowLabel = windowDays === 1 ? "Today" : `Last ${windowDays} days`;
 
   const [goalsRow, dailyCals, weights, volumes, meals, workouts, supplements] = await Promise.all([
     c.env.DB.prepare("SELECT calories, protein, carbs, fats, water_ml FROM goals WHERE user_id = ?")
@@ -327,7 +346,7 @@ export async function renderViewPage(c: Ctx): Promise<Response> {
   ${statTile({ label: "Protein", value: todayTotals.protein, target: goalsRow?.protein ?? null, unit: "g" })}
 </section>
 
-<h2>Last 14 days</h2>
+<h2>${esc(windowLabel)}</h2>
 <section>
   ${barChart({ title: "Calories per day", points: caloriePoints, target: goalsRow?.calories ?? null, unit: " kcal", series: 1 })}
   ${barChart({ title: "Training volume per day (kg × reps)", points: volumePoints, series: 3 })}
@@ -335,7 +354,7 @@ export async function renderViewPage(c: Ctx): Promise<Response> {
 
 <h2>Body weight</h2>
 <section>
-  ${lineChart({ title: `Body weight, last 90 days${weightUnit ? ` (${weightUnit})` : ""}`, points: weightPoints, unit: weightUnit, series: 2 })}
+  ${lineChart({ title: `Body weight, last ${Math.max(windowDays, 90)} days${weightUnit ? ` (${weightUnit})` : ""}`, points: weightPoints, unit: weightUnit, series: 2 })}
 </section>
 
 <h2>Today's meals</h2>
@@ -370,11 +389,11 @@ export async function renderViewPage(c: Ctx): Promise<Response> {
     }).join("")}</tbody></table>` : `<p class="sub">No workouts logged yet.</p>`}
 </section>
 
-${supplements.results.length ? `<h2>Supplements, last 14 days</h2>
+${supplements.results.length ? `<h2>Supplements, ${esc(windowLabel.toLowerCase())}</h2>
 <section class="wrap">
   <table>
     <thead><tr><th>Supplement</th><th class="num">Days taken</th></tr></thead>
-    <tbody>${supplements.results.map((s) => `<tr><td>${esc(s.name)}</td><td class="num">${s.days} / 14</td></tr>`).join("")}</tbody>
+    <tbody>${supplements.results.map((s) => `<tr><td>${esc(s.name)}</td><td class="num">${s.days} / ${windowDays}</td></tr>`).join("")}</tbody>
   </table>
 </section>` : ""}
 

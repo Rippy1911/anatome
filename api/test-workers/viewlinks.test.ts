@@ -91,6 +91,60 @@ describe("the page renders the owner's data", () => {
   });
 });
 
+// "Show my coach my last month" is the example in llms.txt and the reason this feature exists.
+// The page was fixed at 14 days and `days` was ignored in silence, so an assistant could ask for
+// a month, be told it worked, and hand over a fortnight.
+describe("the window the owner asked for", () => {
+  it("renders the requested number of days", async () => {
+    const res = await app.request(await mint(owner, { days: 30 }), {}, env);
+    const html = await res.text();
+    expect(html).toContain("Last 30 days");
+    expect(html).not.toContain("Last 14 days");
+  });
+
+  it("defaults to 14 when nothing is asked for", async () => {
+    const res = await app.request(await mint(owner), {}, env);
+    expect(await res.text()).toContain("Last 14 days");
+  });
+
+  it("reports back the window it actually used", async () => {
+    const out = await callTool(app, owner, "create_view_link", { days: 900 });
+    // Clamped, and said so. An assistant that asked for 900 and was told "ok" would describe the
+    // link to the user as something it is not.
+    expect((out.data as { days: number }).days).toBe(365);
+  });
+
+  it("is fixed at mint time, not read from the URL", async () => {
+    const url = await mint(owner, { days: 7 });
+    const res = await app.request(`${url}?days=365`, {}, env);
+    const html = await res.text();
+    // The owner shared a week. A recipient editing the address bar must not get a year.
+    expect(html).toContain("Last 7 days");
+    expect(html).not.toContain("Last 365 days");
+  });
+
+  it("counts supplement adherence against that window", async () => {
+    const res = await app.request(await mint(owner, { days: 30 }), {}, env);
+    expect(await res.text()).toContain("/ 30");
+  });
+});
+
+describe("a log with nothing in it", () => {
+  it("says so instead of drawing an empty chart", async () => {
+    // The series is padded with a zero for every day in the window, so `points.length` is never
+    // zero and the empty-state guard never fired: a coach opening a link for someone who had not
+    // logged yet saw axes, a goal line and no bars, which reads as a broken page.
+    const newcomer = await signUp(app, "newcomer@example.com");
+    const res = await app.request(await mint(newcomer), {}, env);
+    const html = await res.text();
+    // All three: calories and training volume (both padded with zeros) and body weight (genuinely
+    // no rows). Every chart on the page has to say it, or the ones that stay blank look broken.
+    expect(html.match(/Nothing logged in this window yet\./g)?.length).toBe(3);
+    // And no plotted bar. The bars are the only rounded rects the chart emits.
+    expect(html).not.toMatch(/<rect[^>]*rx="4"[^>]*fill="var\(--series/);
+  });
+});
+
 describe("what a link must not do", () => {
   it("cannot be guessed", async () => {
     // Note "../../account" is deliberately absent: the URL parser normalises it away before

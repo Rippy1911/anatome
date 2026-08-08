@@ -68,7 +68,13 @@ export function barChart(opts: {
   series?: 1 | 2 | 3;
 }): string {
   const { title, points, target, targetLabel = "goal", unit = "" } = opts;
-  if (!points.length) return emptyState(title, "Nothing logged in this window yet.");
+  // All-zero counts as empty. The caller pads the series with a zero for every day in the window,
+  // so `points.length` is never 0 and this guard never fired — a coach opening a link for someone
+  // who had not logged yet got a full set of axes, a goal line and no bars, which reads as a
+  // broken chart rather than as an empty log.
+  if (!points.length || points.every((p) => !p.value)) {
+    return emptyState(title, "Nothing logged in this window yet.");
+  }
 
   const w = 720, h = 220;
   const plotW = w - PAD.left - PAD.right;
