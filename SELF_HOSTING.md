@@ -115,11 +115,23 @@ wrangler secret put GITHUB_TOKEN     # /ciStatus badge; degrades to a static poi
 cd ..            # repo root
 npm install
 npm run build
-npx wrangler deploy --env production
+npx wrangler deploy
 ```
 
-Edit the root `wrangler.toml` `routes` first, the same way you did for the API. To point the
-site at your own API rather than ours, build with:
+The root `wrangler.toml` ships with **no `routes`**, so this uploads the Worker without claiming a
+hostname. That is a deliberate default for our own CI, whose deploy token cannot edit zone routes —
+see the comment at the top of that file. On your own zone you have both permissions, so add the
+routes there and wrangler will bind the hostname for you on every deploy:
+
+```toml
+workers_dev = false
+routes = [{ pattern = "example.com/*", zone_name = "example.com" }]
+```
+
+Either way the cutover is reversible: a Workers route wins over whatever the zone pointed at
+before, and deleting the route restores it immediately, with no DNS change and no gap.
+
+To point the site at your own API rather than ours, build with:
 
 ```bash
 VITE_PUBLIC_API=https://api.your-domain.example npm run build

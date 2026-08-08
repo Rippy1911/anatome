@@ -154,4 +154,16 @@ jobs:
           # Pinned: if the repo's own wrangler is ever unusable, this action's default
           # fallback is wrangler 3, which silently deploys a different thing instead of failing.
           wranglerVersion: "4"
-          command: deploy --env production
+          command: deploy
+      # Uploading the Worker and attaching a hostname to it need different Cloudflare permissions,
+      # and this token only has the first (see wrangler.toml). So the route is bound by hand, once,
+      # and this step reports whether that has happened yet rather than failing the build over it —
+      # a job that is red on every push is a job everybody learns to scroll past.
+      - name: Report cutover status
+        run: |
+          origin=$(curl -sS -m 15 -I https://anatome.dev/ | tr -d '\r' | grep -i '^x-render-origin-server:' || true)
+          if [ -n "$origin" ]; then
+            echo "::warning::anatome.dev is still on the old origin ($origin). The Worker is deployed and current, but nothing routes to it. One-time operator action: Cloudflare dashboard -> Workers & Pages -> anatome-site -> Settings -> Domains & Routes -> add anatome.dev/* and www.anatome.dev/*."
+          else
+            echo "anatome.dev is served by the Worker: cutover complete."
+          fi

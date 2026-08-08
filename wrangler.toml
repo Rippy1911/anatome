@@ -8,26 +8,33 @@
 # Deploy:
 #   npm install && npm run build && npx wrangler deploy
 #
-# Cutting over from another origin is adding the route below: a Workers route wins over the
-# zone's origin, and removing the route puts the old origin straight back. No DNS change, no gap.
+# **Hostnames are managed on the zone, not from this file, and that is deliberate.** Uploading a
+# Worker needs an account-scoped token; attaching a hostname to it needs a zone-scoped one. Ours
+# has the first and not the second, so declaring routes here made every push to main fail on a
+# permission it will never have — a red build that says nothing about the code.
+#
+# Cloudflare's rule: a config with no `route`/`routes` key leaves existing routes untouched. So CI
+# ships the assets on every push, the route is bound once by hand, and neither step can break the
+# other. Binding it: dashboard → Workers & Pages → anatome-site → Settings → Domains & Routes.
+#
+# Cutting over from another origin is that one route: a Workers route wins over the zone's origin,
+# and deleting the route puts the old origin straight back. No DNS change, no gap.
+#
+# **Self-hosting on your own zone?** Your token owns both halves, so let wrangler do it — add:
+#
+#   workers_dev = false
+#   routes = [{ pattern = "example.com/*", zone_name = "example.com" }]
 
 name = "anatome-site"
 compatibility_date = "2026-08-01"
+
+# No workers.dev subdomain. The site would be reachable at two hostnames serving identical pages,
+# and a search engine that indexes both has to guess which is canonical — a needless handicap for
+# a project whose whole distribution problem is being found.
+workers_dev = false
 
 [assets]
 directory = "dist"
 # Client-side routing: unknown paths serve index.html so /docs, /playground and /guides/:slug
 # resolve on a hard refresh instead of 404ing.
-not_found_handling = "single-page-application"
-
-[env.production]
-name = "anatome-site"
-workers_dev = false
-routes = [
-  { pattern = "anatome.dev/*", zone_name = "anatome.dev" },
-  { pattern = "www.anatome.dev/*", zone_name = "anatome.dev" },
-]
-
-[env.production.assets]
-directory = "dist"
 not_found_handling = "single-page-application"
