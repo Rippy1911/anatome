@@ -94,14 +94,27 @@ export function barChart(opts: {
       + `<text x="${PAD.left - 6}" y="${gy + 4}" class="tick" text-anchor="end">${Math.round(top * f)}</text>`;
   }).join("");
 
-  // Label every bar when they fit, otherwise first/last/max only — never a number on every point.
+  // Which bars get an x-axis label. Decided up front rather than per bar, because the last and
+  // max-value labels used to be added unconditionally: on a 30-day chart the peak sat one slot
+  // from a regular tick and the two rendered on top of each other — "19 Ju20 Jul".
+  //
+  // The spacing rule is in pixels, not indices. A date label is roughly 48px wide, and how many
+  // bars that spans depends entirely on the window: at 14 days a slot is ~48px and neighbours are
+  // fine, at 365 it is ~2px and they are not.
   const labelEvery = points.length <= 10 ? 1 : Math.ceil(points.length / 7);
   const maxIndex = points.reduce((bi, p, i) => (p.value > points[bi].value ? i : bi), 0);
+  const labelled = new Set<number>();
+  for (let i = 0; i < points.length; i += labelEvery) labelled.add(i);
+  const minGap = Math.max(1, Math.ceil(48 / slot));
+  const fits = (i: number) => !labelled.has(i) && ![...labelled].some((j) => Math.abs(j - i) < minGap);
+  // Last before max: the end of the axis tells you the range, the peak is only a nicety.
+  if (fits(points.length - 1)) labelled.add(points.length - 1);
+  if (fits(maxIndex)) labelled.add(maxIndex);
 
   const bars = points.map((p, i) => {
     const x = PAD.left + i * slot + (slot - barW) / 2;
     const barH = Math.max(p.value > 0 ? 2 : 0, PAD.top + plotH - y(p.value));
-    const showLabel = i % labelEvery === 0 || i === maxIndex || i === points.length - 1;
+    const showLabel = labelled.has(i);
     return `<g>
       <rect x="${x.toFixed(1)}" y="${(PAD.top + plotH - barH).toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" rx="4" fill="${seriesVar}"><title>${esc(p.title)}</title></rect>
       ${showLabel ? `<text x="${(x + barW / 2).toFixed(1)}" y="${h - 10}" class="tick" text-anchor="middle">${esc(p.label)}</text>` : ""}
