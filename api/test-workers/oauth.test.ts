@@ -6,7 +6,7 @@
 import { env } from "cloudflare:test";
 import { beforeAll, describe, it, expect } from "vitest";
 import app from "../src/index.ts";
-import { applySchema, challengeFor, signUp } from "./helpers.ts";
+import { applySchema, callTool, challengeFor, signUp } from "./helpers.ts";
 import { PBKDF2_ITERATIONS, PBKDF2_MAX_ITERATIONS, hashPassword, newSalt } from "../src/lib/auth.ts";
 
 const REDIRECT = "https://claude.ai/api/mcp/auth_callback";
@@ -283,5 +283,71 @@ describe("password storage", () => {
     const hit = await env.DB.prepare("SELECT COUNT(*) AS n FROM tokens WHERE token_hash = ?")
       .bind(session.accessToken).first<{ n: number }>();
     expect(hit?.n).toBe(0);
+  });
+});
+
+describe("personal API tokens", () => {
+  // OAuth covers a client that can open a browser. It does not cover a shell script, a cron job
+  // or moving a year of logs somewhere else — and those should not require implementing an
+  // OAuth client.
+  it("mints a token that actually works as a bearer", async () => {
+    const session = await signUp(app, "tokens@example.com");
+    const minted = await callTool(app, session, "create_api_token", { label: "my sync script" });
+    expect(minted.isError).toBe(false);
+    const token = (minted.data as { token: string }).token;
+    expect(token).toMatch(/^ana_a_/);
+
+    const res = await app.request("https://api.anatome.dev/v1/profile", {
+      headers: { authorization: `Bearer ${token}` },
+    }, env);
+    expect(res.status).toBe(200);
+    expect((await res.json() as { email: string }).email).toBe("tokens@example.com");
+  });
+
+  it("requires a label, because an unlabelled token cannot be revoked later", async () => {
+    const session = await signUp(app, "unlabelled@example.com");
+    const out = await callTool(app, session, "create_api_token", {});
+    expect(out.isError).toBe(true);
+    expect(out.text).toMatch(/label/i);
+  });
+
+  it("stores only the hash, like every other token", async () => {
+    const session = await signUp(app, "tokenhash2@example.com");
+    const minted = await callTool(app, session, "create_api_token", { label: "hashed" });
+    const token = (minted.data as { token: string }).token;
+    const hit = await env.DB.prepare("SELECT COUNT(*) AS n FROM tokens WHERE token_hash = ?")
+      .bind(token).first<{ n: number }>();
+    expect(hit?.n).toBe(0);
+  });
+
+  it("revokes by label and the token stops working immediately", async () => {
+    const session = await signUp(app, "revoketoken@example.com");
+    const minted = await callTool(app, session, "create_api_token", { label: "throwaway" });
+    const token = (minted.data as { token: string }).token;
+
+    const revoked = await callTool(app, session, "revoke_api_token", { label: "throwaway" });
+    expect((revoked.data as { revoked: number }).revoked).toBe(1);
+
+    const res = await app.request("https://api.anatome.dev/v1/profile", {
+      headers: { authorization: `Bearer ${token}` },
+    }, env);
+    expect(res.status).toBe(401);
+  });
+
+  it("lists tokens by label without ever showing the value again", async () => {
+    const session = await signUp(app, "listtokens@example.com");
+    const minted = await callTool(app, session, "create_api_token", { label: "shortcut" });
+    const token = (minted.data as { token: string }).token;
+
+    const listed = await callTool(app, session, "list_api_tokens", {});
+    const body = JSON.stringify(listed.data);
+    expect(body).toContain("shortcut");
+    expect(body).not.toContain(token);
+  });
+
+  it("warns the caller that the token is password-equivalent", async () => {
+    const session = await signUp(app, "warned@example.com");
+    const out = await callTool(app, session, "create_api_token", { label: "warned" });
+    expect((out.data as { warning: string }).warning).toMatch(/like a password/i);
   });
 });

@@ -131,14 +131,64 @@ export async function issueToken(
   clientId: string | null,
   ttlSeconds: number,
   scope = "",
+  label = "",
 ): Promise<IssuedToken> {
   const token = `ana_${kind[0]}_${newId()}${newId()}`;
   const expiresAt = nowUnix() + ttlSeconds;
   await db.prepare(
-    `INSERT INTO tokens (token_hash, kind, user_id, client_id, scope, expires_at, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-  ).bind(await sha256Hex(token), kind, userId, clientId, scope, expiresAt, nowUnix()).run();
+    `INSERT INTO tokens (token_hash, kind, user_id, client_id, scope, expires_at, created_at, label)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+  ).bind(await sha256Hex(token), kind, userId, clientId, scope, expiresAt, nowUnix(), label).run();
   return { token, expiresAt };
+}
+
+/** A year, for a token a person pastes into a script rather than a browser refreshes. */
+export const PERSONAL_TOKEN_TTL = 60 * 60 * 24 * 365;
+
+/**
+ * Mint a long-lived personal token.
+ *
+ * Same row, same format, same revocation path as an OAuth-issued token — deliberately not a
+ * second credential type. The only differences are the lifetime and a label, because a token
+ * you paste into a cron job needs to be findable in a list a year later.
+ */
+export async function issuePersonalToken(
+  db: D1Database,
+  userId: string,
+  label: string,
+  ttlSeconds = PERSONAL_TOKEN_TTL,
+): Promise<IssuedToken> {
+  return issueToken(db, "access", userId, null, ttlSeconds, "anatome.logging", label.slice(0, 60) || "personal token");
+}
+
+export interface TokenSummary {
+  label: string;
+  created_at: string;
+  expires_at: string;
+  active: boolean;
+}
+
+export async function listPersonalTokens(db: D1Database, userId: string): Promise<TokenSummary[]> {
+  const { results } = await db.prepare(
+    `SELECT label, created_at, expires_at, revoked_at FROM tokens
+      WHERE user_id = ? AND kind = 'access' AND label != '' ORDER BY created_at DESC LIMIT 50`,
+  ).bind(userId).all<{ label: string; created_at: number; expires_at: number; revoked_at: number | null }>();
+  const now = nowUnix();
+  return results.map((r) => ({
+    label: r.label,
+    created_at: new Date(r.created_at * 1000).toISOString(),
+    expires_at: new Date(r.expires_at * 1000).toISOString(),
+    active: !r.revoked_at && r.expires_at > now,
+  }));
+}
+
+/** Revoke by label, because the person asking pasted the token somewhere and no longer has it. */
+export async function revokePersonalTokens(db: D1Database, userId: string, label: string): Promise<number> {
+  const stmt = label
+    ? db.prepare("UPDATE tokens SET revoked_at = ? WHERE user_id = ? AND kind = 'access' AND label = ? AND revoked_at IS NULL").bind(nowUnix(), userId, label)
+    : db.prepare("UPDATE tokens SET revoked_at = ? WHERE user_id = ? AND kind = 'access' AND label != '' AND revoked_at IS NULL").bind(nowUnix(), userId);
+  const res = await stmt.run();
+  return res.meta.changes ?? 0;
 }
 
 export interface TokenRow {

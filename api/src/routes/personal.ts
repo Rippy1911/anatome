@@ -13,7 +13,9 @@
 
 import type { Context } from "hono";
 import { findUserById, hasDb, type DbEnv, type UserRow } from "../lib/db.ts";
-import { identifyRequest } from "../lib/auth.ts";
+import {
+  identifyRequest, issuePersonalToken, listPersonalTokens, revokePersonalTokens,
+} from "../lib/auth.ts";
 import { gateMetered } from "../lib/meter.ts";
 import { isValidTimezone } from "../lib/tz.ts";
 import {
@@ -40,6 +42,7 @@ export const LOGGING_TOOL_NAMES = [
   "log_weight", "get_weight_trend",
   "get_daily_summary", "get_day", "get_exercise_history",
   "create_view_link", "list_view_links", "revoke_view_link",
+  "create_api_token", "list_api_tokens", "revoke_api_token",
   "export_my_data", "delete_my_account",
 ] as const;
 
@@ -300,6 +303,30 @@ export const LOGGING_TOOLS = [
     },
   },
   {
+    name: "create_api_token",
+    description: "Mint a long-lived personal API token the user can paste into a script, a shortcut, a cron job, or another MCP client that cannot do the OAuth browser flow. Shown once and never again. Tell the user to store it somewhere safe and that it is equivalent to their password for this data.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        label: { type: "string", description: "What it is for, e.g. 'my sync script'. Needed to revoke it later." },
+        expires_in_days: { type: "number", description: "1 to 365. Default 365." },
+      },
+      required: ["label"],
+    },
+  },
+  {
+    name: "list_api_tokens",
+    description: "List personal API tokens by label, with expiry and whether they are still active. Token values are never shown again after minting.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "revoke_api_token",
+    description: "Revoke personal API tokens by label, or all of them if no label is given. Does not affect this connector's own sign-in.",
+    annotations: { destructiveHint: true },
+    inputSchema: { type: "object", properties: { label: { type: "string" } } },
+  },
+  {
     name: "export_my_data",
     description: "Return everything Anatome stores for this user, as JSON. The user owns their data and can take it at any time.",
     annotations: { readOnlyHint: true },
@@ -446,6 +473,29 @@ export async function callLoggingTool(
       return { ok: true, payload: made.data };
     }
     case "list_view_links": return { ok: true, payload: await listViewLinks(db, user) };
+
+    case "create_api_token": {
+      const label = String(args.label ?? "").trim();
+      if (!label) return { ok: false, text: "Give the token a label so it can be found and revoked later, e.g. 'my sync script'.", payload: { error: "missing_field", field: "label", retryable: false } };
+      const days = Number.isFinite(Number(args.expires_in_days))
+        ? Math.min(Math.max(1, Math.round(Number(args.expires_in_days))), 365) : 365;
+      const minted = await issuePersonalToken(db, user.id, label, days * 86400);
+      return {
+        ok: true,
+        payload: {
+          token: minted.token,
+          label,
+          expires_at: new Date(minted.expiresAt * 1000).toISOString(),
+          usage: `curl -H "Authorization: Bearer ${minted.token}" ${base}/v1/summary`,
+          warning: "Shown once. It grants full access to this account's log — treat it like a password, and revoke_api_token kills it.",
+        },
+      };
+    }
+    case "list_api_tokens": return { ok: true, payload: { tokens: await listPersonalTokens(db, user.id) } };
+    case "revoke_api_token": {
+      const revoked = await revokePersonalTokens(db, user.id, String(args.label ?? "").trim());
+      return { ok: true, payload: { revoked, scope: args.label ? `tokens labelled "${String(args.label)}"` : "every personal token" } };
+    }
     case "revoke_view_link": return { ok: true, payload: await revokeViewLinks(db, user, args) };
 
     case "export_my_data":
