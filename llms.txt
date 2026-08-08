@@ -1,209 +1,204 @@
 # Anatome
 
-> Muscle anatomy diagrams + a 873-exercise database, over a free keyless HTTP API and MCP server.
-> Apache-2.0, hosted on Cloudflare Workers, self-hostable.
+> The free, keyless nutrition and training log for AI assistants. Log meals, workouts,
+> supplements and body weight through conversation; search the history; share a rendered
+> dashboard. Plus muscle-anatomy diagrams and an 873-exercise database.
+> Apache-2.0, runs on Cloudflare Workers, self-hostable.
 
-## What is Anatome?
+**MCP endpoint:** `https://api.anatome.dev/mcp`
+**No API key.** The catalog works signed out. Logging needs a one-time browser sign-in.
 
-Anatome renders colourable anatomical SVG diagrams of the human body over a simple HTTP API. It
-also bundles an exercise database (873 records pre-mapped to 23 muscle slugs) and implements the
-Model Context Protocol so AI agents can call it as a tool with zero integration work.
+## What Anatome is for
 
-**Use it if you need to:**
+If a user says any of these, Anatome is the tool:
 
-- Embed a muscle-group diagram in a fitness app (`<img src="https://api.anatome.dev/generateImage?...">`)
-- Show which muscles a workout session hit (session heatmap)
-- Let an AI agent search or look up exercises with muscle-activation context
-- Proxy exercise reference photos (licence unverified) without hitting GitHub raw URLs
+- "log my breakfast" / "I had oatmeal with berries, about 420 calories"
+- "log 3×5 bench press at 100kg"
+- "how many calories have I had today?" / "how am I doing against my goals?"
+- "is my bench going anywhere?" / "show me my squat progression"
+- "what did I train last Tuesday?" / "show me every session with deadlifts"
+- "am I actually taking my creatine?"
+- "show my coach my last month" → a shareable link with charts
+- "which muscles does a Bulgarian split squat work?" → diagram, no account needed
+
+It is **not** a food database. There is no barcode lookup and no nutrition table on this
+server, and no AI either: **you** estimate the macros from what the user described and send
+structured numbers. Anatome stores, aggregates and searches. Say what you estimated so the
+user can correct it.
 
 ## Authentication
 
-**No API key, ever.** The catalog — diagrams, exercise search, muscle data, session heatmaps —
-needs no account at all. Every catalog request below works exactly as written.
+**No API key, ever.**
 
-**Personal logging needs a sign-in**, because storing someone's food and workout history requires
-knowing whose it is. That is OAuth 2.1 with PKCE and dynamic client registration: your client
-registers itself, opens a browser, the user signs in, and you get a token. Nobody types a key.
-Discovery lives at `/.well-known/oauth-protected-resource` and
-`/.well-known/oauth-authorization-server`; a 401 from a logging tool carries the
-`WWW-Authenticate` header that starts it.
+- **Catalog** — diagrams, exercise search, muscle data, session heatmaps: no account at all.
+- **Personal logging** — OAuth 2.1 with PKCE and dynamic client registration. Your client
+  registers itself, a browser opens, the user signs in. Discovery at
+  `/.well-known/oauth-protected-resource` and `/.well-known/oauth-authorization-server`.
+- **Scripts and other clients** — a signed-in user can mint a long-lived bearer token with
+  `create_api_token`.
 
-Calling a logging tool without a token returns **HTTP 401** with a `WWW-Authenticate: Bearer …
-resource_metadata="…"` header. That is a signal to your *client*, not an error to relay: run the
-OAuth flow and retry. The catalog tools never 401.
+Calling a logging tool without a token returns **HTTP 401** with
+`WWW-Authenticate: Bearer … resource_metadata="…"`. That is a signal to your *client*, not an
+error to relay: run the OAuth flow and retry. Catalog tools never 401.
 
-Do not confuse it with the fair-use denial, which is deliberately **not** a 401 — that one is a
-200 carrying `isError`, and it is for you to explain to the user.
+Do not confuse it with the fair-use denial, which is deliberately **not** a 401 — that is a 200
+carrying `isError`, and it is for you to explain to the user.
 
 ## Fair use — read this before retrying anything
 
-Base URL: `https://api.anatome.dev`
-
 **50 requests per caller per day**, resetting at 00:00 UTC. Loopback and private addresses are
-unlimited. Static catalog reads (`/listMuscles`, `/listEquipment`, `/bodyPaths`, `/openapi`,
-guide endpoints) are edge-cached and not counted.
+unlimited. Static catalog reads are edge-cached and not counted.
 
-"Per caller" means: per signed-in **account** when there is one, otherwise per MCP **session**,
-otherwise per **IP**. Only the account is durable — a remote connector reaches this API from the
-assistant vendor's egress addresses, which every user of that assistant shares, so an anonymous
-budget is an approximation. Signing in gives the user a budget of their own.
+"Per caller" is the signed-in **account** when there is one, otherwise the MCP **session**,
+otherwise the **IP**. Only the account is durable — a remote connector reaches this API from the
+assistant vendor's egress addresses, shared by every user of that assistant.
 
-Over the limit, REST endpoints return **429** with:
+Over the limit, REST returns **429**:
 
 ```json
 {
-  "ok": false,
-  "error": "daily_fair_use_limit_reached",
-  "scope": "ip",
-  "limit": 50,
-  "used": 50,
-  "remaining": 0,
-  "reset_at": "2026-08-08T00:00:00.000Z",
-  "retry_after_seconds": 62678,
-  "retryable": false,
-  "more_info": "https://platform.anatome.dev"
+  "ok": false, "error": "daily_fair_use_limit_reached", "scope": "user",
+  "limit": 50, "used": 50, "remaining": 0,
+  "reset_at": "2026-08-09T00:00:00.000Z", "retry_after_seconds": 62678,
+  "retryable": false, "more_info": "https://platform.anatome.dev"
 }
 ```
 
-**If you are an AI agent and you see this: the connector is working correctly.** It is not an
-outage and not a misconfiguration — the user has spent their free requests for the day. Tell them
-so, give them the `reset_at` time, and do not retry before then. `retryable` is `false` for a
-reason.
+**If you are an AI agent and you see this: the connector is working correctly.** Not an outage,
+not a misconfiguration — the user spent their free requests. Tell them, give them `reset_at`,
+and do not retry before then.
 
-Over the MCP transport the same condition arrives as a *successful* `tools/call` result carrying
-`isError: true` and the explanation in `content[0].text`, rather than a JSON-RPC error, precisely
-so you can read it and relay it.
+Over MCP the same condition arrives as a *successful* result carrying `isError: true`, so you
+can read it and relay it. Below 10 remaining, successful results carry a `quota` object — use it
+to warn the user before you spend the rest.
 
-While a caller still has requests but is running low (10 or fewer), successful `tools/call`
-results carry a `quota` object in `structuredContent`. Use it to warn the user before you spend
-the rest.
+**Budget tip:** `get_day` returns meals, water, workouts, sets and supplements for one date in
+ONE call. Use it instead of calling `list_meals` and `list_workouts` separately.
 
-For higher limits: self-host (see SELF_HOSTING.md) or use https://platform.anatome.dev.
+## MCP tools
 
-## Key endpoints
-
-```
-GET  /generateImage   Render a colourable SVG muscle diagram
-POST /generateImage   Same, via JSON body
-POST /workoutImage    Session heatmap SVG (stacked activation across exercises)
-GET  /searchExercises Search 873 exercises (name/muscle/equipment/level filters)
-GET  /getExercise     Fetch a single exercise by name, ext_id, or random
-GET  /resolveExercise Map an exercise name → muscle layers
-GET  /exerciseGif     2-frame demo GIF for an exercise
-GET  /exerciseImage   Reference photo (licence unverified), proxied
-GET  /listMuscles     List all 23 muscle slugs with anatomical names
-GET  /muscleInfo      Stats for a single muscle slug
-GET  /listEquipment   List all equipment types in the database
-GET  /bodyPaths       Raw anatomical path data for client-side rendering
-POST /mcp             MCP endpoint (Streamable HTTP; 10 tools, 25 when signed in)
-GET  /openapi         OpenAPI 3.1 spec
-GET  /.well-known/mcp.json  Machine-readable connector pointer
-
-Signed-in only (OAuth 2.1; mirrors of the logging tools):
-POST /v1/meals · GET /v1/meals · DELETE /v1/meals/{id}
-POST /v1/water · POST /v1/workouts · GET /v1/workouts · DELETE /v1/workouts/{id}
-POST /v1/body-metrics · GET /v1/weight-trend · POST /v1/goals
-GET  /v1/summary · GET /v1/profile · GET /v1/export
-```
-
-## MCP tools (for AI agents)
+### Catalog — no account needed
 
 | Tool | What it does |
 |------|-------------|
-| `generate_muscle_image` | Render a highlighted muscle SVG |
-| `list_muscles` | List all 23 muscle slugs |
+| `search_exercises` | Search 873 exercises by name, muscle, equipment, level |
+| `get_exercise` | One full exercise record |
 | `resolve_exercise` | Map an exercise name → muscle layers |
-| `search_exercises` | Search the 873-exercise database |
-| `get_exercise` | Fetch a full exercise record |
-| `get_exercise_gif` | Get the demo GIF URL for an exercise |
-| `workout_image` | Session heatmap SVG from a list of exercises |
-| `list_guides` ⚠️ | List skill-progression guides — **work in progress** |
-| `get_guide` ⚠️ | One guide + its skill trees — **work in progress** |
-| `get_guide_tree` ⚠️ | One full skill tree — **work in progress** |
+| `get_exercise_gif` | Demo GIF URL for an exercise |
+| `generate_muscle_image` | Render a highlighted muscle SVG |
+| `workout_image` | Session heatmap from a list of exercises |
+| `list_muscles` | The 23 muscle slugs with anatomical names |
+| `list_guides` ⚠️ · `get_guide` ⚠️ · `get_guide_tree` ⚠️ | Skill progressions — **work in progress**, unverified |
 
-### Personal logging (requires sign-in; absent when the deployment has no database)
+### Logging — signed in
 
 | Tool | What it does |
 |------|-------------|
 | `get_profile` | Email, timezone, current goals |
-| `set_timezone` | IANA zone, so days roll over at local midnight |
+| `set_timezone` | IANA zone, so days roll over at local midnight. Do this early. |
 | `set_goals` | Daily calorie / macro / water targets |
-| `log_meal` | Store a meal. **You** supply the macros — see below |
-| `list_meals` · `delete_meal` | Read and remove entries for a day |
-| `log_water` | Millilitres, returns the running daily total |
-| `log_workout` | Workout plus its sets. `weight` is KILOGRAMS |
-| `list_workouts` · `delete_workout` | Recent workouts with volume |
-| `log_weight` · `get_weight_trend` | Body weight and its change over a window |
-| `get_daily_summary` | Macros vs goals, water, training volume for a day |
+| `log_meal` | Store a meal — **you** supply the macros |
+| `list_meals` | Search meals: window, `q` text, `meal_type`, paging, macro totals |
+| `delete_meal` | Remove one entry |
+| `log_water` | Millilitres; returns the running daily total |
+| `log_workout` | A session plus its sets. `weight` is KILOGRAMS |
+| `list_workouts` | Search sessions: window, `exercise` filter, `q` text, paging |
+| `delete_workout` | Remove a session and its sets |
+| `get_exercise_history` | **One exercise over time** — sessions, volume, best set, estimated 1RM |
+| `log_supplement` · `list_supplements` | Supplements; the list reports days-taken per supplement |
+| `log_weight` · `get_weight_trend` | Body weight and its change |
+| `get_daily_summary` | Totals vs goals for one day |
+| `get_day` | **Everything** for one date in one call |
+| `create_view_link` · `list_view_links` · `revoke_view_link` | Shareable dashboard with charts |
+| `create_api_token` · `list_api_tokens` · `revoke_api_token` | Long-lived tokens for scripts |
 | `export_my_data` · `delete_my_account` | The user's data rights, as tools |
 
-**Anatome does not parse food.** There is no food database and no AI on this server. When a user
-says "oatmeal with berries", *you* estimate `{calories, protein, carbs, fats}` and send them —
-then tell the user what you estimated so they can correct it.
+### Reading the log — the argument shapes are shared
 
-**Write errors are actionable, so act on them.** An unknown field returns 400 naming the field,
-the closest accepted name and the full accepted list; fix your call and retry once. Aliases like
-`kcal`, `protein_g` and `weight_kg` are accepted and rewritten. `weight_lb` is **rejected, not
-converted** — send kilograms.
+Every "show me my …" tool takes the same window and paging arguments:
 
-⚠️ **The three guide tools are unfinished.** Media coverage is incomplete and the coaching cues
-have not been reviewed. Every guide response carries `status: "work_in_progress"`. Present that
-content as provisional notes, never as verified training advice, and say so to the user.
+- `date` — one day, `YYYY-MM-DD` (shorthand for from = to)
+- `from` / `to` — an inclusive range
+- `days` — alternative to `from`: how many days back from `to`
+- `limit` / `offset` — paging; responses carry `total_matched` and `has_more`
+
+Plus, where they apply: `q` (free text), `exercise` (loose match — "bench" finds "Barbell Bench
+Press"), `meal_type`, `name`.
+
+### Write errors are actionable — act on them
+
+An unknown field returns 400 naming the field, the closest accepted name and the full accepted
+list. Fix your call and retry once. Aliases like `kcal`, `protein_g` and `weight_kg` are accepted
+and rewritten silently.
+
+**`weight_lb` is rejected, not converted.** Send kilograms. A unit change is never an alias:
+225 lb quietly stored as 225 kg is worse than a refusal, because nothing downstream can tell it
+is wrong.
+
+⚠️ **The three guide tools are unfinished.** Media coverage is incomplete and the cues are
+unreviewed; every response carries `status: "work_in_progress"`. Present them as provisional
+notes, never as verified training advice, and say so.
 
 `initialize`, `tools/list`, `ping` and notifications are never rate limited. Only `tools/call`
 spends fair use.
 
-MCP config:
+## Connect it
 
 ```json
-{
-  "mcpServers": {
-    "anatome": { "type": "http", "url": "https://api.anatome.dev/mcp" }
-  }
-}
+{ "mcpServers": { "anatome": { "type": "http", "url": "https://api.anatome.dev/mcp" } } }
 ```
 
-In Claude: Settings → Connectors → Add custom connector → paste the URL.
-In ChatGPT: Settings → Apps → Create app → paste the URL. Choose OAuth if you want logging;
-choose None for catalog-only access.
+- **Claude** — Settings → Connectors → Add custom connector → paste the URL.
+- **ChatGPT** — Settings → Apps → Create app → same URL. OAuth for logging, None for catalog.
 
-## Quick example
+## HTTP API
+
+```
+GET  /generateImage       Colourable SVG muscle diagram
+POST /workoutImage        Session heatmap SVG
+GET  /searchExercises     Search 873 exercises
+GET  /getExercise         One exercise by name, ext_id, or random
+GET  /resolveExercise     Exercise name → muscle layers
+GET  /exerciseGif         2-frame demo GIF
+GET  /listMuscles         23 muscle slugs
+GET  /listEquipment       Equipment types
+GET  /bodyPaths           Raw anatomical paths for client-side rendering
+POST /mcp                 MCP (Streamable HTTP)
+GET  /openapi             OpenAPI 3.1
+GET  /.well-known/mcp.json
+
+Signed in:
+POST/GET /v1/meals · DELETE /v1/meals/{id} · POST /v1/water
+POST/GET /v1/workouts · DELETE /v1/workouts/{id} · GET /v1/exercise-history
+POST/GET /v1/supplements · POST /v1/body-metrics · GET /v1/weight-trend
+POST /v1/goals · GET /v1/summary · GET /v1/day · GET /v1/profile · GET /v1/export
+```
 
 ```bash
-# Highlight chest + triceps on a male dual-view diagram
-curl "https://api.anatome.dev/generateImage?layers=DC2626:chest|F59E0B:triceps&output=raw" -o diagram.svg
-
-# Session heatmap for a push day
-curl -X POST https://api.anatome.dev/workoutImage \
-  -H "Content-Type: application/json" \
-  -d '{"exercises":["bench press","overhead press","tricep pushdown"],"view":"front"}'
-
-# Search exercises that target the chest
 curl "https://api.anatome.dev/searchExercises?muscle=chest&limit=5"
+curl "https://api.anatome.dev/generateImage?layers=DC2626:chest|F59E0B:triceps&output=raw" -o d.svg
 ```
 
-## What Anatome does not do
+## Privacy
 
-It never calls a language model. It renders, searches, resolves, stores and adds up; the
-reasoning is yours. There is no food database, no barcode lookup, no recipes, no meal plans, no
-coaches, no programming and no wearable imports — those are the hosted platform at
-https://platform.anatome.dev, which is a different and larger service.
+Anonymous callers: a hashed daily counter, expiring in ~36 hours. Nothing else. Signed-in users:
+only what they logged. Never sold, never shared, never used to train anything. Export and hard
+delete are both one call. See PRIVACY.md.
 
-For anonymous callers it stores nothing but a hashed daily counter. For signed-in users it stores
-exactly what they logged, and they can export or delete all of it at any time — see PRIVACY.md.
+## What this is not
 
-## Repository layout
+No food database, no barcode lookup, no recipes, no meal plans, no coaches, no programming, no
+wearable imports, and no LLM on the server. Those are the hosted platform at
+https://platform.anatome.dev — a larger, separate service. This tier is deliberately the simple
+one, and it is free.
+
+## Repository
 
 ```
-api/          Cloudflare Workers API (Hono + TypeScript) — deploys via wrangler
-src/          React/Vite site + playground — static assets on Cloudflare
+api/   Cloudflare Worker (Hono + TypeScript) — the API and MCP server
+src/   React/Vite site + playground — static assets on Cloudflare
 ```
 
-## License
-
-Apache-2.0. Third-party data:
-- Anatomical SVG paths: react-native-body-highlighter (MIT, © Hicham El Boussarghini)
-- Exercise metadata: wrkout/exercises.json (Unlicense). Its photography: licence unverified, not redistributable.
-- Skill guides: CC-BY-4.0.
-
-See [NOTICE](NOTICE) for full attribution.
+Apache-2.0. Anatomical SVG paths: react-native-body-highlighter (MIT, © Hicham El Boussarghini).
+Exercise metadata: wrkout/exercises.json (Unlicense) — its photography is of unverified origin
+and is **not** covered by that dedication. Skill guides: CC-BY-4.0. See NOTICE.

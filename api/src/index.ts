@@ -47,6 +47,7 @@ import {
 } from "./routes/personal.ts";
 import { identifyRequest } from "./lib/auth.ts";
 import { accountPage, accountAction, accountExport, accountLogout } from "./routes/account.ts";
+import { renderViewPage, handleViewAction } from "./routes/view.ts";
 import { elapsedMs, renderTimingHeaders } from "./lib/timing.ts";
 import { logRequest } from "./lib/observability.ts";
 import { gateMetered, noteUsage, execCtx } from "./lib/meter.ts";
@@ -108,10 +109,14 @@ app.get("/", (c) => c.json({
   ],
   auth: {
     scheme: "none",
-    detail: "Anatome is keyless. There is no signup, no API key and no token to paste.",
+    detail: "Keyless. The catalog needs no account; personal logging uses OAuth 2.1 with dynamic client registration, so there is still nothing to paste.",
     fair_use: `${fairUseLimit(c.env)} requests per day per caller, resetting at 00:00 UTC.`,
+    oauth: hasDb(c.env) ? `${baseUrl(c)}/.well-known/oauth-authorization-server` : null,
     rapidapi: "X-RapidAPI-Proxy-Secret (marketplace listing only)",
   },
+  what_it_does: hasDb(c.env)
+    ? "Log and search meals, workouts, supplements and body weight by conversation; render muscle diagrams and session heatmaps; share a dashboard."
+    : "Render muscle diagrams and session heatmaps; search an 873-exercise database. No database bound, so this deployment has no accounts or logging.",
   mcp: { endpoint: `${baseUrl(c)}/mcp`, transport: "streamable-http", protocol_version: MCP_PROTOCOL_VERSION },
   more: upgradeUrl(c.env),
   ...serviceAttribution(),
@@ -121,12 +126,27 @@ app.get("/", (c) => c.json({
 // assistant that lands on the domain can find the connector without reading marketing copy.
 app.get("/.well-known/mcp.json", (c) => c.json({
   name: "anatome",
-  description: "Muscle anatomy diagrams, a 873-exercise database and session heatmaps. Free, keyless.",
+  title: "Anatome — nutrition & training log",
+  description: "Free, keyless nutrition and workout logging for AI assistants: log meals, workouts, supplements and body weight by talking, search the history, and share a dashboard. Plus muscle-anatomy diagrams and an 873-exercise database.",
   version: API_VERSION,
   transport: { type: "streamable-http", url: `${baseUrl(c)}/mcp` },
-  authentication: { type: "none" },
-  fair_use: { requests_per_day: fairUseLimit(c.env), window: "UTC day" },
+  // Anonymous for the catalog, OAuth for personal data. Stating both is the honest shape and
+  // stops a registry listing it as "requires auth" when most of it does not.
+  authentication: {
+    type: "none",
+    optional_oauth2: {
+      required_for: "personal logging tools",
+      authorization_server: `${baseUrl(c)}/.well-known/oauth-authorization-server`,
+      dynamic_registration: true,
+    },
+  },
+  capabilities: ["nutrition-logging", "workout-logging", "supplement-logging", "body-metrics", "exercise-database", "muscle-diagrams", "shareable-reports"],
+  fair_use: { requests_per_day: fairUseLimit(c.env), window: "UTC day", applies_to: "tools/call" },
   documentation: "https://anatome.dev",
+  llms_txt: "https://anatome.dev/llms.txt",
+  openapi: `${baseUrl(c)}/openapi`,
+  license: "Apache-2.0",
+  repository: "https://github.com/Rippy1911/anatome",
 }));
 
 // ---- generateImage (GET query + POST JSON) ----
@@ -712,5 +732,11 @@ app.post("/account", (c) => accountAction(c));
 app.get("/account/export.json", (c) => accountExport(c, "json"));
 app.get("/account/export.csv", (c) => accountExport(c, "csv"));
 registerPersonalRoutes(app);
+
+// ---- shared view links ----
+// A bearer URL: no session, no header. Everything it can reach is scoped to the one account
+// that minted it, and the page itself is noindex + private, no-store.
+app.get("/v/:token", (c) => renderViewPage(c));
+app.post("/v/:token", (c) => handleViewAction(c));
 
 export default app;

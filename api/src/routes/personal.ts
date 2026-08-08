@@ -13,16 +13,21 @@
 
 import type { Context } from "hono";
 import { findUserById, hasDb, type DbEnv, type UserRow } from "../lib/db.ts";
-import { identifyRequest } from "../lib/auth.ts";
+import {
+  identifyRequest, issuePersonalToken, listPersonalTokens, revokePersonalTokens,
+} from "../lib/auth.ts";
 import { gateMetered } from "../lib/meter.ts";
 import { isValidTimezone } from "../lib/tz.ts";
 import {
-  dailySummary, deleteMeal, deleteWorkout, exportEverything, listMeals, listWorkouts,
-  logBodyMetric, logMeal, logWater, logWorkout, setGoals, weightTrend, type LogResult,
+  dailySummary, deleteMeal, deleteWorkout, exerciseHistory, exportEverything, getDay,
+  listMeals, listSupplements, listWorkouts, logBodyMetric, logMeal, logSupplement, logWater,
+  logWorkout, setGoals, weightTrend, type LogResult,
 } from "../lib/logging.ts";
 import { deleteUserCompletely, setUserTimezone } from "../lib/db.ts";
+import { createViewLink, listViewLinks, revokeViewLinks } from "./view.ts";
 import {
   MEAL_FIELDS, WATER_FIELDS, WORKOUT_FIELDS, SET_FIELDS, BODY_METRIC_FIELDS, GOAL_FIELDS,
+  SUPPLEMENT_FIELDS,
 } from "../lib/validate.ts";
 
 type Ctx = Context<{ Bindings: DbEnv }>;
@@ -33,12 +38,32 @@ export const LOGGING_TOOL_NAMES = [
   "log_meal", "list_meals", "delete_meal",
   "log_water",
   "log_workout", "list_workouts", "delete_workout",
+  "log_supplement", "list_supplements",
   "log_weight", "get_weight_trend",
-  "get_daily_summary",
+  "get_daily_summary", "get_day", "get_exercise_history",
+  "create_view_link", "list_view_links", "revoke_view_link",
+  "create_api_token", "list_api_tokens", "revoke_api_token",
   "export_my_data", "delete_my_account",
 ] as const;
 
 const list = (fields: readonly string[]) => fields.join(", ");
+
+/**
+ * Every "show me my …" tool takes the same window and page arguments. Declared once so the
+ * schemas cannot drift from each other, which is how a model learns that `from` works on one
+ * tool and not the next.
+ */
+const WINDOW_PROPS = {
+  date: { type: "string", description: "One specific day, YYYY-MM-DD. Shorthand for from=to=date." },
+  from: { type: "string", description: "Start of the range, YYYY-MM-DD (inclusive)." },
+  to: { type: "string", description: "End of the range, YYYY-MM-DD (inclusive). Defaults to today." },
+  days: { type: "number", description: "Alternative to `from`: how many days back from `to`." },
+} as const;
+
+const PAGE_PROPS = {
+  limit: { type: "number", description: "Rows to return, 1-200." },
+  offset: { type: "number", description: "Rows to skip, for paging. Responses carry total_matched and has_more." },
+} as const;
 
 /**
  * Tool schemas. Property names are exactly the accepted field names from validate.ts — a test
@@ -91,9 +116,17 @@ export const LOGGING_TOOLS = [
   },
   {
     name: "list_meals",
-    description: "List the meals logged on one day, with their macros.",
+    description: "Search meals. Defaults to today; pass from/to or days for a range, q to search the name and notes, meal_type to filter. Returns macro totals for whatever matched, so it answers 'how much protein did I average in March' as well as 'what did I eat'.",
     annotations: { readOnlyHint: true },
-    inputSchema: { type: "object", properties: { date: { type: "string", description: "YYYY-MM-DD; omit for today" } } },
+    inputSchema: {
+      type: "object",
+      properties: {
+        ...WINDOW_PROPS,
+        ...PAGE_PROPS,
+        q: { type: "string", description: "Free text matched against the meal name and notes, e.g. 'oats'." },
+        meal_type: { type: "string", enum: ["breakfast", "lunch", "dinner", "snack"] },
+      },
+    },
   },
   {
     name: "delete_meal",
@@ -144,9 +177,71 @@ export const LOGGING_TOOLS = [
   },
   {
     name: "list_workouts",
-    description: "List recent workouts with their sets and total volume.",
+    description: "Search workouts with their sets and volume. Defaults to the last 90 days; pass date/from/to/days for a window, exercise to keep only sessions containing a movement, q to search the title and notes.",
     annotations: { readOnlyHint: true },
-    inputSchema: { type: "object", properties: { limit: { type: "number", default: 10, description: "1-50" } } },
+    inputSchema: {
+      type: "object",
+      properties: {
+        ...WINDOW_PROPS,
+        ...PAGE_PROPS,
+        exercise: { type: "string", description: "Only workouts containing this exercise, matched loosely: 'bench' finds 'Barbell Bench Press'." },
+        q: { type: "string", description: "Free text matched against the workout title and notes, e.g. 'push day'." },
+      },
+    },
+  },
+  {
+    name: "get_exercise_history",
+    description: "One exercise over time: every set grouped by session, with per-session volume, the best set and an estimated 1RM. This is the tool for 'is my bench going anywhere' and for showing a coach someone's progression. Matched loosely, so 'squat' finds 'Barbell Back Squat'.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        exercise: { type: "string", description: "Exercise name or part of one, e.g. 'bench press'." },
+        ...WINDOW_PROPS,
+        ...PAGE_PROPS,
+      },
+      required: ["exercise"],
+    },
+  },
+  {
+    name: "log_supplement",
+    description: "Log a supplement taken. Dose is optional — 'took my magnesium' is a complete entry. Defaults to today in the user's timezone.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "e.g. 'creatine', 'vitamin D3'" },
+        dose: { type: "number", description: "Optional amount." },
+        unit: { type: "string", description: "g | mg | mcg | iu | ml | capsule | scoop" },
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+        notes: { type: "string" },
+      },
+      required: ["name"],
+    },
+  },
+  {
+    name: "list_supplements",
+    description: "Supplements over a window, plus a per-supplement count of how many days each was actually taken — which is the number people want when they ask whether they are being consistent.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { ...WINDOW_PROPS, ...PAGE_PROPS, name: { type: "string", description: "Filter to one supplement, matched loosely." } },
+    },
+  },
+  {
+    name: "get_day",
+    description: "Everything logged on one day in a single call: meals, water, workouts with sets, supplements and measurements. Use this instead of calling list_meals and list_workouts separately — it costs the user one request instead of three. Pass `include` to narrow it.",
+    annotations: { readOnlyHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        date: { type: "string", description: "YYYY-MM-DD; omit for today" },
+        include: {
+          type: "array",
+          items: { type: "string", enum: ["nutrition", "training", "supplements", "body"] },
+          description: "Sections to return. Omit for all of them.",
+        },
+      },
+    },
   },
   {
     name: "delete_workout",
@@ -181,6 +276,57 @@ export const LOGGING_TOOLS = [
     inputSchema: { type: "object", properties: { date: { type: "string", description: "YYYY-MM-DD; omit for today" } } },
   },
   {
+    name: "create_view_link",
+    description: "Mint a URL that opens a rendered dashboard of this user's log — today against goals, calories and training volume over 14 days, body-weight trend, recent sessions and supplement adherence. Use it whenever someone asks to SEE their data, to show a coach, or to check something visually. The link expires (24h by default) and is read-only unless you pass can_edit. Always tell the user that anyone holding the URL can see the data.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        label: { type: "string", description: "What it is for, e.g. 'for my coach'. Shown in list_view_links and used to revoke it later." },
+        expires_in_hours: { type: "number", description: "1 to 720. Default 24." },
+        can_edit: { type: "boolean", description: "Allow deleting entries from the page. Default false — ask the user before setting it." },
+      },
+    },
+  },
+  {
+    name: "list_view_links",
+    description: "List the view links this user has minted, with expiry and view counts. Tokens are never returned — they exist only in the URL handed out at creation.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "revoke_view_link",
+    description: "Kill view links immediately. Pass a label to revoke just those, or nothing to revoke every active link. Use this the moment someone says they shared a link by mistake.",
+    annotations: { destructiveHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { label: { type: "string", description: "Only revoke links with this label. Omit to revoke all of them." } },
+    },
+  },
+  {
+    name: "create_api_token",
+    description: "Mint a long-lived personal API token the user can paste into a script, a shortcut, a cron job, or another MCP client that cannot do the OAuth browser flow. Shown once and never again. Tell the user to store it somewhere safe and that it is equivalent to their password for this data.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        label: { type: "string", description: "What it is for, e.g. 'my sync script'. Needed to revoke it later." },
+        expires_in_days: { type: "number", description: "1 to 365. Default 365." },
+      },
+      required: ["label"],
+    },
+  },
+  {
+    name: "list_api_tokens",
+    description: "List personal API tokens by label, with expiry and whether they are still active. Token values are never shown again after minting.",
+    annotations: { readOnlyHint: true },
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "revoke_api_token",
+    description: "Revoke personal API tokens by label, or all of them if no label is given. Does not affect this connector's own sign-in.",
+    annotations: { destructiveHint: true },
+    inputSchema: { type: "object", properties: { label: { type: "string" } } },
+  },
+  {
     name: "export_my_data",
     description: "Return everything Anatome stores for this user, as JSON. The user owns their data and can take it at any time.",
     annotations: { readOnlyHint: true },
@@ -205,6 +351,7 @@ export const TOOL_FIELD_CONTRACT: Record<string, readonly string[]> = {
   log_workout: WORKOUT_FIELDS,
   log_weight: BODY_METRIC_FIELDS,
   set_goals: GOAL_FIELDS,
+  log_supplement: SUPPLEMENT_FIELDS,
 };
 export const SET_FIELD_CONTRACT = SET_FIELDS;
 
@@ -315,6 +462,41 @@ export async function callLoggingTool(
     case "log_weight": return fromResult(await logBodyMetric(db, user, args));
     case "get_weight_trend": return fromResult(await weightTrend(db, user, args));
     case "get_daily_summary": return fromResult(await dailySummary(db, user, args));
+    case "get_day": return fromResult(await getDay(db, user, args));
+    case "get_exercise_history": return fromResult(await exerciseHistory(db, user, args));
+    case "log_supplement": return fromResult(await logSupplement(db, user, args));
+    case "list_supplements": return fromResult(await listSupplements(db, user, args));
+
+    case "create_view_link": {
+      const made = await createViewLink(db, user, args, base);
+      if (!made.ok) return { ok: false, text: made.message, payload: { error: "invalid_value", field: made.field, retryable: false } };
+      return { ok: true, payload: made.data };
+    }
+    case "list_view_links": return { ok: true, payload: await listViewLinks(db, user) };
+
+    case "create_api_token": {
+      const label = String(args.label ?? "").trim();
+      if (!label) return { ok: false, text: "Give the token a label so it can be found and revoked later, e.g. 'my sync script'.", payload: { error: "missing_field", field: "label", retryable: false } };
+      const days = Number.isFinite(Number(args.expires_in_days))
+        ? Math.min(Math.max(1, Math.round(Number(args.expires_in_days))), 365) : 365;
+      const minted = await issuePersonalToken(db, user.id, label, days * 86400);
+      return {
+        ok: true,
+        payload: {
+          token: minted.token,
+          label,
+          expires_at: new Date(minted.expiresAt * 1000).toISOString(),
+          usage: `curl -H "Authorization: Bearer ${minted.token}" ${base}/v1/summary`,
+          warning: "Shown once. It grants full access to this account's log — treat it like a password, and revoke_api_token kills it.",
+        },
+      };
+    }
+    case "list_api_tokens": return { ok: true, payload: { tokens: await listPersonalTokens(db, user.id) } };
+    case "revoke_api_token": {
+      const revoked = await revokePersonalTokens(db, user.id, String(args.label ?? "").trim());
+      return { ok: true, payload: { revoked, scope: args.label ? `tokens labelled "${String(args.label)}"` : "every personal token" } };
+    }
+    case "revoke_view_link": return { ok: true, payload: await revokeViewLinks(db, user, args) };
 
     case "export_my_data":
       return { ok: true, payload: await exportEverything(db, user) };
@@ -449,6 +631,30 @@ export function registerPersonalRoutes(app: {
     const u = await requireUser(c);
     if (u instanceof Response) return u;
     return send(c, await setGoals(c.env.DB!, u, await body(c)));
+  });
+
+  app.post("/v1/supplements", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await logSupplement(c.env.DB!, u, await body(c)));
+  });
+
+  app.get("/v1/supplements", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await listSupplements(c.env.DB!, u, c.req.query()));
+  });
+
+  app.get("/v1/day", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await getDay(c.env.DB!, u, c.req.query()));
+  });
+
+  app.get("/v1/exercise-history", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await exerciseHistory(c.env.DB!, u, c.req.query()));
   });
 
   app.get("/v1/summary", async (c) => {

@@ -1,18 +1,24 @@
 import { env } from "cloudflare:test";
-// Inlined at build time by Vite. There is no filesystem inside workerd, and importing the real
-// migration rather than duplicating DDL here is deliberate: a schema copy in the test suite
-// drifts from the real one, and then the tests pass against a database production does not have.
-import schemaSql from "../migrations/0001_init.sql?raw";
 
-/** Apply the schema to this test file's isolated D1. */
+// Every migration, inlined at build time by Vite and applied in filename order.
+//
+// There is no filesystem inside workerd, so these are imported rather than read. The glob is
+// deliberate: naming migrations individually means the day someone adds 0003 the tests keep
+// passing against a schema production no longer has — which is exactly what happened when 0002
+// was added and this file still said 0001.
+const MIGRATIONS = import.meta.glob("../migrations/*.sql", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+
+/** Apply every migration to this test file's isolated D1, in order. */
 export async function applySchema(): Promise<void> {
-  const statements = schemaSql
-    .replace(/--[^\n]*/g, "")   // strip comments; D1's exec wants plain statements
-    .split(";")
-    .map((s) => s.replace(/\s+/g, " ").trim())
-    .filter(Boolean);
-  for (const statement of statements) {
-    await env.DB.exec(statement);
+  for (const path of Object.keys(MIGRATIONS).sort()) {
+    const statements = MIGRATIONS[path]
+      .replace(/--[^\n]*/g, "")   // strip comments; D1's exec wants plain statements
+      .split(";")
+      .map((s) => s.replace(/\s+/g, " ").trim())
+      .filter(Boolean);
+    for (const statement of statements) {
+      await env.DB.exec(statement);
+    }
   }
 }
 

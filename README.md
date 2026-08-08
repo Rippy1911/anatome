@@ -22,8 +22,10 @@ so an assistant can use it as a tool with no integration work at all.
 - 🔓 **No API key.** No signup, no token, no header. Every example below runs as written.
 - 🎨 Multi-colour layered muscle rendering, `<img src>`-friendly via `?output=raw`
 - 💪 873 exercises, searchable and resolvable to muscle layers, with hosted demo GIFs
-- 🤖 MCP server (10 tools, 25 when signed in) + OpenAPI 3.1 spec
-- 📓 Optional accounts for logging meals and workouts — OAuth 2.1, one browser sign-in, no key
+- 🤖 MCP server (10 tools, 31 when signed in) + OpenAPI 3.1 spec
+- 📓 Log meals, workouts, supplements and body weight by talking — then **search** it: by
+  exercise, by date range, by text. `get_exercise_history` answers "is my bench going anywhere?"
+- 🔗 Shareable dashboards with charts, for showing a coach — expiring, revocable, no login
 - ☁️ Runs on Cloudflare and nothing else — see [SELF_HOSTING.md](./SELF_HOSTING.md)
 
 ## Connect it to an assistant
@@ -56,8 +58,10 @@ There is still no key.
 
 > *"Set my timezone to Europe/Warsaw."*
 > *"I had oatmeal with berries for breakfast, about 420 calories."*
-> *"Log 3×5 bench press at 100kg."*
-> *"How am I doing today?"*
+> *"Log 3×5 bench press at 100kg."* · *"Took my creatine."*
+> *"How am I doing today?"* · *"Is my bench going anywhere?"*
+> *"Show me every session with deadlifts since March."*
+> *"Share my last month with my coach."* → a link with charts, expiring in 24h
 
 **Anatome does no food lookup and calls no model** — your assistant estimates the macros and
 sends them, and Anatome stores and adds them up. That is what keeps this tier free.
@@ -137,9 +141,9 @@ D1 database **only** for accounts, and serves the whole catalog without one.
 `exerciseGif` · `exerciseImage` · `listMuscles` · `muscleInfo` · `listEquipment` · `bodyPaths` ·
 `listGuides` · `getGuide` · `getGuideTree` · `mcp` · `openapi` · `ciStatus` · `selfTest`
 
-Signed-in only: `/v1/meals` · `/v1/water` · `/v1/workouts` · `/v1/body-metrics` ·
-`/v1/weight-trend` · `/v1/goals` · `/v1/summary` · `/v1/profile` · `/v1/export`, plus
-`/oauth/*` and `/account`.
+Signed-in only: `/v1/meals` · `/v1/water` · `/v1/workouts` · `/v1/exercise-history` ·
+`/v1/supplements` · `/v1/body-metrics` · `/v1/weight-trend` · `/v1/goals` · `/v1/summary` ·
+`/v1/day` · `/v1/profile` · `/v1/export`, plus `/oauth/*`, `/account` and `/v/{token}`.
 
 Full schema: `GET https://api.anatome.dev/openapi`. Machine discovery:
 `GET https://api.anatome.dev/.well-known/mcp.json` and
@@ -157,7 +161,7 @@ Full schema: `GET https://api.anatome.dev/openapi`. Machine discovery:
 cd api && pnpm install && pnpm run worker:dev     # → http://localhost:8787
 cd api && pnpm run db:migrate:local               # only if you want accounts locally
 cd api && pnpm test                               # 257 tests, plain node
-cd api && pnpm run test:workers                   # 52 tests inside workerd, real local D1
+cd api && pnpm run test:workers                   # 106 tests inside workerd, real local D1
 cd api && pnpm run typecheck
 
 # Site
@@ -179,6 +183,10 @@ Anatome is licensed under [Apache-2.0](./LICENSE). It builds on third-party data
   redistribution ([#48](https://github.com/Rippy1911/anatome/issues/48)). `/exerciseImage`
   proxies those files rather than vendoring them; do not treat them as licensed.
 - **Skill guides** — CC-BY-4.0 content.
+
+Being findable is a design problem too — see [DISCOVERABILITY.md](./DISCOVERABILITY.md) for how
+the tool descriptions, `llms.txt` and discovery documents are written for retrieval, and what is
+left as operator work.
 
 > NextSolutions also makes [airon.coach](https://airon.coach) — an AI personal trainer that uses
 > Anatome under the hood.

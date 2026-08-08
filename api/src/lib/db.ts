@@ -107,6 +107,7 @@ export async function deleteUserCompletely(db: D1Database, userId: string): Prom
     "DELETE FROM workouts WHERE user_id = ?",
     "DELETE FROM meals WHERE user_id = ?",
     "DELETE FROM water_logs WHERE user_id = ?",
+    "DELETE FROM supplements WHERE user_id = ?",
     "DELETE FROM body_metrics WHERE user_id = ?",
     "DELETE FROM goals WHERE user_id = ?",
     "DELETE FROM tokens WHERE user_id = ?",
