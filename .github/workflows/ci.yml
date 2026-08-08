@@ -115,6 +115,11 @@ jobs:
           cache: pnpm
           cache-dependency-path: api/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
+      # llms.txt lives once at the repo root and is copied into the directories that serve it.
+      # This runs here rather than relying on api/package.json's predeploy hook, because the
+      # deploy below is `wrangler deploy` invoked by an action — npm lifecycle scripts never fire.
+      - name: Sync llms.txt into the served assets
+        run: node ../scripts/sync-public.mjs
       # Schema first: a deploy that adds a route reading a table the database does not have yet
       # fails for users, not for us. Migrations are additive and idempotent.
       - uses: cloudflare/wrangler-action@v3

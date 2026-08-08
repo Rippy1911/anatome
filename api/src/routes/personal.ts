@@ -226,7 +226,7 @@ export const LOGGING_TOOLS = [
       type: "object",
       properties: {
         name: { type: "string", description: "e.g. 'creatine', 'vitamin D3'" },
-        dose: { type: "number", description: "Optional amount." },
+        dose: { type: ["number", "string"], description: "Optional amount. The number alone (5) with the unit in `unit`, or the whole thing as one string (\"5 g\", \"4000 IU\") — both are stored the same way." },
         unit: { type: "string", description: "g | mg | mcg | iu | ml | capsule | scoop" },
         date: { type: "string", description: "YYYY-MM-DD; omit for today" },
         notes: { type: "string" },

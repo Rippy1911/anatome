@@ -217,6 +217,41 @@ describe("supplements", () => {
     expect(out.isError).toBe(true);
     expect(out.text).toContain("dosis");
   });
+
+  // A supplement dose without its unit is not a quantity — 4000 of vitamin D means nothing — so
+  // the natural way to say it puts both in one string. Rejecting that taught callers to retry with
+  // the dose dropped rather than with the unit moved, which loses the number entirely.
+  it("accepts a dose and unit written as one string", async () => {
+    const out = await callTool(app, user, "log_supplement", { name: "Creatine mono", dose: "5 g", date: "2026-03-14" });
+    expect(out.isError).toBe(false);
+    const s = (out.data as { supplement: { dose: number | null; unit: string } }).supplement;
+    expect(s.dose).toBe(5);
+    expect(s.unit).toBe("g");
+  });
+
+  it("handles the units people actually write", async () => {
+    for (const [dose, amount, unit] of [["4000 IU", 4000, "iu"], ["2 capsules", 2, "capsules"], ["0.5 scoop", 0.5, "scoop"], ["500mg", 500, "mg"]] as const) {
+      const out = await callTool(app, user, "log_supplement", { name: `Test ${dose}`, dose, date: "2026-03-15" });
+      const s = (out.data as { supplement: { dose: number | null; unit: string } }).supplement;
+      expect([dose, s.dose, s.unit]).toEqual([dose, amount, unit]);
+    }
+  });
+
+  it("does not let the string form overwrite an explicit unit", async () => {
+    const out = await callTool(app, user, "log_supplement", { name: "Zinc picolinate", dose: "50 mg", unit: "mcg", date: "2026-03-16" });
+    // The caller said mcg twice as far as we know; splitting the string must not silently
+    // relabel their unit, because that is the one thing nothing downstream could detect.
+    expect((out.data as { supplement: { unit: string } }).supplement.unit).toBe("mcg");
+  });
+
+  it("still refuses a dose that is not a number, and says how to fix it", async () => {
+    const out = await callTool(app, user, "log_supplement", { name: "Mystery", dose: "a big scoop" });
+    expect(out.isError).toBe(true);
+    expect(out.text).toMatch(/unit/);
+    // The message has to name the shape that works, or the model's cheapest recovery is to drop
+    // the field and log nothing.
+    expect(out.text).toMatch(/"dose": 5/);
+  });
 });
 
 describe("get_day", () => {

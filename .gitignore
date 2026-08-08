@@ -56,3 +56,4 @@ _worktrees/
 
 # Generated at build time from the repo root by scripts/sync-public.mjs.
 public/llms.txt
+api/public/llms.txt

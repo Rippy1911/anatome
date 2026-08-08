@@ -14,7 +14,8 @@
     "test:workers": "vitest run --config vitest.workers.config.ts",
     "test:all": "npm run test && npm run test:workers",
     "db:migrate:local": "wrangler d1 migrations apply anatome --local",
-    "db:migrate": "wrangler d1 migrations apply anatome --remote"
+    "db:migrate": "wrangler d1 migrations apply anatome --remote",
+    "predeploy": "node ../scripts/sync-public.mjs"
   },
   "dependencies": {
     "hono": "^4.6.14"

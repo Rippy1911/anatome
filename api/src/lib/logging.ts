@@ -531,9 +531,31 @@ export async function logSupplement(db: D1Database, user: UserRow, raw: unknown)
 
   // Dose is optional on purpose: "took my magnesium" is a complete thought, and demanding a
   // number would make people either skip logging or invent one.
-  const dose = body.dose === undefined || body.dose === null || body.dose === "" ? null : num(body.dose, NaN);
+  //
+  // `dose: "5 g"` is accepted and split into 5 + "g". A supplement dose is meaningless without its
+  // unit — 4000 of vitamin D is not a quantity — so the natural way to say it puts both in one
+  // string, and rejecting that taught the caller to retry with the dose dropped rather than with
+  // the unit moved. Splitting is not the unit *conversion* this codebase refuses elsewhere:
+  // nothing is rescaled and nothing is guessed, so no information changes on the way in.
+  let doseInput = body.dose;
+  let unitInput = body.unit;
+  if (typeof doseInput === "string") {
+    const combined = doseInput.trim().match(/^([0-9]+(?:\.[0-9]+)?)\s*([^\s0-9].*)?$/);
+    if (combined) {
+      doseInput = combined[1];
+      if (combined[2] && (unitInput === undefined || unitInput === null || unitInput === "")) {
+        unitInput = combined[2].trim();
+      }
+    }
+  }
+
+  const dose = doseInput === undefined || doseInput === null || doseInput === "" ? null : num(doseInput, NaN);
   if (dose !== null && !Number.isFinite(dose)) {
-    return bad("dose must be a number, or omitted.", "dose", "invalid_value");
+    return bad(
+      `dose must be a number, with the unit in "unit" — e.g. {"dose": 5, "unit": "g"}. "${String(body.dose)}" is neither. Omit dose entirely if you do not know it.`,
+      "dose",
+      "invalid_value",
+    );
   }
 
   const row = {
@@ -542,7 +564,7 @@ export async function logSupplement(db: D1Database, user: UserRow, raw: unknown)
     name: name.slice(0, 120),
     name_key: name.slice(0, 120).toLowerCase(),
     dose,
-    unit: String(body.unit ?? "").toLowerCase().slice(0, 16),
+    unit: String(unitInput ?? "").toLowerCase().slice(0, 16),
     notes: String(body.notes ?? "").slice(0, 500),
   };
 

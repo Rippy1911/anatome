@@ -143,11 +143,41 @@ app.get("/.well-known/mcp.json", (c) => c.json({
   capabilities: ["nutrition-logging", "workout-logging", "supplement-logging", "body-metrics", "exercise-database", "muscle-diagrams", "shareable-reports"],
   fair_use: { requests_per_day: fairUseLimit(c.env), window: "UTC day", applies_to: "tools/call" },
   documentation: "https://anatome.dev",
-  llms_txt: "https://anatome.dev/llms.txt",
+  // This host's own copy, not the site's. A crawler that has this file has, by definition, reached
+  // the API — pointing it at a different hostname is one more thing that can be wrong.
+  llms_txt: `${baseUrl(c)}/llms.txt`,
   openapi: `${baseUrl(c)}/openapi`,
   license: "Apache-2.0",
   repository: "https://github.com/Rippy1911/anatome",
 }));
+
+// ---- robots.txt, on the API's own hostname ----
+//
+// `https://api.anatome.dev/mcp` is the string every user pastes and every listing carries, so this
+// origin — not the marketing site — is where a crawler actually arrives, and until now this
+// hostname had no robots.txt of its own.
+//
+// What it served instead was Cloudflare's *managed* robots.txt, which Disallows GPTBot, ClaudeBot,
+// Google-Extended, CCBot, Applebot-Extended and meta-externalagent, and sets `ai-train=no`. That
+// is a sensible default for a site that does not want to feed models, and exactly backwards for
+// one whose entire purpose is to be called by them.
+//
+// NOTE: this route may not be the last word. The managed file is injected at the zone, so if it
+// still wins after this deploys, the fix is in the dashboard (AI Crawl Control) and not here.
+// `llms.txt` is served from api/public/ as a static asset — see scripts/sync-public.mjs.
+app.get("/robots.txt", (c) => c.text([
+  "# Anatome — free, keyless nutrition, training and anatomy API.",
+  "# Being crawled by assistants is the point of this service, not something it tolerates.",
+  "User-agent: *",
+  "Allow: /",
+  "",
+  "# Named explicitly so a zone-level default cannot quietly opt this host out.",
+  ...["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-Web", "Claude-User", "PerplexityBot", "Google-Extended", "Applebot-Extended", "CCBot", "meta-externalagent", "Bytespider", "Amazonbot"]
+    .flatMap((bot) => [`User-agent: ${bot}`, "Allow: /"]),
+  "",
+  `Sitemap: https://anatome.dev/sitemap.xml`,
+  "",
+].join("\n"), 200, { "Cache-Control": "public, max-age=3600" }));
 
 // ---- generateImage (GET query + POST JSON) ----
 async function generateImageInner(

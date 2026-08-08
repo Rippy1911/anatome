@@ -53,8 +53,25 @@ worse for reputation than not being retrieved.
 | `/.well-known/oauth-authorization-server` | RFC 8414 — enables one-click sign-in |
 | `/openapi` | OpenAPI 3.1 with the fair-use contract in the description |
 | `/` | human-and-machine readable summary, `what_it_does`, auth shape |
-| `/llms.txt` | served at both `anatome.dev/llms.txt` and in the repo root |
-| `robots.txt` | GPTBot, ClaudeBot, PerplexityBot, Google-Extended named `Allow` explicitly |
+| `/llms.txt` | one file at the repo root, copied at build time to **both** `anatome.dev/llms.txt` and `api.anatome.dev/llms.txt` |
+| `robots.txt` | GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-User, PerplexityBot, Google-Extended and the rest named `Allow` explicitly, on both hostnames |
+
+Both files are served from the **API** hostname as well as the site, and that is the half that
+was missing. `https://api.anatome.dev/mcp` is the string in every listing, every config snippet
+and every "paste this URL" instruction, so the API origin — not the marketing site — is where an
+agent or a crawler actually arrives. It was answering 404 for `llms.txt`.
+
+> ⚠️ **A robots.txt in the repo does not mean a robots.txt on the wire.** `api.anatome.dev` was
+> serving Cloudflare's **managed** robots.txt, which `Disallow`s GPTBot, ClaudeBot,
+> Google-Extended, CCBot, Applebot-Extended and meta-externalagent and sets `ai-train=no`. Nothing
+> in this repo asked for that and nothing in this repo revealed it — it took fetching the live URL.
+> A Worker route now serves the permissive file, but the managed one is injected at the **zone**,
+> so if it still wins, the fix is in the dashboard under **AI Crawl Control** and it is an operator
+> action. Check the live URL, not the repo:
+>
+> ```bash
+> curl -s https://api.anatome.dev/robots.txt | head -20
+> ```
 
 `.well-known/mcp.json` declares `authentication.type: "none"` with OAuth listed as *optional*,
 because most of the surface genuinely needs no account. A registry that reads it as
