@@ -18,7 +18,7 @@
     "predeploy": "node ../scripts/sync-public.mjs"
   },
   "dependencies": {
-    "hono": "^4.6.14"
+    "hono": "^4.13.0"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.8.71",
