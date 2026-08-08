@@ -15,7 +15,7 @@
 import { newId, nowIso, type UserRow } from "./db.ts";
 import { localDate, parseDateOnly, recentLocalDates } from "./tz.ts";
 import {
-  containsPattern, estimate1rm, isWindowError, normaliseKey, parsePage, parseWindow,
+  addDays, containsPattern, estimate1rm, isWindowError, normaliseKey, parsePage, parseWindow,
   setsForWorkouts, volumeOf,
 } from "./query.helpers.ts";
 import {
@@ -214,15 +214,26 @@ export async function logWorkout(db: D1Database, user: UserRow, raw: unknown): P
   const date = resolveDate(body.date, user);
   if (!date) return bad(`Invalid date "${String(body.date)}". Use YYYY-MM-DD.`, "date", "invalid_value");
 
+  // A session dated in the future is a plan unless the caller says otherwise. Inferring it is
+  // right far more often than not — nobody logs Thursday's bench on Tuesday as done — and the
+  // response says which way it went so the assistant can tell the user rather than surprise them.
+  const today = localDate(user.timezone);
+  const requested = body.status === undefined ? null : String(body.status).toLowerCase();
+  if (requested && requested !== "planned" && requested !== "completed") {
+    return bad(`Unknown status "${requested}". Use "planned" or "completed".`, "status", "invalid_value");
+  }
+  const status = requested ?? (date > today ? "planned" : "completed");
+
   const workoutId = newId("wk");
   const statements: D1PreparedStatement[] = [
     db.prepare(
-      "INSERT INTO workouts (id, user_id, date, title, notes, duration_minutes, logged_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO workouts (id, user_id, date, title, notes, duration_minutes, status, logged_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     ).bind(
       workoutId, user.id, date,
       String(body.title ?? "").slice(0, 200),
       String(body.notes ?? "").slice(0, 2000),
       body.duration_minutes === undefined ? null : Math.round(num(body.duration_minutes)),
+      status,
       nowIso(),
     ),
   ];
@@ -261,10 +272,10 @@ export async function logWorkout(db: D1Database, user: UserRow, raw: unknown): P
     };
     stored.push(row);
     statements.push(db.prepare(
-      `INSERT INTO workout_sets (id, workout_id, user_id, exercise_name, exercise_key, date, anatome_exercise_id, set_number, reps, weight, rpe, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO workout_sets (id, workout_id, user_id, exercise_name, exercise_key, date, status, anatome_exercise_id, set_number, reps, weight, rpe, notes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).bind(
-      row.id, workoutId, user.id, row.exercise_name, row.exercise_key, row.date,
+      row.id, workoutId, user.id, row.exercise_name, row.exercise_key, row.date, status,
       row.anatome_exercise_id, row.set_number, row.reps, row.weight, row.rpe, row.notes,
     ));
   });
@@ -275,14 +286,20 @@ export async function logWorkout(db: D1Database, user: UserRow, raw: unknown): P
     workout: {
       id: workoutId,
       date,
+      status,
       title: String(body.title ?? ""),
       duration_minutes: body.duration_minutes === undefined ? null : Math.round(num(body.duration_minutes)),
       set_count: stored.length,
-      total_volume: volume,
+      // A plan has no volume yet — reporting one would be counting work nobody has done.
+      total_volume: status === "completed" ? volume : 0,
+      planned_volume: status === "planned" ? volume : undefined,
       sets: stored,
     },
     logged_for_date: date,
     timezone: user.timezone,
+    note: status === "planned"
+      ? `Saved as a PLAN for ${date}. It does not count toward training volume until you mark it done with mark_workout_done.`
+      : undefined,
   }, 201);
 }
 
@@ -294,12 +311,28 @@ export async function logWorkout(db: D1Database, user: UserRow, raw: unknown): P
  * workouts meant 26 round trips and the cost grew with the answer.
  */
 export async function listWorkouts(db: D1Database, user: UserRow, args: Record<string, unknown>): Promise<LogResult> {
-  const window = parseWindow(args, user, 90);
+  // `upcoming` is a shorthand for the window nobody wants to compute by hand: today forward.
+  // Without it a model has to know today's date in the user's timezone to ask "what's planned",
+  // which is exactly the kind of arithmetic it gets wrong.
+  const upcoming = args.upcoming === true;
+  const today = localDate(user.timezone);
+  const window = upcoming && args.from === undefined && args.to === undefined && args.date === undefined
+    ? { from: today, to: addDays(today, 30), explicit: true }
+    : parseWindow(args, user, 90);
   if (isWindowError(window)) return bad(window.error, window.field, "invalid_value");
   const page = parsePage(args, 10);
 
   const where = ["w.user_id = ?", "w.date BETWEEN ? AND ?"];
   const params: unknown[] = [user.id, window.from, window.to];
+
+  const status = upcoming ? "planned" : String(args.status ?? "").toLowerCase();
+  if (status && status !== "any") {
+    if (status !== "planned" && status !== "completed") {
+      return bad(`Unknown status "${status}". Use "planned", "completed" or "any".`, "status", "invalid_value");
+    }
+    where.push("w.status = ?");
+    params.push(status);
+  }
 
   const exercise = normaliseKey(args.exercise);
   if (exercise) {
@@ -318,16 +351,27 @@ export async function listWorkouts(db: D1Database, user: UserRow, args: Record<s
   const total = await db.prepare(`SELECT COUNT(*) AS n FROM workouts w WHERE ${clause}`)
     .bind(...params).first<{ n: number }>();
 
+  // Plans read forward (soonest first); history reads backward (most recent first). Sorting a
+  // plan list newest-first would put next month above tomorrow.
+  const order = upcoming || status === "planned" ? "ASC" : "DESC";
   const { results } = await db.prepare(
-    `SELECT w.id, w.date, w.title, w.notes, w.duration_minutes, w.logged_at
+    `SELECT w.id, w.date, w.title, w.notes, w.duration_minutes, w.status, w.logged_at
        FROM workouts w WHERE ${clause}
-      ORDER BY w.date DESC, w.logged_at DESC LIMIT ? OFFSET ?`,
-  ).bind(...params, page.limit, page.offset).all<{ id: string }>();
+      ORDER BY w.date ${order}, w.logged_at ${order} LIMIT ? OFFSET ?`,
+  ).bind(...params, page.limit, page.offset).all<{ id: string; status: string }>();
 
   const sets = await setsForWorkouts(db, user.id, results.map((w) => w.id));
   const workouts = results.map((w) => {
     const rows = sets.get(w.id) ?? [];
-    return { ...w, set_count: rows.length, total_volume: volumeOf(rows), sets: rows };
+    const volume = volumeOf(rows);
+    return {
+      ...w,
+      set_count: rows.length,
+      // A plan's volume is prospective. Naming it differently stops it being summed with real work.
+      total_volume: w.status === "completed" ? volume : 0,
+      planned_volume: w.status === "planned" ? volume : undefined,
+      sets: rows,
+    };
   });
 
   return ok({
@@ -365,7 +409,7 @@ export async function exerciseHistory(db: D1Database, user: UserRow, args: Recor
   const { results } = await db.prepare(
     `SELECT id, workout_id, date, exercise_name, set_number, reps, weight, rpe, notes
        FROM workout_sets
-      WHERE user_id = ? AND exercise_key LIKE ? ESCAPE '\\' AND date BETWEEN ? AND ?
+      WHERE user_id = ? AND status = 'completed' AND exercise_key LIKE ? ESCAPE '\\' AND date BETWEEN ? AND ?
       ORDER BY date DESC, set_number ASC
       LIMIT ? OFFSET ?`,
   ).bind(user.id, containsPattern(exercise), window.from, window.to, page.limit, page.offset)
@@ -374,7 +418,7 @@ export async function exerciseHistory(db: D1Database, user: UserRow, args: Recor
   const total = await db.prepare(
     `SELECT COUNT(*) AS n, COUNT(DISTINCT date) AS sessions
        FROM workout_sets
-      WHERE user_id = ? AND exercise_key LIKE ? ESCAPE '\\' AND date BETWEEN ? AND ?`,
+      WHERE user_id = ? AND status = 'completed' AND exercise_key LIKE ? ESCAPE '\\' AND date BETWEEN ? AND ?`,
   ).bind(user.id, containsPattern(exercise), window.from, window.to)
     .first<{ n: number; sessions: number }>();
 
@@ -424,6 +468,41 @@ export async function exerciseHistory(db: D1Database, user: UserRow, args: Recor
     // it "best" without saying over what would be the kind of number people screenshot.
     best_in_window: allTimeBest,
     sessions,
+  });
+}
+
+/**
+ * Turn a plan into a session that happened.
+ *
+ * Updates the status on BOTH tables in one batch. workout_sets carries its own copy so every
+ * aggregate can filter without a join (see migration 0005) — which only stays true if this,
+ * the single writer of status, keeps them in step.
+ */
+export async function markWorkoutDone(db: D1Database, user: UserRow, args: Record<string, unknown>): Promise<LogResult> {
+  const id = String(args.id ?? "").trim();
+  if (!id) return bad("Provide the workout id to mark done. Get it from list_workouts.", "id", "missing_field");
+
+  const row = await db.prepare("SELECT id, status, date, title FROM workouts WHERE id = ? AND user_id = ?")
+    .bind(id, user.id).first<{ id: string; status: string; date: string; title: string }>();
+  if (!row) return { ok: false, status: 404, error: "not_found", message: `No workout ${id} in your log.` };
+  if (row.status === "completed") {
+    return ok({ id, status: "completed", already_done: true, note: "This session was already marked done; nothing changed." });
+  }
+
+  await db.batch([
+    db.prepare("UPDATE workouts SET status = 'completed' WHERE id = ? AND user_id = ?").bind(id, user.id),
+    db.prepare("UPDATE workout_sets SET status = 'completed' WHERE workout_id = ? AND user_id = ?").bind(id, user.id),
+  ]);
+
+  const totals = await db.prepare(
+    "SELECT COUNT(*) AS n, COALESCE(SUM(COALESCE(reps,0)*COALESCE(weight,0)),0) AS volume FROM workout_sets WHERE workout_id = ? AND user_id = ?",
+  ).bind(id, user.id).first<{ n: number; volume: number }>();
+
+  return ok({
+    id, status: "completed", date: row.date, title: row.title,
+    set_count: totals?.n ?? 0,
+    total_volume: totals?.volume ?? 0,
+    note: "It now counts toward training volume and exercise history.",
   });
 }
 
@@ -613,14 +692,16 @@ export async function dailySummary(db: D1Database, user: UserRow, args: Record<s
   const water = await db.prepare("SELECT COALESCE(SUM(amount_ml),0) AS total FROM water_logs WHERE user_id = ? AND date = ?")
     .bind(user.id, date).first<{ total: number }>();
 
-  const workoutRows = await db.prepare("SELECT id, title, duration_minutes FROM workouts WHERE user_id = ? AND date = ?")
+  const workoutRows = await db.prepare("SELECT id, title, duration_minutes, status FROM workouts WHERE user_id = ? AND date = ? AND status = 'completed'")
     .bind(user.id, date).all<{ id: string; title: string; duration_minutes: number | null }>();
+  const plannedRows = await db.prepare("SELECT id, title, duration_minutes FROM workouts WHERE user_id = ? AND date = ? AND status = 'planned'")
+    .bind(user.id, date).all<{ id: string; title: string }>();
 
   // One aggregate over the day's sets, reading workout_sets.date directly (migration 0002).
   // This used to be a query per workout inside a loop.
   const setTotals = await db.prepare(
     `SELECT COUNT(*) AS set_count, COALESCE(SUM(COALESCE(reps,0) * COALESCE(weight,0)),0) AS volume
-       FROM workout_sets WHERE user_id = ? AND date = ?`,
+       FROM workout_sets WHERE user_id = ? AND date = ? AND status = 'completed'`,
   ).bind(user.id, date).first<{ set_count: number; volume: number }>();
   const sets = setTotals?.set_count ?? 0;
   const volume = setTotals?.volume ?? 0;
@@ -659,6 +740,7 @@ export async function dailySummary(db: D1Database, user: UserRow, args: Record<s
       total_volume: volume,
       workouts: workoutRows.results,
     },
+    planned: plannedRows.results.length ? { workout_count: plannedRows.results.length, workouts: plannedRows.results } : null,
     supplements: supplements.results,
     goals: goals ?? null,
     remaining,
@@ -693,8 +775,8 @@ export async function getDay(db: D1Database, user: UserRow, args: Record<string,
       ? db.prepare("SELECT COALESCE(SUM(amount_ml),0) AS total FROM water_logs WHERE user_id = ? AND date = ?").bind(user.id, date).first<{ total: number }>()
       : Promise.resolve(null),
     wants("training")
-      ? db.prepare("SELECT id, title, notes, duration_minutes FROM workouts WHERE user_id = ? AND date = ? ORDER BY logged_at").bind(user.id, date).all<{ id: string }>()
-      : Promise.resolve({ results: [] as { id: string }[] }),
+      ? db.prepare("SELECT id, title, notes, duration_minutes, status FROM workouts WHERE user_id = ? AND date = ? ORDER BY logged_at").bind(user.id, date).all<{ id: string; status: string }>()
+      : Promise.resolve({ results: [] as { id: string; status: string }[] }),
     wants("supplements")
       ? db.prepare("SELECT id, name, dose, unit, notes FROM supplements WHERE user_id = ? AND date = ? ORDER BY logged_at").bind(user.id, date).all()
       : Promise.resolve({ results: [] }),
@@ -704,7 +786,7 @@ export async function getDay(db: D1Database, user: UserRow, args: Record<string,
     db.prepare("SELECT calories, protein, carbs, fats, water_ml FROM goals WHERE user_id = ?").bind(user.id).first<Record<string, number | null>>(),
   ]);
 
-  const workoutRows = (workouts as { results: { id: string }[] }).results;
+  const workoutRows = (workouts as { results: { id: string; status: string }[] }).results;
   const setsByWorkout = wants("training")
     ? await setsForWorkouts(db, user.id, workoutRows.map((w) => w.id))
     : new Map();
@@ -720,10 +802,12 @@ export async function getDay(db: D1Database, user: UserRow, args: Record<string,
     { calories: 0, protein: 0, carbs: 0, fats: 0 },
   );
 
-  const training = workoutRows.map((w) => {
+  const allWorkouts = workoutRows.map((w) => {
     const rows = setsByWorkout.get(w.id) ?? [];
     return { ...w, set_count: rows.length, total_volume: volumeOf(rows), sets: rows };
   });
+  const training = allWorkouts.filter((w) => w.status !== "planned");
+  const plannedToday = allWorkouts.filter((w) => w.status === "planned");
 
   return ok({
     date,
@@ -740,6 +824,7 @@ export async function getDay(db: D1Database, user: UserRow, args: Record<string,
         workouts: training,
       }
       : null,
+    planned: wants("training") && plannedToday.length ? plannedToday : null,
     supplements: wants("supplements") ? (supplements as { results: unknown[] }).results : null,
     body_metrics: wants("body") ? (metrics as { results: unknown[] }).results : null,
     goals: goals ?? null,

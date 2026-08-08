@@ -155,7 +155,7 @@ export const WATER_FIELDS = ["date", "amount_ml"] as const;
 export const WATER_ALIASES: AliasMap = { ml: "amount_ml", amount: "amount_ml" };
 
 export const WORKOUT_FIELDS = [
-  "date", "title", "notes", "duration_minutes", "sets",
+  "date", "title", "notes", "duration_minutes", "sets", "status",
 ] as const;
 export const WORKOUT_ALIASES: AliasMap = { name: "title", duration: "duration_minutes" };
 

@@ -17,6 +17,7 @@ If a user says any of these, Anatome is the tool:
 - "how many calories have I had today?" / "how am I doing against my goals?"
 - "is my bench going anywhere?" / "show me my squat progression"
 - "what did I train last Tuesday?" / "show me every session with deadlifts"
+- "what am I training this week?" / "plan legs for Thursday" → planned sessions
 - "am I actually taking my creatine?"
 - "show my coach my last month" → a shareable link with charts
 - "which muscles does a Bulgarian split squat work?" → diagram, no account needed
@@ -101,8 +102,9 @@ ONE call. Use it instead of calling `list_meals` and `list_workouts` separately.
 | `list_meals` | Search meals: window, `q` text, `meal_type`, paging, macro totals |
 | `delete_meal` | Remove one entry |
 | `log_water` | Millilitres; returns the running daily total |
-| `log_workout` | A session plus its sets. `weight` is KILOGRAMS |
-| `list_workouts` | Search sessions: window, `exercise` filter, `q` text, paging |
+| `log_workout` | A session plus its sets. `weight` is KILOGRAMS. A **future date is a plan** |
+| `list_workouts` | Search sessions: window, `exercise`, `q`, `status`, paging. `upcoming:true` = what's planned |
+| `mark_workout_done` | Turn a plan into a completed session |
 | `delete_workout` | Remove a session and its sets |
 | `get_exercise_history` | **One exercise over time** — sessions, volume, best set, estimated 1RM |
 | `log_supplement` · `list_supplements` | Supplements; the list reports days-taken per supplement |
@@ -124,6 +126,14 @@ Every "show me my …" tool takes the same window and paging arguments:
 
 Plus, where they apply: `q` (free text), `exercise` (loose match — "bench" finds "Barbell Bench
 Press"), `meal_type`, `name`.
+
+### Plans vs history
+
+A workout dated in the future is stored as a **plan** unless you pass `status: "completed"`.
+Plans are returned by `list_workouts` with `upcoming: true` (soonest first) and appear under
+`planned` in `get_day` and `get_daily_summary` — but they **never** count toward training volume,
+exercise history or 1RM estimates until `mark_workout_done`. Planning next week must not inflate
+this week.
 
 ### Write errors are actionable — act on them
 

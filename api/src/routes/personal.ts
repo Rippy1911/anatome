@@ -21,7 +21,7 @@ import { isValidTimezone } from "../lib/tz.ts";
 import {
   dailySummary, deleteMeal, deleteWorkout, exerciseHistory, exportEverything, getDay,
   listMeals, listSupplements, listWorkouts, logBodyMetric, logMeal, logSupplement, logWater,
-  logWorkout, setGoals, weightTrend, type LogResult,
+  logWorkout, markWorkoutDone, setGoals, weightTrend, type LogResult,
 } from "../lib/logging.ts";
 import { deleteUserCompletely, setUserTimezone } from "../lib/db.ts";
 import { createViewLink, listViewLinks, revokeViewLinks } from "./view.ts";
@@ -37,7 +37,7 @@ export const LOGGING_TOOL_NAMES = [
   "get_profile", "set_timezone", "set_goals",
   "log_meal", "list_meals", "delete_meal",
   "log_water",
-  "log_workout", "list_workouts", "delete_workout",
+  "log_workout", "list_workouts", "delete_workout", "mark_workout_done",
   "log_supplement", "list_supplements",
   "log_weight", "get_weight_trend",
   "get_daily_summary", "get_day", "get_exercise_history",
@@ -155,6 +155,11 @@ export const LOGGING_TOOLS = [
         date: { type: "string", description: "YYYY-MM-DD; omit for today" },
         duration_minutes: { type: "number" },
         notes: { type: "string" },
+        status: {
+          type: "string",
+          enum: ["completed", "planned"],
+          description: "Omit and it is inferred: a future date is a PLAN, today or earlier is completed. Plans do not count toward volume or exercise history until mark_workout_done.",
+        },
         sets: {
           type: "array",
           description: "One entry per set performed.",
@@ -177,7 +182,7 @@ export const LOGGING_TOOLS = [
   },
   {
     name: "list_workouts",
-    description: "Search workouts with their sets and volume. Defaults to the last 90 days; pass date/from/to/days for a window, exercise to keep only sessions containing a movement, q to search the title and notes.",
+    description: "Search workouts with their sets and volume. Defaults to the last 90 days. Pass upcoming:true for planned sessions from today forward — that is the tool for 'what am I training this week'. Otherwise date/from/to/days for a window, exercise to keep only sessions containing a movement, q to search title and notes, status to pick planned/completed/any.",
     annotations: { readOnlyHint: true },
     inputSchema: {
       type: "object",
@@ -186,7 +191,18 @@ export const LOGGING_TOOLS = [
         ...PAGE_PROPS,
         exercise: { type: "string", description: "Only workouts containing this exercise, matched loosely: 'bench' finds 'Barbell Bench Press'." },
         q: { type: "string", description: "Free text matched against the workout title and notes, e.g. 'push day'." },
+        upcoming: { type: "boolean", description: "Planned sessions from today forward (next 30 days), soonest first. Ignores the window args." },
+        status: { type: "string", enum: ["planned", "completed", "any"], description: "Default: both. Completed history is returned newest-first, plans soonest-first." },
       },
+    },
+  },
+  {
+    name: "mark_workout_done",
+    description: "Turn a planned session into a completed one, so it starts counting toward training volume and exercise history. Use it when someone says they did the session they had planned.",
+    inputSchema: {
+      type: "object",
+      properties: { id: { type: "string", description: "Workout id from list_workouts." } },
+      required: ["id"],
     },
   },
   {
@@ -459,6 +475,7 @@ export async function callLoggingTool(
     case "log_workout": return fromResult(await logWorkout(db, user, args));
     case "list_workouts": return fromResult(await listWorkouts(db, user, args));
     case "delete_workout": return fromResult(await deleteWorkout(db, user, args.id));
+    case "mark_workout_done": return fromResult(await markWorkoutDone(db, user, args));
     case "log_weight": return fromResult(await logBodyMetric(db, user, args));
     case "get_weight_trend": return fromResult(await weightTrend(db, user, args));
     case "get_daily_summary": return fromResult(await dailySummary(db, user, args));
@@ -643,6 +660,12 @@ export function registerPersonalRoutes(app: {
     const u = await requireUser(c);
     if (u instanceof Response) return u;
     return send(c, await listSupplements(c.env.DB!, u, c.req.query()));
+  });
+
+  app.post("/v1/workouts/:id/done", async (c) => {
+    const u = await requireUser(c);
+    if (u instanceof Response) return u;
+    return send(c, await markWorkoutDone(c.env.DB!, u, { id: (c.req as unknown as { param: (k: string) => string }).param("id") }));
   });
 
   app.get("/v1/day", async (c) => {
