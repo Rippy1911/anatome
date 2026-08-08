@@ -89,6 +89,13 @@ export function isWindowError(w: DateWindow | WindowError): w is WindowError {
   return (w as WindowError).error !== undefined;
 }
 
+/** `YYYY-MM-DD` plus n days, staying in calendar-date space. */
+export function addDays(date: string, days: number): string {
+  const [y, m, d] = date.split("-").map(Number);
+  const t = new Date(Date.UTC(y, m - 1, d + days));
+  return t.toISOString().slice(0, 10);
+}
+
 /** Lower-cased, trimmed. The stored `*_key` columns hold exactly this. */
 export function normaliseKey(name: unknown): string {
   return String(name ?? "").trim().toLowerCase();
