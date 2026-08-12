@@ -195,6 +195,7 @@ function renderSide(
       let opacity = 1;
       let stroke: string = border_color;
       let strokeWidth: number = border_width;
+      let highlighted = false;
       if (style && style.fill != null) {
         // Apply highlight, unless side_filter excludes this side
         if (!filterSide || filterSide === whichSide || whichSide === "common") {
@@ -202,9 +203,18 @@ function renderSide(
           if (style.opacity != null) opacity = style.opacity;
           if (style.stroke != null) stroke = style.stroke;
           if (style.strokeWidth != null) strokeWidth = style.strokeWidth;
+          highlighted = true;
         }
       }
-      if (MUSCLES.includes(slug) || style) rendered.add(slug);
+      // `rendered` means HIGHLIGHTED, not "present in the drawing".
+      //
+      // Every muscle path is drawn on every image — that is what makes it a body — so the old
+      // condition (`MUSCLES.includes(slug) || style`) added all 19 groups whatever the caller
+      // asked for. `muscles_rendered` is returned as MCP structuredContent, where it is the only
+      // machine-readable statement about an SVG the model cannot see, so a request that
+      // highlighted chest and triceps came back claiming nineteen muscles worked and the model
+      // narrated exactly that.
+      if (highlighted) rendered.add(slug);
       out.push(
         `<path d="${d}" fill="${esc(fill)}" stroke="${esc(stroke)}" stroke-width="${strokeWidth}" opacity="${opacity}" data-muscle="${esc(slug)}"/>`
       );

@@ -39,6 +39,39 @@ describe("muscleEngine", () => {
   it("lists 23 muscles", () => {
     expect(listMuscles()).toHaveLength(23);
   });
+
+  // muscles_rendered is the only machine-readable statement about an image the caller cannot see.
+  // It used to name every muscle group drawn — i.e. all of them, on every request — so an MCP
+  // client asking for chest got back a list of nineteen and told the user nineteen were worked.
+  it("reports only the muscles that were actually highlighted", () => {
+    const body = {
+      male: {
+        front: [
+          { slug: "chest", path: { common: ["M0 0"] } },
+          { slug: "abs", path: { common: ["M1 1"] } },
+          { slug: "quadriceps", path: { common: ["M2 2"] } },
+        ],
+        back: [],
+      },
+      female: { front: [], back: [] },
+    };
+    const { muscles_rendered } = renderMuscleSvg(
+      { gender: "male", view: "front", layers: [{ color: "#123456", muscles: ["chest"] }] },
+      body,
+    );
+    expect(muscles_rendered).toEqual(["chest"]);
+  });
+
+  it("reports nothing when nothing was highlighted", () => {
+    const body = {
+      male: { front: [{ slug: "chest", path: { common: ["M0 0"] } }], back: [] },
+      female: { front: [], back: [] },
+    };
+    const { svg, muscles_rendered } = renderMuscleSvg({ gender: "male", view: "front", layers: [] }, body);
+    // The body is still drawn — this is about what we CLAIM, not what we paint.
+    expect(svg).toContain('data-muscle="chest"');
+    expect(muscles_rendered).toEqual([]);
+  });
 });
 
 describe("resolveExercise", () => {
@@ -47,6 +80,19 @@ describe("resolveExercise", () => {
   });
   it("flags nonsense as unmatched", () => {
     expect(resolveExercise("zzzzz nonsense").matched).toBe(false);
+  });
+
+  // "Barbell row" is the 5x5 lift and the vernacular name everyone types. It scored
+  // `Upright Barbell Row` above `Bent Over Barbell Row` because "upright" is one word and
+  // "bent over" is two. Upright rows are deltoids and traps; the user meant their back.
+  it("resolves an unqualified row to a horizontal row, not an upright one", () => {
+    const r = resolveExercise("barbell row");
+    expect(r.ext_id).toBe("Bent_Over_Barbell_Row");
+    expect(r.layers[0].muscles).toContain("upper-back");
+  });
+
+  it("still resolves an upright row when that is what was asked for", () => {
+    expect(resolveExercise("upright barbell row").ext_id).toBe("Upright_Barbell_Row");
   });
 });
 

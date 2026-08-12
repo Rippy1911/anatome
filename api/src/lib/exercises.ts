@@ -375,6 +375,22 @@ function equipmentPrefixBonus(nameLower: string): number {
   return 0;
 }
 
+/**
+ * Prefix words that name a DIFFERENT movement, not a variation of the same one.
+ *
+ * The suffix rule below scores a candidate by how few words it adds to the query, which treats
+ * every added word as equally innocent. Most are: "barbell", "seated", "one-arm" all leave the
+ * movement intact. "Upright" does not. An upright row is a deltoid and trapezius exercise; every
+ * other row is upper-back. Because "upright" is one word and "bent over" is two, `barbell row`
+ * scored `Upright Barbell Row` at 7800 and `Bent Over Barbell Row` at 7600 — so the 5x5's row, and
+ * every user who typed the vernacular name, got the wrong lift, the wrong muscle diagram and
+ * progression history filed under a movement they had never performed.
+ *
+ * A word here only costs when the QUERY did not ask for it: `upright row` still resolves to an
+ * upright row. Keep this list short and evidence-led — one entry, one movement it changes.
+ */
+const MOVEMENT_CHANGING_PREFIXES = new Set(["upright"]);
+
 /** Rank how well an exercise name matches a user query (higher = better). */
 export function scoreExerciseNameMatch(nameLower: string, key: string): number {
   if (!nameLower || !key) return 0;
@@ -391,8 +407,13 @@ export function scoreExerciseNameMatch(nameLower: string, key: string): number {
 
   const words = nameLower.split(/\s+/);
   if (words.length >= keyWords.length && words.slice(-keyWords.length).join(" ") === key) {
-    const prefixLen = words.length - keyWords.length;
-    return 8000 - prefixLen * 200 + equipmentPrefixBonus(nameLower);
+    const prefix = words.slice(0, words.length - keyWords.length);
+    // A movement-changing word the caller did not ask for drops the candidate out of contention
+    // rather than costing it one prefix-word. 3000 is larger than the whole suffix band (8000
+    // down to ~6000), so such a candidate can still win if nothing else matches at all — which is
+    // the right outcome for a catalog that has only the upright variant of some movement.
+    const changed = prefix.filter((w) => MOVEMENT_CHANGING_PREFIXES.has(w) && !keyWords.includes(w));
+    return 8000 - prefix.length * 200 + equipmentPrefixBonus(nameLower) - changed.length * 3000;
   }
 
   const idx = nameLower.indexOf(key);
