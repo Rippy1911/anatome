@@ -36,8 +36,15 @@ describe("muscleEngine", () => {
     expect(svg).toContain('fill="#123456"');
   });
 
-  it("lists 23 muscles", () => {
-    expect(listMuscles()).toHaveLength(23);
+  it("lists 23 highlightable slugs, of which 6 are regions rather than muscles", () => {
+    // A connector review read this catalogue and found hair, head, hands, feet, ankles and knees
+    // presented as trainable muscles. They stay — they are renderable paths, and dropping them
+    // would stop the figure drawing them — but they no longer claim to be anatomy.
+    const all = listMuscles();
+    expect(all).toHaveLength(23);
+    expect(all.filter((m) => m.kind === "region").map((m) => m.slug).sort())
+      .toEqual(["ankles", "feet", "hair", "hands", "head", "knees"]);
+    expect(all.filter((m) => m.kind === "muscle")).toHaveLength(17);
   });
 
   // muscles_rendered is the only machine-readable statement about an image the caller cannot see.
@@ -93,6 +100,18 @@ describe("resolveExercise", () => {
 
   it("still resolves an upright row when that is what was asked for", () => {
     expect(resolveExercise("upright barbell row").ext_id).toBe("Upright_Barbell_Row");
+  });
+
+  // Same class as the row: "close-grip" moves a bench press's primary from chest to triceps, so
+  // an unqualified "barbell bench press" must not land on it.
+  it("does not resolve an unqualified bench press to the close-grip variant", () => {
+    const r = resolveExercise("barbell bench press");
+    expect(r.ext_id).not.toBe("Close-Grip_Barbell_Bench_Press");
+    expect(r.layers[0].muscles).toContain("chest");
+  });
+
+  it("still resolves the close-grip bench press when asked for by name", () => {
+    expect(resolveExercise("close-grip barbell bench press").ext_id).toBe("Close-Grip_Barbell_Bench_Press");
   });
 });
 

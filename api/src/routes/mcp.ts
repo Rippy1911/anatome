@@ -7,7 +7,7 @@
 
 import { renderMuscleSvg } from "../lib/muscleEngine.ts";
 import { getBodyData } from "../lib/bodyData.ts";
-import { MUSCLES, ANATOMICAL_NAMES, SIDE_PRESENCE, BODY_REGION, ANTAGONISTS } from "../data/muscleCatalog.ts";
+import { MUSCLES, ANATOMICAL_NAMES, NON_MUSCLE_REGIONS, SIDE_PRESENCE, BODY_REGION, ANTAGONISTS } from "../data/muscleCatalog.ts";
 import {
   searchExercisesLogic, formatExercise, getByExtId, getRandom, getByName, lookupExerciseById,
   cleanExercise, resolveExercise as resolveEx,
@@ -45,7 +45,7 @@ export const TOOLS = [
       background: { type: "string", default: "transparent" }, width: { type: "number", default: 768 }, height: { type: "number", default: 1024 },
       per_muscle: { type: "object" }, side_filter: { type: "object" }, defs: { type: "array" } },
       required: ["layers"] } },
-  { name: "list_muscles", description: "List all 23 supported muscle slugs with anatomical names and which views they appear on.",
+  { name: "list_muscles", description: "List the 23 highlightable slugs with anatomical names and which views they appear on. 17 are muscles; 6 (hair, head, hands, feet, ankles, knees) are body regions, marked kind=region.",
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {} } },
   { name: "resolve_exercise", description: "Resolve an exercise name against the 873-exercise database into primary/secondary muscle layers. Use generate_muscle_image with custom layers for additional tiers (e.g. accessory stabilizers).",
@@ -176,11 +176,16 @@ export function computeMcpResult(
       const muscles = MUSCLES.map((slug) => ({
         slug,
         name: ANATOMICAL_NAMES[slug],
+        // Six entries are highlightable REGIONS, not muscles (hair, head, hands, feet, ankles,
+        // knees). They stay in the list because they are renderable; `kind` stops a reader
+        // treating them as anatomy, which is how "hair" ended up in a muscle catalogue review.
+        kind: NON_MUSCLE_REGIONS.has(slug) ? "region" : "muscle",
         views: SIDE_PRESENCE[slug],
         body_region: BODY_REGION[slug] || null,
         antagonists: ANTAGONISTS[slug] || [],
       }));
-      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscles } } };
+      const muscleCount = muscles.filter((m) => m.kind === "muscle").length;
+      return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(muscles) }], structuredContent: { count: MUSCLES.length, muscle_count: muscleCount, region_count: MUSCLES.length - muscleCount, muscles } } };
     }
     if (name === "resolve_exercise") {
       const r = resolveEx(args.exercise as string, base);

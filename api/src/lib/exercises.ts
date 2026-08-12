@@ -387,9 +387,15 @@ function equipmentPrefixBonus(nameLower: string): number {
  * progression history filed under a movement they had never performed.
  *
  * A word here only costs when the QUERY did not ask for it: `upright row` still resolves to an
- * upright row. Keep this list short and evidence-led — one entry, one movement it changes.
+ * upright row.
+ *
+ * THE TEST FOR ADDING A WORD: the catalog's own primary muscle must differ. "Upright" flips a row
+ * from upper-back to deltoids; "close-grip" flips a bench press from chest to triceps
+ * (`Close-Grip_Barbell_Bench_Press` primary = triceps, `Barbell_Bench_Press_-_Medium_Grip` primary
+ * = chest). "Wide-grip" does NOT — both are chest — so it is deliberately absent. Two entries,
+ * each with the data behind it; do not add a third on intuition.
  */
-const MOVEMENT_CHANGING_PREFIXES = new Set(["upright"]);
+const MOVEMENT_CHANGING_PREFIXES = new Set(["upright", "close-grip"]);
 
 /** Rank how well an exercise name matches a user query (higher = better). */
 export function scoreExerciseNameMatch(nameLower: string, key: string): number {

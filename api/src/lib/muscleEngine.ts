@@ -4,7 +4,7 @@
 // this dependency-free.
 
 import { WRAPPER } from "../data/bodyWrappers.ts";
-import { MUSCLES, ANATOMICAL_NAMES, normalizeSlug } from "../data/muscleCatalog.ts";
+import { MUSCLES, ANATOMICAL_NAMES, NON_MUSCLE_REGIONS, normalizeSlug } from "../data/muscleCatalog.ts";
 
 export interface BodyPart {
   slug: string;
@@ -328,8 +328,14 @@ export function renderMuscleSvg(
   return { svg, muscles_rendered: Array.from(renderedSet).filter((s) => MUSCLES.includes(s)) };
 }
 
-export function listMuscles(): { slug: string; name: string }[] {
-  return MUSCLES.map((slug) => ({ slug, name: ANATOMICAL_NAMES[slug] }));
+export function listMuscles(): { slug: string; name: string; kind: "muscle" | "region" }[] {
+  return MUSCLES.map((slug) => ({
+    slug,
+    name: ANATOMICAL_NAMES[slug],
+    // Six of these are body regions, not muscles — see NON_MUSCLE_REGIONS. They stay renderable
+    // and stop being presented as anatomy.
+    kind: NON_MUSCLE_REGIONS.has(slug) ? "region" : "muscle",
+  }));
 }
 
 export function getAnatomicalName(slug: string): string {

@@ -9,6 +9,20 @@ export const MUSCLES: string[] = [
   "trapezius", "triceps", "upper-back",
 ];
 
+/**
+ * Slugs in MUSCLES that are NOT muscles.
+ *
+ * They are highlightable regions of the body figure, inherited from
+ * react-native-body-highlighter's path set, and they have to stay in MUSCLES because that list is
+ * what `renderSide` and `muscles_rendered` filter on — dropping them would stop the head, hands
+ * and feet rendering at all. What they must not do is claim to be anatomy: `list_muscles` billed
+ * itself as "23 supported muscles" and returned `hair` with the anatomical name "Hair", so a
+ * reviewer reading the catalogue found hair, knees and ankles presented as trainable muscles.
+ *
+ * Marked, not removed. The figure keeps every path; the catalogue stops lying about six of them.
+ */
+export const NON_MUSCLE_REGIONS = new Set(["ankles", "feet", "hair", "hands", "head", "knees"]);
+
 export const ANATOMICAL_NAMES: Record<string, string> = {
   abs: "Rectus Abdominis",
   adductors: "Adductor Group",
