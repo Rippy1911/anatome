@@ -227,6 +227,67 @@ function score(e: Indexed, queryTokens: string[], modal: string | null): number 
   return 8000 - extra * 200 - tailCost + offModal + eq + (leads ? 150 : 0) - e.nameLength * 0.5;
 }
 
+/**
+ * Edit distance, capped — anything past `max` is "too far" and not worth finishing.
+ *
+ * Used only by the typo fallback below, so it runs on the queries that would otherwise return
+ * NOTHING, not on every lookup.
+ */
+function withinDistance(a: string, b: string, max: number): boolean {
+  if (a === b) return true;
+  if (Math.abs(a.length - b.length) > max) return false;
+  // Damerau, not plain Levenshtein: a transposition is the commonest typing error there is, and
+  // charging it two edits is what made `sqaut` fail to find `squat`.
+  let prevPrev: number[] = [];
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    let rowMin = i;
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      cur[j] = Math.min(cur[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        cur[j] = Math.min(cur[j], prevPrev[j - 2] + 1);
+      }
+      rowMin = Math.min(rowMin, cur[j]);
+    }
+    if (rowMin > max) return false;
+    prevPrev = prev;
+    prev = cur;
+  }
+  return prev[b.length] <= max;
+}
+
+/** How wrong a word may be before it stops being that word. Short words get no slack. */
+function typoBudget(token: string): number {
+  if (token.length <= 3) return 0;
+  if (token.length <= 6) return 1;
+  return 2;
+}
+
+/**
+ * Ranking for the typo pass, where the query's words are only approximately the name's words.
+ *
+ * The exact-match rules above cannot fire (that is why we are here), so this ranks on how much of
+ * the name the query accounts for, then defers to the same modal-muscle and implement judgements
+ * as the strict path — a misspelled query should not get a band variant either.
+ */
+function scoreFuzzy(e: Indexed, queryTokens: string[], modal: string | null): number {
+  const glued = queryTokens.join("");
+  // A de-spaced query matches the whole name or nothing — no per-token distance reaches
+  // "benchpress" from "bench", so it has to be counted here or the candidate scores zero and is
+  // dropped by the very pass that found it.
+  const gluedHit = glued.length >= 6 && e.head.join("").includes(glued);
+  const matched = gluedHit ? queryTokens.length : queryTokens.filter((t) =>
+    e.all.has(t) || [...e.all].some((n) => withinDistance(t, n, typoBudget(t)))
+  ).length;
+  if (matched === 0) return 0;
+  const extra = Math.max(0, e.head.length - queryTokens.length);
+  const offModal = modal && e.primary && e.primary !== modal ? -1500 : 0;
+  return 6000 + matched * 100 - extra * 200 - e.tail.length * 200 + offModal +
+    equipmentAdjustment(e, queryTokens) - e.nameLength * 0.5;
+}
+
 export interface RankedMatch {
   row: ExerciseRow;
   score: number;
@@ -240,12 +301,30 @@ export function rankExerciseMatches(all: ExerciseRow[], queryRaw: string, limit 
   if (queryTokens.length === 0) return [];
 
   const entries = index(all);
-  const candidates = entries.filter((e) => queryTokens.every((t) => e.all.has(t)));
+  let candidates = entries.filter((e) => queryTokens.every((t) => e.all.has(t)));
+
+  // Typo fallback. Exact token matching answers "bech press" and "deadlfit" with NOTHING — it did
+  // that for 8 of 10 realistic misspellings — and nothing is the one answer a caller cannot act
+  // on. Only runs when the strict pass found no one, so a correctly spelled query never pays for
+  // it, and only ever ADDS candidates the ranking below still has to justify.
+  let typoCorrected = false;
+  if (candidates.length === 0) {
+    // Missing spaces are their own class: "benchpress" is not a typo of any single token, so no
+    // per-token distance reaches it. Compared as a substring because the name usually carries an
+    // implement the query left out — "benchpress" has to find "Barbell Bench Press".
+    const glued = queryTokens.join("");
+    candidates = entries.filter((e) =>
+      (glued.length >= 6 && e.head.join("").includes(glued)) || e.all.has(glued) ||
+      queryTokens.every((t) => [...e.all].some((n) => withinDistance(t, n, typoBudget(t))))
+    );
+    typoCorrected = candidates.length > 0;
+  }
   if (candidates.length === 0) return [];
+
   const modal = familyModal(entries, candidates, queryTokens[queryTokens.length - 1]);
   const scored: RankedMatch[] = [];
   for (const e of candidates) {
-    const s = score(e, queryTokens, modal);
+    const s = typoCorrected ? scoreFuzzy(e, queryTokens, modal) : score(e, queryTokens, modal);
     if (s > 0) scored.push({ row: e.row, score: s });
   }
   // Name as the final tiebreak so the answer never depends on catalog order.

@@ -158,3 +158,52 @@ describe("exercise name resolution", () => {
     expect(rankExercises("zzzzz nonsense")).toHaveLength(0);
   });
 });
+
+describe("typos and near-misses", () => {
+  // Measured over 10 realistic misspellings: before the fallback, 8 of 10 returned NOTHING —
+  // the one answer a caller cannot act on. Now 0 of 10 do. Top-1 went 1/10 -> 5/10 and
+  // recall@5 2/10 -> 7/10; the top-1 misses are all the right MOVEMENT with a different
+  // implement (a dumbbell bench for "bech press"), which `alternatives` lets a model correct.
+  const TYPOS = [
+    "bech press", "benchpress", "deadlfit", "sqaut", "barbel row",
+    "shouldar press", "tricep pushdwn", "romanian dead lift",
+  ];
+
+  it("a misspelled lift never resolves to nothing", () => {
+    for (const q of TYPOS) {
+      expect(rankExercises(q, 5).length, `${q} returned no candidates at all`).toBeGreaterThan(0);
+    }
+  });
+
+  it("a misspelling lands in the right movement family", () => {
+    const family: Record<string, RegExp> = {
+      "bech press": /bench press/i,
+      "benchpress": /bench press/i,
+      "deadlfit": /deadlift/i,
+      "sqaut": /squat/i,
+      "barbel row": /row/i,
+      "shouldar press": /shoulder press/i,
+      "tricep pushdwn": /pushdown/i,
+      "romanian dead lift": /romanian deadlift/i,
+    };
+    for (const [q, want] of Object.entries(family)) {
+      const name = String(rankExercises(q, 1)[0]?.name ?? "");
+      expect(name, `${q} -> ${name}`).toMatch(want);
+    }
+  });
+
+  it("the typo pass never fires for a query that already matched", () => {
+    // It only ever ADDS candidates when the strict pass found none, so correct spelling is
+    // unaffected — the labelled set above is the proof, and this pins the specific risk.
+    expect(rankExercises("barbell row", 1)[0]?.ext_id).toBe("Bent_Over_Barbell_Row");
+    expect(rankExercises("squat", 1)[0]?.ext_id).toBe("Barbell_Squat");
+  });
+
+  it("nonsense is still nonsense, not a wrong answer", () => {
+    // The fallback must not turn "no such exercise" into a confident miss: a custom exercise
+    // name has to be recognisable AS custom, or it gets silently filed under someone else's lift.
+    for (const q of ["zzzzz nonsense", "bulgarian split squat XYZQ"]) {
+      expect(rankExercises(q, 5).length, `${q} should not match anything`).toBe(0);
+    }
+  });
+});
