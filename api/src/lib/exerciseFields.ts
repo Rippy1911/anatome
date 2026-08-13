@@ -63,6 +63,29 @@ export const SEARCH_DEFAULT_FIELDS: ReadonlySet<ExerciseFieldKey> = new Set([
   "keywords",
 ]);
 
+/**
+ * What an AGENT needs from a search result: enough to CHOOSE, not enough to teach.
+ *
+ * The REST default above returns the full enriched row — 1,903 bytes each, of which `instructions`
+ * alone is 883. Twenty results is ~38 KB, and an MCP host pays for all of it in context to answer
+ * "which of these did the user mean". The answer needs a name, an implement, a difficulty and the
+ * muscles; the coaching cues are what `get_exercise` is for, once one row has been chosen.
+ *
+ * ~150 bytes a row instead of ~1,900. Nothing is removed — `fields=` restores any of it and
+ * `fields=all` returns everything — and REST callers keep the fat default they were built against.
+ */
+export const MCP_SEARCH_DEFAULT_FIELDS: ReadonlySet<ExerciseFieldKey> = new Set([
+  "ext_id",
+  "name",
+  "equipment",
+  "level",
+  "category",
+  "mechanic",
+  "primaryMuscles",
+  "secondaryMuscles",
+  "anatome_primary_slugs",
+]);
+
 const KEY_SET = new Set<string>(EXERCISE_FIELD_KEYS);
 
 /**

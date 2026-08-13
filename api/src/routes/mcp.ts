@@ -13,7 +13,7 @@ import {
   cleanExercise, resolveExercise as resolveEx,
   type ExerciseRow,
 } from "../lib/exercises.ts";
-import { parseFieldsParam, SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
+import { parseFieldsParam, MCP_SEARCH_DEFAULT_FIELDS } from "../lib/exerciseFields.ts";
 import { ATTRIBUTION, ATTRIBUTION_SOURCE, LICENSE, EXERCISE_DB_ATTRIBUTION, guideCatalogAttribution } from "../lib/attribution.ts";
 import { workoutImageLogic } from "../lib/workoutImage.ts";
 import { listGuides as listGuidesLogic, getGuide as getGuideLogic, getGuideTree as getGuideTreeLogic } from "../lib/guides.ts";
@@ -48,10 +48,10 @@ export const TOOLS = [
   { name: "list_muscles", description: "List the 23 highlightable slugs with anatomical names and which views they appear on. 17 are muscles; 6 (hair, head, hands, feet, ankles, knees) are body regions, marked kind=region.",
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {} } },
-  { name: "resolve_exercise", description: "Resolve an exercise name against the 873-exercise database into primary/secondary muscle layers. Use generate_muscle_image with custom layers for additional tiers (e.g. accessory stabilizers).",
+  { name: "resolve_exercise", description: "Resolve an exercise name against the 873-exercise database into primary/secondary muscle layers. Returns `alternatives` — the next-best matches with their primary muscles — because gym vernacular is ambiguous: check them before logging if the name was loose. Use generate_muscle_image with custom layers for additional tiers (e.g. accessory stabilizers).",
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: { exercise: { type: "string" } }, required: ["exercise"] } },
-  { name: "search_exercises", description: "Search the 873-exercise database (free-exercise-db) by name with optional muscle/equipment/level filters. Returns enriched results with ready-to-embed anatome_imageSrc URLs.",
+  { name: "search_exercises", description: "Search the 873-exercise database (free-exercise-db) by name with optional muscle/equipment/level filters. Returns a lean row per hit — name, ext_id, equipment, level and muscles — enough to pick one; call get_exercise with its ext_id for instructions and media, or pass fields= for more here.",
     annotations: { readOnlyHint: true },
     inputSchema: { type: "object", properties: {
       q: { type: "string", description: "Name search query, e.g. 'bench'" },
@@ -192,7 +192,11 @@ export function computeMcpResult(
       return { ok: true, result: { content: [{ type: "text", text: JSON.stringify(r) }], structuredContent: { ...r, exercise_db_attribution: EXERCISE_DB_ATTRIBUTION, license: LICENSE } } };
     }
     if (name === "search_exercises") {
-      const fields = parseFieldsParam(args.fields as string | undefined, SEARCH_DEFAULT_FIELDS);
+      // Lean by default on the agent surface: a name, an implement and the muscles is what
+      // picking a result needs. `fields=` or `fields=all` restores the full row, and
+      // get_exercise returns everything for the one that was chosen. See
+      // MCP_SEARCH_DEFAULT_FIELDS.
+      const fields = parseFieldsParam(args.fields as string | undefined, MCP_SEARCH_DEFAULT_FIELDS);
       const { total, offset, limit, next_cursor, results } = searchExercisesLogic(args);
       const payload = {
         total_matched: total, offset, limit, next_cursor,
