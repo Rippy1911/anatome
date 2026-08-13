@@ -5,7 +5,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { renderMuscleSvg } from "./lib/muscleEngine.ts";
-import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, BODY_REGION, ANTAGONISTS } from "./data/muscleCatalog.ts";
+import { ANATOMICAL_NAMES, SIDE_PRESENCE, MUSCLES, NON_MUSCLE_REGIONS, BODY_REGION, ANTAGONISTS } from "./data/muscleCatalog.ts";
 import { getBodyData } from "./lib/bodyData.ts";
 import { payloadFromQuery, sha256 } from "./lib/query.ts";
 import {
@@ -233,11 +233,20 @@ app.get("/listMuscles", (c) => withEdgeCache(c.req.raw, execCtx(c), () => {
   const muscles = MUSCLES.map((slug) => ({
     slug,
     name: ANATOMICAL_NAMES[slug],
+    // Six are highlightable regions, not muscles — see NON_MUSCLE_REGIONS.
+    kind: NON_MUSCLE_REGIONS.has(slug) ? "region" : "muscle",
     views: SIDE_PRESENCE[slug],
     body_region: BODY_REGION[slug] || null,
     antagonists: ANTAGONISTS[slug] || [],
   }));
-  return c.json({ ok: true, count: MUSCLES.length, muscles });
+  const muscleCount = muscles.filter((m) => m.kind === "muscle").length;
+  return c.json({
+    ok: true,
+    count: MUSCLES.length,
+    muscle_count: muscleCount,
+    region_count: MUSCLES.length - muscleCount,
+    muscles,
+  });
 }));
 
 // ---- muscleInfo ----

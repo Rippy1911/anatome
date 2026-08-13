@@ -4,7 +4,7 @@
 // this dependency-free.
 
 import { WRAPPER } from "../data/bodyWrappers.ts";
-import { MUSCLES, ANATOMICAL_NAMES, normalizeSlug } from "../data/muscleCatalog.ts";
+import { MUSCLES, ANATOMICAL_NAMES, NON_MUSCLE_REGIONS, normalizeSlug } from "../data/muscleCatalog.ts";
 
 export interface BodyPart {
   slug: string;
@@ -195,6 +195,7 @@ function renderSide(
       let opacity = 1;
       let stroke: string = border_color;
       let strokeWidth: number = border_width;
+      let highlighted = false;
       if (style && style.fill != null) {
         // Apply highlight, unless side_filter excludes this side
         if (!filterSide || filterSide === whichSide || whichSide === "common") {
@@ -202,9 +203,18 @@ function renderSide(
           if (style.opacity != null) opacity = style.opacity;
           if (style.stroke != null) stroke = style.stroke;
           if (style.strokeWidth != null) strokeWidth = style.strokeWidth;
+          highlighted = true;
         }
       }
-      if (MUSCLES.includes(slug) || style) rendered.add(slug);
+      // `rendered` means HIGHLIGHTED, not "present in the drawing".
+      //
+      // Every muscle path is drawn on every image — that is what makes it a body — so the old
+      // condition (`MUSCLES.includes(slug) || style`) added all 19 groups whatever the caller
+      // asked for. `muscles_rendered` is returned as MCP structuredContent, where it is the only
+      // machine-readable statement about an SVG the model cannot see, so a request that
+      // highlighted chest and triceps came back claiming nineteen muscles worked and the model
+      // narrated exactly that.
+      if (highlighted) rendered.add(slug);
       out.push(
         `<path d="${d}" fill="${esc(fill)}" stroke="${esc(stroke)}" stroke-width="${strokeWidth}" opacity="${opacity}" data-muscle="${esc(slug)}"/>`
       );
@@ -318,8 +328,14 @@ export function renderMuscleSvg(
   return { svg, muscles_rendered: Array.from(renderedSet).filter((s) => MUSCLES.includes(s)) };
 }
 
-export function listMuscles(): { slug: string; name: string }[] {
-  return MUSCLES.map((slug) => ({ slug, name: ANATOMICAL_NAMES[slug] }));
+export function listMuscles(): { slug: string; name: string; kind: "muscle" | "region" }[] {
+  return MUSCLES.map((slug) => ({
+    slug,
+    name: ANATOMICAL_NAMES[slug],
+    // Six of these are body regions, not muscles — see NON_MUSCLE_REGIONS. They stay renderable
+    // and stop being presented as anatomy.
+    kind: NON_MUSCLE_REGIONS.has(slug) ? "region" : "muscle",
+  }));
 }
 
 export function getAnatomicalName(slug: string): string {

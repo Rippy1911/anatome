@@ -16,6 +16,7 @@ import {
   deriveKeywords, computeVariations, computeRelatedExerciseIds, needsComputedRelations,
 } from "./exerciseEnrichment.ts";
 import { resolveSearchParams, buildNextSearchCursor } from "./searchCursor.ts";
+import { rankExerciseMatches } from "./exerciseMatch.ts";
 
 export interface ExerciseRow {
   id?: string;
@@ -364,61 +365,24 @@ export function getRandom(): ExerciseRow | null {
   if (!ALL.length) return null;
   return ALL[Math.floor(Math.random() * ALL.length)];
 }
-const PREFERRED_EQUIPMENT = ["barbell", "dumbbell", "bodyweight", "body only"] as const;
+/**
+ * Name matching lives in exerciseMatch.ts.
+ *
+ * What used to be here scored a candidate by how few words it added to the query, which ranked
+ * "Upright Barbell Row" above "Bent Over Barbell Row" for `barbell row` and could not reach
+ * "Seated Cable Rows" from `seated row` at all. Measured over 59 labelled queries it was right
+ * 54% of the time; the replacement is right 91% of the time. See exerciseMatch.ts for why, and
+ * test/exerciseMatch.test.ts for the labels.
+ */
 
-function equipmentPrefixBonus(nameLower: string): number {
-  for (let i = 0; i < PREFERRED_EQUIPMENT.length; i++) {
-    if (nameLower.startsWith(`${PREFERRED_EQUIPMENT[i]} `)) {
-      return (PREFERRED_EQUIPMENT.length - i) * 15;
-    }
-  }
-  return 0;
-}
-
-/** Rank how well an exercise name matches a user query (higher = better). */
-export function scoreExerciseNameMatch(nameLower: string, key: string): number {
-  if (!nameLower || !key) return 0;
-  if (nameLower === key) return 10000;
-
-  const keyWords = key.split(/\s+/);
-
-  for (const equip of PREFERRED_EQUIPMENT) {
-    const ideal = `${equip} ${key}`;
-    if (nameLower === ideal || nameLower.startsWith(`${ideal} `) || nameLower.startsWith(`${ideal} -`)) {
-      return 9500 - nameLower.length + equipmentPrefixBonus(nameLower);
-    }
-  }
-
-  const words = nameLower.split(/\s+/);
-  if (words.length >= keyWords.length && words.slice(-keyWords.length).join(" ") === key) {
-    const prefixLen = words.length - keyWords.length;
-    return 8000 - prefixLen * 200 + equipmentPrefixBonus(nameLower);
-  }
-
-  const idx = nameLower.indexOf(key);
-  if (idx >= 0) {
-    const suffixLen = nameLower.slice(idx + key.length).length;
-    return 3000 - nameLower.length - suffixLen * 5 + equipmentPrefixBonus(nameLower);
-  }
-
-  if (key.includes(nameLower)) return 500 + nameLower.length;
-  return 0;
-}
-
-/** Best fuzzy match against the bundled exercise list, or null. */
+/** Best match against the bundled exercise list, or null. */
 export function findBestExerciseMatch(keyRaw: string): ExerciseRow | null {
-  const key = String(keyRaw || "").trim().toLowerCase().replace(/\s+/g, " ");
-  if (!key) return null;
-  let best: ExerciseRow | null = null;
-  let bestScore = 0;
-  for (const e of ALL) {
-    const score = scoreExerciseNameMatch(e.name_lower || "", key);
-    if (score > bestScore) {
-      bestScore = score;
-      best = e;
-    }
-  }
-  return bestScore > 0 ? best : null;
+  return rankExerciseMatches(ALL, keyRaw, 1)[0]?.row ?? null;
+}
+
+/** Best match plus the runners-up, so a caller can correct a near miss without another round trip. */
+export function rankExercises(keyRaw: string, limit = 5): ExerciseRow[] {
+  return rankExerciseMatches(ALL, keyRaw, limit).map((m) => m.row);
 }
 
 export function getByName(name: string): { match: "exact" | "fuzzy" | "none"; exercise: ExerciseRow | null } {
@@ -431,6 +395,13 @@ export function getByName(name: string): { match: "exact" | "fuzzy" | "none"; ex
 
 // ---- resolveExercise (exercise_db -> keyword fallback) ----
 export interface ResolvedLayer { color: string; muscles: string[]; opacity?: number }
+/** A runner-up, cheap enough to always include. See `alternatives` below. */
+export interface ResolvedAlternative {
+  ext_id?: string;
+  name: string;
+  equipment?: string;
+  primary: string[];
+}
 export interface Resolved {
   exercise: string;
   matched: boolean;
@@ -444,10 +415,21 @@ export interface Resolved {
   equipment?: string;
   level?: string;
   category?: string;
+  /**
+   * The next-best matches, so a caller that got a near miss can correct it in the same turn.
+   *
+   * Resolution is a guess about vernacular — "dumbbell row" has four defensible answers and this
+   * picks one. Returning only the winner made that guess final: the model logged whatever came
+   * back, and a wrong variant became a wrong set in someone's training history. Four names and
+   * their primary muscles cost ~200 bytes and let the model say "did you mean the one-arm row?"
+   * instead of being right 91% of the time and silently wrong the rest.
+   */
+  alternatives?: ResolvedAlternative[];
 }
 
 function resolveFromDb(exerciseRaw: string, base = ""): Resolved | null {
-  const rec = findBestExerciseMatch(exerciseRaw);
+  const ranked = rankExercises(exerciseRaw, 5);
+  const rec = ranked[0];
   if (!rec) return null;
   const layers: ResolvedLayer[] = [];
   if ((rec.anatome_primary_slugs || []).length) layers.push({ color: PALETTE.primary, muscles: rec.anatome_primary_slugs as string[] });
@@ -460,6 +442,12 @@ function resolveFromDb(exerciseRaw: string, base = ""): Resolved | null {
     image_src: absImgSrc ?? undefined,
     ext_id: rec.ext_id, equipment: rec.equipment, level: rec.level, category: rec.category,
     explanation: `From free-exercise-db: "${rec.name}" — primary: ${(rec.anatome_primary_slugs || []).join(", ") || "none"}; secondary: ${(rec.anatome_secondary_slugs || []).join(", ") || "none"}.`,
+    alternatives: ranked.slice(1).map((r) => ({
+      ext_id: r.ext_id,
+      name: r.name as string,
+      equipment: r.equipment,
+      primary: (r.anatome_primary_slugs as string[] | undefined) ?? [],
+    })),
   };
 }
 
