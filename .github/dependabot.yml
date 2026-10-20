@@ -1,33 +1,44 @@
 version: 2
 
+# Grouped monthly: each ecosystem below opens at most one PR a month that
+# bundles every dependency update for it (owner decision close:stale-sweep-1020e).
 updates:
   # Root npm package (frontend / Base44)
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
     open-pull-requests-limit: 5
     labels:
       - dependencies
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
 
   # API package (Cloudflare Workers)
   - package-ecosystem: npm
     directory: /api
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
     open-pull-requests-limit: 5
     labels:
       - dependencies
       - api
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
 
   # GitHub Actions
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
     labels:
       - dependencies
       - ci
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
